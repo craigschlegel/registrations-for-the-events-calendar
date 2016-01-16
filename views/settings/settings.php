@@ -12,10 +12,6 @@ settings_errors(); ?>
     <?php do_settings_sections(RTEC_OPTION_SECTION_GENERAL); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
     <hr>
-    <?php settings_fields(RTEC_OPTION_NAME_NOTIFICATION); ?>
-    <?php do_settings_sections(RTEC_OPTION_SECTION_NOTIFICATION); ?>
-    <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
-    <hr>
     <?php settings_fields(RTEC_OPTION_NAME_CONFIRMATION); ?>
     <?php do_settings_sections(RTEC_OPTION_SECTION_CONFIRMATION); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />

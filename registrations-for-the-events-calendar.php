@@ -54,8 +54,6 @@ add_action( 'plugins_loaded', 'registrationsTEC_TEC_check' );
 define( 'RTEC_URL' , plugin_dir_path( __FILE__ ) );
 define( 'RTEC_OPTION_NAME_GENERAL' , 'registrationsTEC_general' );
 define( 'RTEC_OPTION_SECTION_GENERAL' , 'registrationsTEC_general_main' );
-define( 'RTEC_OPTION_NAME_NOTIFICATION' , 'registrationsTEC_notification' );
-define( 'RTEC_OPTION_SECTION_NOTIFICATION' , 'registrationsTEC_notification_main' );
 define( 'RTEC_OPTION_NAME_CONFIRMATION' , 'registrationsTEC_confirmation' );
 define( 'RTEC_OPTION_SECTION_CONFIRMATION' , 'registrationsTEC_confirmation_main' );
 define( 'RTEC_OPTIONS_PAGE' , 'registrations-for-the-events-calendar' );
@@ -83,3 +81,19 @@ function registrationsTEC_the_registration_form()
 
 //register_activation_hook( __FILE__, array( 'Tribe__Events__Main', 'activate' ) );
 //register_deactivation_hook( __FILE__, array( 'Tribe__Events__Main', 'deactivate' ) );
+
+
+/* example of message code
+ *
+ * <pre>
+    <?php $message = get_option(RTEC_OPTION_NAME_CONFIRMATION);
+    foreach($message as $key => $value ) {
+        echo '<br>key: '.$key;
+        echo '<br>value: '.$value;
+    }
+$needle = array( '{example}', '{example2}' );
+$replace = array( 'works1', 'works2');
+$clean_message = str_replace ( $needle , $replace , $message['message'] );
+echo $clean_message;
+</pre>
+ */

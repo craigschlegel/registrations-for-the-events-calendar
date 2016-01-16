@@ -65,19 +65,6 @@ class Settings
         );
 
         register_setting(
-            RTEC_OPTION_NAME_NOTIFICATION,
-            RTEC_OPTION_NAME_NOTIFICATION,
-            array( $this, 'validate_email_options' )
-        );
-
-        add_settings_section(
-            RTEC_OPTION_SECTION_NOTIFICATION,
-            'Notification Email',
-            array( $this, 'notification_section_text' ),
-            RTEC_OPTION_SECTION_NOTIFICATION
-        );
-
-        register_setting(
             RTEC_OPTION_NAME_CONFIRMATION,
             RTEC_OPTION_NAME_CONFIRMATION,
             array( $this, 'validate_email_options' )
@@ -85,7 +72,7 @@ class Settings
 
         add_settings_section(
             RTEC_OPTION_SECTION_CONFIRMATION,
-            'Confirmation Email',
+            'Email',
             array( $this, 'confirmation_section_text' ),
             RTEC_OPTION_SECTION_CONFIRMATION
         );
@@ -105,37 +92,63 @@ class Settings
 
         // notification recipients
         $this->create_settings_field( array(
-            'option' => RTEC_OPTION_NAME_NOTIFICATION,
+            'option' => RTEC_OPTION_NAME_CONFIRMATION,
             'name' => 'recipients',
             'title' => 'Recipient(s) Email',
-            'example' => 'example',
-            'description' => 'description',
+            'example' => 'example: one@yoursite.com, two@yoursite.com',
+            'description' => 'Enter the email addresses you would like notification emails to go to',
             'callback'  => 'default_text',
             'class' => 'large-text',
-            'page' => RTEC_OPTION_SECTION_NOTIFICATION,
-            'section' => RTEC_OPTION_SECTION_NOTIFICATION
+            'page' => RTEC_OPTION_SECTION_CONFIRMATION,
+            'section' => RTEC_OPTION_SECTION_CONFIRMATION
         ));
 
-        // notification recipients
+        // notification from
         $this->create_settings_field( array(
-            'option' => RTEC_OPTION_NAME_NOTIFICATION,
+            'option' => RTEC_OPTION_NAME_CONFIRMATION,
             'name' => 'notification_from',
-            'title' => 'From',
-            'example' => 'example',
-            'description' => 'description',
+            'title' => 'Notification From',
+            'example' => 'example: New Registration',
+            'description' => 'Enter the name you would like the notification email to come from',
             'callback'  => 'default_text',
             'class' => 'regular-text',
-            'page' => RTEC_OPTION_SECTION_NOTIFICATION,
-            'section' => RTEC_OPTION_SECTION_NOTIFICATION
+            'page' => RTEC_OPTION_SECTION_CONFIRMATION,
+            'section' => RTEC_OPTION_SECTION_CONFIRMATION
         ));
 
         // confirmation from name
         $this->create_settings_field( array(
             'option' => RTEC_OPTION_NAME_CONFIRMATION,
             'name' => 'confirmation_from',
-            'title' => 'From',
+            'title' => 'Confirmation From',
             'example' => 'example: Your Site',
-            'description' => 'Enter the name you would like customers to get the email from',
+            'description' => 'Enter the name you would like visitors to get the email from',
+            'callback'  => 'default_text',
+            'class' => 'regular-text',
+            'page' => RTEC_OPTION_SECTION_CONFIRMATION,
+            'section' => RTEC_OPTION_SECTION_CONFIRMATION
+        ));
+
+        // confirmation from address
+        $this->create_settings_field( array(
+            'option' => RTEC_OPTION_NAME_CONFIRMATION,
+            'name' => 'confirmation_from_address',
+            'title' => 'Confirmation From Address',
+            'example' => 'example: registrations@yoursite.com',
+            'description' => 'Enter an email address you would like visitors to receive the confirmation email from',
+            'callback'  => 'default_text',
+            'class' => 'regular-text',
+            'page' => RTEC_OPTION_SECTION_CONFIRMATION,
+            'section' => RTEC_OPTION_SECTION_CONFIRMATION
+        ));
+
+        // confirmation from address
+        $this->create_settings_field( array(
+            'option' => RTEC_OPTION_NAME_CONFIRMATION,
+            'name' => 'confirmation_subject',
+            'title' => 'Confirmation Subject',
+            'example' => 'example: Registration Confirmation',
+            'description' => 'Enter a subject for the confirmation email',
             'callback'  => 'default_text',
             'class' => 'regular-text',
             'page' => RTEC_OPTION_SECTION_CONFIRMATION,
@@ -157,15 +170,11 @@ class Settings
     }
 
     public function general_section_text() {
-        echo '<p>Change settings for registrations.</p>';
-    }
-
-    public function notification_section_text() {
-        echo '<p>Change settings for emails.</p>';
+        echo '<p>Options for registrations</p>';
     }
 
     public function confirmation_section_text() {
-        echo '<p>Change settings for emails.</p>';
+        echo '<p>Configure notifications when visitors register and the confirmation emails sent to a visitor who registers</p>';
     }
 
     public function default_text( $args )
@@ -174,8 +183,7 @@ class Settings
         $options = get_option( $args['option'] );
         $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
         ?>
-        <input id="text_string" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" type="text" value="<?php echo $option_string; ?>" />
-        <span><?php print( $args['example'] ); ?></span>
+        <input id="text_string" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" type="text" value="<?php echo $option_string; ?>" placeholder="<?php print( $args['example'] ); ?>"/>
 
         <br><span class="description"><?php esc_attr_e( $args['description'], 'registrationsTEC' ); ?></span>
         <?php
