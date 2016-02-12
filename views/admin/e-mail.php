@@ -8,11 +8,9 @@
 
 settings_errors(); ?>
 <form method="post" action="options.php">
-    <?php settings_fields(RTEC_OPTION_NAME_GENERAL); ?>
-    <?php do_settings_sections(RTEC_OPTION_SECTION_GENERAL); ?>
+    <?php settings_fields('rtec-email'); ?>
+    <?php do_settings_sections('rtec-notification-section'); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
-    <hr>
-    <?php settings_fields(RTEC_OPTION_NAME_CONFIRMATION); ?>
-    <?php do_settings_sections(RTEC_OPTION_SECTION_CONFIRMATION); ?>
+    <?php do_settings_sections('rtec-confirmation-section'); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
 </form>

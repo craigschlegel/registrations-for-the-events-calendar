@@ -11,19 +11,20 @@
     <?php
     // this controls which view is included based on the selected tab
     $tab = isset( $_GET["tab"] ) ? $_GET["tab"] : '';
-    $active_tab = Registrations_TEC\Settings::get_active_tab( $tab );
+    $active_tab = RegistrationsTEC\Admin::get_active_tab( $tab );
     ?>
 
 <!-- Display the tabs along with styling for the 'active' tab -->
 <h2 class="nav-tab-wrapper">
     <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations" class="nav-tab <?php if($active_tab == 'registrations' || $active_tab == 'single'  ){echo 'nav-tab-active';} ?> "><?php _e('Registrations', 'registrationsTEC'); ?></a>
-    <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=settings" class="nav-tab <?php if($active_tab == 'settings'){echo 'nav-tab-active';} ?>"><?php _e('Settings', 'registrationsTEC'); ?></a>
+    <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=general" class="nav-tab <?php if($active_tab == 'general'){echo 'nav-tab-active';} ?>"><?php _e('General', 'registrationsTEC'); ?></a>
+    <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=email" class="nav-tab <?php if($active_tab == 'email'){echo 'nav-tab-active';} ?>"><?php _e('Email', 'registrationsTEC'); ?></a>
 </h2>
     <?php
 
     if( isset( $active_tab ) ) {
         if( $active_tab === 'registrations' ) {
-            require_once RTEC_URL . 'views/settings/registrations.php';
+            require_once RTEC_URL . 'views/admin/registrations.php';
         } elseif( $active_tab === 'single' ) {
             /*
             if( isset( $_GET["id"] ) ) {
@@ -45,8 +46,10 @@
                 $start_date = $single_query->get_formatted_event_start_time( $meta["_EventStartDate"][0] );
                 require_once RTEC_URL.'views/admin/partial.single-registrations-view.php';
             }*/
-        } elseif( $active_tab === 'settings' ) {
-            require_once RTEC_URL.'views/settings/settings.php';
+        } elseif( $active_tab === 'general' ) {
+            require_once RTEC_URL.'views/admin/general.php';
+        } elseif( $active_tab === 'email' ) {
+            require_once RTEC_URL.'views/admin/e-mail.php';
         }
 
     }

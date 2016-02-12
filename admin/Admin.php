@@ -6,14 +6,14 @@
  * Time: 9:45 PM
  */
 
-namespace Registrations_TEC;
+namespace RegistrationsTEC;
 
 // Don't load directly
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
 
-class Settings
+class Admin
 {
     public function __construct()
     {
@@ -38,8 +38,10 @@ class Settings
         switch( $tab ) {
             case 'single':
                 return 'single';
-            case 'settings':
-                return 'settings';
+            case 'general':
+                return 'general';
+            case 'email':
+                return 'email';
             default:
                 return 'registrations';
         }
@@ -47,134 +49,153 @@ class Settings
 
     public function create_options_page()
     {
-        require_once RTEC_URL . '/views/settings/main.php';
+        require_once RTEC_URL . '/views/admin/main.php';
+    }
+
+    public function blank() {
+        // none needed
     }
 
     public function options_page_init() {
+
+        /**
+         * General Settings
+         */
+
         register_setting(
-            RTEC_OPTION_NAME_GENERAL,
-            RTEC_OPTION_NAME_GENERAL,
+            'rtec-general',
+            'rtec-general',
             array( $this, 'validate_general_options' )
         );
 
+        /* General Settings Section */
+
         add_settings_section(
-            RTEC_OPTION_SECTION_GENERAL,
+            'rtec-general-section',
             'General',
-            array( $this, 'general_section_text' ),
-            RTEC_OPTION_SECTION_GENERAL
-        );
-
-        register_setting(
-            RTEC_OPTION_NAME_CONFIRMATION,
-            RTEC_OPTION_NAME_CONFIRMATION,
-            array( $this, 'validate_email_options' )
-        );
-
-        add_settings_section(
-            RTEC_OPTION_SECTION_CONFIRMATION,
-            'Email',
-            array( $this, 'confirmation_section_text' ),
-            RTEC_OPTION_SECTION_CONFIRMATION
+            array( $this, 'blank' ),
+            'rtec-general-section'
         );
 
         // max registrations
         $this->create_settings_field( array(
-            'option' => RTEC_OPTION_NAME_GENERAL,
+            'option' => 'rtec-general',
             'name' => 'default_max_registrations',
             'title' => 'Default Max Registrations',
-            'example' => 'example',
-            'description' => 'description',
+            'example' => '',
+            'description' => 'Maximum allowed registrants for every event. Type "i" for no limit',
             'callback'  => 'default_text',
             'class' => 'small-text',
-            'page' => RTEC_OPTION_SECTION_GENERAL,
-            'section' => RTEC_OPTION_SECTION_GENERAL
+            'page' => 'rtec-general-section',
+            'section' => 'rtec-general-section',
+            'type' => 'number'
         ));
+
+        /**
+         * Email Settings
+         */
+
+        register_setting(
+            'rtec-email',
+            'rtec-email',
+            array( $this, 'validate_email_options' )
+        );
+
+        /* Notification Email Settings Section */
+
+        add_settings_section(
+            'rtec-notification-section',
+            'Notification Email',
+            array( $this, 'blank' ),
+            'rtec-notification-section'
+        );
 
         // notification recipients
         $this->create_settings_field( array(
-            'option' => RTEC_OPTION_NAME_CONFIRMATION,
+            'option' => 'rtec-email',
             'name' => 'recipients',
             'title' => 'Recipient(s) Email',
             'example' => 'example: one@yoursite.com, two@yoursite.com',
-            'description' => 'Enter the email addresses you would like notification emails to go to',
+            'description' => 'Enter the email addresses you would like notification emails to go to separated by commas',
             'callback'  => 'default_text',
             'class' => 'large-text',
-            'page' => RTEC_OPTION_SECTION_CONFIRMATION,
-            'section' => RTEC_OPTION_SECTION_CONFIRMATION
+            'page' => 'rtec-notification-section',
+            'section' => 'rtec-notification-section'
         ));
 
         // notification from
         $this->create_settings_field( array(
-            'option' => RTEC_OPTION_NAME_CONFIRMATION,
+            'option' => 'rtec-email',
             'name' => 'notification_from',
             'title' => 'Notification From',
             'example' => 'example: New Registration',
             'description' => 'Enter the name you would like the notification email to come from',
             'callback'  => 'default_text',
             'class' => 'regular-text',
-            'page' => RTEC_OPTION_SECTION_CONFIRMATION,
-            'section' => RTEC_OPTION_SECTION_CONFIRMATION
+            'page' => 'rtec-notification-section',
+            'section' => 'rtec-notification-section'
         ));
+
+        /* Confirmation Email Settings Section */
+
+        add_settings_section(
+            'rtec-confirmation-section',
+            'Confirmation Email',
+            array( $this, 'blank' ),
+            'rtec-confirmation-section'
+        );
 
         // confirmation from name
         $this->create_settings_field( array(
-            'option' => RTEC_OPTION_NAME_CONFIRMATION,
+            'option' => 'rtec-email',
             'name' => 'confirmation_from',
             'title' => 'Confirmation From',
             'example' => 'example: Your Site',
             'description' => 'Enter the name you would like visitors to get the email from',
             'callback'  => 'default_text',
             'class' => 'regular-text',
-            'page' => RTEC_OPTION_SECTION_CONFIRMATION,
-            'section' => RTEC_OPTION_SECTION_CONFIRMATION
+            'page' => 'rtec-confirmation-section',
+            'section' => 'rtec-confirmation-section'
         ));
 
         // confirmation from address
         $this->create_settings_field( array(
-            'option' => RTEC_OPTION_NAME_CONFIRMATION,
+            'option' => 'rtec-email',
             'name' => 'confirmation_from_address',
             'title' => 'Confirmation From Address',
             'example' => 'example: registrations@yoursite.com',
             'description' => 'Enter an email address you would like visitors to receive the confirmation email from',
             'callback'  => 'default_text',
             'class' => 'regular-text',
-            'page' => RTEC_OPTION_SECTION_CONFIRMATION,
-            'section' => RTEC_OPTION_SECTION_CONFIRMATION
+            'page' => 'rtec-confirmation-section',
+            'section' => 'rtec-confirmation-section'
         ));
 
         // confirmation from address
         $this->create_settings_field( array(
-            'option' => RTEC_OPTION_NAME_CONFIRMATION,
+            'option' => 'rtec-email',
             'name' => 'confirmation_subject',
             'title' => 'Confirmation Subject',
             'example' => 'example: Registration Confirmation',
             'description' => 'Enter a subject for the confirmation email',
             'callback'  => 'default_text',
             'class' => 'regular-text',
-            'page' => RTEC_OPTION_SECTION_CONFIRMATION,
-            'section' => RTEC_OPTION_SECTION_CONFIRMATION
+            'page' => 'rtec-confirmation-section',
+            'section' => 'rtec-confirmation-section'
         ));
 
         // confirmation message
         $this->create_settings_field( array(
-            'option' => RTEC_OPTION_NAME_CONFIRMATION,
+            'option' => 'rtec-email',
             'name' => 'message',
             'title' => 'Message',
             'example' => '',
             'description' => 'Enter the message you would like customers to receive along with details of the event',
             'callback'  => 'email_message_text_area',
             'class' => '',
-            'page' => RTEC_OPTION_SECTION_CONFIRMATION,
-            'section' => RTEC_OPTION_SECTION_CONFIRMATION
+            'page' => 'rtec-confirmation-section',
+            'section' => 'rtec-confirmation-section'
         ));
-    }
-
-    public function general_section_text() {
-        echo '<p>Options for registrations</p>';
-    }
-
-    public function confirmation_section_text() {
-        echo '<p>Configure notifications when visitors register and the confirmation emails sent to a visitor who registers</p>';
     }
 
     public function default_text( $args )
@@ -182,10 +203,12 @@ class Settings
         // get option 'text_string' value from the database
         $options = get_option( $args['option'] );
         $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
+        $type = ( isset( $args['type'] ) ) ? 'type="'. $args['type'].'"' : 'type="text"';
         ?>
-        <input id="text_string" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" type="text" value="<?php echo $option_string; ?>" placeholder="<?php print( $args['example'] ); ?>"/>
+        <input id="rtec-<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" <?php echo $type; ?> value="<?php echo $option_string; ?>"/>
 
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrationsTEC' ); ?></span>
+        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
+
         <?php
     }
 
@@ -198,11 +221,11 @@ class Settings
         <textarea id="textarea_string" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" cols="80" rows="10"><?php echo $option_string; ?></textarea><br>
         <span><?php print( $args['example'] ); ?></span>
 
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrationsTEC' ); ?></span>
+        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
         <?php
     }
 
-    public function create_settings_field( $args=array() )
+    public function create_settings_field( $args = array() )
     {
         add_settings_field(
             $args['name'],

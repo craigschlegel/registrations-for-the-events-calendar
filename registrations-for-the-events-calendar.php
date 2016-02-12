@@ -28,20 +28,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 function registrationsTEC_TEC_check() {
-    if ( ! class_exists( 'Tribe__Events__Main' ) ) {
-        if ( current_user_can( 'activate_plugins' ) ) {
+    if( ! class_exists( 'Tribe__Events__Main' ) ) {
+        if( current_user_can( 'activate_plugins' ) ) {
 
-            add_action('admin_init', 'registrationsTEC_deactivate');
-            add_action('admin_notices', 'registrationsTEC_deactivation_notice');
+            add_action( 'admin_init', 'registrationsTEC_deactivate' );
+            add_action( 'admin_notices', 'registrationsTEC_deactivation_notice' );
 
-            function registrationsTEC_deactivate() {
+            function registrationsTEC_deactivate()
+            {
                 deactivate_plugins( plugin_basename( __FILE__ ) );
             }
 
-            function registrationsTEC_deactivation_notice() {
+            function registrationsTEC_deactivation_notice()
+            {
                 echo '<div class="updated"><p><strong>Registrations for The Events Calendar has been deactivated</strong>. The Events Calendar plugin must be active for this extension to work</strong>.</p></div>';
-                if ( isset( $_GET['activate'] ) )
+                if( isset( $_GET['activate'] ) ) {
                     unset( $_GET['activate'] );
+                }
             }
 
         }
@@ -52,32 +55,31 @@ add_action( 'plugins_loaded', 'registrationsTEC_TEC_check' );
 
 
 define( 'RTEC_URL' , plugin_dir_path( __FILE__ ) );
-define( 'RTEC_OPTION_NAME_GENERAL' , 'registrationsTEC_general' );
-define( 'RTEC_OPTION_SECTION_GENERAL' , 'registrationsTEC_general_main' );
-define( 'RTEC_OPTION_NAME_CONFIRMATION' , 'registrationsTEC_confirmation' );
-define( 'RTEC_OPTION_SECTION_CONFIRMATION' , 'registrationsTEC_confirmation_main' );
-define( 'RTEC_OPTIONS_PAGE' , 'registrations-for-the-events-calendar' );
 define( 'RTEC_VERSION' , '0.1' );
 define( 'RTEC_DBVERSION' , '0.1' );
 define( 'RTEC_TABLENAME' , 'registrationsTEC_registrations' );
 define( 'TRIBE_EVENTS_POST_TYPE', 'tribe_events' );
 
 if( is_admin() ) {
-    require_once RTEC_URL . '/Registrations-TEC/Settings.php';
 
-    $instance = new Registrations_TEC\Settings;
+    require_once RTEC_URL . '/admin/Admin.php';
+
+    $admin = new RegistrationsTEC\Admin;
+
 }
 
 function registrationsTEC_the_registration_form()
 {
-    $instance = new Registrations_TEC\Main;
-    echo '<pre>';
-    //echo Registrations_TEC\Main::OPTIONNAME;
-    var_dump($instance);
 
+    require_once RTEC_URL . '/RegistrationsTEC/Form.php';
+
+    $form = new RegistrationsTEC\Form;
+    $form->show_form();
+    echo '<pre>';
+    var_dump( $form );
     echo '</pre>';
 }
-//add_action( 'tribe_events_single_event_before_the_content', 'registrationsTEC_the_registration_form', 99 );
+add_action( 'tribe_events_single_event_before_the_content', 'registrationsTEC_the_registration_form', 99 );
 
 //register_activation_hook( __FILE__, array( 'Tribe__Events__Main', 'activate' ) );
 //register_deactivation_hook( __FILE__, array( 'Tribe__Events__Main', 'deactivate' ) );
