@@ -74,12 +74,55 @@ function registrationsTEC_the_registration_form()
     require_once RTEC_URL . '/RegistrationsTEC/Form.php';
 
     $form = new RegistrationsTEC\Form;
+    $form->set_form_field( array(
+        'priority' => 50,
+        'type' => 'text',
+        'name' => 'last',
+        'label' => 'Last',
+        'placeholder' => 'Last',
+        'class' => 'text-field',
+        'min-length' => 2,
+        'max-length' => 30,
+        'validation-type' => 'default'
+    ) );
+    $form->set_form_field( array(
+        'priority' => 10,
+        'type' => 'text',
+        'name' => 'first',
+        'label' => 'First',
+        'placeholder' => 'First',
+        'class' => 'text-field',
+        'min-length' => 2,
+        'max-length' => 30,
+        'validation-type' => 'default'
+    ) );
+    $form->set_form_field( array(
+        'priority' => 60,
+        'type' => 'email',
+        'name' => 'email',
+        'label' => 'Email',
+        'placeholder' => 'you@example.com',
+        'class' => 'text-field',
+        'min-length' => 2,
+        'max-length' => 30,
+        'validation-type' => 'email'
+    ) );
+    $form->set_form_fields_html();
     $form->show_form();
     echo '<pre>';
     var_dump( $form );
     echo '</pre>';
 }
 add_action( 'tribe_events_single_event_before_the_content', 'registrationsTEC_the_registration_form', 99 );
+
+/**
+ * Some CSS and JS needed in the admin area as well
+ */
+function rtec_admin_scripts_and_styles() {
+    wp_enqueue_style( 'rtec_admin_styles', plugins_url( '/css/rtec-admin-styles.css', __FILE__ ) );
+    wp_enqueue_script( 'rtec_admin_scripts', plugins_url( '/js/rtec-admin-scripts.js', __FILE__ ), array( 'jquery' ), '', false );
+}
+add_action( 'admin_enqueue_scripts', 'rtec_admin_scripts_and_styles' );
 
 //register_activation_hook( __FILE__, array( 'Tribe__Events__Main', 'activate' ) );
 //register_deactivation_hook( __FILE__, array( 'Tribe__Events__Main', 'deactivate' ) );
