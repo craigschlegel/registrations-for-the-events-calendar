@@ -91,6 +91,36 @@ class Admin
             'type' => 'number'
         ));
 
+        // register text
+        $this->create_settings_field( array(
+            'option' => 'rtec_general',
+            'name' => 'register_text',
+            'title' => '<label for="rtec_register_text">"Register" Button Text</label>',
+            'example' => '',
+            'description' => 'The text displayed on the button that reveals the form',
+            'callback'  => 'default_text',
+            'class' => 'default-text',
+            'page' => 'rtec_general_general',
+            'section' => 'rtec_general_general',
+            'type' => 'text',
+            'default' => 'Register'
+        ));
+        
+        // submit text
+        $this->create_settings_field( array(
+            'option' => 'rtec_general',
+            'name' => 'submit_text',
+            'title' => '<label for="rtec_submit_text">"Submit" Button Text</label>',
+            'example' => '',
+            'description' => 'The text displayed on the button that submits the form',
+            'callback'  => 'default_text',
+            'class' => 'default-text',
+            'page' => 'rtec_general_general',
+            'section' => 'rtec_general_general',
+            'type' => 'text',
+            'default' => 'Submit'
+        ));
+
         /* Form Settings Section */
 
         add_settings_section(
@@ -228,7 +258,8 @@ class Admin
     {
         // get option 'text_string' value from the database
         $options = get_option( $args['option'] );
-        $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
+        $default = isset( $args['default'] ) ? esc_attr( $args['default'] ) : '';
+        $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $default;
         $type = ( isset( $args['type'] ) ) ? 'type="'. $args['type'].'"' : 'type="text"';
         ?>
 

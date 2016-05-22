@@ -16,42 +16,14 @@
 
 <!-- Display the tabs along with styling for the 'active' tab -->
 <h2 class="nav-tab-wrapper">
-    <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations" class="nav-tab <?php if($active_tab == 'registrations' || $active_tab == 'single'  ){echo 'nav-tab-active';} ?> "><?php _e('Registrations', 'registrationsTEC'); ?></a>
     <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=general" class="nav-tab <?php if($active_tab == 'general'){echo 'nav-tab-active';} ?>"><?php _e('General', 'registrationsTEC'); ?></a>
     <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=email" class="nav-tab <?php if($active_tab == 'email'){echo 'nav-tab-active';} ?>"><?php _e('Email', 'registrationsTEC'); ?></a>
 </h2>
     <?php
-
-    if( isset( $active_tab ) ) {
-        if( $active_tab === 'registrations' ) {
-            require_once RTEC_URL . 'views/admin/registrations.php';
-        } elseif( $active_tab === 'single' ) {
-            /*
-            if( isset( $_GET["id"] ) ) {
-                require_once RTEC_URL . 'includes/database/class.MySQL.php';
-                $single_query = new RegistrationsTEC_MySQL();
-                $options = get_option( 'registrationsTEC_general' );
-                $multiple_locations_venue = $options["multiple_locations_venue"];
-                $id = (int) $_GET["id"];
-                $results = $single_query->get_long_single_event_registrations($id);
-                $meta = get_post_meta( $id );
-                $venue_meta = get_post_meta( $meta["_EventVenueID"][0] );
-                $venue = $venue_meta["_VenueVenue"][0];
-                if( $multiple_locations_venue != 'none' ) {
-                    $multiple_locations_options = explode(', ', $options["multiple_locations_options"] );
-                    $has_multiple_locations = RegistrationsTEC_Form::is_multiple_locations_venue( $id, $multiple_locations_venue );
-                } else {
-                    $has_multiple_locations = false;
-                }
-                $start_date = $single_query->get_formatted_event_start_time( $meta["_EventStartDate"][0] );
-                require_once RTEC_URL.'views/admin/partial.single-registrations-view.php';
-            }*/
-        } elseif( $active_tab === 'general' ) {
-            require_once RTEC_URL.'views/admin/general.php';
-        } elseif( $active_tab === 'email' ) {
+        if ( $active_tab === 'email' ) {
             require_once RTEC_URL.'views/admin/e-mail.php';
+        } else{
+            require_once RTEC_URL.'views/admin/general.php';
         }
-
-    }
     ?>
 </div>

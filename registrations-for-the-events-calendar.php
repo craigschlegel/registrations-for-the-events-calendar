@@ -70,20 +70,46 @@ if ( is_admin() ) {
 
 function registrationsTEC_the_registration_form()
 {
-
-    require_once RTEC_URL . '/RegistrationsTEC/EventData.php';
-    $event_data = new RegistrationsTEC\EventData();
-
     require_once RTEC_URL . '/RegistrationsTEC/Form.php';
     $form = new RegistrationsTEC\Form( array( 'first', 'last', 'email', 'other' ) );
 
+    $form->setEventMeta();
+    
+    $form_html = '';
+
+    $general_options = get_option( 'rtec_general', array() );
+    $form_html .= $form->getBeginningFormHtml( $general_options );
+    
+    $form_html .= $form->getHiddenInputFieldsHtml();
+    
+    $form->setInputFieldsData( $general_options );
+    $form_html .= $form->getRegularInputFieldsHtml();
+    
+    $form_html .= $form->getEndingFormHtml( $general_options );
+
     //$form->show_form();
-    echo '<pre>';
-    var_dump( $event_data );
+    /*echo '<pre>';
     var_dump( $form );
-    echo '</pre>';
+    echo '</pre>';*/
+
+    echo $form_html;
 }
 add_action( 'tribe_events_single_event_before_the_content', 'registrationsTEC_the_registration_form', 99 );
+
+/**
+ * To separate concerns and avoid potential problems with redirects, this function performs
+ * a check to see if the registrationsTEC form was submitted and initiates form
+ * before the template is loaded.
+ */
+function rtec_process_form_submission()
+{
+    if ( isset( $_POST['rtec_email_submission'] ) && '1' === $_POST['rtec_email_submission'] ) {
+        // when a form is submitted, a form submission object is used to send an email and record
+        // in the database
+        require_once RTEC_URL . '/inc/submission-process.php';
+    }
+}
+add_action( 'init', 'rtec_process_form_submission' );
 
 /**
  * Some CSS and JS needed in the admin area as well
