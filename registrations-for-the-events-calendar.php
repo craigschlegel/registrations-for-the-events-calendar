@@ -60,7 +60,7 @@ define( 'RTEC_DBVERSION' , '0.1' );
 define( 'RTEC_TABLENAME' , 'registrationsTEC_registrations' );
 define( 'TRIBE_EVENTS_POST_TYPE', 'tribe_events' );
 
-if( is_admin() ) {
+if ( is_admin() ) {
 
     require_once RTEC_URL . '/admin/Admin.php';
 
@@ -71,45 +71,15 @@ if( is_admin() ) {
 function registrationsTEC_the_registration_form()
 {
 
-    require_once RTEC_URL . '/RegistrationsTEC/Form.php';
+    require_once RTEC_URL . '/RegistrationsTEC/EventData.php';
+    $event_data = new RegistrationsTEC\EventData();
 
-    $form = new RegistrationsTEC\Form;
-    $form->set_form_field( array(
-        'priority' => 50,
-        'type' => 'text',
-        'name' => 'last',
-        'label' => 'Last',
-        'placeholder' => 'Last',
-        'class' => 'text-field',
-        'min-length' => 2,
-        'max-length' => 30,
-        'validation-type' => 'default'
-    ) );
-    $form->set_form_field( array(
-        'priority' => 10,
-        'type' => 'text',
-        'name' => 'first',
-        'label' => 'First',
-        'placeholder' => 'First',
-        'class' => 'text-field',
-        'min-length' => 2,
-        'max-length' => 30,
-        'validation-type' => 'default'
-    ) );
-    $form->set_form_field( array(
-        'priority' => 60,
-        'type' => 'email',
-        'name' => 'email',
-        'label' => 'Email',
-        'placeholder' => 'you@example.com',
-        'class' => 'text-field',
-        'min-length' => 2,
-        'max-length' => 30,
-        'validation-type' => 'email'
-    ) );
-    $form->set_form_fields_html();
-    $form->show_form();
+    require_once RTEC_URL . '/RegistrationsTEC/Form.php';
+    $form = new RegistrationsTEC\Form( array( 'first', 'last', 'email', 'other' ) );
+
+    //$form->show_form();
     echo '<pre>';
+    var_dump( $event_data );
     var_dump( $form );
     echo '</pre>';
 }

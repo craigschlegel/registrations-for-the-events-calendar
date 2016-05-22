@@ -9,7 +9,6 @@
 <button type="button" id="form-toggle-button" class="registrationsTEC-register-button">Register<span class="tribe-bar-toggle-arrow"></span></button>
 
     <form method="post" action="" id="registrationsTEC-hidden-form" class="registration-form">
-        <!-- Certain information about the event is submitted along with the form -->
         <input type="hidden" name="email_submission" value="1" />
         <input type="hidden" value="<?php the_title(); ?>" name="title">
         <input type="hidden" value="<?php echo tribe_get_start_date(); ?>" name="date">
@@ -18,7 +17,6 @@
         <div class="registrationsTEC-form-wrapper">
             <p>* required</p>
 
-            <!-- Display options for payment if there is a cost for the event -->
             <?php if ( tribe_get_cost() ) : ?>
 
             <div class="registrationsTEC-cost-wrapper">
@@ -27,7 +25,6 @@
                     <div class="attention-message">
                         <p> This event has a cost.
 
-                <!-- The option to pay with PayPal is only displayed if WP Simple PayPal cart is installed -->
                 <?php if( defined( 'WP_CART_VERSION') ) : ?>
 
                     You can pay at the event or pay now with PayPal.</p>
@@ -46,7 +43,6 @@
 
             <?php endif; // event has a cost ?>
 
-            <!-- Loop through the formfields in the $registrationsTEC object and display -->
             <div class="">
 
             </div> <!--  -->
