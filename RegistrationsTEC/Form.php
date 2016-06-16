@@ -155,8 +155,11 @@ class Form
             $error_html = '';
 
             if ( in_array( $field['name'], $this->errors ) ) {
-                $value = $this->submission_data['rtec_' . $field['name']];
                 $error_html = '<p>' . $field['error_message'] . '</p>';
+            }
+
+            if ( isset( $this->submission_data['rtec_' . $field['name']] ) ) {
+                $value = $this->submission_data['rtec_' . $field['name']];
             }
 
             $html .= '<div class="rtec-form-field rtec-'. $field['name'] . '">';
