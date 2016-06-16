@@ -23,10 +23,14 @@ class Form
 
     private $input_fields_data = array();
 
-    public function __construct( $fields )
+    private $submission_data = array();
+
+    private $errors = array();
+
+    public function __construct( $fields, $submission_data, $errors )
     {
         // get form options from the db
-        $options = get_option('rtec_general');
+        $options = get_option( 'rtec_general', array() );
 
         foreach ( $fields as $field ) {
             // create an array of all to be shown
@@ -39,6 +43,8 @@ class Form
             }
         }
 
+        $this->submission_data = $submission_data;
+        $this->errors = $errors;
     }
 
     public function setEventMeta( $id = '' )
@@ -130,10 +136,10 @@ class Form
         $event_meta = $this->event_meta;
 
         $html .= '<input type="hidden" name="rtec_email_submission" value="1" />';
-        $html .= '<input type="hidden" name="title" value="'. $event_meta['title'] . '" />';
-        $html .= '<input type="hidden" name="venue_title" value="'. $event_meta['venue_title'] . '" />';
-        $html .= '<input type="hidden" name="date" value="'. $event_meta['start_date'] . '" />';
-        $html .= '<input type="hidden" name="event_id" value="' . $event_meta['post_id'] . '" />';
+        $html .= '<input type="hidden" name="rtec_title" value="'. $event_meta['title'] . '" />';
+        $html .= '<input type="hidden" name="rtec_venue_title" value="'. $event_meta['venue_title'] . '" />';
+        $html .= '<input type="hidden" name="rtec_date" value="'. $event_meta['start_date'] . '" />';
+        $html .= '<input type="hidden" name="rtec_event_id" value="' . $event_meta['post_id'] . '" />';
 
         return $html;
     }
@@ -143,9 +149,20 @@ class Form
         $html = '<div class="rtec-form-fields-wrapper">';
 
         foreach ( $this->input_fields_data as $field ) {
+            // check to see if there was an error and fill in
+            // previous data
+            $value = '';
+            $error_html = '';
+
+            if ( in_array( $field['name'], $this->errors ) ) {
+                $value = $this->submission_data['rtec_' . $field['name']];
+                $error_html = '<p>' . $field['error_message'] . '</p>';
+            }
+
             $html .= '<div class="rtec-form-field rtec-'. $field['name'] . '">';
                 $html .= '<label for="rtec_' . $field['name'] . '" class="rtec_text_label">' . $field['label'] . '</label>';
-                $html .= '<input type="text" name="rtec_' . $field['name'] . '" value="" id="rtec_' . $field['name'] . '" />';
+                $html .= '<input type="text" name="rtec_' . $field['name'] . '" value="'. $value . '" id="rtec_' . $field['name'] . '" />';
+                $html .= $error_html;
             $html .= '</div>';
         }
 

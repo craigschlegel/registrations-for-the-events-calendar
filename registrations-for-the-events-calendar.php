@@ -52,26 +52,62 @@ function registrationsTEC_TEC_check() {
 }
 add_action( 'plugins_loaded', 'registrationsTEC_TEC_check' );
 
+function rtec_activate() {
 
+    require_once RTEC_URL . '/RegistrationsTEC/Database.php';
+
+    RegistrationsTEC\Database::createTable();
+
+    if ( !get_option( 'rtec_general' ) ) {
+        $defaults = array(
+            'first_show' => true,
+            'first_require' => true,
+            'first_error' => 'Please enter your first name',
+            'last_show' => true,
+            'last_require' => true,
+            'last_error' => 'Please enter your last name',
+            'email_show' => true,
+            'email_require' => false,
+            'email_error' => 'Please enter a valid email address',
+            'other_show' => false,
+            'other_require' => false,
+            'other_error' => 'There is an error with your entry'
+        );
+
+        // get form options from the db
+        update_option( 'rtec_general', $defaults );
+    }
+}
+register_activation_hook( __FILE__, 'rtec_activate' );
 
 define( 'RTEC_URL' , plugin_dir_path( __FILE__ ) );
 define( 'RTEC_VERSION' , '0.1' );
 define( 'RTEC_DBVERSION' , '0.1' );
-define( 'RTEC_TABLENAME' , 'registrationsTEC_registrations' );
+define( 'RTEC_TABLENAME' , 'rtec_registrations' );
 define( 'TRIBE_EVENTS_POST_TYPE', 'tribe_events' );
 
 if ( is_admin() ) {
-
     require_once RTEC_URL . '/admin/Admin.php';
 
     $admin = new RegistrationsTEC\Admin;
-
 }
 
 function registrationsTEC_the_registration_form()
 {
+    $errors = array();
+    $submission_data = array();
+
+    if ( isset( $_POST['rtec_email_submission'] ) && '1' === $_POST['rtec_email_submission'] ) {
+        // when a form is submitted, a form submission object is used to send an email and record
+        // in the database
+        require_once RTEC_URL . '/inc/submission-process.php';
+        
+        $errors = isset( $submission->errors ) ? $submission->errors : array();
+        $submission_data = isset( $submission->submission ) ? $submission->submission : array();
+    }
+    
     require_once RTEC_URL . '/RegistrationsTEC/Form.php';
-    $form = new RegistrationsTEC\Form( array( 'first', 'last', 'email', 'other' ) );
+    $form = new RegistrationsTEC\Form( array( 'first', 'last', 'email', 'other' ), $submission_data, $errors );
 
     $form->setEventMeta();
     
@@ -91,7 +127,7 @@ function registrationsTEC_the_registration_form()
     /*echo '<pre>';
     var_dump( $form );
     echo '</pre>';*/
-
+    var_dump( $form );
     echo $form_html;
 }
 add_action( 'tribe_events_single_event_before_the_content', 'registrationsTEC_the_registration_form', 99 );
@@ -109,7 +145,7 @@ function rtec_process_form_submission()
         require_once RTEC_URL . '/inc/submission-process.php';
     }
 }
-add_action( 'init', 'rtec_process_form_submission' );
+//add_action( 'init', 'rtec_process_form_submission' );
 
 /**
  * Some CSS and JS needed in the admin area as well
