@@ -244,9 +244,24 @@ class Admin
         $this->create_settings_field( array(
             'option' => 'rtec_email',
             'name' => 'confirmation_message',
-            'title' => '<label>Message</label>',
+            'title' => '<label>Confirmation Message</label>',
             'example' => '',
+            'default' => 'You are registered',
             'description' => 'Enter the message you would like customers to receive along with details of the event',
+            'callback'  => 'email_message_text_area',
+            'class' => '',
+            'page' => 'rtec_email_confirmation',
+            'section' => 'rtec_email_confirmation'
+        ));
+
+        // success message
+        $this->create_settings_field( array(
+            'option' => 'rtec_email',
+            'name' => 'success_message',
+            'title' => '<label>Website Success Message</label>',
+            'example' => '',
+            'default' => 'Success! Please check your email inbox for a confirmation message',
+            'description' => 'Enter the message you would like to display on your site after a successful form completion',
             'callback'  => 'email_message_text_area',
             'class' => '',
             'page' => 'rtec_email_confirmation',
@@ -325,7 +340,7 @@ class Admin
     {
         // get option 'text_string' value from the database
         $options = get_option( $args['option'] );
-        $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
+        $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $args['default'];
         ?>
         <textarea id="textarea_string" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" cols="80" rows="10"><?php echo $option_string; ?></textarea><br>
         <span><?php print( $args['example'] ); ?></span>

@@ -36,7 +36,7 @@ if ( empty( $submission->errors ) ) {
     $db->insertEntry( $data );
 }
 
-echo '<pre>';
-var_dump( $submission );
+//echo '<pre>';
+//var_dump( $submission );
 
-echo '</pre>';
+//echo '</pre>';

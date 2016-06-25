@@ -1,3 +1,47 @@
 .rtec-field-options-wrapper {
     margin-left: 30px;
 }
+
+.rtec-wrapper {
+    box-sizing: border-box;
+}
+
+.rtec-single-event {
+    display: inline-block;
+    width: 47.5%;
+    margin: 2em 2% 2em 0;
+    border-radius: 3px;
+    background: #23282d;
+}
+.rtec-event-meta {
+    padding: .5em 1em .5em 1em;
+}
+.rtec-event-meta h3 {
+    margin: .5em 0em;
+    color: #fff;
+}
+.rtec-event-meta a {
+    text-decoration: none;
+}
+.rtec-event-meta h3:hover {
+    color: #00a0d2;
+}
+.rtec-event-meta p {
+    margin: 0em 0em .25em;
+    color: #fff;
+}
+
+.rtec-single-event table td {
+    word-wrap: break-word;
+    max-width: 120px;
+}
+.rtec-wrapper .rtec-admin-details {
+    float: right;
+    margin: .5em 1em .5em 1em;
+}
+.rtec-wrapper-single .rtec-single-event {
+    width: 100%;
+}
+.rtec-wrapper-single .rtec-single-event table td {
+    max-width: 200px;
+}

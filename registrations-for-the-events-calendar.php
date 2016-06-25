@@ -58,7 +58,9 @@ function rtec_activate() {
 
     RegistrationsTEC\Database::createTable();
 
-    if ( !get_option( 'rtec_general' ) ) {
+    $options = get_option( 'rtec_general' );
+
+    if ( empty( $options  ) ) {
         $defaults = array(
             'first_show' => true,
             'first_require' => true,
@@ -92,10 +94,11 @@ if ( is_admin() ) {
     $admin = new RegistrationsTEC\Admin;
 }
 
-function registrationsTEC_the_registration_form()
+function rtec_the_registration_form()
 {
     $errors = array();
     $submission_data = array();
+    $data_sent = false;
 
     if ( isset( $_POST['rtec_email_submission'] ) && '1' === $_POST['rtec_email_submission'] ) {
         // when a form is submitted, a form submission object is used to send an email and record
@@ -104,33 +107,47 @@ function registrationsTEC_the_registration_form()
         
         $errors = isset( $submission->errors ) ? $submission->errors : array();
         $submission_data = isset( $submission->submission ) ? $submission->submission : array();
+
+        if ( empty( $errors ) && ! empty ( $submission_data ) ) {
+            $data_sent = true;
+        }
     }
-    
-    require_once RTEC_URL . '/RegistrationsTEC/Form.php';
-    $form = new RegistrationsTEC\Form( array( 'first', 'last', 'email', 'other' ), $submission_data, $errors );
 
-    $form->setEventMeta();
-    
-    $form_html = '';
+    if ( ! $data_sent ) {
+        require_once RTEC_URL . '/RegistrationsTEC/Form.php';
+        $form = new RegistrationsTEC\Form( array( 'first', 'last', 'email', 'other' ), $submission_data, $errors );
 
-    $general_options = get_option( 'rtec_general', array() );
-    $form_html .= $form->getBeginningFormHtml( $general_options );
-    
-    $form_html .= $form->getHiddenInputFieldsHtml();
-    
-    $form->setInputFieldsData( $general_options );
-    $form_html .= $form->getRegularInputFieldsHtml();
-    
-    $form_html .= $form->getEndingFormHtml( $general_options );
+        $form->setEventMeta();
 
-    //$form->show_form();
-    /*echo '<pre>';
-    var_dump( $form );
-    echo '</pre>';*/
-    var_dump( $form );
-    echo $form_html;
+        $form_html = '';
+
+        $general_options = get_option( 'rtec_general', array() );
+        $form_html .= $form->getBeginningFormHtml( $general_options );
+
+        $form_html .= $form->getHiddenInputFieldsHtml();
+
+        $form->setInputFieldsData( $general_options );
+        $form_html .= $form->getRegularInputFieldsHtml();
+
+        $form_html .= $form->getEndingFormHtml( $general_options );
+
+        echo $form_html;
+    } else {
+        $options = get_option( 'rtec_email' );
+
+        $success_html = '<p class="rtec_success">';
+        if ( isset( $options['success_message'] ) ) {
+            $success_html .= esc_html( $options['success_message'] );
+        } else {
+            $success_html .= 'Success! Please check your email inbox for a confirmation message';
+        }
+        $success_html .= '</p>';
+
+        echo $success_html;
+    }
+
 }
-add_action( 'tribe_events_single_event_before_the_content', 'registrationsTEC_the_registration_form', 99 );
+add_action( 'tribe_events_single_event_before_the_content', 'rtec_the_registration_form', 99 );
 
 /**
  * To separate concerns and avoid potential problems with redirects, this function performs

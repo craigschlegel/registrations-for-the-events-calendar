@@ -86,4 +86,44 @@ class Database
             $event_id, $registration_date, $last, $first, $email, $venue, $other, $seen ) );
     }
 
+    public function retrieveEntries( $data )
+    {
+        $fields = $data['fields'];
+        if ( is_array( $fields ) ) {
+            $fields = implode( ',' , $fields );
+        }
+        $id = isset( $data['id'] ) ? $data['id'] : '';
+        $order_by = isset( $data['order_by'] ) ? $data['order_by'] : 'last_name';
+        $type = ARRAY_A;
+
+        if ( is_numeric( $id ) ) {
+            $sql = sprintf(
+                "
+                SELECT %s
+                FROM %s
+                WHERE event_id = %d
+                ORDER BY %s DESC;
+                ",
+                esc_sql( $fields ),
+                esc_sql( $this->table_name ),
+                esc_sql( $id ),
+                esc_sql( $order_by )
+            );
+        } else {
+            $sql = sprintf(
+                "
+                SELECT %s
+                FROM %s
+                ORDER BY %s DESC;
+                ",
+                esc_sql( $fields ),
+                esc_sql( $this->table_name ),
+                esc_sql( $order_by )
+            );
+        }
+
+        $results = $this->wpdb->get_results( $sql, $type );
+        return $results;
+    }
+
 }
