@@ -5,7 +5,7 @@ require_once RTEC_URL . '/RegistrationsTEC/Database.php';
 $options = get_option( 'rtec_general' );
 
 if ( ! isset( $options['default_max_registrations'] ) ) {
-    _e ( 'Hey! First time using the plugin? You can start configuring on the "General" tab' );
+    _e ( 'Hey! First time using the plugin? You can start configuring on the "General" tab', 'rtec' );
 }
 
 $args = array(
@@ -17,7 +17,9 @@ $args = array(
 // create a custom WP_Query object just for events
 $the_query = new WP_Query( $args );
 ?>
-<div class="rtec-wrapper">
+<h2>Overview</h2>
+
+<div class="rtec-wrapper rtec-overview">
 <?php
 if ( $the_query->have_posts() ) :
     while ( $the_query->have_posts() ) : $the_query->the_post();
@@ -59,10 +61,10 @@ if ( $the_query->have_posts() ) :
         <table class="widefat rtec-registrations-data">
             <thead>
                 <tr>
-                    <th><?php _e( 'Registration Date' ) ?></th>
-                    <th><?php _e( 'Last Name' ) ?></th>
-                    <th><?php _e( 'First Name' ) ?></th>
-                    <th><?php _e( 'Email' ) ?></th>
+                    <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
+                    <th><?php _e( 'Last Name', 'rtec' ) ?></th>
+                    <th><?php _e( 'First Name', 'rtec' ) ?></th>
+                    <th><?php _e( 'Email', 'rtec' ) ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -80,14 +82,14 @@ if ( $the_query->have_posts() ) :
             <?php else: ?>
     
                 <tr>
-                    <td colspan="4" align="center"><?php _e( 'No Registrations Yet' ); ?></td>
+                    <td colspan="4" align="center"><?php _e( 'No Registrations Yet', 'rtec' ); ?></td>
                 </tr>
     
             <?php endif; // registrations not empty?>
     
             </tbody>
         </table>
-        <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $id; ?>" class="rtec-admin-details button action"><?php _e( 'View Details' ); ?></a>
+        <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $id; ?>" class="rtec-admin-secondary-button button action"><?php _e( 'More...', 'rtec' ); ?></a>
     
     </div> <!-- rtec-single-event -->
 

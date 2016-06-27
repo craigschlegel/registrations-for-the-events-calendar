@@ -86,6 +86,23 @@ class Database
             $event_id, $registration_date, $last, $first, $email, $venue, $other, $seen ) );
     }
 
+    public function updateEntry( $data )
+    {
+        $id = isset( $data['rtec_id'] ) ? $data['rtec_id'] : '';
+        $last = isset( $data['rtec_last'] ) ? $data['rtec_last'] : '';
+        $first = isset( $data['rtec_first'] ) ? $data['rtec_first'] : '';
+        $email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
+        $other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
+
+        if ( ! empty( $id ) ) {
+            $this->wpdb->query( $this->wpdb->prepare( "UPDATE $this->table_name
+                SET last_name=%s, first_name=%s, email=%s, other=%s
+                WHERE id=%d",
+                $last, $first, $email, $other, $id ) );
+        }
+
+    }
+
     public function retrieveEntries( $data )
     {
         $fields = $data['fields'];
@@ -126,4 +143,22 @@ class Database
         return $results;
     }
 
+    public function removeRecords( $records ) {
+        $where = 'id';
+        if ( ( is_array( $records ) && is_email( $records[0] ) ) || is_email( $records ) ) {
+            $where = 'email';
+        }
+        
+        if ( is_array( $records ) ) {
+            $registrations_to_be_deleted = implode( ', ', $records);
+        } else {
+            $registrations_to_be_deleted = $records;
+        }
+
+        $this->wpdb->query( $this->wpdb->prepare( "DELETE FROM $this->table_name
+        WHERE $where IN($registrations_to_be_deleted)" ) );
+
+        // add a way to check if success
+        return true;
+    }
 }

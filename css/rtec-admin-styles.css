@@ -35,13 +35,35 @@
     word-wrap: break-word;
     max-width: 120px;
 }
-.rtec-wrapper .rtec-admin-details {
+.rtec-wrapper .rtec-admin-secondary-button {
+    margin-left: 1em;
+}
+.rtec-overview .rtec-admin-secondary-button {
     float: right;
     margin: .5em 1em .5em 1em;
 }
-.rtec-wrapper-single .rtec-single-event {
+
+/* Single */
+.rtec-single .rtec-single-event {
     width: 100%;
 }
-.rtec-wrapper-single .rtec-single-event table td {
-    max-width: 200px;
+.rtec-single table {
+    position: relative;
+}
+.rtec-single .rtec-single-event table td {
+    max-width: none;
+}
+.rtec-single table td input[type="checkbox"] {
+    width: auto;
+    margin: 0px 0px 0px 8px;
+}
+.rtec-single table .rtec-checkbox {
+    padding: 11px 0 0 3px;
+}
+.rtec-table-changing {
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    right: 50%;
+    left: 50%;
 }

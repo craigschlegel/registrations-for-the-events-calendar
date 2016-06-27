@@ -162,7 +162,74 @@ function rtec_process_form_submission()
         require_once RTEC_URL . '/inc/submission-process.php';
     }
 }
-//add_action( 'init', 'rtec_process_form_submission' );
+
+function rtec_delete_registrations()
+{
+    $nonce = $_POST['rtec_nonce'];
+    if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
+        die ( 'You did not do this the right way!' );
+    }
+
+    $registrations_to_be_deleted = array();
+    foreach ( $_POST['registrations_to_be_deleted'] as $registration ) {
+        $registrations_to_be_deleted[] = sanitize_text_field( $registration );
+    }
+
+    require_once RTEC_URL . '/RegistrationsTEC/Database.php';
+
+    $db = new RegistrationsTEC\Database();
+    
+    if ( $db->removeRecords( $registrations_to_be_deleted ) ) {
+        return true;
+    } else {
+        return false;
+    }
+
+    die();
+}
+add_action( 'wp_ajax_rtec_delete_registrations', 'rtec_delete_registrations' );
+
+function rtec_add_registration()
+{
+    $nonce = $_POST['rtec_nonce'];
+    if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
+        die ( 'You did not do this the right way!' );
+    }
+    $data = array();
+    foreach( $_POST as $key => $value ) {
+        $data[$key] = sanitize_text_field( $value );
+    }
+    
+    require_once RTEC_URL . '/RegistrationsTEC/Database.php';
+
+    $new_reg = new RegistrationsTEC\Database();
+    
+    $new_reg->insertEntry( $data );
+
+    die();
+}
+add_action( 'wp_ajax_rtec_add_registration', 'rtec_add_registration' );
+
+function rtec_update_registration()
+{
+    $nonce = $_POST['rtec_nonce'];
+    if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
+        die ( 'You did not do this the right way!' );
+    }
+    $data = array();
+    foreach( $_POST as $key => $value ) {
+        $data[$key] = esc_sql( $value );
+    }
+
+    require_once RTEC_URL . '/RegistrationsTEC/Database.php';
+
+    $edit_reg = new RegistrationsTEC\Database();
+
+    $edit_reg->updateEntry( $data );
+
+    die();
+}
+add_action( 'wp_ajax_rtec_update_registration', 'rtec_update_registration' );
 
 /**
  * Some CSS and JS needed in the admin area as well
@@ -170,6 +237,12 @@ function rtec_process_form_submission()
 function rtec_admin_scripts_and_styles() {
     wp_enqueue_style( 'rtec_admin_styles', plugins_url( '/css/rtec-admin-styles.css', __FILE__ ) );
     wp_enqueue_script( 'rtec_admin_scripts', plugins_url( '/js/rtec-admin-scripts.js', __FILE__ ), array( 'jquery' ), '', false );
+    wp_localize_script( 'rtec_admin_scripts', 'rtecAdminScript', 
+        array(
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'rtec_nonce' => wp_create_nonce( 'rtec_nonce' )
+        )
+    );
 }
 add_action( 'admin_enqueue_scripts', 'rtec_admin_scripts_and_styles' );
 
