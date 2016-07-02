@@ -87,11 +87,46 @@ define( 'RTEC_VERSION' , '0.1' );
 define( 'RTEC_DBVERSION' , '0.1' );
 define( 'RTEC_TABLENAME' , 'rtec_registrations' );
 define( 'TRIBE_EVENTS_POST_TYPE', 'tribe_events' );
+define( 'RTEC_TRIBE_MENU_PAGE', 'edit.php?post_type=tribe_events' );
 
 if ( is_admin() ) {
     require_once RTEC_URL . '/admin/Admin.php';
 
     $admin = new RegistrationsTEC\Admin;
+}
+
+function rtec_get_existing_new_reg_count() {
+    $existing_new_reg_data = get_transient( 'rtec_new_registrations' );
+
+    if ( $existing_new_reg_data ) {
+        $new_registrations_count = $existing_new_reg_data;
+    } else {
+        require_once RTEC_URL . '/RegistrationsTEC/Database.php';
+
+        $db = new RegistrationsTEC\Database();
+        $new_registrations_count = $db->checkForNew();
+
+        if ( ! $existing_new_reg_data ) {
+            set_transient( 'rtec_new_registrations', $new_registrations_count, 60 * 15 );
+        }
+    }
+
+    return $new_registrations_count;
+}
+
+add_action( 'admin_menu', 'rtec_registrations_bubble' );
+function rtec_registrations_bubble() {
+    $new_registrations_count = rtec_get_existing_new_reg_count();
+
+    if ( $new_registrations_count > 0 ) {
+        global $menu;
+        foreach ( $menu as $key => $value ) {
+            if ( $menu[$key][2] === RTEC_TRIBE_MENU_PAGE ) {
+                $menu[$key][0] .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . $new_registrations_count . '</span></span>';
+                return;
+            }
+        }
+    }
 }
 
 function rtec_the_registration_form()
@@ -122,6 +157,10 @@ function rtec_the_registration_form()
         $form_html = '';
 
         $general_options = get_option( 'rtec_general', array() );
+
+        $max_registrations = isset( $general_options['default_max_registrations'] ) ? $general_options['default_max_registrations'] : 'i';
+        $form->setMaxRegistrations( $max_registrations );
+        
         $form_html .= $form->getBeginningFormHtml( $general_options );
 
         $form_html .= $form->getHiddenInputFieldsHtml();
@@ -198,6 +237,12 @@ function rtec_add_registration()
     $data = array();
     foreach( $_POST as $key => $value ) {
         $data[$key] = sanitize_text_field( $value );
+    }
+
+    if ( ( time() - strtotime( $data['rtec_end_time'] ) ) > 0 ) {
+        $data['rtec_status'] = 'p';
+    } else {
+        $data['rtec_status'] = 'c';
     }
     
     require_once RTEC_URL . '/RegistrationsTEC/Database.php';

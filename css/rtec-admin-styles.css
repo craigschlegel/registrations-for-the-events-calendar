@@ -23,7 +23,7 @@
 .rtec-event-meta a {
     text-decoration: none;
 }
-.rtec-event-meta h3:hover {
+.rtec-event-meta a h3:hover {
     color: #00a0d2;
 }
 .rtec-event-meta p {
@@ -66,4 +66,18 @@
     bottom: 50%;
     right: 50%;
     left: 50%;
+}
+.rtec-first-data {
+    position: relative;
+}
+.rtec-notice-new {
+    position: absolute;
+    left: -15px;
+    top: -2px;
+    padding: 3px 4px 5px;
+    line-height: 1;
+    border-radius:50%;
+    background: #ff6600;
+    color: #fff;
+    font-size: 10px;
 }

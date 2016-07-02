@@ -43,8 +43,7 @@ jQuery(document).ready(function($){
     }); // delete submit click
 
     $('.rtec-edit-registration').click( function() {
-        var $table = $(this).closest('.tablenav').prev(),
-            editCount = 0;
+        var editCount = 0;
 
         if (! $('.rtec-submit-edit').length) {
             $('.rtec-registration-select').each(function() {
@@ -57,7 +56,7 @@ jQuery(document).ready(function($){
                         other = $closestRegRow.find('.rtec-reg-other').text();
 
                     editCount = 1;
-                    $(this).addClass('rtec-editing');
+
                     if (! $('.rtec-submit-edit').length) {
                         $closestRegRow.find('.rtec-reg-date').html('<button data-rtec-val="'+date+'" class="button-primary rtec-submit-edit">Submit Edit</button>');
                     }
@@ -66,6 +65,9 @@ jQuery(document).ready(function($){
                     $closestRegRow.find('.rtec-reg-first').html('<input type="text" name="first" id="rtec-first" data-rtec-val="'+firstName+'" value="'+firstName+'" />');
                     $closestRegRow.find('.rtec-reg-email').html('<input type="text" name="email" id="rtec-email" data-rtec-val="'+email+'" value="'+email+'" />');
                     $closestRegRow.find('.rtec-reg-other').html('<input type="text" name="other" id="rtec-other" data-rtec-val="'+other+'" value="'+other+'" />');
+
+                    $(this).addClass('rtec-editing');
+
                     $('.rtec-edit-registration').text('Undo');
                 }
             });
@@ -77,8 +79,11 @@ jQuery(document).ready(function($){
             $editingClosestRegRow.find('.rtec-reg-first').html($editingClosestRegRow.find('.rtec-reg-first input').attr('data-rtec-val'));
             $editingClosestRegRow.find('.rtec-reg-email').html($editingClosestRegRow.find('.rtec-reg-email input').attr('data-rtec-val'));
             $editingClosestRegRow.find('.rtec-reg-other').html($editingClosestRegRow.find('.rtec-reg-other input').attr('data-rtec-val'));
-            $('.rtec-edit-registration').text('Edit Selected');
+
             $('.rtec-editing').removeClass('rtec-editing');
+
+            $('.rtec-edit-registration').text('Edit Selected');
+
         }
 
     }); // edit registration click
@@ -151,7 +156,8 @@ jQuery(document).ready(function($){
                 rtec_first: $table.find('input[name=first]').val(),
                 rtec_email: $table.find('input[name=email]').val(),
                 rtec_last: $table.find('input[name=last]').val(),
-                rtec_venue_title: $table.closest('.rtec-single-event').find('.rtec_venue_title').text(),
+                rtec_venue_title: $table.closest('.rtec-single-event').find('.rtec-venue-title').text(),
+                rtec_end_time: $table.closest('.rtec-single-event').find('.rtec-end-time').text(),
                 rtec_nonce : rtecAdminScript.rtec_nonce
             },
             success : function() {

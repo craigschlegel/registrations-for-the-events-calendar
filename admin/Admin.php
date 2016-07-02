@@ -23,10 +23,16 @@ class Admin
 
     public function add_tribe_submenu()
     {
+        $menu_title = 'Registrations';
+
+        $new_registrations_count = rtec_get_existing_new_reg_count();
+        if ( $new_registrations_count > 0 ) {
+            $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . $new_registrations_count . '</span></span>';
+        }
         add_submenu_page(
             'edit.php?post_type=' . TRIBE_EVENTS_POST_TYPE,
             'Registrations',
-            'Registrations',
+            $menu_title,
             'manage_options',
             RTEC_URL.'_settings',
             array( $this, 'create_options_page' )

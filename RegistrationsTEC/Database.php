@@ -54,7 +54,7 @@ class Database
                 email VARCHAR(60) NOT NULL,
                 venue VARCHAR(100) NOT NULL,
                 other VARCHAR(100) DEFAULT '' NOT NULL,
-                seen CHAR(1) DEFAULT 'y' NOT NULL,
+                status CHAR(1) DEFAULT 'y' NOT NULL,
                 UNIQUE KEY id (id)
             ) $charset_collate;";
 
@@ -79,11 +79,11 @@ class Database
         $email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
         $venue = isset( $data['rtec_venue_title'] ) ? $data['rtec_venue_title'] : '';
         $other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
-        $seen = isset( $data['rtec_seen'] ) ? $data['rtec_seen'] : 'n';
+        $status = isset( $data['rtec_status'] ) ? $data['rtec_status'] : 'n';
 
         $this->wpdb->query( $this->wpdb->prepare( "INSERT INTO $this->table_name
-          ( event_id, registration_date, last_name, first_name, email, venue, other, seen ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %s )",
-            $event_id, $registration_date, $last, $first, $email, $venue, $other, $seen ) );
+          ( event_id, registration_date, last_name, first_name, email, venue, other, status ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %s )",
+            $event_id, $registration_date, $last, $first, $email, $venue, $other, $status ) );
     }
 
     public function updateEntry( $data )
@@ -148,7 +148,7 @@ class Database
         if ( ( is_array( $records ) && is_email( $records[0] ) ) || is_email( $records ) ) {
             $where = 'email';
         }
-        
+
         if ( is_array( $records ) ) {
             $registrations_to_be_deleted = implode( ', ', $records);
         } else {
@@ -160,5 +160,23 @@ class Database
 
         // add a way to check if success
         return true;
+    }
+
+    public function updateStatuses() 
+    {
+        $current = 'c';
+        $new = 'n';
+        $this->wpdb->query( $this->wpdb->prepare( "UPDATE $this->table_name SET status=%s WHERE status=%s", $current, $new ) );
+
+        // add a way to check if success
+        return true;
+    }
+
+    public function checkForNew()
+    {
+        $new = 'n';
+
+        return $this->wpdb->query($this->wpdb->prepare("SELECT status
+        FROM $this->table_name WHERE status=%s", $new) );
     }
 }

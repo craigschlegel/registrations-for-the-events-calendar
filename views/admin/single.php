@@ -32,7 +32,6 @@ $id = (int)$_GET['id'];
                 $event_meta['start_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventStartDate'][0] ) );
                 $event_meta['end_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventEndDate'][0] ) );
 
-
                 // set venue meta
                 $venue_meta = get_post_meta( $meta['_EventVenueID'][0] );
                 $event_meta['venue_title'] = $venue_meta["_VenueVenue"][0];
@@ -45,7 +44,7 @@ $id = (int)$_GET['id'];
 
                     <div class="rtec-event-meta">
                         <h3><?php echo get_the_title( $id ); ?></h3>
-                        <p><?php echo $event_meta['start_date']; ?> to <?php echo $event_meta['end_date']; ?></p>
+                        <p><?php echo $event_meta['start_date']; ?> to <span class="rtec-end-time"><?php echo $event_meta['end_date']; ?></span></p>
                         <p class="rtec-venue-title"><?php echo $event_meta['venue_title']; ?></p>
                     </div>
 

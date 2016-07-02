@@ -26,6 +26,8 @@ class Form
     private $submission_data = array();
 
     private $errors = array();
+    
+    private $max_registrations;
 
     public function __construct( $fields, $submission_data, $errors )
     {
@@ -117,16 +119,45 @@ class Form
         $this->input_fields_data = $input_fields_data;
     }
 
+    public function setMaxRegistrations( $default_max_registrations )
+    {
+        $this->max_registrations = $default_max_registrations;
+    }
+
+    public function getMaxRegistrations()
+    {
+        return $this->max_registrations;
+    }
+
     public function getBeginningFormHtml( $options )
     {
         $button_text = isset( $options['register_text'] ) ? esc_attr( $options['register_text'] ) : 'Register';
+        $spots_remaining_text = isset( $options['spots_remaining_text'] ) ? esc_attr( $options['spots_remaining_text'] ) : 'Spots Remaining';
         $html = '';
 
         $html .= '<button type="button" id="rtec-form-toggle-button" class="rtec-register-button">' . $button_text . '<span class="tribe-bar-toggle-arrow"></span></button>';
 
+        $html .= '<div class="rtec-form-wrapper">';
+        
+            $html .= $this->getAttendanceHtml( $spots_remaining_text );
+
             $html .= '<form method="post" action="" id="rtec-form" class="rtec-form">';
 
         return $html;
+    }
+
+    public function getAttendanceHtml( $spots_remaining_text )
+    {
+        $html = '';
+        
+        if ( $this->getMaxRegistrations() !== 'i' ) {
+            $html .= '<div class="rtec-attendance">';
+                $html .= '<span><span class="rtec-spots-remaining"></span> '.$spots_remaining_text.'</span>';
+            $html .= '</div>';
+        }
+        
+        return $html;
+
     }
 
     public function getHiddenInputFieldsHtml()
@@ -179,9 +210,10 @@ class Form
         $button_text = isset( $options['submit_text'] ) ? esc_attr( $options['submit_text'] ) : 'Submit';
         $html = '';
 
-            $html .= '<input type="submit" class="rtec-submit-button" name="rtec_submit" value="' . $button_text . '"/>';
-        $html .= '</form>';
+                $html .= '<input type="submit" class="rtec-submit-button" name="rtec_submit" value="' . $button_text . '"/>';
 
+            $html .= '</form>';
+        $html .= '</div>';
         return $html;
     }
 }

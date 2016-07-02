@@ -1,7 +1,4 @@
 <?php
-
-require_once RTEC_URL . '/RegistrationsTEC/Database.php';
-
 $options = get_option( 'rtec_general' );
 
 if ( ! isset( $options['default_max_registrations'] ) ) {
@@ -26,10 +23,12 @@ if ( $the_query->have_posts() ) :
 
         $id = get_the_ID();
 
+        require_once RTEC_URL . '/RegistrationsTEC/Database.php';
+        
         $db = new RegistrationsTEC\Database();
 
         $data = array(
-            'fields' => 'registration_date, last_name, first_name, email',
+            'fields' => 'registration_date, last_name, first_name, email, status',
             'id' => $id,
             'order_by' => 'registration_date'
         );
@@ -72,7 +71,12 @@ if ( $the_query->have_posts() ) :
     
             <?php foreach( $registrations as $registration ): ?>
                 <tr>
-                    <td><?php echo date_i18n( 'm/d g:i a', strtotime( $registration['registration_date'] ) ); ?></td>
+                    <td class="rtec-first-data">
+                        <?php if ( $registration['status'] == 'n' ) {
+                            echo '<span class="rtec-notice-new">' . _( 'new' ) . '</span>';
+                        }
+                        echo date_i18n( 'm/d g:i a', strtotime( $registration['registration_date'] ) ); ?>
+                    </td>
                     <td><?php echo $registration['last_name']; ?></td>
                     <td><?php echo $registration['first_name']; ?></td>
                     <td><?php echo $registration['email']; ?></td>
@@ -95,3 +99,5 @@ if ( $the_query->have_posts() ) :
 
 <?php endwhile; endif; // end loop ?>
 </div> <!-- rtec-wrapper -->
+
+<?php $db->updateStatuses();
