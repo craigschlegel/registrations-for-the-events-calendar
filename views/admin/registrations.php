@@ -2,8 +2,10 @@
 $options = get_option( 'rtec_general' );
 
 if ( ! isset( $options['default_max_registrations'] ) ) {
-    _e ( 'Hey! First time using the plugin? You can start configuring on the "General" tab', 'rtec' );
+    _e ( 'Hey! First time using the plugin? You can start configuring on the "Form" tab', 'rtec' );
 }
+require_once RTEC_URL . '/RegistrationsTEC/Database.php';
+$db = new RegistrationsTEC\Database();
 
 $args = array(
     'post_type'   => 'tribe_events',
@@ -22,10 +24,6 @@ if ( $the_query->have_posts() ) :
     while ( $the_query->have_posts() ) : $the_query->the_post();
 
         $id = get_the_ID();
-
-        require_once RTEC_URL . '/RegistrationsTEC/Database.php';
-        
-        $db = new RegistrationsTEC\Database();
 
         $data = array(
             'fields' => 'registration_date, last_name, first_name, email, status',

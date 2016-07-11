@@ -36,7 +36,7 @@ class Submission
 
     public function validateSubmissionData() {
         // get form options from the db
-        $options = get_option( 'rtec_general' );
+        $options = get_option( 'rtec_options' );
         $submission = $this->submission;
 
         // for each submitted form field
@@ -110,20 +110,29 @@ class Submission
 
     public function getConfirmationEmailMessage( $options )
     {
-        $body = $options['confirmation_message']. "\n\n";
+        $body = $options['confirmation_message'];
 
-        $date_str = date_i18n( 'F j, Y', strtotime( $this->submission['rtec_date'] ) );
+        $date_str = date_i18n( 'F jS, g:i a', strtotime( $this->submission['rtec_date'] ) );
 
-        $body .= sprintf( 'Event: %1$s at %2$s on %3$s'. "\n",
-            esc_html( $this->submission['rtec_title'] ) , esc_html( $this->submission['rtec_venue_title'] ) , $date_str );
+        if ( isset( $options['confirmation_message'] ) ) {
+            $raw_body = $options['confirmation_message'];
+            $search = array( '{venue}', '{event-title}', '{event-date}', '{first}', '{last}', '{email}', '{other}', '{nl}' );
+            $replace   = array( $this->submission['rtec_venue_title'], $this->submission['rtec_title'], $date_str, $this->submission['rtec_first'], $this->submission['rtec_last'], $this->submission['rtec_email'], $this->submission['rtec_other'], "\n" );
 
-        $first = ! empty( $this->submission['rtec_first'] ) ? esc_html( $this->submission['rtec_first'] ) . ' ' : ' ';
-        $last = ! empty( $this->submission['rtec_last'] ) ? esc_html( $this->submission['rtec_last'] ) : '';
-        $body .= sprintf ( 'Registered Name: %1$s%2$s', $first, $last ) . "\n";
+            $body = str_replace( $search, $replace, $raw_body );
+        } else {
+            $body = 'You are registered!'."\n\n";
+            $body .= sprintf( 'Event: %1$s at %2$s on %3$s'. "\n",
+                esc_html( $this->submission['rtec_title'] ) , esc_html( $this->submission['rtec_venue_title'] ) , $date_str );
 
-        if ( ! empty( $this->submission['rtec_other'] ) ) {
-            $other = esc_html( $this->submission['rtec_other'] );
-            $body .= sprintf ( 'Other: %1$s', $other ) . "\n";
+            $first = ! empty( $this->submission['rtec_first'] ) ? esc_html( $this->submission['rtec_first'] ) . ' ' : ' ';
+            $last = ! empty( $this->submission['rtec_last'] ) ? esc_html( $this->submission['rtec_last'] ) : '';
+            $body .= sprintf ( 'Registered Name: %1$s%2$s', $first, $last ) . "\n";
+
+            if ( ! empty( $this->submission['rtec_other'] ) ) {
+                $other = esc_html( $this->submission['rtec_other'] );
+                $body .= sprintf ( 'Other: %1$s', $other ) . "\n";
+            }
         }
 
         return $body;

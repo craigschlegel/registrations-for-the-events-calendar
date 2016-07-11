@@ -1,0 +1,84 @@
+/* styling borrowed from The Events Calendar  */
+.tribe-bar-toggle-arrow {
+    display: inline-block;
+    margin: 0 4px;
+    position: absolute;
+    right: 10px;
+}
+.tribe-bar-toggle-arrow:after {
+    top: 10px;
+    right: 0;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-top-color: inherit;
+    border-width: 8px;
+}
+.tribe-bar-filters-open span.tribe-bar-toggle-arrow:after {
+    top: 0;
+    border-top-color: transparent;
+    border-bottom-color: inherit;
+}
+/* hide button and reveal if javascript is available */
+#rtec .rtec-js-show,
+#rtec .rtec-hidden-message,
+#rtec .rtec-screen-reader {
+    display: none;
+}
+#rtec .rtec-spinner {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+#rtec .rtec-form-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 0 auto 30px;
+    padding: 4%;
+    border: 1px solid #eee;
+    background: #f5f5f5;
+}
+#rtec .rtec-register-button {
+    position: relative;
+    padding-right: 40px;
+}
+#rtec .rtec-attendance p {
+    text-align: center;
+    margin: 0;
+}
+#rtec .rtec-form-field {
+    position: relative;
+}
+#rtec input[type="text"],
+#rtec input[type="email"],
+#rtec textarea {
+    background: #fff;
+}
+#rtec .rtec-form-buttons {
+    text-align: center;
+}
+#rtec .rtec-form-buttons input{
+    margin: 0;
+}
+
+#rtec .rtec-valid {
+    border: 1px solid rgb(20, 220, 70);
+}
+
+#rtec .rtec-error {
+    border: 1px solid rgb(255, 92, 51);
+}
+#rtec .rtec-error-message {
+    position: absolute;
+    bottom: -8px;
+    font-size: 14px;
+    color: rgb(255, 92, 51);
+}
+#rtec .rtec-success-message {
+    text-align: center;
+}

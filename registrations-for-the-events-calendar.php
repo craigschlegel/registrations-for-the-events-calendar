@@ -27,6 +27,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
+
 function registrationsTEC_TEC_check() {
     if( ! class_exists( 'Tribe__Events__Main' ) ) {
         if( current_user_can( 'activate_plugins' ) ) {
@@ -58,7 +60,7 @@ function rtec_activate() {
 
     RegistrationsTEC\Database::createTable();
 
-    $options = get_option( 'rtec_general' );
+    $options = get_option( 'rtec_options' );
 
     if ( empty( $options  ) ) {
         $defaults = array(
@@ -77,7 +79,16 @@ function rtec_activate() {
         );
 
         // get form options from the db
-        update_option( 'rtec_general', $defaults );
+        update_option( 'rtec_options', $defaults );
+    }
+
+    $db = new RegistrationsTEC\Database();
+
+    $ids = $db->getEventPostIds();
+
+    foreach ( $ids as $id ) {
+        $reg_count = $db->getRegistrationCount( $id );
+        update_post_meta( $id, '_RTECnumRegistered', $reg_count );
     }
 }
 register_activation_hook( __FILE__, 'rtec_activate' );
@@ -147,16 +158,16 @@ function rtec_the_registration_form()
             $data_sent = true;
         }
     }
+    require_once RTEC_URL . '/RegistrationsTEC/Form.php';
 
     if ( ! $data_sent ) {
-        require_once RTEC_URL . '/RegistrationsTEC/Form.php';
         $form = new RegistrationsTEC\Form( array( 'first', 'last', 'email', 'other' ), $submission_data, $errors );
 
         $form->setEventMeta();
 
         $form_html = '';
 
-        $general_options = get_option( 'rtec_general', array() );
+        $general_options = get_option( 'rtec_options', array() );
 
         $max_registrations = isset( $general_options['default_max_registrations'] ) ? $general_options['default_max_registrations'] : 'i';
         $form->setMaxRegistrations( $max_registrations );
@@ -172,17 +183,9 @@ function rtec_the_registration_form()
 
         echo $form_html;
     } else {
-        $options = get_option( 'rtec_email' );
+        $html = RegistrationsTEC\Form::getSuccessMessageHtml();
 
-        $success_html = '<p class="rtec_success">';
-        if ( isset( $options['success_message'] ) ) {
-            $success_html .= esc_html( $options['success_message'] );
-        } else {
-            $success_html .= 'Success! Please check your email inbox for a confirmation message';
-        }
-        $success_html .= '</p>';
-
-        echo $success_html;
+        echo $html;
     }
 
 }
@@ -196,14 +199,20 @@ add_action( 'tribe_events_single_event_before_the_content', 'rtec_the_registrati
 function rtec_process_form_submission()
 {
     if ( isset( $_POST['rtec_email_submission'] ) && '1' === $_POST['rtec_email_submission'] ) {
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'rtec_form_nonce' ) ) {
+            die ( 'This form has expired. Try refreshing the page' );
+        }
         // when a form is submitted, a form submission object is used to send an email and record
         // in the database
         require_once RTEC_URL . '/inc/submission-process.php';
     }
 }
+add_action( 'wp_ajax_nopriv_rtec_process_form_submission', 'rtec_process_form_submission' );
+add_action( 'wp_ajax_rtec_process_form_submission', 'rtec_process_form_submission' );
 
 function rtec_delete_registrations()
 {
+    $return = false;
     $nonce = $_POST['rtec_nonce'];
     if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
         die ( 'You did not do this the right way!' );
@@ -219,10 +228,19 @@ function rtec_delete_registrations()
     $db = new RegistrationsTEC\Database();
     
     if ( $db->removeRecords( $registrations_to_be_deleted ) ) {
-        return true;
+        $return = true;
     } else {
-        return false;
+        $return = false;
     }
+
+    $ids = $db->getEventPostIds();
+
+    foreach ( $ids as $id ) {
+        $reg_count = $db->getRegistrationCount( $id );
+        update_post_meta( $id, '_RTECnumRegistered', $reg_count );
+    }
+
+    return $return;
 
     die();
 }
@@ -251,6 +269,13 @@ function rtec_add_registration()
     
     $new_reg->insertEntry( $data );
 
+    $ids = $new_reg->getEventPostIds();
+
+    foreach ( $ids as $id ) {
+        $reg_count = $new_reg->getRegistrationCount( $id );
+        update_post_meta( $id, '_RTECnumRegistered', $reg_count );
+    }
+
     die();
 }
 add_action( 'wp_ajax_rtec_add_registration', 'rtec_add_registration' );
@@ -277,11 +302,49 @@ function rtec_update_registration()
 add_action( 'wp_ajax_rtec_update_registration', 'rtec_update_registration' );
 
 /**
+ * outputs the custom js from the "Customize" tab on the Settings page
+ */
+function rtec_custom_js() {
+    $options = get_option( 'rtec_options' );
+    $rtec_custom_js = isset( $options[ 'custom_js' ] ) ? $options[ 'custom_js' ] : '';
+
+    if ( ! empty( $rtec_custom_js ) ) {
+        ?>
+        <!-- Registrations For the Events Calendar JS -->
+        <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                <?php echo stripslashes( $rtec_custom_js ) . "\r\n"; ?>
+            });
+        </script>
+        <?php
+    }
+}
+add_action( 'wp_footer', 'rtec_custom_js' );
+
+/**
+ * outputs the custom css from the "Customize" tab on the Settings page
+ */
+function rtec_custom_css() {
+    $options = get_option( 'rtec_options' );
+    $rtec_custom_css = isset( $options[ 'custom_css' ] ) ? $options[ 'custom_css' ] : '';
+
+    if ( ! empty( $rtec_custom_css ) ) {
+        echo "<!-- Registrations For the Events Calendar CSS -->" . "\r\n";
+        echo "<style type='text/css'>" . "\r\n";
+        if ( ! empty( $rtec_custom_css ) ) {
+            echo stripslashes( $rtec_custom_css ) . "\r\n";
+        }
+        echo "</style>" . "\r\n";
+    }
+}
+add_action( 'wp_head', 'rtec_custom_css' );
+
+/**
  * Some CSS and JS needed in the admin area as well
  */
 function rtec_admin_scripts_and_styles() {
-    wp_enqueue_style( 'rtec_admin_styles', plugins_url( '/css/rtec-admin-styles.css', __FILE__ ) );
-    wp_enqueue_script( 'rtec_admin_scripts', plugins_url( '/js/rtec-admin-scripts.js', __FILE__ ), array( 'jquery' ), '', false );
+    wp_enqueue_style( 'rtec_admin_styles', plugins_url( '/css/rtec-admin-styles.css', __FILE__ ), array(), RTEC_VERSION );
+    wp_enqueue_script( 'rtec_admin_scripts', plugins_url( '/js/rtec-admin-scripts.js', __FILE__ ), array( 'jquery' ), RTEC_VERSION, false );
     wp_localize_script( 'rtec_admin_scripts', 'rtecAdminScript', 
         array(
             'ajax_url' => admin_url( 'admin-ajax.php' ),
@@ -290,6 +353,16 @@ function rtec_admin_scripts_and_styles() {
     );
 }
 add_action( 'admin_enqueue_scripts', 'rtec_admin_scripts_and_styles' );
+
+function rtec_scripts_and_styles() {
+    wp_enqueue_style( 'rtec_styles', plugins_url( '/css/rtec-styles.css', __FILE__ ), array(), RTEC_VERSION );
+    wp_enqueue_script( 'rtec_scripts', plugins_url( '/js/rtec-scripts.js', __FILE__ ), array( 'jquery' ), RTEC_VERSION, true );
+    wp_localize_script( 'rtec_scripts', 'rtec', array(
+            'ajaxUrl' => admin_url( 'admin-ajax.php' )
+        )
+    );
+}
+add_action( 'wp_enqueue_scripts', 'rtec_scripts_and_styles' );
 
 //register_activation_hook( __FILE__, array( 'Tribe__Events__Main', 'activate' ) );
 //register_deactivation_hook( __FILE__, array( 'Tribe__Events__Main', 'deactivate' ) );

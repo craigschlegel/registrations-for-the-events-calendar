@@ -32,7 +32,7 @@ class Form
     public function __construct( $fields, $submission_data, $errors )
     {
         // get form options from the db
-        $options = get_option( 'rtec_general', array() );
+        $options = get_option( 'rtec_options', array() );
 
         foreach ( $fields as $field ) {
             // create an array of all to be shown
@@ -72,8 +72,8 @@ class Form
         $event_meta['end_date'] = $post_obj->EventEndDate;
         $event_meta['venue_id'] = $meta['_EventVenueID'][0];
         $event_meta['currency_symbol'] = $meta['_EventCurrencySymbol'][0];
-        $event_meta['cost'] = $meta['_EventCost'][0];
         $event_meta['venue_title'] = $venue_meta["_VenueVenue"][0];
+        $event_meta['num_registered'] = $meta['_RTECnumRegistered'][0];
         
         $this->event_meta = $event_meta;
     }
@@ -132,29 +132,58 @@ class Form
     public function getBeginningFormHtml( $options )
     {
         $button_text = isset( $options['register_text'] ) ? esc_attr( $options['register_text'] ) : 'Register';
-        $spots_remaining_text = isset( $options['spots_remaining_text'] ) ? esc_attr( $options['spots_remaining_text'] ) : 'Spots Remaining';
-        $html = '';
+        $width_unit = isset( $options['width_unit'] ) ? esc_attr( $options['width_unit'] ) : '%';
+        $width = isset( $options['width'] ) ? ' style="width: ' . esc_attr( $options['width'] ) . $width_unit . ';"' : '';
+        $data = isset( $options['success_message'] ) ? ' data-rtec-success-message="' . esc_html( $options['success_message'] ) . '"' : ' data-rtec-success-message="Success! Please check your email inbox for a confirmation message"';
+        $html = '<div id="rtec" class="rtec"' . $data . '>';
 
-        $html .= '<button type="button" id="rtec-form-toggle-button" class="rtec-register-button">' . $button_text . '<span class="tribe-bar-toggle-arrow"></span></button>';
+            $html .= '<button type="button" id="rtec-form-toggle-button" class="rtec-register-button rtec-js-show">' . $button_text . '<span class="tribe-bar-toggle-arrow"></span></button>';
+            $html .= '<h3 class="rtec-js-hide">' . $button_text . '</h3>';
 
-        $html .= '<div class="rtec-form-wrapper">';
-        
-            $html .= $this->getAttendanceHtml( $spots_remaining_text );
-
-            $html .= '<form method="post" action="" id="rtec-form" class="rtec-form">';
+            $html .= '<div class="rtec-form-wrapper rtec-js-hide rtec-toggle-on-click"'.$width.'>';
+            if ( ! empty( $this->errors ) ) {
+                $html .= '<div class="rtec-screen-reader" role="alert">';
+                $html .= 'There were errors with your submission. Please try again.';
+                $html .= '</div>';
+            }
+            if ( ! isset( $options['include_attendance_message'] ) || $options['include_attendance_message'] ) {
+                $html .= $this->getAttendanceHtml( $options );
+            }
+                $html .= '<form method="post" action="" id="rtec-form" class="rtec-form">';
 
         return $html;
     }
 
-    public function getAttendanceHtml( $spots_remaining_text )
+    public function getAttendanceHtml( $options )
     {
         $html = '';
-        
-        if ( $this->getMaxRegistrations() !== 'i' ) {
-            $html .= '<div class="rtec-attendance">';
-                $html .= '<span><span class="rtec-spots-remaining"></span> '.$spots_remaining_text.'</span>';
+        $attendance_message_type = isset( $options['attendance_message_type'] ) ? $options['attendance_message_type'] : 'up';
+
+            if ( $attendance_message_type === 'up' ) {
+                $display_num = $this->event_meta['num_registered'];
+                $text_before = isset( $options['attendance_text_before'] ) ? esc_html( $options['attendance_text_before'] ) : 'Join';
+                $text_after = isset( $options['attendance_text_after'] ) ? esc_html( $options['attendance_text_after'] ) : 'others.';
+            } else {
+                $display_num = $this->max_registrations - $this->event_meta['num_registered'];
+                $text_before = isset( $options['attendance_text_before'] ) ? esc_html( $options['attendance_text_before'] ) : 'Only';
+                $text_after = isset( $options['attendance_text_after'] ) ? esc_html( $options['attendance_text_after'] ) : 'spots left.';
+            }
+            $text_string = sprintf( '%s %s %s', $text_before, (string)$display_num, $text_after );
+            if ( $display_num == 1 ) {
+                if ( isset( $options['attendance_text_singular_replace'] ) ) {
+                    $text_string = str_replace( $options['attendance_text_singular_replace'], $options['attendance_text_singular'], $text_string );
+                } else {
+                    $text_string = 'Join 1 other';
+                }
+            }
+            if ( $display_num < 1 ) {
+                $text_string = isset( $options['attendance_text_none_yet'] ) ? esc_html( $options['attendance_text_none_yet'] ) : 'Be the first!';
+            }
+
+            $html .= '<div class="rtec-attendance tribe-events-notices">';
+                $html .= '<p>' . $text_string . '</p>';
             $html .= '</div>';
-        }
+
         
         return $html;
 
@@ -166,6 +195,7 @@ class Form
 
         $event_meta = $this->event_meta;
 
+        $html .= wp_nonce_field( 'rtec_form_nonce', '_wpnonce', true, false );
         $html .= '<input type="hidden" name="rtec_email_submission" value="1" />';
         $html .= '<input type="hidden" name="rtec_title" value="'. $event_meta['title'] . '" />';
         $html .= '<input type="hidden" name="rtec_venue_title" value="'. $event_meta['venue_title'] . '" />';
@@ -183,37 +213,66 @@ class Form
             // check to see if there was an error and fill in
             // previous data
             $value = '';
+            $type = 'text';
+            $required_data = '';
+            $label = $field['label'];
+            if ( in_array( $field['name'], $this->required_fields ) ) {
+                $required_data = ' aria-required="true"';
+                $label .= '*';
+            } else {
+                $required_data = ' aria-required="false"';
+            }
             $error_html = '';
-
             if ( in_array( $field['name'], $this->errors ) ) {
-                $error_html = '<p>' . $field['error_message'] . '</p>';
+                $required_data .= ' aria-invalid="true"';
+                $error_html = '<p class="rtec-error-message" role="alert">' . $field['error_message'] . '</p>';
+            } else {
+                $required_data .= ' aria-invalid="false"';
+            }
+
+            if ( $field['name'] === 'email' ) {
+                $type = 'email';
             }
 
             if ( isset( $this->submission_data['rtec_' . $field['name']] ) ) {
                 $value = $this->submission_data['rtec_' . $field['name']];
             }
 
-            $html .= '<div class="rtec-form-field rtec-'. $field['name'] . '">';
-                $html .= '<label for="rtec_' . $field['name'] . '" class="rtec_text_label">' . $field['label'] . '</label>';
-                $html .= '<input type="text" name="rtec_' . $field['name'] . '" value="'. $value . '" id="rtec_' . $field['name'] . '" />';
+            $html .= '<div class="rtec-form-field rtec-'. $field['name'] . '" data-rtec-error-message="'.$field['error_message'].'">';
+                $html .= '<label for="rtec_' . $field['name'] . '" class="rtec_text_label">' . $label . '</label>';
+                $html .= '<input type="' . $type . '" name="rtec_' . $field['name'] . '" value="'. $value . '" id="rtec_' . $field['name'] . '"' . $required_data . ' />';
                 $html .= $error_html;
             $html .= '</div>';
         }
 
-        $html .= '</div>';
+        $html .= '</div>'; // rtec-form-fields-wrapper
 
         return $html;
     }
 
+    public static function getSuccessMessageHtml() {
+        $options = get_option( 'rtec_options' );
+
+        $success_html = '<p class="rtec-success-message tribe-events-notices">';
+        $success_html .= isset( $options['success_message'] ) ? esc_html( $options['success_message'] ) : 'Success! Please check your email inbox for a confirmation message';
+        $success_html .= '</p>';
+        
+        return $success_html;
+    }
     public function getEndingFormHtml( $options )
     {
         $button_text = isset( $options['submit_text'] ) ? esc_attr( $options['submit_text'] ) : 'Submit';
         $html = '';
+                    $html .= '<div class="rtec-form-buttons">';
+                        $html .= '<input type="submit" class="rtec-submit-button" name="rtec_submit" value="' . $button_text . '"/>';
+                    $html .= '</div>';
 
-                $html .= '<input type="submit" class="rtec-submit-button" name="rtec_submit" value="' . $button_text . '"/>';
-
-            $html .= '</form>';
-        $html .= '</div>';
+                $html .= '</form>';
+                $html .= '<div class="rtec-spinner">';
+                    $html .= '<img title="Tribe Loading Animation Image" alt="Tribe Loading Animation Image" class="tribe-events-spinner-medium" src="' . plugins_url() . '/the-events-calendar/src/resources/images/tribe-loading.gif' . '">';
+                $html .= '</div>';
+            $html .= '</div>'; // rtec-form-wrapper
+        $html .= '</div>'; // rtec
         return $html;
     }
 }

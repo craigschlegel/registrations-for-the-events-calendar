@@ -168,6 +168,7 @@ class Database
         $new = 'n';
         $this->wpdb->query( $this->wpdb->prepare( "UPDATE $this->table_name SET status=%s WHERE status=%s", $current, $new ) );
 
+        set_transient( 'rtec_new_registrations', 0, 60 * 15 );
         // add a way to check if success
         return true;
     }
@@ -176,7 +177,39 @@ class Database
     {
         $new = 'n';
 
-        return $this->wpdb->query($this->wpdb->prepare("SELECT status
-        FROM $this->table_name WHERE status=%s", $new) );
+        return $this->wpdb->query( $this->wpdb->prepare("SELECT status
+        FROM $this->table_name WHERE status=%s", $new ) );
+    }
+
+    public function updateNumRegisteredMeta( $id, $change )
+    {
+        $meta = get_post_meta( $id );
+        $num_registered = $meta['_RTECnumRegistered'][0];
+
+        $num_registered = $num_registered + $change;
+        update_post_meta( $id, '_RTECnumRegistered', $num_registered );
+    }
+
+    public function getRegistrationCount( $id )
+    {
+        $result = $this->wpdb->get_results( $this->wpdb->prepare("SELECT event_id, COUNT(*) AS num_registered
+        FROM $this->table_name WHERE event_id = %d", $id ), ARRAY_A );
+
+        return $result[0]['num_registered'];
+    }
+
+    public function setNumRegisteredMeta( $id, $num )
+    {
+        update_post_meta( $id, '_RTECnumRegistered', (int)$num );
+    }
+
+    public function getEventPostIds() 
+    {
+        global $wpdb;
+        $query = $this->wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", TRIBE_EVENTS_POST_TYPE );
+
+        $event_ids = $this->wpdb->get_col( $query );
+        
+        return $event_ids;
     }
 }

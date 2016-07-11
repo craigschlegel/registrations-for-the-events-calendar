@@ -10,7 +10,7 @@ if ( empty( $submission->errors ) ) {
 
     $submission->sanitizeSubmissionData();
     
-    $email_options = get_option( 'rtec_email' );
+    $email_options = get_option( 'rtec_options' );
 
     if ( $submission->emailAddressGiven() ) {
         $confirmation_header = $submission->getConfirmationEmailHeader( $email_options );
@@ -34,6 +34,14 @@ if ( empty( $submission->errors ) ) {
 
     $db = new RegistrationsTEC\Database();
     $db->insertEntry( $data );
+
+    if ( ! empty( $data['rtec_event_id'] ) ) {
+        $change = 1;
+        $db->updateNumRegisteredMeta( $data['rtec_event_id'], $change );
+    }
+    $conf = $submission->getConfirmationEmailMessage( get_option('rtec_options') );
+
+    echo $conf;
 }
 
 //echo '<pre>';

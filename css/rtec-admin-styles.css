@@ -1,7 +1,3 @@
-.rtec-field-options-wrapper {
-    margin-left: 30px;
-}
-
 .rtec-wrapper {
     box-sizing: border-box;
 }
@@ -80,4 +76,41 @@
     background: #ff6600;
     color: #fff;
     font-size: 10px;
+}
+
+.rtec-field-options-wrapper {
+    width: 425px;
+}
+
+.rtec-field-options-wrapper,
+.rtec-availability-options-wrapper {
+    padding: 1em;
+    margin-bottom: .5em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #fbfbfb;
+
+}
+
+.rtec-field-options-wrapper h4,
+.rtec-availability-options-wrapper h4 {
+    margin: .5rem 0;
+}
+
+.rtec-field-options-wrapper h4 span {
+    font-size: 12px;
+    font-weight: normal;
+}
+.rtec-field-options-wrapper input[type=text] {
+    width: 300px;
+}
+.rtec-availability-options-wrapper input[type=text] {
+    margin-right: 1em;
+}
+.rtec-checkbox-row label {
+    margin-right: 1em;
+}
+
+.rtec-availability-options-wrapper {
+    margin: 1.5em 0 .5em;
 }
