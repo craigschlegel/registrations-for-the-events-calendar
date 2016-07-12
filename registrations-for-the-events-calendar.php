@@ -189,7 +189,14 @@ function rtec_the_registration_form()
     }
 
 }
-add_action( 'tribe_events_single_event_before_the_content', 'rtec_the_registration_form', 99 );
+
+function rtec_location_init()
+{
+    $options = get_option( 'rtec_options' );
+    $location = isset( $options['template_location'] ) ? $options['template_location'] : 'tribe_events_single_event_before_the_content';
+    add_action( $location, 'rtec_the_registration_form' );
+}
+add_action( 'plugins_loaded', 'rtec_location_init', 1 );
 
 /**
  * To separate concerns and avoid potential problems with redirects, this function performs

@@ -115,8 +115,8 @@ jQuery(document).ready(function($) {
                     $('.rtec-spinner, #rtec-form-toggle-button').hide();
                     $('.rtec-form-wrapper').slideUp();
                     $('html, body').animate({
-                        scrollTop: $('#tribe-events').offset().top
-                    }, 200);
+                        scrollTop: $('#rtec').offset().top - 200
+                    }, 750);
                     $('#rtec').prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">'+$('#rtec').attr('data-rtec-success-message')+'</p>');
                     
                 }

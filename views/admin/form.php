@@ -7,6 +7,7 @@
  */
 
 settings_errors(); ?>
+<h2><?php _e( 'Form Settings', 'rtec' ); ?></h2>
 <form method="post" action="options.php">
     <?php settings_fields( 'rtec_options' ); ?>
     <?php //echo'<pre>';var_dump(get_option('rtec_options'));echo'</pre>'; ?>

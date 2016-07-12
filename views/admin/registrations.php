@@ -1,6 +1,4 @@
 <?php
-$options = get_option( 'rtec_general' );
-
 if ( ! isset( $options['default_max_registrations'] ) ) {
     _e ( 'Hey! First time using the plugin? You can start configuring on the "Form" tab', 'rtec' );
 }
@@ -16,7 +14,16 @@ $args = array(
 // create a custom WP_Query object just for events
 $the_query = new WP_Query( $args );
 ?>
-<h2>Overview</h2>
+<h2><?php _e( 'Overview', 'rtec' ); ?></h2>
+
+<?php if ( empty( $tz_offset )) : ?>
+<form method="post" action="options.php">
+    <?php settings_fields( 'rtec_options' ); ?>
+    <?php do_settings_sections( 'rtec_timezone' ); ?>
+    <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
+    <hr>
+</form>
+<?php endif; ?>
 
 <div class="rtec-wrapper rtec-overview">
 <?php
@@ -73,7 +80,7 @@ if ( $the_query->have_posts() ) :
                         <?php if ( $registration['status'] == 'n' ) {
                             echo '<span class="rtec-notice-new">' . _( 'new' ) . '</span>';
                         }
-                        echo date_i18n( 'm/d g:i a', strtotime( $registration['registration_date'] ) ); ?>
+                        echo date_i18n( 'm/d g:i a', strtotime( $registration['registration_date'] ) + $tz_offset ); ?>
                     </td>
                     <td><?php echo $registration['last_name']; ?></td>
                     <td><?php echo $registration['first_name']; ?></td>

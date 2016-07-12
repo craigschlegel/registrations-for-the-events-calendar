@@ -36,6 +36,7 @@
     left: 50%;
 }
 #rtec .rtec-form-wrapper {
+    box-sizing: border-box;
     position: relative;
     width: 100%;
     margin: 0 auto 30px;
@@ -81,4 +82,11 @@
 }
 #rtec .rtec-success-message {
     text-align: center;
+}
+
+/* On mobile make the min-width 100% */
+@media all and (max-width: 640px){
+    #rtec .rtec-form-wrapper {
+        width: 100% !important;
+    }
 }
