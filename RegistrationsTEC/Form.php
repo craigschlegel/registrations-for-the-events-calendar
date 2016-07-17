@@ -170,11 +170,7 @@ class Form
             }
             $text_string = sprintf( '%s %s %s', $text_before, (string)$display_num, $text_after );
             if ( $display_num == 1 ) {
-                if ( isset( $options['attendance_text_singular_replace'] ) ) {
-                    $text_string = str_replace( $options['attendance_text_singular_replace'], $options['attendance_text_singular'], $text_string );
-                } else {
-                    $text_string = 'Join 1 other';
-                }
+                $text_string = isset( $options['attendance_text_one'] ) ? esc_html( $options['attendance_text_one'] ) : 'Join one other person';
             }
             if ( $display_num < 1 ) {
                 $text_string = isset( $options['attendance_text_none_yet'] ) ? esc_html( $options['attendance_text_none_yet'] ) : 'Be the first!';

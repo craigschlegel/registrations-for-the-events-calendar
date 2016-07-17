@@ -71,7 +71,7 @@ $id = (int)$_GET['id'];
                                         <input type="checkbox" value="<?php echo (int)$registration['id']; ?>" id="rtec-select-<?php echo (int)$registration['id']; ?>" class="rtec-registration-select check-column">
                                         <div class="locked-indicator"></div>
                                     </td>
-                                    <td class="rtec-reg-date"><?php echo date_i18n( 'F jS, g:i a', strtotime( $registration['registration_date'] )+ $tz_offset ); ?></td>
+                                    <td class="rtec-reg-date" data-rtec-submit="<?php echo $registration['registration_date']; ?>"><?php echo date_i18n( 'F jS, g:i a', strtotime( $registration['registration_date'] )+ $tz_offset ); ?></td>
                                     <td class="rtec-reg-last"><?php echo $registration['last_name']; ?></td>
                                     <td class="rtec-reg-first"><?php echo $registration['first_name']; ?></td>
                                     <td class="rtec-reg-email"><?php echo $registration['email']; ?></td>

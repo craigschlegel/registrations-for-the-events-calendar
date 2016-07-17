@@ -48,6 +48,8 @@ class Admin
                 return 'form';
             case 'email':
                 return 'email';
+	        case 'support':
+		        return 'support';
             default:
                 return 'registrations';
         }
@@ -369,9 +371,11 @@ class Admin
             'default' => 'You are registered',
             'description' => 'Enter the message you would like customers to receive along with details of the event',
             'callback'  => 'message_text_area',
-            'class' => '',
+            'class' => 'rtec-confirmation-message-tr',
             'page' => 'rtec_email_confirmation',
-            'section' => 'rtec_email_confirmation'
+            'section' => 'rtec_email_confirmation',
+	        'columns' => '60',
+	        'preview' => true
         ));
     }
 
@@ -429,10 +433,10 @@ class Admin
             <div class="rtec-field-options-wrapper">
                 <h4><?php _e( $label, 'rtec' ); ?></h4>
                 <p class="rtec-checkbox-row">
-                    <input type="checkbox" name="<?php echo $args['option'].'['.$field[0].'_show]'; ?>" <?php if ( $show == true ) { echo 'checked'; } ?>>
+                    <input type="checkbox" class="rtec_include_checkbox" name="<?php echo $args['option'].'['.$field[0].'_show]'; ?>" <?php if ( $show == true ) { echo 'checked'; } ?>>
                     <label><?php _e( 'include', 'rtec' ); ?></label>
 
-                    <input type="checkbox" name="<?php echo $args['option'].'['.$field[0].'_require]'; ?>" <?php if ( $require == true ) { echo 'checked'; } ?>>
+                    <input type="checkbox" class="rtec_require_checkbox" name="<?php echo $args['option'].'['.$field[0].'_require]'; ?>" <?php if ( $require == true ) { echo 'checked'; } ?>>
                     <label><?php _e( 'require', 'rtec' ); ?></label><br>
                 </p>
                 <p>
@@ -454,10 +458,10 @@ class Admin
                 <label><?php _e( 'Custom Label:', 'rtec' ); ?></label><input type="text" name="<?php echo $args['option'].'[other_label]'; ?>" value="<?php echo $label; ?>" class="large-text">
             </p>
             <p class="rtec-checkbox-row">
-                <input type="checkbox" name="<?php echo $args['option'].'[other_show]'; ?>" <?php if( $show == true ) { echo 'checked'; } ?>>
+                <input type="checkbox" class="rtec_include_checkbox" name="<?php echo $args['option'].'[other_show]'; ?>" <?php if( $show == true ) { echo 'checked'; } ?>>
                 <label><?php _e( 'include', 'rtec' ); ?></label>
 
-                <input type="checkbox" name="<?php echo $args['option'].'[other_require]'; ?>" <?php if( $require == true ) { echo 'checked'; } ?>>
+                <input type="checkbox" class="rtec_require_checkbox" name="<?php echo $args['option'].'[other_require]'; ?>" <?php if( $require == true ) { echo 'checked'; } ?>>
                 <label><?php _e( 'require', 'rtec' ); ?></label>
             </p>
             <p>
@@ -482,9 +486,8 @@ class Admin
         $options = get_option( $args['option'] );
         $text_before = ( isset( $options['attendance_text_before'] ) ) ? esc_attr( $options['attendance_text_before'] ) : 'Join';
         $text_after = ( isset( $options['attendance_text_after'] ) ) ? esc_attr( $options['attendance_text_after'] ) : 'others';
-        $text_singular = ( isset( $options['attendance_text_singular'] ) ) ? esc_attr( $options['attendance_text_singular'] ) : 'other';
-        $text_singular_replace = ( isset( $options['attendance_text_singular_replace'] ) ) ? esc_attr( $options['attendance_text_singular_replace'] ) : 'others';
-        $none_yet = ( isset( $options['attendance_text_none_yet'] ) ) ? esc_attr( $options['attendance_text_none_yet'] ) : 'Be the first!';
+	    $one = ( isset( $options['attendance_text_one'] ) ) ? esc_attr( $options['attendance_text_one'] ) : 'Join one other person';
+	    $none_yet = ( isset( $options['attendance_text_none_yet'] ) ) ? esc_attr( $options['attendance_text_none_yet'] ) : 'Be the first!';
         $option_checked = ( isset( $options['include_attendance_message'] ) ) ? $options['include_attendance_message'] : true;
         $option_selected = ( isset( $options['attendance_message_type'] ) ) ? $options['attendance_message_type'] : 'up';
         ?>
@@ -495,9 +498,9 @@ class Admin
             <div class="rtec-checkbox-row">
                 <h4><?php _e( 'Message Type', 'rtec' ); ?></h4>
                 <input id="rtec_guests_attending_type" name="<?php echo $args['option'].'[attendance_message_type]'; ?>" type="radio" value="up" <?php if ( $option_selected == 'up' ) echo "checked"; ?> />
-                <label for="rtec_guests_attending_type"><?php _e( 'guests attending', 'rtec' ); ?></label>
+                <label for="rtec_guests_attending_type"><?php _e( 'guests attending (count up)', 'rtec' ); ?></label>
                 <input id="rtec_spots_remaining_type" name="<?php echo $args['option'].'[attendance_message_type]'; ?>" type="radio" value="down" <?php if ( $option_selected == 'down' ) echo "checked"; ?>/>
-                <label for="rtec_spots_remaining_type"><?php _e( 'spots remaining', 'rtec' ); ?></label>
+                <label for="rtec_spots_remaining_type"><?php _e( 'spots remaining (count down)', 'rtec' ); ?></label>
             </div>
         </div>
         <div class="rtec-availability-options-wrapper">
@@ -507,10 +510,10 @@ class Admin
             <label for="rtec_text_before"><?php _e( 'Text Before: ', 'rtec' ); ?></label><input id="rtec_text_before" type="text" name="<?php echo $args['option'].'[attendance_text_before]'; ?>" value="<?php echo $text_before; ?>"/>
             <label for="rtec_text_after"><?php _e( 'Text After: ', 'rtec' ); ?></label><input id="rtec_text_after" type="text" name="<?php echo $args['option'].'[attendance_text_after]'; ?>" value="<?php echo $text_after; ?>"/>
             <p class="description">Example: "<strong>Join</strong> 20 <strong>others.</strong>", "<strong>Only</strong> 5 <strong>spots left.</strong>"</p>
-            <label for="rtec_text_singular"><?php _e( 'Singular form of plural: ', 'rtec' ); ?></label><input id="rtec_text_singular" type="text" name="<?php echo $args['option'].'[attendance_text_singular]'; ?>" value="<?php echo $text_singular; ?>"/>
-            <label for="rtec_text_singular_replace"><?php _e( 'Plural form to replace: ', 'rtec' ); ?></label><input id="rtec_text_singular_replace" type="text" name="<?php echo $args['option'].'[attendance_text_singular_replace]'; ?>" value="<?php echo $text_singular_replace; ?>"/>
-            <p class="description">Example: "Join 1 <strong>other</strong>.", "Only 1 <strong>spot</strong> left."</p>
-            <br>
+	        <br>
+	        <label for="rtec_text_one"><?php _e( 'Message if exactly 1 registration: ', 'rtec' ); ?></label>
+	        <input id="rtec_text_one" type="text" class="large-text" name="<?php echo $args['option'].'[attendance_text_one]'; ?>" value="<?php echo $one; ?>"/>
+	        <br><br>
             <label for="rtec_text_none_yet"><?php _e( 'Message if no registrations yet: ', 'rtec' ); ?></label>
             <input id="rtec_text_none_yet" type="text" class="large-text" name="<?php echo $args['option'].'[attendance_text_none_yet]'; ?>" value="<?php echo $none_yet; ?>"/>
         </div>
@@ -523,8 +526,19 @@ class Admin
         $options = get_option( $args['option'] );
         $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $args['default'];
         $rows = isset( $args['rows'] ) ? $args['rows'] : '10';
+	    $columns = isset( $args['columns'] ) ? $args['columns'] : '70';
+	    $preview = isset( $args['preview'] ) ? $args['preview'] : false;
         ?>
-        <textarea id="textarea_string" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" cols="80" rows="<?php echo $rows; ?>"><?php echo $option_string; ?></textarea><br>
+        <textarea id="confirmation_message_textarea" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" cols="<?php echo $columns; ?>" rows="<?php echo $rows; ?>"><?php echo $option_string; ?></textarea>
+	    <?php if ( $preview ) : ?>
+	    <td>
+		    <h4>Example:</h4>
+		    <div id="rtec_js_preview">
+			    <pre></pre>
+		    </div>
+	    </td>
+	    <?php endif; ?>
+	    <br>
         <span><?php print( $args['example'] ); ?></span>
 
         <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
@@ -664,7 +678,7 @@ class Admin
             $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'other_show', 'other_require' );
             $leave_spaces = array();
         } elseif ( isset( $input['confirmation_message'] ) ) {
-            $checkbox_settings = array();
+            $checkbox_settings = array('include_attendance_message');
             $leave_spaces = array();
         }
 

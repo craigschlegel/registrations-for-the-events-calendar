@@ -77,11 +77,9 @@
     color: #fff;
     font-size: 10px;
 }
-
 .rtec-field-options-wrapper {
     width: 425px;
 }
-
 .rtec-field-options-wrapper,
 .rtec-availability-options-wrapper {
     padding: 1em;
@@ -91,7 +89,6 @@
     background: #fbfbfb;
 
 }
-
 .rtec-field-options-wrapper h4,
 .rtec-availability-options-wrapper h4 {
     margin: .5rem 0;
@@ -110,7 +107,32 @@
 .rtec-checkbox-row label {
     margin-right: 1em;
 }
-
 .rtec-availability-options-wrapper {
     margin: 1.5em 0 .5em;
+}
+.rtec-confirmation-message-tr td pre{
+    max-width: 800px;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+}
+.rtec-button-wrapper {
+    display: block;
+}
+.rtec-support-button {
+    border: none;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 3px 6px 4px;
+    margin-bottom: 1em;
+    width: auto;
+    background-color: rgba(0, 102, 102, .8);
+    color: #fff !important;
+    text-decoration: none;
+    text-align: center;
+}
+.rtec-support-button:hover {
+    background-color: rgb(0, 102, 102);
 }

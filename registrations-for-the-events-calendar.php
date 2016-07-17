@@ -94,6 +94,7 @@ function rtec_activate() {
 register_activation_hook( __FILE__, 'rtec_activate' );
 
 define( 'RTEC_URL' , plugin_dir_path( __FILE__ ) );
+define( 'RTEC_TITLE' , 'Registrations for the Events Calendar' );
 define( 'RTEC_VERSION' , '0.1' );
 define( 'RTEC_DBVERSION' , '0.1' );
 define( 'RTEC_TABLENAME' , 'rtec_registrations' );

@@ -1,5 +1,58 @@
 jQuery(document).ready(function($){
 
+
+    // FORM tab
+    $('.rtec_require_checkbox').change(function(){
+        if ($(this).is(':checked')) {
+            console.log('checked');
+            $(this).closest('.rtec-checkbox-row').find('.rtec_include_checkbox').prop( "checked", true );
+        }
+    });
+
+    $('.rtec_include_checkbox').change(function(){
+        if (!$(this).is(':checked')) {
+            $(this).closest('.rtec-checkbox-row').find('.rtec_require_checkbox').prop( "checked", false );
+        }
+    });
+
+    String.prototype.replaceAll = function(search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
+
+    var $rtecJsPreview = $('#rtec_js_preview').find('pre'),
+        $rtecConfirmationTextarea = $('#confirmation_message_textarea'),
+        typingTimer,
+        doneTypingInterval = 1500;
+    function updateText() {
+        var confirmationMessage = $rtecConfirmationTextarea.val();
+        confirmationMessage = confirmationMessage.replaceAll('{venue}', 'MI6 Headquarters');
+        confirmationMessage = confirmationMessage.replaceAll('{event-title}', 'Top Secret Meeting');
+        confirmationMessage = confirmationMessage.replaceAll('{event-date}', 'July 3');
+        confirmationMessage = confirmationMessage.replaceAll('{first}', 'James');
+        confirmationMessage = confirmationMessage.replaceAll('{last}', 'Bond');
+        confirmationMessage = confirmationMessage.replaceAll('{email}', 'Bond007@ohmss.com');
+        confirmationMessage = confirmationMessage.replaceAll('{other}', 'Shaken not Stirred');
+        confirmationMessage = confirmationMessage.replaceAll('{nl}', "\n");
+        $rtecJsPreview.text(confirmationMessage);
+    }
+    if ( $rtecConfirmationTextarea.length){
+        updateText();
+    }
+    $rtecConfirmationTextarea.keyup(function(){
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(updateText, doneTypingInterval);
+    });
+    
+    function rtecRegistrationAjax(submitData,successFunc) {
+        $.ajax({
+            url: rtecAdminScript.ajax_url,
+            type: 'post',
+            data: submitData,
+            success: successFunc
+        });
+    }
+
     $('.rtec-delete-registration').on('click', function() {
         var idsToRemove = [];
         $('.rtec-registration-select').each(function() {
@@ -17,27 +70,28 @@ jQuery(document).ready(function($){
                     .after('<div class="rtec-table-changing spinner is-active"></div>')
                     .fadeTo("slow", .2);
 
-                $.ajax({
-                    url: rtecAdminScript.ajax_url,
-                    type: 'post',
-                    data: {
-                        action: 'rtec_delete_registrations',
-                        registrations_to_be_deleted: idsToRemove,
-                        rtec_nonce : rtecAdminScript.rtec_nonce
-                    },
-                    success: function () {
-                        // remove deleted entries
-                        $('.rtec-being-removed').each(function () {
-                            $(this).remove();
-                        });
-                        // remove spinner
-                        $('.rtec-table-changing').remove();
-                        $('.rtec-single table tbody').fadeTo("fast", 1);
-                        idsToRemove = [];
-                    }
-                }); // ajax call
+                var submitData = {
+                    action: 'rtec_delete_registrations',
+                    registrations_to_be_deleted: idsToRemove,
+                    rtec_nonce : rtecAdminScript.rtec_nonce
+                },
+                successFunc = function () {
+                    // remove deleted entries
+                    $('.rtec-being-removed').each(function () {
+                        $(this).remove();
+                    });
+                    // remove spinner
+                    $('.rtec-table-changing').remove();
+                    $('.rtec-single table tbody').fadeTo("fast", 1);
+                    idsToRemove = [];
+                };
+                rtecRegistrationAjax(submitData,successFunc);
+
             } else {
                 idsToRemove = [];
+                $('.rtec-being-removed').each(function() {
+                    $(this).removeClass('rtec-being-removed');
+                });
             } // if user confirms delete registrations
         } // if registrations to be deleted is not empty
     }); // delete submit click
@@ -49,7 +103,8 @@ jQuery(document).ready(function($){
             $('.rtec-registration-select').each(function() {
                 if ($(this).is(':checked') && editCount < 1) {
                     var $closestRegRow = $(this).closest('.rtec-reg-row'),
-                        date = $closestRegRow.find('.rtec-reg-date').text(),
+                        dateStr = $closestRegRow.find('.rtec-reg-date').text(),
+                        date = $closestRegRow.find('.rtec-reg-date').attr('data-rtec-submit'),
                         lastName = $closestRegRow.find('.rtec-reg-last').text(),
                         firstName = $closestRegRow.find('.rtec-reg-first').text(),
                         email = $closestRegRow.find('.rtec-reg-email').text(),
@@ -58,7 +113,7 @@ jQuery(document).ready(function($){
                     editCount = 1;
 
                     if (! $('.rtec-submit-edit').length) {
-                        $closestRegRow.find('.rtec-reg-date').html('<button data-rtec-val="'+date+'" class="button-primary rtec-submit-edit">Submit Edit</button>');
+                        $closestRegRow.find('.rtec-reg-date').html('<button data-rtec-val="'+dateStr+'" data-rtec-submit="'+date+'" class="button-primary rtec-submit-edit">Submit Edit</button>');
                     }
 
                     $closestRegRow.find('.rtec-reg-last').html('<input type="text" name="last" id="rtec-last" data-rtec-val="'+lastName+'" value="'+lastName+'" />');
@@ -72,15 +127,21 @@ jQuery(document).ready(function($){
                 }
             });
         } else {
-            var $editingClosestRegRow = $('.rtec-editing').closest('.rtec-reg-row');
+            var $rtecEditing = $('.rtec-editing'),
+                $editingClosestRegRow = $rtecEditing.closest('.rtec-reg-row');
 
-            $editingClosestRegRow.find('.rtec-reg-date').html($editingClosestRegRow.find('.rtec-reg-date button').attr('data-rtec-val'));
-            $editingClosestRegRow.find('.rtec-reg-last').html($editingClosestRegRow.find('.rtec-reg-last input').attr('data-rtec-val'));
-            $editingClosestRegRow.find('.rtec-reg-first').html($editingClosestRegRow.find('.rtec-reg-first input').attr('data-rtec-val'));
-            $editingClosestRegRow.find('.rtec-reg-email').html($editingClosestRegRow.find('.rtec-reg-email input').attr('data-rtec-val'));
-            $editingClosestRegRow.find('.rtec-reg-other').html($editingClosestRegRow.find('.rtec-reg-other input').attr('data-rtec-val'));
+            function addBackRowData($row,findEl,inputEl) {
+                var html = $editingClosestRegRow.find(inputEl).attr('data-rtec-val');
+                $row.find(findEl).html(html);
+            }
 
-            $('.rtec-editing').removeClass('rtec-editing');
+            addBackRowData($editingClosestRegRow,'.rtec-reg-date','.rtec-reg-date button');
+            addBackRowData($editingClosestRegRow,'.rtec-reg-last','.rtec-reg-last input');
+            addBackRowData($editingClosestRegRow,'.rtec-reg-first','.rtec-reg-first input');
+            addBackRowData($editingClosestRegRow,'.rtec-reg-email','.rtec-reg-email input');
+            addBackRowData($editingClosestRegRow,'.rtec-reg-other','.rtec-reg-other input');
+
+            $rtecEditing.removeClass('rtec-editing');
 
             $('.rtec-edit-registration').text('Edit Selected');
 
@@ -88,36 +149,34 @@ jQuery(document).ready(function($){
 
     }); // edit registration click
 
-    $('body').on('click', '.rtec-submit-edit', function () {
+    var $body = $('body');
+    $body.on('click', '.rtec-submit-edit', function () {
         var $table = $(this).closest('table');
         // start spinner to show user that request is processing
         $('.rtec-single table tbody')
             .after('<div class="rtec-table-changing spinner is-active"></div>')
             .fadeTo("slow", .2);
 
-        // submit the entry with ajax
-        $.ajax({
-            url: rtecAdminScript.ajax_url,
-            type: 'post',
-            data : {
+        var submitData = {
                 action : 'rtec_update_registration',
                 rtec_id: $table.find('.rtec-editing').val(),
+                rtec_registration_date: $table.find('.rtec-reg-date').attr('data-rtec-val'),
                 rtec_other: $table.find('input[name=other]').val(),
                 rtec_first: $table.find('input[name=first]').val(),
                 rtec_email: $table.find('input[name=email]').val(),
                 rtec_last: $table.find('input[name=last]').val(),
                 rtec_nonce : rtecAdminScript.rtec_nonce
             },
-            success : function() {
+            successFunc = function () {
                 //reload the page on success to show the added registration
                 location.reload();
-            }
-        }); // ajax call
+            };
+        rtecRegistrationAjax(submitData,successFunc);
     }); // registration submit
 
     $('.rtec-add-registration').click( function() {
-        $table = $(this).closest('.tablenav').prev();
-        var $nav = $table.next();
+        var $table = $(this).closest('.tablenav').prev(),
+            $nav = $table.next();
         // remove if input fields already displayed
         if ($table.find('.rtec-new-registration').length) {
             $nav.find('.rtec-add-registration').text('+ Add New Registration');
@@ -139,17 +198,14 @@ jQuery(document).ready(function($){
         }
     });
 
-    $('body').on('click', '.rtec-submit-new', function () {
+    $body.on('click', '.rtec-submit-new', function () {
+        var $table = $(this).closest('.tablenav').prev();
         // start spinner to show user that request is processing
         $('.rtec-single table tbody')
             .after('<div class="rtec-table-changing spinner is-active"></div>')
             .fadeTo("slow", .2);
 
-        // submit the entry with ajax
-        $.ajax({
-            url: rtecAdminScript.ajax_url,
-            type: 'post',
-            data : {
+        var submitData = {
                 action : 'rtec_add_registration',
                 rtec_event_id: $('.rtec-single-event').attr('data-rtec-event-id'),
                 rtec_other: $table.find('input[name=other]').val(),
@@ -160,10 +216,10 @@ jQuery(document).ready(function($){
                 rtec_end_time: $table.closest('.rtec-single-event').find('.rtec-end-time').text(),
                 rtec_nonce : rtecAdminScript.rtec_nonce
             },
-            success : function() {
+            successFunc = function () {
                 //reload the page on success to show the added registration
                 location.reload();
-            }
-        }); // ajax call
+            };
+        rtecRegistrationAjax(submitData,successFunc);
     }); // registration submit
 });
