@@ -1,20 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Craig
- * Date: 5/22/2016
- * Time: 9:33 AM
- */
-
-namespace RegistrationsTEC;
 
 // Don't load directly
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
 
-class Submission
+class RTEC_Submission
 {
+    private static $instance;
     public $submission = array();
 
     public $errors = array();
@@ -25,16 +18,24 @@ class Submission
 
     public function __construct( $post )
     {
-        $sanitized_post = array();
-
-        foreach ( $post as $post_key => $raw_post_value ) {
-            $sanitized_post[$post_key] = sanitize_text_field( $raw_post_value );
+        $this->submission = $post;
+        
+        $this->validate_data();
+    }
+    /**
+     * Get the one true instance of EDD_Register_Meta.
+     *
+     * @since  1.0
+     * @return $instance
+     */
+    static public function instance() {
+        if ( !self::$instance ) {
+            self::$instance = new RTEC_Submission( $_POST );
         }
-
-        $this->submission = $sanitized_post;
+        return self::$instance;
     }
 
-    public function validateSubmissionData() {
+    public function validate_data() {
         // get form options from the db
         $options = get_option( 'rtec_options' );
         $submission = $this->submission;
@@ -63,44 +64,48 @@ class Submission
                     $this->errors[] = 'other';
                 }
             }
-
-            $this->submission[$input_key] = $this->stripMaliciousHeaders( $input_value );
         }
     }
+    public function has_errors()
+    {
+        return ! empty( $this->errors );
+    }
+    public function get_errors() 
+    {
+        return $this->errors;
+    }
+    public function get_data()
+    {
+        return $this->submission;
+    }
     
-    public function sanitizeSubmissionData() 
+    public function sanitize_submission() 
     {
         $submission = $this->submission;
-
         // for each submitted form field
         foreach ( $submission as $input_key => $input_value ) {
-
             // sanitize the input value
             $new_val = sanitize_text_field( $input_value );
-            
             // strip potentially malicious header strings
-            $new_val  = $this->stripMaliciousHeaders( $new_val  );
-            
+            $new_val  = $this->strip_malicious( $new_val  );
             // assign the sanitized value
             $this->submission[$input_key] = $new_val;
         }
     }
 
-    private function stripMaliciousHeaders( $value )
+    private function strip_malicious( $value )
     {
         $malicious = array( 'to:', 'cc:', 'bcc:', 'content-type:', 'mime-version:', 'multipart-mixed:', 'content-transfer-encoding:' );
-
         foreach ( $malicious as $m ) {
             if( stripos( $value, $m ) !== false ) {
                 return 'untrusted';
             }
         }
-
         $value = str_replace( array( '\r', '\n', '%0a', '%0d'), ' ' , $value);
         return trim( $value );
     }
 
-    public function emailAddressGiven()
+    public function email_given()
     {
         if ( ! empty( $this->submission['rtec_email'] ) ) {
             return true;
@@ -108,7 +113,7 @@ class Submission
         return false;
     }
 
-    public function getConfirmationEmailMessage( $options )
+    private function get_conf_message( $options )
     {
         $body = $options['confirmation_message'];
 
@@ -138,7 +143,7 @@ class Submission
         return $body;
     }
 
-    public function getConfirmationEmailHeader( $email_options )
+    private function get_conf_header( $email_options )
     {
         $options = $email_options;
 
@@ -153,12 +158,12 @@ class Submission
         return $headers;
     }
 
-    public function getConfirmationEmailRecipient()
+    private function get_conf_recipient()
     {
         return $this->submission['rtec_email'];
     }
 
-    public function getConfirmationEmailSubject( $email_options )
+    private function get_conf_subject( $email_options )
     {
         $options = $email_options;
 
@@ -168,86 +173,84 @@ class Submission
 
         return 'Thank You';
     }
+    
+    public function send_confirmation_email() {
+        $confirmation_header = $this->get_conf_header();
+        $confirmation_message = $this->get_conf_message();
+        $confirmation_recipient = $this->get_conf_recipient();
+        $confirmation_subject = $this->get_conf_subject();
+        return wp_mail( $confirmation_recipient, $confirmation_subject, $confirmation_message, $confirmation_header );
+    }
 
-    public function getNotificationEmailMessage()
+    public function get_not_message()
     {
         $body = '';
-
         $date_str = date_i18n( 'F j, Y', strtotime( $this->submission['rtec_date'] ) );
-
         $body .= sprintf( 'The following submission was made for: %1$s at %2$s on %3$s'. "\n",
             esc_html( $this->submission['rtec_title'] ) , esc_html( $this->submission['rtec_venue_title'] ) , $date_str );
-
         $first = ! empty( $this->submission['rtec_first'] ) ? esc_html( $this->submission['rtec_first'] ) . ' ' : ' ';
         $last = ! empty( $this->submission['rtec_last'] ) ? esc_html( $this->submission['rtec_last'] ) : '';
         $body .= sprintf ( 'Registered Name: %1$s%2$s', $first, $last ) . "\n";
-
         if ( ! empty( $this->submission['rtec_email'] ) ) {
             $email = esc_html( $this->submission['rtec_email'] );
             $body .= sprintf ( 'Email: %1$s', $email ) . "\n";
         }
-
         if ( ! empty( $this->submission['rtec_other'] ) ) {
             $other = esc_html( $this->submission['rtec_other'] );
             $body .= sprintf ( 'Other: %1$s', $other ) . "\n";
         }
-
         return $body;
     }
 
-    public function getNotificationEmailHeader( $email_options )
+    public function get_not_header()
     {
-        $options = $email_options;
-
-        if ( ! empty ( $options['notification_from'] ) && ! empty ( $options['confirmation_from_address'] ) ) {
-            $notification_from_address = is_email( $options['confirmation_from_address'] ) ? $options['confirmation_from_address'] : get_option( 'admin_email' );
-            $email_from = $this->stripMaliciousHeaders( $options['notification_from'] ) . ' <' . $notification_from_address . '>';
+		global $rtec_options;
+        if ( ! empty ( $rtec_options['notification_from'] ) && ! empty ( $rtec_options['confirmation_from_address'] ) ) {
+            $notification_from_address = is_email( $rtec_options['confirmation_from_address'] ) ? $rtec_options['confirmation_from_address'] : get_option( 'admin_email' );
+            $email_from = $this->strip_malicious( $rtec_options['notification_from'] ) . ' <' . $notification_from_address . '>';
             $headers = 'From: ' . $email_from;
         } else {
             $headers = '';
         }
-
         return $headers;
     }
 
-    public function getNotificationEmailRecipient( $email_options )
+    public function get_not_recipient()
     {
-        $options = $email_options;
-
-        $recipients = explode( ',', $options['recipients'] );
+	    global $rtec_options;
+        $recipients = explode( ',', $rtec_options['recipients'] );
         $valid_recipients = array();
-
         foreach ( $recipients as $recipient ) {
             if ( is_email( $recipient ) ) {
                 $valid_recipients[] = $recipient;
             }
         }
-
         if ( ! empty( $valid_recipients ) ) {
             return $valid_recipients;
         }
     }
 
-    public function getNotificationEmailSubject()
+    public function get_not_subject()
     {
         return 'New Submission';
     }
     
-    public function sendEmail( $header, $message, $recipient, $subject )
+    public function send_notification_email() 
     {
-        //echo '<pre>';
-        return wp_mail( $header,$message,$recipient,$subject );
-        //echo '</pre>';
+        $notification_header = $this->get_not_header();
+        $notification_message = $this->get_not_message();
+        $notification_recipient = $this->get_not_recipient();
+        $notification_subject = $this->get_not_subject();
+        return wp_mail( $notification_recipient, $notification_subject, $notification_message, $notification_header );
     }
     
-    public function getDbData()
+    public function get_db_data()
     {
         $data = array();
-        
         foreach ( $this->submission as $key => $value ) {
             $data[$key] = $value;
         }
-
         return $data;
     }
 }
+RTEC_Submission::instance( $_POST );

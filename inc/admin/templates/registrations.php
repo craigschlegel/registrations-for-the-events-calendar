@@ -2,8 +2,7 @@
 if ( ! isset( $options['default_max_registrations'] ) ) {
     _e ( 'Hey! First time using the plugin? You can start configuring on the "Form" tab', 'rtec' );
 }
-require_once RTEC_URL . '/RegistrationsTEC/Database.php';
-$db = new RegistrationsTEC\Database();
+$db = new RTEC_Db_Admin();
 
 $args = array(
     'post_type'   => 'tribe_events',
@@ -38,7 +37,7 @@ if ( $the_query->have_posts() ) :
             'order_by' => 'registration_date'
         );
 
-        $registrations = $db->retrieveEntries( $data );
+        $registrations = $db->retrieve_entries( $data );
 
         // set post meta
         $meta = get_post_meta( $id );
@@ -105,4 +104,4 @@ if ( $the_query->have_posts() ) :
 <?php endwhile; endif; // end loop ?>
 </div> <!-- rtec-wrapper -->
 
-<?php $db->updateStatuses();
+<?php $db->update_statuses();

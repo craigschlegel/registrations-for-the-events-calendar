@@ -15,7 +15,8 @@
 	<a href="" class="rtec-support-button"><?php _e( 'Request a Feature', 'rtec' ); ?></a>
 </div>
 <br />
-<h3><?php _e('System Info', 'rtec' ); ?> &nbsp; <?php _e( 'Click the text below to select all', 'rtec' ); ?></h3>
+<h3><?php _e('System Info', 'rtec' ); ?></h3>
+<p><?php _e( 'Click the text below to select all', 'rtec' ); ?></p>
 
 <textarea readonly="readonly" onclick="this.focus();this.select()" title="To copy, click the field then press Ctrl + C (PC) or Cmd + C (Mac)." style="width: 70%; height: 500px; white-space: pre; font-family: Menlo,Monaco,monospace;">
 ## SITE/SERVER INFO: ##

@@ -11,7 +11,7 @@
     <?php
     // this controls which view is included based on the selected tab
     $tab = isset( $_GET["tab"] ) ? $_GET["tab"] : 'registrations';
-    $active_tab = RegistrationsTEC\Admin::get_active_tab( $tab );
+    $active_tab = RTEC_Admin::get_active_tab( $tab );
 
     $options = get_option( 'rtec_options' );
     $WP_offset = get_option( 'gmt_offset' );
@@ -38,16 +38,16 @@
 </h2>
     <?php
         if ( $active_tab === 'email' ) {
-            require_once RTEC_URL.'views/admin/e-mail.php';
+            require_once RTEC_PLUGIN_DIR.'inc/admin/templates/email.php';
         } elseif ( $active_tab === 'form' ){
-            require_once RTEC_URL.'views/admin/form.php';
+            require_once RTEC_PLUGIN_DIR.'inc/admin/templates/form.php';
         } elseif ( $active_tab === 'support' ){
-            require_once RTEC_URL.'views/admin/support.php';
+            require_once RTEC_PLUGIN_DIR.'inc/admin/templates/support.php';
         } else {
             if ( $active_tab === 'single' ) {
-                require_once RTEC_URL.'views/admin/single.php';
+                require_once RTEC_PLUGIN_DIR.'inc/admin/templates/single.php';
             } else {
-                require_once RTEC_URL.'views/admin/registrations.php';
+                require_once RTEC_PLUGIN_DIR.'inc/admin/templates/registrations.php';
             }
         }
     ?>

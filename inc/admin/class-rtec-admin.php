@@ -6,14 +6,12 @@
  * Time: 9:45 PM
  */
 
-namespace RegistrationsTEC;
-
 // Don't load directly
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
 
-class Admin
+class RTEC_Admin
 {
     public function __construct()
     {
@@ -30,11 +28,11 @@ class Admin
             $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . $new_registrations_count . '</span></span>';
         }
         add_submenu_page(
-            'edit.php?post_type=' . TRIBE_EVENTS_POST_TYPE,
+	        'edit.php?post_type=' . RTEC_TRIBE_EVENTS_POST_TYPE,
             'Registrations',
             $menu_title,
             'manage_options',
-            RTEC_URL.'_settings',
+            RTEC_PLUGIN_DIR.'_settings',
             array( $this, 'create_options_page' )
         );
     }
@@ -57,7 +55,7 @@ class Admin
 
     public function create_options_page()
     {
-        require_once RTEC_URL . '/views/admin/main.php';
+        require_once RTEC_PLUGIN_DIR . '/inc/admin/templates/main.php';
     }
 
     public function blank() {

@@ -1,7 +1,5 @@
 <?php
 
-require_once RTEC_URL . '/RegistrationsTEC/Database.php';
-
 // create a custom WP_Query object just for events
 
 $id = (int)$_GET['id'];
@@ -14,7 +12,7 @@ $id = (int)$_GET['id'];
 
     <div class="rtec-wrapper rtec-single">
         <?php
-                $db = new RegistrationsTEC\Database();
+                $db = new RTEC_Db_Admin();
 
                 $data = array(
                     'fields' => 'registration_date, id, last_name, first_name, email, other',
@@ -22,7 +20,7 @@ $id = (int)$_GET['id'];
                     'order_by' => 'registration_date'
                 );
 
-                $registrations = $db->retrieveEntries( $data );
+                $registrations = $db->retrieve_entries( $data );
 
                 // set post meta
                 $meta = get_post_meta( $id );

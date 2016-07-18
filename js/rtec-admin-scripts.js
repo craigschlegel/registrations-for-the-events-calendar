@@ -199,7 +199,7 @@ jQuery(document).ready(function($){
     });
 
     $body.on('click', '.rtec-submit-new', function () {
-        var $table = $(this).closest('.tablenav').prev();
+        var $table = $(this).closest('table');
         // start spinner to show user that request is processing
         $('.rtec-single table tbody')
             .after('<div class="rtec-table-changing spinner is-active"></div>')

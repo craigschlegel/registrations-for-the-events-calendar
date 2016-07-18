@@ -1,7 +1,5 @@
 <?php
 
-namespace RegistrationsTEC;
-
 // Don't load directly
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
@@ -10,40 +8,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  *
  */
-class Database
+class RTEC_Db_Admin extends RTEC_Db
 {
-
-    /**
-     * @var object WordPress database object
-     */
-    protected $wpdb;
-
-    /**
-     * @var string RTEC database table name
-     */
-    protected $table_name;
-
-    /**
-     * Construct the necessary data needed to make queries
-     *
-     * Including the WordPress database object and the table name for
-     * registrations is needed to add registrations to the database
-     */
-    public function __construct()
+    public static function create_table()
     {
         global $wpdb;
-
-        $this->wpdb = &$wpdb;
-        $this->table_name = $wpdb->prefix . RTEC_TABLENAME;
-    }
-
-    public static function createTable()
-    {
-        global $wpdb;
-
         $table_name = $wpdb->prefix . RTEC_TABLENAME;
         $charset_collate = $wpdb->get_charset_collate();
-
         if ( $wpdb->get_var("show tables like '$table_name'" ) != $table_name ) {
             $sql = "CREATE TABLE " . $table_name . " (
                 id MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
@@ -57,45 +28,24 @@ class Database
                 status CHAR(1) DEFAULT 'y' NOT NULL,
                 UNIQUE KEY id (id)
             ) $charset_collate;";
-
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-
             dbDelta( $sql );
-
             add_option( 'rtec_db_version', RTEC_DBVERSION );
 
         }
 
     }
 
-    public function insertEntry( $data )
+    public function update_entry( $data )
     {
-        $now = date( "Y-m-d H:i:s" );
-        
-        $event_id = isset( $data['rtec_event_id'] ) ? $data['rtec_event_id'] : '';
-        $registration_date = isset( $data['rtec_entry_date'] ) ? $data['rtec_entry_date'] : $now;
-        $last = isset( $data['rtec_last'] ) ? $data['rtec_last'] : '';
-        $first = isset( $data['rtec_first'] ) ? $data['rtec_first'] : '';
-        $email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
-        $venue = isset( $data['rtec_venue_title'] ) ? $data['rtec_venue_title'] : '';
-        $other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
-        $status = isset( $data['rtec_status'] ) ? $data['rtec_status'] : 'n';
-
-        $this->wpdb->query( $this->wpdb->prepare( "INSERT INTO $this->table_name
-          ( event_id, registration_date, last_name, first_name, email, venue, other, status ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %s )",
-            $event_id, $registration_date, $last, $first, $email, $venue, $other, $status ) );
-    }
-
-    public function updateEntry( $data )
-    {
+        global $wpdb;
         $id = isset( $data['rtec_id'] ) ? $data['rtec_id'] : '';
         $last = isset( $data['rtec_last'] ) ? $data['rtec_last'] : '';
         $first = isset( $data['rtec_first'] ) ? $data['rtec_first'] : '';
         $email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
         $other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
-
         if ( ! empty( $id ) ) {
-            $this->wpdb->query( $this->wpdb->prepare( "UPDATE $this->table_name
+            $wpdb->query( $wpdb->prepare( "UPDATE $this->table_name
                 SET last_name=%s, first_name=%s, email=%s, other=%s
                 WHERE id=%d",
                 $last, $first, $email, $other, $id ) );
@@ -103,8 +53,9 @@ class Database
 
     }
 
-    public function retrieveEntries( $data )
+    public function retrieve_entries( $data )
     {
+        global $wpdb;
         $fields = $data['fields'];
         if ( is_array( $fields ) ) {
             $fields = implode( ',' , $fields );
@@ -112,7 +63,6 @@ class Database
         $id = isset( $data['id'] ) ? $data['id'] : '';
         $order_by = isset( $data['order_by'] ) ? $data['order_by'] : 'last_name';
         $type = ARRAY_A;
-
         if ( is_numeric( $id ) ) {
             $sql = sprintf(
                 "
@@ -138,78 +88,62 @@ class Database
                 esc_sql( $order_by )
             );
         }
-
-        $results = $this->wpdb->get_results( $sql, $type );
+        $results = $wpdb->get_results( $sql, $type );
         return $results;
     }
 
-    public function removeRecords( $records ) {
+    public function remove_records( $records ) {
+        global $wpdb;
         $where = 'id';
         if ( ( is_array( $records ) && is_email( $records[0] ) ) || is_email( $records ) ) {
             $where = 'email';
         }
-
         if ( is_array( $records ) ) {
             $registrations_to_be_deleted = implode( ', ', $records);
         } else {
             $registrations_to_be_deleted = $records;
         }
-
-        $this->wpdb->query( $this->wpdb->prepare( "DELETE FROM $this->table_name
+        $wpdb->query( $wpdb->prepare( "DELETE FROM $this->table_name
         WHERE $where IN($registrations_to_be_deleted)" ) );
-
-        // add a way to check if success
         return true;
     }
 
-    public function updateStatuses() 
+    public function update_statuses() 
     {
+        global $wpdb;
         $current = 'c';
         $new = 'n';
-        $this->wpdb->query( $this->wpdb->prepare( "UPDATE $this->table_name SET status=%s WHERE status=%s", $current, $new ) );
-
+        $wpdb->query( $wpdb->prepare( "UPDATE $this->table_name SET status=%s WHERE status=%s", $current, $new ) );
         set_transient( 'rtec_new_registrations', 0, 60 * 15 );
-        // add a way to check if success
         return true;
     }
 
-    public function checkForNew()
+    public function check_for_new()
     {
+        global $wpdb;
         $new = 'n';
-
-        return $this->wpdb->query( $this->wpdb->prepare("SELECT status
+        return $wpdb->query( $wpdb->prepare("SELECT status
         FROM $this->table_name WHERE status=%s", $new ) );
     }
 
-    public function updateNumRegisteredMeta( $id, $change )
+    public function get_registration_count( $id )
     {
-        $meta = get_post_meta( $id );
-        $num_registered = $meta['_RTECnumRegistered'][0];
-
-        $num_registered = $num_registered + $change;
-        update_post_meta( $id, '_RTECnumRegistered', $num_registered );
-    }
-
-    public function getRegistrationCount( $id )
-    {
-        $result = $this->wpdb->get_results( $this->wpdb->prepare("SELECT event_id, COUNT(*) AS num_registered
+        global $wpdb;
+        $result = $wpdb->get_results( $wpdb->prepare("SELECT event_id, COUNT(*) AS num_registered
         FROM $this->table_name WHERE event_id = %d", $id ), ARRAY_A );
-
         return $result[0]['num_registered'];
     }
 
-    public function setNumRegisteredMeta( $id, $num )
+    public function set_num_registered_meta( $id, $num )
     {
         update_post_meta( $id, '_RTECnumRegistered', (int)$num );
     }
 
-    public function getEventPostIds() 
+    public function get_event_post_ids() 
     {
         global $wpdb;
-        $query = $this->wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", TRIBE_EVENTS_POST_TYPE );
-
-        $event_ids = $this->wpdb->get_col( $query );
-        
+        $query = $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", RTEC_TRIBE_EVENTS_POST_TYPE );
+        $event_ids = $wpdb->get_col( $query );
         return $event_ids;
     }
 }
