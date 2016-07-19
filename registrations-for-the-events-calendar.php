@@ -56,8 +56,11 @@ function rtec_TEC_check() {
 add_action( 'plugins_loaded', 'rtec_TEC_check' );
 
 if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
+
     /**
      * Main Registrations_For_The_Events_Calendar Class.
+     *
+     * Design pattern inspired by Pippin Williamson's Easy Digital Downloads
      *
      * @since 1.0
      */
@@ -68,21 +71,25 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
          * @since 1.0
          */
         private static $instance;
+
 	    /**
 	     * @var Registrations_For_The_Events_Calendar
 	     * @since 1.0
 	     */
 	    public $form;
+
 	    /**
 	     * @var Registrations_For_The_Events_Calendar
 	     * @since 1.0
 	     */
 	    public $submission;
+
 	    /**
 	     * @var Registrations_For_The_Events_Calendar
 	     * @since 1.0
 	     */
 	    public $db_frontend;
+
         /**
          * Main Registrations_For_The_Events_Calendar Instance.
          *
@@ -103,14 +110,14 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 			            $sanitized_post[$post_key] = sanitize_text_field( $raw_post_value );
 		            }
 		            self::$instance->submission = new RTEC_Submission( $sanitized_post );
-		            self::$instance->db_frontend = new RTEC_Db_Frontend();
+		            self::$instance->db_frontend = new RTEC_Db();
 	            }
             }
             return self::$instance;
         }
+
         /**
          * Throw error on object clone.
-         *
          *
          * @since 1.0
          * @return void
@@ -119,6 +126,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
             // Cloning instances of the class is forbidden.
             _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'rtec' ), '1.0' );
         }
+
         /**
          * Disable unserializing of the class.
          *
@@ -130,6 +138,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
             // Unserializing instances of the class is forbidden.
             _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'rtec' ), '1.0' );
         }
+
         /**
          * Setup plugin constants.
          *
@@ -171,6 +180,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
                 define( 'RTEC_TRIBE_MENU_PAGE', 'edit.php?post_type=tribe_events' );
             }
         }
+
 	    /**
 	     * Include required files.
 	     *
@@ -192,23 +202,19 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/activate.php';
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/admin-functions.php';
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/class-rtec-admin.php';
-			    $admin = new RTEC_Admin;
 		    }
 	    }
     }
 endif; // End if class_exists check.
+
 /**
- * The main function for that returns Easy_Digital_Downloads
+ * The main function for Registrations_For_The_Events_Calendar
  *
- * The main function responsible for returning the one true Easy_Digital_Downloads
+ * The main function responsible for returning the one true Registrations_For_The_Events_Calendar
  * Instance to functions everywhere.
  *
- * Use this function like you would a global variable, except without needing
- * to declare the global.
  *
- * Example: <?php $edd = EDD(); ?>
- *
- * @since 1.4
+ * @since 1.0
  * @return object|Registrations_For_The_Events_Calendar The one true Registrations_For_The_Events_Calendar Instance.
  */
 function RTEC() {

@@ -6,7 +6,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- *
+ * Class RTEC_Db_Admin
+ * 
+ * Contains special methods that just apply to the admin area
+ * @since 1.0
  */
 class RTEC_Db_Admin extends RTEC_Db
 {
@@ -36,6 +39,12 @@ class RTEC_Db_Admin extends RTEC_Db
 
     }
 
+    /**
+     * Used to make changes to existing registrations
+     * 
+     * @param $data array   information to be updated
+     * @since 1.0
+     */
     public function update_entry( $data )
     {
         global $wpdb;
@@ -53,6 +62,14 @@ class RTEC_Db_Admin extends RTEC_Db
 
     }
 
+    /**
+     * Gets all entries that meet a set of parameters
+     * 
+     * @param $data array       parameters for what entries to retrieve
+     *
+     * @return mixed bool/array false if no results, registrations if there are
+     * @since 1.0
+     */
     public function retrieve_entries( $data )
     {
         global $wpdb;
@@ -92,6 +109,14 @@ class RTEC_Db_Admin extends RTEC_Db
         return $results;
     }
 
+    /**
+     * Removes a set of records from the dashboard
+     * 
+     * @param $records array    ids or email of records to remove
+     *
+     * @return bool
+     * @since 1.0
+     */
     public function remove_records( $records ) {
         global $wpdb;
         $where = 'id';
@@ -108,6 +133,12 @@ class RTEC_Db_Admin extends RTEC_Db
         return true;
     }
 
+    /**
+     * One a registration has been seen, status changes from (n)ew to (c)urrent
+     * 
+     * @return bool
+     * @since 1.0
+     */
     public function update_statuses() 
     {
         global $wpdb;
@@ -118,6 +149,12 @@ class RTEC_Db_Admin extends RTEC_Db
         return true;
     }
 
+    /**
+     * Used to create the alert for new registrations
+     * 
+     * @return false|int    false if no records, otherwise number of new registrations
+     * @since 1.0
+     */
     public function check_for_new()
     {
         global $wpdb;
@@ -126,6 +163,15 @@ class RTEC_Db_Admin extends RTEC_Db
         FROM $this->table_name WHERE status=%s", $new ) );
     }
 
+    /**
+     * Get a hard count of the number of registrations currently
+     * in the database for the give id
+     * 
+     * @param $id int   post ID for the event
+     *
+     * @return int      number registered
+     * @since 1.0
+     */
     public function get_registration_count( $id )
     {
         global $wpdb;
@@ -134,11 +180,24 @@ class RTEC_Db_Admin extends RTEC_Db
         return $result[0]['num_registered'];
     }
 
+    /**
+     * Manually set the number of registrations
+     * 
+     * @param $id int   post ID
+     * @param $num int  new number to set the post meta as
+     * @since 1.0
+     */
     public function set_num_registered_meta( $id, $num )
     {
         update_post_meta( $id, '_RTECnumRegistered', (int)$num );
     }
 
+    /**
+     * Gets all of the post IDs with the Tribe Events post type
+     * 
+     * @return array    the ids
+     * @since 1.0
+     */
     public function get_event_post_ids() 
     {
         global $wpdb;

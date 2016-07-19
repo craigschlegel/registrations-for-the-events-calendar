@@ -1,11 +1,13 @@
 <?php
+/**
+ * create the table and set defaults for some settings on activation
+ * @since 1.0
+ */
 function rtec_activate() {
-	
+	global $rtec_options;
 	RTEC_Db_Admin::create_table();
 
-	$options = get_option( 'rtec_options' );
-
-	if ( empty( $options  ) ) {
+	if ( empty( $rtec_options  ) ) {
 		$defaults = array(
 			'first_show' => true,
 			'first_require' => true,
@@ -20,15 +22,12 @@ function rtec_activate() {
 			'other_require' => false,
 			'other_error' => 'There is an error with your entry'
 		);
-
 		// get form options from the db
 		update_option( 'rtec_options', $defaults );
 	}
 
 	$db = new RTEC_Db_Admin();
-
 	$ids = $db->get_event_post_ids();
-
 	foreach ( $ids as $id ) {
 		$reg_count = $db->get_registration_count( $id );
 		update_post_meta( $id, '_RTECnumRegistered', $reg_count );

@@ -1,24 +1,34 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Craig
- * Date: 1/10/2016
- * Time: 9:45 PM
- */
-
 // Don't load directly
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
 
+/**
+ * Class RTEC_Admin
+ * 
+ * Just your standard settings pages with a tab to view current registrations
+ * 
+ * @since 1.0
+ */
 class RTEC_Admin
 {
+	/**
+	 * RTEC_Admin constructor.
+	 * 
+	 * Create the basic admin pages
+	 */
     public function __construct()
     {
         add_action( 'admin_menu', array( $this, 'add_tribe_submenu' ) );
         add_action( 'admin_init', array( $this, 'options_page_init' ) );
     }
 
+    /**
+     * Add the menu with new registration count alert
+     * 
+     * @since 1.0
+     */
     public function add_tribe_submenu()
     {
         $menu_title = 'Registrations';
@@ -36,7 +46,15 @@ class RTEC_Admin
             array( $this, 'create_options_page' )
         );
     }
-
+    
+    /**
+     * Validates the $_GET field with tab information
+     * 
+     * @param string $tab   current selected tab
+     *
+     * @return string       name of the tab to navigate to
+     * @since 1.0
+     */
     public static function get_active_tab( $tab = '' )
     {
         switch( $tab ) {
@@ -52,12 +70,12 @@ class RTEC_Admin
                 return 'registrations';
         }
     }
-
+    
     public function create_options_page()
     {
         require_once RTEC_PLUGIN_DIR . '/inc/admin/templates/main.php';
     }
-
+    
     public function blank() {
         // none needed
     }
@@ -644,6 +662,11 @@ class RTEC_Admin
     <?php
     }
 
+    /**
+     * Makes creating settings easier
+     * 
+     * @param array $args   extra arguments to create parts of the form fields
+     */
     public function create_settings_field( $args = array() )
     {
         add_settings_field(
@@ -663,6 +686,7 @@ class RTEC_Admin
      *
      * @param array $input raw input data from the user
      * @return array valid and sanitized data
+     * @since 1.0
      */
     public function validate_options( $input )
     {
@@ -712,6 +736,7 @@ class RTEC_Admin
      *
      * @param string $value value of an option submitted from the plugin options page
      * @return string sanitized data string or if validation fails, empty string
+     * @since 1.0
      */
     public function check_malicious_headers( $value )
     {
@@ -728,3 +753,13 @@ class RTEC_Admin
         return trim( $value );
     }
 }
+
+/**
+ * Create the admin menus and pages
+ * 
+ * @since 1.0
+ */
+function RTEC_ADMIN() {
+    $admin = new RTEC_Admin;
+}
+RTEC_ADMIN();
