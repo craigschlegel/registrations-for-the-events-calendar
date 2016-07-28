@@ -43,15 +43,17 @@ function rtec_the_registration_form()
  */
 function rtec_process_form_submission()
 {
-	$rtec = RTEC();
-	$submission = $rtec->submission->instance();
+	require_once RTEC_PLUGIN_DIR . 'inc/submission/class-rtec-submission.php';
+	require_once RTEC_PLUGIN_DIR . 'inc/submission/submission-functions.php';
+
+	$submission = new RTEC_Submission( $_POST );
 
 	$submission->validate_data();
 
 	if ( $submission->has_errors() ) {
 		return false;
 	} else {
-		rtec_process_submission();
+		rtec_process_submission( $submission );
 	}
 
 	die();
