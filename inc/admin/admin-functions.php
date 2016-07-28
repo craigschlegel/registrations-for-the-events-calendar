@@ -6,16 +6,21 @@
  * @since 1.0
  */
 function rtec_get_existing_new_reg_count() {
+
 	$existing_new_reg_data = get_transient( 'rtec_new_registrations' );
+
 	if ( $existing_new_reg_data ) {
 		$new_registrations_count = $existing_new_reg_data;
 	} else {
 		$db = new RTEC_Db_Admin();
 		$new_registrations_count = $db->check_for_new();
+
 		if ( ! $existing_new_reg_data ) {
 			set_transient( 'rtec_new_registrations', $new_registrations_count, 60 * 15 );
 		}
+
 	}
+
 	return $new_registrations_count;
 }
 
@@ -25,9 +30,12 @@ function rtec_get_existing_new_reg_count() {
  * @since 1.0
  */
 function rtec_registrations_bubble() {
+
 	$new_registrations_count = rtec_get_existing_new_reg_count();
+
 	if ( $new_registrations_count > 0 ) {
 		global $menu;
+
 		foreach ( $menu as $key => $value ) {
 			if ( $menu[$key][2] === RTEC_TRIBE_MENU_PAGE ) {
 				$menu[$key][0] .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . $new_registrations_count . '</span></span>';
@@ -35,6 +43,7 @@ function rtec_registrations_bubble() {
 			}
 		}
 	}
+
 }
 add_action( 'admin_menu', 'rtec_registrations_bubble' );
 
@@ -46,22 +55,28 @@ add_action( 'admin_menu', 'rtec_registrations_bubble' );
 function rtec_delete_registrations()
 {
 	$nonce = $_POST['rtec_nonce'];
+
 	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
 		die ( 'You did not do this the right way!' );
 	}
 
 	$registrations_to_be_deleted = array();
+
 	foreach ( $_POST['registrations_to_be_deleted'] as $registration ) {
 		$registrations_to_be_deleted[] = sanitize_text_field( $registration );
 	}
 
 	$db = new RTEC_Db_Admin();
+
 	$db->remove_records( $registrations_to_be_deleted );
 	$ids = $db->get_event_post_ids();
+
 	foreach ( $ids as $id ) {
 		$reg_count = $db->get_registration_count( $id );
+
 		update_post_meta( $id, '_RTECnumRegistered', $reg_count );
 	}
+
 	die();
 }
 add_action( 'wp_ajax_rtec_delete_registrations', 'rtec_delete_registrations' );
@@ -74,14 +89,17 @@ add_action( 'wp_ajax_rtec_delete_registrations', 'rtec_delete_registrations' );
 function rtec_add_registration()
 {
 	$nonce = $_POST['rtec_nonce'];
+
 	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
 		die ( 'You did not do this the right way!' );
 	}
 	
 	$data = array();
+
 	foreach( $_POST as $key => $value ) {
 		$data[$key] = sanitize_text_field( $value );
 	}
+
 	if ( ( time() - strtotime( $data['rtec_end_time'] ) ) > 0 ) {
 		$data['rtec_status'] = 'p';
 	} else {
@@ -89,12 +107,16 @@ function rtec_add_registration()
 	}
 	
 	$new_reg = new RTEC_Db_Admin();
+
 	$new_reg->insert_entry( $data );
+
 	$ids = $new_reg->get_event_post_ids();
+
 	foreach ( $ids as $id ) {
 		$reg_count = $new_reg->get_registration_count( $id );
 		update_post_meta( $id, '_RTECnumRegistered', $reg_count );
 	}
+
 	die();
 }
 add_action( 'wp_ajax_rtec_add_registration', 'rtec_add_registration' );
@@ -118,6 +140,7 @@ function rtec_update_registration()
 	
 	$edit_reg = new RTEC_Db_Admin();
 	$edit_reg->update_entry( $data );
+
 	die();
 }
 add_action( 'wp_ajax_rtec_update_registration', 'rtec_update_registration' );

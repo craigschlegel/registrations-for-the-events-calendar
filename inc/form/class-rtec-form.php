@@ -13,22 +13,57 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class RTEC_Form
 {
+	/**
+	 * @var RTEC_Form
+	 * @since 1.0
+	 */
     private static $instance;
-    
+
+	/**
+	 * @var array
+	 * @since 1.0
+	 */
     private $event_meta;
-    
+
+	/**
+	 * @var array
+	 * @since 1.0
+	 */
     private $show_fields = array();
 
+	/**
+	 * @var array
+	 * @since 1.0
+	 */
     private $required_fields = array();
 
+	/**
+	 * @var array
+	 * @since 1.0
+	 */
     private $input_fields_data = array();
 
+	/**
+	 * @var array
+	 * @since 1.0
+	 */
     private $submission_data = array();
 
+	/**
+	 * @var array
+	 * @since 1.0
+	 */
     private $errors = array();
-    
+
+	/**
+	 * @var int
+	 * @since 1.0
+	 */
     private $max_registrations;
 
+	/**
+	 * RTEC_Form constructor. Set up basic field info
+	 */
     public function __construct()
     {
 		global $rtec_options;
@@ -46,10 +81,10 @@ class RTEC_Form
     }
     
     /**
-     * Get the one true instance of EDD_Register_Meta.
+     * Get the one true instance of RTEC_Form.
      *
      * @since  1.0
-     * @return $instance
+     * @return object $instance
      */
     static public function instance() {
         if ( !self::$instance ) {
@@ -57,25 +92,44 @@ class RTEC_Form
         }
         return self::$instance;
     }
-	
+
+	/**
+	 * Set user input errors for the form
+	 *
+	 * @param array $errors names of fields that have validation errors
+	 * @since 1.0
+	 */
 	public function set_errors( $errors )
 	{
 		$this->errors = $errors;
 	}
 
+	/**
+	 * @param array $submission submitted data from user
+	 * @since 1.0
+	 */
 	public function set_submission_data( $submission )
 	{
 		$this->submission_data = $submission;
 	}
 
+	/**
+	 * @param string $id    optional manual input of post ID
+	 * @since 1.0
+	 */
     public function set_event_meta( $id = '' )
     {
         $this->event_meta = rtec_get_event_meta( $id );
     }
-    
+
+	/**
+	 * Combine required and included fields to use in a loop later
+	 * @since 1.0
+	 */
     public function set_input_fields_data()
     {
         global $rtec_options;
+
         $input_fields_data = array();
         $show_fields = $this->show_fields;
         $required_fields = $this->required_fields;
@@ -83,7 +137,6 @@ class RTEC_Form
         $standard_field_types = array( 'first', 'last', 'email' );
         
         foreach ( $standard_field_types as $type ) {
-
             if ( in_array( $type, $show_fields ) ) {
                 $input_fields_data[$type]['name'] = $type;
                 $input_fields_data[$type]['require'] = in_array( $type, $required_fields );
@@ -101,7 +154,6 @@ class RTEC_Form
                         break;
                 }
             }
-
         }
 
         // the "other" fields is handled slightly differently
@@ -115,19 +167,34 @@ class RTEC_Form
         $this->input_fields_data = $input_fields_data;
     }
 
+	/**
+	 * @param string $default_max_registrations default to infinite
+	 * @since 1.0
+	 */
     public function set_max_registrations( $default_max_registrations = 'i' )
     {
         $this->max_registrations = $default_max_registrations;
     }
 
+	/**
+	 * @since 1.0
+	 * @return int  the maximum registrations
+	 */
     public function getMaxRegistrations()
     {
         return $this->max_registrations;
     }
 
+	/**
+	 * The html that creates the feed is broken into parts and pieced together
+	 *
+	 * @since 1.0
+	 * @return string
+	 */
     public function get_beginning_html()
     {
 	    global $rtec_options;
+
         $button_text = isset( $rtec_options['register_text'] ) ? esc_attr( $rtec_options['register_text'] ) : 'Register';
         $width_unit = isset( $rtec_options['width_unit'] ) ? esc_attr( $rtec_options['width_unit'] ) : '%';
         $width = isset( $rtec_options['width'] ) ? ' style="width: ' . esc_attr( $rtec_options['width'] ) . $width_unit . ';"' : '';
@@ -136,21 +203,31 @@ class RTEC_Form
             $html .= '<button type="button" id="rtec-form-toggle-button" class="rtec-register-button rtec-js-show">' . $button_text . '<span class="tribe-bar-toggle-arrow"></span></button>';
             $html .= '<h3 class="rtec-js-hide">' . $button_text . '</h3>';
             $html .= '<div class="rtec-form-wrapper rtec-js-hide rtec-toggle-on-click"'.$width.'>';
+
             if ( ! empty( $this->errors ) ) {
                 $html .= '<div class="rtec-screen-reader" role="alert">';
                 $html .= 'There were errors with your submission. Please try again.';
                 $html .= '</div>';
             }
+
             if ( ! isset( $rtec_options['include_attendance_message'] ) || $rtec_options['include_attendance_message'] ) {
                 $html .= $this->get_attendance_html();
             }
                 $html .= '<form method="post" action="" id="rtec-form" class="rtec-form">';
+
         return $html;
     }
 
+	/**
+	 * The html that creates the feed is broken into parts and pieced together
+	 *
+	 * @since 1.0
+	 * @return string
+	 */
     public function get_attendance_html()
     {
 	    global $rtec_options;
+
         $html = '';
         $attendance_message_type = isset( $rtec_options['attendance_message_type'] ) ? $rtec_options['attendance_message_type'] : 'up';
 
@@ -163,19 +240,29 @@ class RTEC_Form
                 $text_before = isset( $rtec_options['attendance_text_before'] ) ? esc_html( $rtec_options['attendance_text_before'] ) : 'Only';
                 $text_after = isset( $rtec_options['attendance_text_after'] ) ? esc_html( $rtec_options['attendance_text_after'] ) : 'spots left.';
             }
+
             $text_string = sprintf( '%s %s %s', $text_before, (string)$display_num, $text_after );
             if ( $display_num == 1 ) {
                 $text_string = isset( $rtec_options['attendance_text_one'] ) ? esc_html( $rtec_options['attendance_text_one'] ) : 'Join one other person';
             }
+
             if ( $display_num < 1 ) {
                 $text_string = isset( $rtec_options['attendance_text_none_yet'] ) ? esc_html( $rtec_options['attendance_text_none_yet'] ) : 'Be the first!';
             }
+
             $html .= '<div class="rtec-attendance tribe-events-notices">';
                 $html .= '<p>' . $text_string . '</p>';
             $html .= '</div>';
+
         return $html;
     }
 
+	/**
+	 * Data about the event is also included
+	 *
+	 * @since 1.0
+	 * @return string
+	 */
     public function get_hidden_fields_html()
     {
         $html = '';
@@ -192,6 +279,12 @@ class RTEC_Form
         return $html;
     }
 
+	/**
+	 * The html that creates the feed is broken into parts and pieced together
+	 *
+	 * @since 1.0
+	 * @return string
+	 */
     public function get_regular_fields()
     {
         $html = '<div class="rtec-form-fields-wrapper">';
@@ -202,25 +295,31 @@ class RTEC_Form
             $value = '';
             $type = 'text';
             $label = $field['label'];
+
             if ( in_array( $field['name'], $this->required_fields ) ) {
                 $required_data = ' aria-required="true"';
                 $label .= '*';
             } else {
                 $required_data = ' aria-required="false"';
             }
+
             $error_html = '';
+
             if ( in_array( $field['name'], $this->errors ) ) {
                 $required_data .= ' aria-invalid="true"';
                 $error_html = '<p class="rtec-error-message" role="alert">' . $field['error_message'] . '</p>';
             } else {
                 $required_data .= ' aria-invalid="false"';
             }
+
             if ( $field['name'] === 'email' ) {
                 $type = 'email';
             }
+
             if ( isset( $this->submission_data['rtec_' . $field['name']] ) ) {
                 $value = $this->submission_data['rtec_' . $field['name']];
             }
+
             $html .= '<div class="rtec-form-field rtec-'. $field['name'] . '" data-rtec-error-message="'.$field['error_message'].'">';
                 $html .= '<label for="rtec_' . $field['name'] . '" class="rtec_text_label">' . $label . '</label>';
                 $html .= '<input type="' . $type . '" name="rtec_' . $field['name'] . '" value="'. $value . '" id="rtec_' . $field['name'] . '"' . $required_data . ' />';
@@ -228,19 +327,36 @@ class RTEC_Form
             $html .= '</div>';
         }
         $html .= '</div>'; // rtec-form-fields-wrapper
-        return $html;
+
+	    return $html;
     }
 
+	/**
+	 * Backup in case javascript is unavailable
+	 *
+	 * @since 1.0
+	 * @return string
+	 */
     public static function get_success_message_html() {
 		global $rtec_options;
+
         $success_html = '<p class="rtec-success-message tribe-events-notices">';
         $success_html .= isset( $rtec_options['success_message'] ) ? esc_html( $rtec_options['success_message'] ) : 'Success! Please check your email inbox for a confirmation message';
         $success_html .= '</p>';
-        return $success_html;
+
+	    return $success_html;
     }
+
+	/**
+	 * The html that creates the feed is broken into parts and pieced together
+	 *
+	 * @since 1.0
+	 * @return string
+	 */
     public function get_ending_html()
     {
 	    global $rtec_options;
+
         $button_text = isset( $rtec_options['submit_text'] ) ? esc_attr( $rtec_options['submit_text'] ) : 'Submit';
         $html = '';
                     $html .= '<div class="rtec-form-buttons">';
@@ -252,9 +368,16 @@ class RTEC_Form
                 $html .= '</div>';
             $html .= '</div>'; // rtec-form-wrapper
         $html .= '</div>'; // rtec
+
         return $html;
     }
-	
+
+	/**
+	 * Assembles the html in the proper order and returns it
+	 *
+	 * @since 1.0
+	 * @return string   complete html for the form
+	 */
 	public function get_form_html()
 	{
 		$html = '';
@@ -262,6 +385,7 @@ class RTEC_Form
 		$html .= $this->get_hidden_fields_html();
 		$html .= $this->get_regular_fields();
 		$html .= $this->get_ending_html();
+
 		return $html;
 	}
 }

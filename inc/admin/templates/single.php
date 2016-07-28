@@ -35,7 +35,7 @@ $id = (int)$_GET['id'];
                 $event_meta['venue_title'] = $venue_meta["_VenueVenue"][0];
 
                 $options = get_option( 'rtec_general' );
-                $other_label = isset( $options['other_label'] ) ? esc_html( $options['other_label'] ) : _( 'Other', 'rtec' );
+                $other_label = isset( $options['other_label'] ) ? esc_html( $options['other_label'] ) : __( 'Other', 'rtec' );
                 ?>
 
                 <div class="rtec-single-event" data-rtec-event-id="<?php echo $id; ?>">

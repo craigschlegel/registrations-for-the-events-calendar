@@ -6,7 +6,7 @@ Version: 0.1
 Author: Craig Schlegel
 Author URI: craigschlegel.com
 License: GPLv2 or later
-Text Domain: registrations-TEC
+Text Domain: rtec
 */
 
 /*
@@ -199,13 +199,51 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 		    require_once RTEC_PLUGIN_DIR . 'inc/helper-functions.php';
 		    if ( is_admin() ) {
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/class-rtec-db-admin.php';
-			    require_once RTEC_PLUGIN_DIR . 'inc/admin/activate.php';
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/admin-functions.php';
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/class-rtec-admin.php';
 		    }
 	    }
+
+	    /**
+	     * Add default settings and create the table in db
+	     *
+	     * @access public
+	     * @since 1.0
+	     * @return void
+	     */
+	    public static function install() {
+		    global $rtec_options;
+		    RTEC_Db_Admin::create_table();
+
+		    if ( empty( $rtec_options  ) ) {
+			    $defaults = array(
+				    'first_show' => true,
+				    'first_require' => true,
+				    'first_error' => 'Please enter your first name',
+				    'last_show' => true,
+				    'last_require' => true,
+				    'last_error' => 'Please enter your last name',
+				    'email_show' => true,
+				    'email_require' => false,
+				    'email_error' => 'Please enter a valid email address',
+				    'other_show' => false,
+				    'other_require' => false,
+				    'other_error' => 'There is an error with your entry'
+			    );
+			    // get form options from the db
+			    update_option( 'rtec_options', $defaults );
+		    }
+
+		    $db = new RTEC_Db_Admin();
+		    $ids = $db->get_event_post_ids();
+		    foreach ( $ids as $id ) {
+			    $reg_count = $db->get_registration_count( $id );
+			    update_post_meta( $id, '_RTECnumRegistered', $reg_count );
+		    }
+	    }
     }
 endif; // End if class_exists check.
+register_activation_hook( __FILE__, array( 'Registrations_For_The_Events_Calendar', 'install' ) );
 
 /**
  * The main function for Registrations_For_The_Events_Calendar

@@ -34,9 +34,11 @@ class RTEC_Admin
         $menu_title = 'Registrations';
 
         $new_registrations_count = rtec_get_existing_new_reg_count();
+
         if ( $new_registrations_count > 0 ) {
             $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . $new_registrations_count . '</span></span>';
         }
+
         add_submenu_page(
 	        'edit.php?post_type=' . RTEC_TRIBE_EVENTS_POST_TYPE,
             'Registrations',
@@ -720,6 +722,7 @@ class RTEC_Admin
                     $updated_options[$key] = sanitize_text_field( $val );
                 }
             }
+
             if ( $tab === 'email' ) {
                 $updated_options[$key] = $this->check_malicious_headers( $val );
             }

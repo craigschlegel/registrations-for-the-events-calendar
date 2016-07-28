@@ -6,12 +6,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- *
+ * Base class for accessing the database and custom table
  */
 class RTEC_Db
 {
 
+	/**
+	 * @var RTEC_Db
+	 *
+	 * @since 1.0
+	 */
 	private static $instance;
+
 	/**
 	 * @var string RTEC database table name
 	 */
@@ -26,6 +32,7 @@ class RTEC_Db
 	public function __construct()
 	{
 		global $wpdb;
+
 		$this->table_name = $wpdb->prefix . RTEC_TABLENAME;
 	}
 
@@ -39,12 +46,20 @@ class RTEC_Db
 		if ( !self::$instance ) {
 			self::$instance = new RTEC_Db();
 		}
+
 		return self::$instance;
 	}
 
+	/**
+	 * Add a new entry to the custom registrations table
+	 *
+	 * @since 1.0
+	 * @param $data
+	 */
 	public function insert_entry( $data )
 	{
 		global $wpdb;
+
 		$now = date( "Y-m-d H:i:s" );
 		$event_id = isset( $data['rtec_event_id'] ) ? $data['rtec_event_id'] : '';
 		$registration_date = isset( $data['rtec_entry_date'] ) ? $data['rtec_entry_date'] : $now;
@@ -59,6 +74,13 @@ class RTEC_Db
 			$event_id, $registration_date, $last, $first, $email, $venue, $other, $status ) );
 	}
 
+	/**
+	 * Update the number of registrations in event meta directly
+	 *
+	 * @param int $id
+	 * @param int $num
+	 * @since 1.0
+	 */
 	public function update_num_registered_meta( $id, $num )
 	{
 		update_post_meta( $id, '_RTECnumRegistered', (int)$num );
