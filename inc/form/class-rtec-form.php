@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Craig
- * Date: 1/16/2016
- * Time: 1:43 PM
- */
-
 // Don't load directly
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
@@ -67,6 +60,7 @@ class RTEC_Form
     public function __construct()
     {
 		global $rtec_options;
+
         $fields = array( 'first', 'last', 'email', 'other' );
         foreach ( $fields as $field ) {
             // create an array of all to be shown
@@ -171,16 +165,18 @@ class RTEC_Form
 	 * @param string $default_max_registrations default to infinite
 	 * @since 1.0
 	 */
-    public function set_max_registrations( $default_max_registrations = 'i' )
+    public function set_max_registrations()
     {
-        $this->max_registrations = $default_max_registrations;
+	    global $rtec_options;
+
+        $this->max_registrations = isset( $rtec_options['default_max_registrations'] ) ? $rtec_options['default_max_registrations'] : 'i';
     }
 
 	/**
 	 * @since 1.0
 	 * @return int  the maximum registrations
 	 */
-    public function getMaxRegistrations()
+    public function get_max_registrations()
     {
         return $this->max_registrations;
     }
@@ -236,13 +232,13 @@ class RTEC_Form
                 $text_before = isset( $rtec_options['attendance_text_before'] ) ? esc_html( $rtec_options['attendance_text_before'] ) : 'Join';
                 $text_after = isset( $rtec_options['attendance_text_after'] ) ? esc_html( $rtec_options['attendance_text_after'] ) : 'others.';
             } else {
-                $display_num = $this->max_registrations - $this->event_meta['num_registered'];
+                $display_num = $this->get_max_registrations() - $this->event_meta['num_registered'];
                 $text_before = isset( $rtec_options['attendance_text_before'] ) ? esc_html( $rtec_options['attendance_text_before'] ) : 'Only';
                 $text_after = isset( $rtec_options['attendance_text_after'] ) ? esc_html( $rtec_options['attendance_text_after'] ) : 'spots left.';
             }
 
             $text_string = sprintf( '%s %s %s', $text_before, (string)$display_num, $text_after );
-            if ( $display_num == 1 ) {
+            if ( $display_num == "1" ) {
                 $text_string = isset( $rtec_options['attendance_text_one'] ) ? esc_html( $rtec_options['attendance_text_one'] ) : 'Join one other person';
             }
 
@@ -275,6 +271,7 @@ class RTEC_Form
         $html .= '<input type="hidden" name="rtec_venue_title" value="'. $event_meta['venue_title'] . '" />';
         $html .= '<input type="hidden" name="rtec_date" value="'. $event_meta['start_date'] . '" />';
         $html .= '<input type="hidden" name="rtec_event_id" value="' . $event_meta['post_id'] . '" />';
+	    $html .= '<input type="hidden" name="rtec_num_registered" value="' . $event_meta['num_registered'] . '" />';
 
         return $html;
     }
@@ -322,8 +319,10 @@ class RTEC_Form
 
             $html .= '<div class="rtec-form-field rtec-'. $field['name'] . '" data-rtec-error-message="'.$field['error_message'].'">';
                 $html .= '<label for="rtec_' . $field['name'] . '" class="rtec_text_label">' . $label . '</label>';
-                $html .= '<input type="' . $type . '" name="rtec_' . $field['name'] . '" value="'. $value . '" id="rtec_' . $field['name'] . '"' . $required_data . ' />';
-                $html .= $error_html;
+	            $html .= '<div class="rtec-input-wrapper">';
+	                $html .= '<input type="' . $type . '" name="rtec_' . $field['name'] . '" value="'. $value . '" id="rtec_' . $field['name'] . '"' . $required_data . ' />';
+                    $html .= $error_html;
+	            $html .= '</div>';
             $html .= '</div>';
         }
         $html .= '</div>'; // rtec-form-fields-wrapper

@@ -110,13 +110,9 @@
 .rtec-availability-options-wrapper {
     margin: 1.5em 0 .5em;
 }
-.rtec-confirmation-message-tr td pre{
-    max-width: 800px;
-    white-space: pre-wrap;
-    white-space: -moz-pre-wrap;
-    white-space: -pre-wrap;
-    white-space: -o-pre-wrap;
-    word-wrap: break-word;
+.rtec-confirmation-message-tr td {
+    width: 400px;
+    vertical-align: top;
 }
 .rtec-button-wrapper {
     display: block;

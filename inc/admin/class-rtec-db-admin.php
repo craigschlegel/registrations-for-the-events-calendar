@@ -1,5 +1,4 @@
 <?php
-
 // Don't load directly
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
@@ -13,6 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class RTEC_Db_Admin extends RTEC_Db
 {
+	/**
+	 * Used to create the registrations table on activation
+	 *
+	 * @since 1.0
+	 */
     public static function create_table()
     {
         global $wpdb;

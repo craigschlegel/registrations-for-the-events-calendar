@@ -1,5 +1,4 @@
 <?php
-
 // Don't load directly
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
@@ -150,10 +149,34 @@ class RTEC_Submission
             // sanitize the input value
             $new_val = sanitize_text_field( $input_value );
             // strip potentially malicious header strings
-            $new_val  = $this->strip_malicious( $new_val  );
+            $new_val = $this->strip_malicious( $new_val );
             // assign the sanitized value
             $this->submission[$input_key] = $new_val;
         }
+    }
+
+	/**
+	 * Meant to be called only after submission has been validated
+	 *
+	 * @since 1.0
+	 */
+    public function process_valid_submission() {
+	    $this->sanitize_submission();
+	    if ( $this->email_given() ) {
+		    $confirmation_success = $this->send_confirmation_email();
+	    }
+	    $notification_success = $this->send_notification_email();
+	    $data = $this->get_db_data();
+
+	    require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-db.php';
+	    $db = new RTEC_Db();
+
+	    $db->insert_entry( $data );
+
+	    if ( ! empty( $data['rtec_event_id'] ) ) {
+		    $change = 1;
+		    $db->update_num_registered_meta( $data['rtec_event_id'], $data['rtec_num_registered'], $change );
+	    }
     }
 
 	/**
@@ -201,8 +224,6 @@ class RTEC_Submission
     {
 	    global $rtec_options;
 
-	    $body = $rtec_options['confirmation_message'];
-
         $date_str = date_i18n( 'F jS, g:i a', strtotime( $this->submission['rtec_date'] ) );
 
         if ( isset( $rtec_options['confirmation_message'] ) ) {
@@ -239,7 +260,7 @@ class RTEC_Submission
 
         if ( ! empty ( $rtec_options['confirmation_from'] ) && ! empty ( $rtec_options['confirmation_from_address'] ) ) {
             $confirmation_from_address = is_email( $rtec_options['confirmation_from_address'] ) ? $rtec_options['confirmation_from_address'] : get_option( 'admin_email' );
-            $email_from = $this->stripMaliciousHeaders( $rtec_options['confirmation_from'] ) . ' <' . $confirmation_from_address . '>';
+            $email_from = $this->strip_malicious( $rtec_options['confirmation_from'] ) . ' <' . $confirmation_from_address . '>';
             $headers = 'From: ' . $email_from;
         } else {
             $headers = '';
@@ -261,12 +282,12 @@ class RTEC_Submission
 	 * @since 1.0
 	 * @return string
 	 */
-    private function get_conf_subject( $email_options )
+    private function get_conf_subject()
     {
         global $rtec_options;
 
         if ( ! empty ( $rtec_options['confirmation_subject'] ) ) {
-            return $this->stripMaliciousHeaders( $rtec_options['confirmation_subject'] );
+            return $this->strip_malicious( $rtec_options['confirmation_subject'] );
         }
 
         return 'Thank You';
@@ -352,6 +373,8 @@ class RTEC_Submission
 
         if ( ! empty( $valid_recipients ) ) {
             return $valid_recipients;
+        } else {
+        	return false;
         }
     }
 
@@ -392,4 +415,4 @@ class RTEC_Submission
         return $data;
     }
 }
-RTEC_Submission::instance( $_POST );
+RTEC_Submission::instance();

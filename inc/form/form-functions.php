@@ -1,4 +1,9 @@
 <?php
+// Don't load directly
+if ( ! defined( 'ABSPATH' ) ) {
+	die( '-1' );
+}
+
 /**
  * global function for hooks to generate the form
  *
@@ -21,7 +26,8 @@ function rtec_the_registration_form()
 			$form->set_max_registrations();
 			echo $form->get_form_html();
 		} else {
-			rtec_process_submission();
+			$submission->process_valid_submission();
+
 			$message = $form::get_success_message_html();
 			echo $message;
 		}
@@ -53,7 +59,7 @@ function rtec_process_form_submission()
 	if ( $submission->has_errors() ) {
 		return false;
 	} else {
-		rtec_process_submission( $submission );
+		$submission->process_valid_submission();
 	}
 
 	die();

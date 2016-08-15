@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Craig
- * Date: 1/15/2016
- * Time: 9:46 PM
- */
-
 settings_errors(); ?>
 <h2><?php _e( 'Form Settings', 'rtec' ); ?></h2>
 <form method="post" action="options.php">

@@ -367,7 +367,7 @@ class RTEC_Admin
             'section' => 'rtec_email_confirmation'
         ));
 
-        // confirmation from address
+        // confirmation subject
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'confirmation_subject',
@@ -386,7 +386,8 @@ class RTEC_Admin
             'name' => 'confirmation_message',
             'title' => '<label>Confirmation Message</label>',
             'example' => '',
-            'default' => 'You are registered',
+            'default' => 'You are registered!{nl}{nl}Here are the details of your registration.{nl}{nl}Event: {event-title} at {venue} on {event-date}{nl}Registered Name: {first} {last}{nl}
+Other: {other}',
             'description' => 'Enter the message you would like customers to receive along with details of the event',
             'callback'  => 'message_text_area',
             'class' => 'rtec-confirmation-message-tr',
@@ -548,18 +549,17 @@ class RTEC_Admin
 	    $preview = isset( $args['preview'] ) ? $args['preview'] : false;
         ?>
         <textarea id="confirmation_message_textarea" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" cols="<?php echo $columns; ?>" rows="<?php echo $rows; ?>"><?php echo $option_string; ?></textarea>
-	    <?php if ( $preview ) : ?>
+        <span><?php echo( $args['example'] ); ?></span>
+
+        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
+        <?php if ( $preview ) : ?>
 	    <td>
-		    <h4>Example:</h4>
+		    <h4>Preview:</h4>
 		    <div id="rtec_js_preview">
 			    <pre></pre>
 		    </div>
 	    </td>
 	    <?php endif; ?>
-	    <br>
-        <span><?php print( $args['example'] ); ?></span>
-
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
         <?php
     }
 

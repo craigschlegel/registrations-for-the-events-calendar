@@ -19,15 +19,15 @@ jQuery(document).ready(function($) {
         invalidClass : 'rtec-error',
 
         showErrorMessage : function(formEl){
-            var $formField = formEl.closest($('.rtec-form-field'));
+            var $formField = formEl.closest($('.rtec-input-wrapper'));
             if(!$formField.find('.rtec-error-message').length) {
-                $formField.append('<p class="rtec-error-message" role="alert">'+$formField.attr('data-rtec-error-message')+'</p>');
+                $formField.append('<p class="rtec-error-message" role="alert">'+formEl.closest($('.rtec-form-field')).attr('data-rtec-error-message')+'</p>');
             }
             formEl.attr('aria-invalid','true');
         },
 
         removeErrorMessage : function(formEl){
-            formEl.closest($('.rtec-form-field')).find('.rtec-error-message').remove();
+            formEl.closest($('.rtec-input-wrapper')).find('.rtec-error-message').remove();
             formEl.attr('aria-invalid','false');
         },
 

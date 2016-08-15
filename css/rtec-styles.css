@@ -3,8 +3,8 @@
     display: inline-block;
     margin: 0 4px;
     position: absolute;
+    top: 11px;
     right: 10px;
-    top: 20%;
 }
 #rtec .tribe-bar-toggle-arrow:after {
     top: 10px;
@@ -41,27 +41,41 @@
     position: relative;
     width: 100%;
     margin: 0 auto 30px;
-    padding: 4%;
+    padding: 30px;
     border: 1px solid #eee;
     background: #f5f5f5;
 }
 #rtec .rtec-register-button {
     position: relative;
-    padding-right: 40px;
-    margin-bottom: 1.75em;
+    margin-bottom: 30px;
+    padding: 12px 40px 12px 16px;
+    font-size: 16px;
 }
 #rtec .rtec-attendance p {
     text-align: center;
     margin: 0;
 }
 #rtec .rtec-form-field {
+    margin-bottom: 30px;
+}
+#rtec .rtec-input-wrapper {
     position: relative;
-    margin-bottom: 1.75em;
 }
 #rtec input[type="text"],
 #rtec input[type="email"],
 #rtec textarea {
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 5px;
+    margin: 0;
+    width: 100%;
+    border: 1px solid #EAEAEA;
+    line-height: 20px;
     background: #fff;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    font-size: 16px;
 }
 #rtec .rtec-form-buttons {
     text-align: center;
@@ -71,16 +85,18 @@
 }
 
 #rtec .rtec-valid {
-    border: 1px solid rgb(20, 220, 70);
+    border: 1px solid rgb(20, 220, 70) !important;
 }
 
 #rtec .rtec-error {
-    border: 1px solid rgb(255, 92, 51);
+    border: 1px solid rgb(255, 92, 51) !important;
 }
 #rtec .rtec-error-message {
     position: absolute;
-    bottom: -8px;
-    font-size: 14px;
+    top: 35px;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
     color: rgb(255, 92, 51);
 }
 #rtec .rtec-success-message {

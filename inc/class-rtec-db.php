@@ -1,5 +1,4 @@
 <?php
-
 // Don't load directly
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
@@ -10,7 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class RTEC_Db
 {
-
 	/**
 	 * @var RTEC_Db
 	 *
@@ -81,9 +79,10 @@ class RTEC_Db
 	 * @param int $num
 	 * @since 1.0
 	 */
-	public function update_num_registered_meta( $id, $num )
+	public function update_num_registered_meta( $id, $current, $num )
 	{
-		update_post_meta( $id, '_RTECnumRegistered', (int)$num );
+		$new = (int)$current + (int)$num;
+		update_post_meta( $id, '_RTECnumRegistered', $new );
 	}
 }
 RTEC_Db::instance();

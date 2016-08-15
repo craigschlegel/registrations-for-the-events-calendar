@@ -1,11 +1,3 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: Craig
- * Date: 1/10/2016
- * Time: 10:06 PM
- */
-?>
 <div class="wrap">
     <h1>Registrations for the Events Calendar</h1>
     <?php

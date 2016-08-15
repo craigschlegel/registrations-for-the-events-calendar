@@ -194,7 +194,6 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 		    require_once RTEC_PLUGIN_DIR . 'inc/form/class-rtec-form.php';
 		    require_once RTEC_PLUGIN_DIR . 'inc/form/form-functions.php';
 		    require_once RTEC_PLUGIN_DIR . 'inc/submission/class-rtec-submission.php';
-		    require_once RTEC_PLUGIN_DIR . 'inc/submission/submission-functions.php';
 		    require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-db.php';
 		    require_once RTEC_PLUGIN_DIR . 'inc/helper-functions.php';
 		    if ( is_admin() ) {
