@@ -42,6 +42,15 @@ function rtec_registrations_bubble() {
 				return;
 			}
 		}
+	} elseif ( get_transient( 'rtec_new_messages' ) === 'yes' ) {
+		global $menu;
+
+		foreach ( $menu as $key => $value ) {
+			if ( $menu[$key][2] === RTEC_TRIBE_MENU_PAGE ) {
+				$menu[$key][0] .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>New Plugin!</span></span>';
+				return;
+			}
+		}
 	}
 
 }

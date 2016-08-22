@@ -37,6 +37,10 @@ class RTEC_Admin
 
         if ( $new_registrations_count > 0 ) {
             $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . $new_registrations_count . '</span></span>';
+        } else {
+            if ( get_transient( 'rtec_new_messages' ) === 'yes' ) {
+                $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>New!</span></span>';
+            }
         }
 
         add_submenu_page(
@@ -44,7 +48,7 @@ class RTEC_Admin
             'Registrations',
             $menu_title,
             'manage_options',
-            RTEC_PLUGIN_DIR.'_settings',
+            RTEC_PLUGIN_DIR . '_settings',
             array( $this, 'create_options_page' )
         );
     }
@@ -174,7 +178,7 @@ class RTEC_Admin
             'class' => 'small-text',
             'page' => 'rtec_form_registration_availability',
             'section' => 'rtec_form_registration_availability',
-            'type' => 'number'
+            'type' => 'text'
         ));
 
         $this->create_settings_field( array(

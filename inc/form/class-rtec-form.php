@@ -182,6 +182,40 @@ class RTEC_Form
     }
 
 	/**
+	 * Are there still registration spots available?
+	 *
+	 * @since 1.0
+	 * @return bool
+	 */
+    public function registrations_available()
+    {
+    	$max_registrations = $this->get_max_registrations();
+	    if ( $max_registrations !== 'i' ) {
+	    	return true;
+	    }
+    	if ( ( $max_registrations - $this->event_meta['num_registered'] ) > 0 ) {
+    		return true;
+	    } else {
+	    	return false;
+	    }
+    }
+
+	/**
+	 * Message if registrations are closed
+	 *
+	 * @since 1.0
+	 * @return string   the html for registrations being closed
+	 */
+	public function registrations_closed_message()
+	{
+		global $rtec_options;
+
+		$message = isset( $rtec_options['registrations_closed_message'] ) ? esc_html( $rtec_options['registrations_closed_message'] ) : 'Registrations are closed for this event';
+
+		return '<p class="rtec-success-message tribe-events-notices">'.$message.'</p>';
+	}
+
+	/**
 	 * The html that creates the feed is broken into parts and pieced together
 	 *
 	 * @since 1.0
@@ -223,6 +257,10 @@ class RTEC_Form
     public function get_attendance_html()
     {
 	    global $rtec_options;
+
+	    if ( $this->get_max_registrations() == 'i' ) {
+		    return '';
+	    }
 
         $html = '';
         $attendance_message_type = isset( $rtec_options['attendance_message_type'] ) ? $rtec_options['attendance_message_type'] : 'up';
@@ -358,6 +396,13 @@ class RTEC_Form
 
         $button_text = isset( $rtec_options['submit_text'] ) ? esc_attr( $rtec_options['submit_text'] ) : 'Submit';
         $html = '';
+				    $html .= '<div class="rtec-form-field rtec-user-address" style="display: none;">';
+				    $html .= '<label for="rtec_user_address" class="rtec_text_label">Address</label>';
+					    $html .= '<div class="rtec-input-wrapper">';
+						    $html .= '<input type="text" name="rtec_user_address" value="" id="rtec_user_address" />';
+	                        $html .= '<p>If you are a human, do not fill in this field</p>';
+					    $html .= '</div>';
+				    $html .= '</div>';
                     $html .= '<div class="rtec-form-buttons">';
                         $html .= '<input type="submit" class="rtec-submit-button" name="rtec_submit" value="' . $button_text . '"/>';
                     $html .= '</div>';

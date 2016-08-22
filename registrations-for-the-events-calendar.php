@@ -239,6 +239,8 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 			    $reg_count = $db->get_registration_count( $id );
 			    update_post_meta( $id, '_RTECnumRegistered', $reg_count );
 		    }
+
+		    set_transient( 'rtec_new_messages', 'yes', 60 * 60 * 24 * 3 );
 	    }
     }
 endif; // End if class_exists check.

@@ -1,15 +1,29 @@
 === Registrations for The Events Calendar ===
-Author: Craig Schlegel
-Support Website: http://craigschlegel.com/
+
+Contributors: roundupwp, Craig Schlegel
+Support Website: https://roundupwp.com/products/registrations-for-the-events-calendar/support/
+Tags: The Events Calendar, Registrations for the Events Calendar
 Requires at least: 3.0
-Tested up to: 4.4
-Version: 0.1
+Tested up to: 4.6
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-The Registrations for The Events Calendar plugin is an extension for Modern Tribe's The Events Calendar (free edition)
+The Registrations for The Events Calendar plugin is an extension for Modern Tribe's The Events Calendar (free edition).
+
+Create a custom contact form that is revealed on a click on the single event post in a location of your choosing.
+
+The form is submitted without leaving the page using AJAX.
+
+Notification emails are sent to email addresses of your choosing, the form submitter, and details of the submission are saved in a custom table in the WordPress database.
+
+Just about everything in the form is customizable including the text, required fields, and the email messages.
+
+== Feedback or Support ==
+
+We would love to hear feedback and support the plugin so please visit the "Support" tab inside the plugin settings page for assistance.
 
 == Installation ==
 
@@ -21,7 +35,23 @@ Follow these steps:
 4. Follow any instructions that appear.
 5. Activate the plugin from the Plugins page and navigate to Events -> Registrations to get started setting up options.
 
+== Setting up Registrations for the Events Calendar ==
+
+1. Make sure you have the Events Calendar by Modern Tribe installed and active
+2. Create a new event by going to the WordPress dashboard and navigating to Events -> Add New
+3. A registration form will now appear on any published event
+4. You can configure the form fields, messaging, registrations limits etc by navigating to Events -> Registrations and then selecting the "Form" tab
+5. You can configure the email options on the "Email" tab
+6. Add, edit, and remove registrations manually by navigating to the "Registrations" tab and clicking "More" for an event
+
+== Screenshots ==
+
+1. Default "Form" options
+2. Default "Email" options
+3. Example "Registrations" tab
+4. Form on the frontend
+
 == Changelog ==
 
-= 0.1 =
-* Begin development
+= 1.0 =
+* Release
