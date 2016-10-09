@@ -171,3 +171,32 @@ function rtec_admin_scripts_and_styles() {
 	);
 }
 add_action( 'admin_enqueue_scripts', 'rtec_admin_scripts_and_styles' );
+
+/**
+ * Add links to the plugin action links
+ *
+ * @since 1.0
+ */
+function rtec_plugin_action_links( $links ) {
+	$links[] = '<a href="'. esc_url( get_admin_url( null, 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations' ) ) .'">Settings</a>';
+	return $links;
+}
+add_filter( 'plugin_action_links_' . RTEC_PLUGIN_BASENAME, 'rtec_plugin_action_links' );
+
+/**
+ * Add links to setup and pro versions
+ *
+ * @since 1.0
+ */
+function rtec_plugin_meta_links( $links, $file ) {
+	$plugin = RTEC_PLUGIN_BASENAME;
+	// create link
+	if ( $file == $plugin ) {
+		return array_merge(
+			$links,
+			array( '<a href="https://www.roundupwp.com/products/registrations-for-the-events-calendar/setup/">Setup Instructions</a>', '<a href="https://www.roundupwp.com/products/registrations-for-the-events-calendar-pro/">Buy Pro</a>' )
+		);
+	}
+	return $links;
+}
+add_filter( 'plugin_row_meta', 'rtec_plugin_meta_links', 10, 2 );

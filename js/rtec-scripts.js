@@ -110,15 +110,20 @@ jQuery(document).ready(function($) {
                 url : rtec.ajaxUrl,
                 type : 'post',
                 data : submittedData,
-                success : function() {
+                success : function(data) {
 
                     $('.rtec-spinner, #rtec-form-toggle-button').hide();
                     $('.rtec-form-wrapper').slideUp();
                     $('html, body').animate({
                         scrollTop: $('#rtec').offset().top - 200
                     }, 750);
-                    $('#rtec').prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">'+$('#rtec').attr('data-rtec-success-message')+'</p>');
-                    
+
+                    if(data !== 'full') {
+                        $('#rtec').prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">'+$('#rtec').attr('data-rtec-success-message')+'</p>');
+                    } else {
+                        $('#rtec').prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">Sorry! Registrations just filled up for this event. You are not registered</p>');
+                    }
+
                 }
             }); // ajax
         } else { // if not .rtec-error

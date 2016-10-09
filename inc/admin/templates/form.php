@@ -6,13 +6,17 @@ settings_errors(); ?>
     <?php //echo'<pre>';var_dump(get_option('rtec_options'));echo'</pre>'; ?>
     <?php do_settings_sections( 'rtec_form_form_fields' ); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
-    <hr>
+    <hr />
     <?php do_settings_sections( 'rtec_form_custom_text' ); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
-    <hr>
+    <hr />
     <?php do_settings_sections( 'rtec_form_registration_availability' ); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
-    <hr>
+    <hr />
     <?php do_settings_sections( 'rtec_form_styles' ); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
+    <hr />
+    <?php do_settings_sections( 'rtec_advanced' ); ?>
+    <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
+    <hr />
 </form>

@@ -141,7 +141,7 @@ class RTEC_Admin
             'fields' => $form_fields_array
         ));
 
-        // Request Method
+        // Template Location
         $this->create_settings_field( array(
             'name' => 'template_location',
             'title' => 'Form Location', // label for the input field
@@ -170,15 +170,29 @@ class RTEC_Admin
 
         $this->create_settings_field( array(
             'option' => 'rtec_options',
+            'name' => 'limit_registrations',
+            'title' => '<label for="rtec_limit_registrations">Limit Registrations for Events</label>',
+            'example' => '',
+            'description' => 'Only allow a certain amount of registrations for each event',
+            'callback'  => 'default_checkbox',
+            'class' => '',
+            'page' => 'rtec_form_registration_availability',
+            'section' => 'rtec_form_registration_availability',
+            'default' => false
+        ));
+
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
             'name' => 'default_max_registrations',
             'title' => '<label for="rtec_default_max_registrations">Default Max Registrations</label>',
             'example' => '',
-            'description' => 'Maximum allowed registrants for every event. Type "i" for no limit',
+            'description' => 'Maximum allowed registrants for every event (if any limit)',
             'callback'  => 'default_text',
             'class' => 'small-text',
             'page' => 'rtec_form_registration_availability',
             'section' => 'rtec_form_registration_availability',
-            'type' => 'text'
+            'type' => 'number',
+            'default' => 30
         ));
 
         $this->create_settings_field( array(
@@ -297,6 +311,29 @@ class RTEC_Admin
             'description' => 'Enter your own custom Javascript/JQuery in the box below',
         ));
 
+        /* Advanced */
+
+        add_settings_section(
+            'rtec_advanced',
+            'Advanced',
+            array( $this, 'blank' ),
+            'rtec_advanced'
+        );
+
+        // preserve database
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'preserve_db',
+            'title' => '<label for="rtec_preserve_db">Preserve registrations and settings on uninstall</label>',
+            'example' => '',
+            'description' => 'Keep your registration records and settings preserved in the database when you uninstall the plugin',
+            'callback'  => 'default_checkbox',
+            'class' => 'default-text',
+            'page' => 'rtec_advanced',
+            'section' => 'rtec_advanced',
+            'default' => false
+        ));
+
         /**
          * Email Settings
          */
@@ -390,8 +427,7 @@ class RTEC_Admin
             'name' => 'confirmation_message',
             'title' => '<label>Confirmation Message</label>',
             'example' => '',
-            'default' => 'You are registered!{nl}{nl}Here are the details of your registration.{nl}{nl}Event: {event-title} at {venue} on {event-date}{nl}Registered Name: {first} {last}{nl}
-Other: {other}',
+            'default' => 'You are registered!{nl}{nl}Here are the details of your registration.{nl}{nl}Event: {event-title} at {venue} on {event-date}{nl}Registered Name: {first} {last}{nl}Other: {other}',
             'description' => 'Enter the message you would like customers to receive along with details of the event',
             'callback'  => 'message_text_area',
             'class' => 'rtec-confirmation-message-tr',
@@ -428,6 +464,17 @@ Other: {other}',
         <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
         <?php
     }
+
+    public function default_checkbox( $args )
+    {
+        $options = get_option( $args['option'] );
+        $option_checked = ( isset( $options[ $args['name'] ] ) ) ? $options[ $args['name'] ] : $args['default'];
+        ?>
+        <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="checkbox" <?php if ( $option_checked === true ) echo "checked"; ?> />
+        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
+        <?php
+    }
+    
     public function width_and_height_settings( $args )
     {
         $options = get_option( $args['option'] );
@@ -511,22 +558,23 @@ Other: {other}',
         $text_after = ( isset( $options['attendance_text_after'] ) ) ? esc_attr( $options['attendance_text_after'] ) : 'others';
 	    $one = ( isset( $options['attendance_text_one'] ) ) ? esc_attr( $options['attendance_text_one'] ) : 'Join one other person';
 	    $none_yet = ( isset( $options['attendance_text_none_yet'] ) ) ? esc_attr( $options['attendance_text_none_yet'] ) : 'Be the first!';
+        $closed = ( isset( $options['registrations_closed_message'] ) ) ? esc_attr( $options['registrations_closed_message'] ) : 'Registrations are closed for this event';
         $option_checked = ( isset( $options['include_attendance_message'] ) ) ? $options['include_attendance_message'] : true;
         $option_selected = ( isset( $options['attendance_message_type'] ) ) ? $options['attendance_message_type'] : 'up';
         ?>
         <input name="<?php echo $args['option'].'[include_attendance_message]'; ?>" id="rtec_include_attendance_message" type="checkbox" <?php if ( $option_checked ) echo "checked"; ?> />
         <label for="rtec_include_attendance_message"><?php _e( 'include registrations availability message', 'rtec' ); ?></label>
         <br>
-        <div class="rtec-availability-options-wrapper">
+        <div class="rtec-availability-options-wrapper" id="rtec-message-type-wrapper">
             <div class="rtec-checkbox-row">
                 <h4><?php _e( 'Message Type', 'rtec' ); ?></h4>
-                <input id="rtec_guests_attending_type" name="<?php echo $args['option'].'[attendance_message_type]'; ?>" type="radio" value="up" <?php if ( $option_selected == 'up' ) echo "checked"; ?> />
+                <input class="rtec_attendance_message_type" id="rtec_guests_attending_type" name="<?php echo $args['option'].'[attendance_message_type]'; ?>" type="radio" value="up" <?php if ( $option_selected == 'up' ) echo "checked"; ?> />
                 <label for="rtec_guests_attending_type"><?php _e( 'guests attending (count up)', 'rtec' ); ?></label>
-                <input id="rtec_spots_remaining_type" name="<?php echo $args['option'].'[attendance_message_type]'; ?>" type="radio" value="down" <?php if ( $option_selected == 'down' ) echo "checked"; ?>/>
+                <input class="rtec_attendance_message_type" id="rtec_spots_remaining_type" name="<?php echo $args['option'].'[attendance_message_type]'; ?>" type="radio" value="down" <?php if ( $option_selected == 'down' ) echo "checked"; ?>/>
                 <label for="rtec_spots_remaining_type"><?php _e( 'spots remaining (count down)', 'rtec' ); ?></label>
             </div>
         </div>
-        <div class="rtec-availability-options-wrapper">
+        <div class="rtec-availability-options-wrapper" id="rtec-message-text-wrapper">
 
             <h4><?php _e( 'Message Text', 'rtec' ); ?></h4>
 
@@ -539,6 +587,10 @@ Other: {other}',
 	        <br><br>
             <label for="rtec_text_none_yet"><?php _e( 'Message if no registrations yet: ', 'rtec' ); ?></label>
             <input id="rtec_text_none_yet" type="text" class="large-text" name="<?php echo $args['option'].'[attendance_text_none_yet]'; ?>" value="<?php echo $none_yet; ?>"/>
+            <br><br>
+            <label for="rtec_registrations_closed_message"><?php _e( 'Message if registrations are closed or filled: ', 'rtec' ); ?></label>
+            <input id="rtec_registrations_closed_message" type="text" class="large-text" name="<?php echo $args['option'].'[registrations_closed_message]'; ?>" value="<?php echo $closed; ?>"/>
+
         </div>
         <?php
     }
@@ -703,11 +755,10 @@ Other: {other}',
         $leave_spaces = array();
 
         if ( isset( $input['default_max_registrations'] ) ) {
-            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'other_show', 'other_require' );
-            $leave_spaces = array();
+            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'other_show', 'other_require', 'limit_registrations', 'include_attendance_message', 'preserve_db' );
+            $leave_spaces = array( 'custom_js', 'custom_css' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
-            $checkbox_settings = array('include_attendance_message');
-            $leave_spaces = array();
+            $checkbox_settings = array();
         }
 
         foreach ( $checkbox_settings as $checkbox_setting ) {

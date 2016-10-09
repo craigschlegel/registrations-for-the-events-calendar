@@ -169,7 +169,7 @@ class RTEC_Form
     {
 	    global $rtec_options;
 
-        $this->max_registrations = isset( $rtec_options['default_max_registrations'] ) ? $rtec_options['default_max_registrations'] : 'i';
+        $this->max_registrations = isset( $rtec_options['default_max_registrations'] ) ? $rtec_options['default_max_registrations'] : 30;
     }
 
 	/**
@@ -178,6 +178,9 @@ class RTEC_Form
 	 */
     public function get_max_registrations()
     {
+    	if ( !isset( $this->max_registrations ) ) {
+    		$this->set_max_registrations();
+	    }
         return $this->max_registrations;
     }
 
@@ -189,10 +192,13 @@ class RTEC_Form
 	 */
     public function registrations_available()
     {
+    	global $rtec_options;
+
     	$max_registrations = $this->get_max_registrations();
-	    if ( $max_registrations !== 'i' ) {
+	    if ( ! $rtec_options['limit_registrations'] ) {
 	    	return true;
 	    }
+
     	if ( ( $max_registrations - $this->event_meta['num_registered'] ) > 0 ) {
     		return true;
 	    } else {
@@ -258,12 +264,14 @@ class RTEC_Form
     {
 	    global $rtec_options;
 
-	    if ( $this->get_max_registrations() == 'i' ) {
-		    return '';
+	    $attendance_message_type = isset( $rtec_options['attendance_message_type'] ) ? $rtec_options['attendance_message_type'] : 'up';
+
+	    // a "count down" type of message won't work if there isn't a limit so we check to see if that's true here
+	    if ( ! $rtec_options['limit_registrations'] ) {
+		    $attendance_message_type = 'up';
 	    }
 
         $html = '';
-        $attendance_message_type = isset( $rtec_options['attendance_message_type'] ) ? $rtec_options['attendance_message_type'] : 'up';
 
             if ( $attendance_message_type === 'up' ) {
                 $display_num = $this->event_meta['num_registered'];

@@ -34,9 +34,9 @@ function rtec_the_registration_form()
 
 	} else {
 		$form->set_event_meta();
+		$form->set_max_registrations();
 		if ( $form->registrations_available() ) {
 			$form->set_input_fields_data();
-			$form->set_max_registrations();
 			echo $form->get_form_html();
 		} else {
 			echo $form->registrations_closed_message();
@@ -56,13 +56,18 @@ function rtec_process_form_submission()
 	require_once RTEC_PLUGIN_DIR . 'inc/submission/class-rtec-submission.php';
 
 	$submission = new RTEC_Submission( $_POST );
+	$event_meta = rtec_get_event_meta( sanitize_text_field( $_POST['rtec_event_id'] ) );
 
-	$submission->validate_data();
+	if ( $submission->attendance_limit_not_reached( $event_meta['num_registered'] ) ) {
+		$submission->validate_data();
 
-	if ( $submission->has_errors() ) {
-		return false;
+		if ( $submission->has_errors() ) {
+			return false;
+		} else {
+			$submission->process_valid_submission();
+		}
 	} else {
-		$submission->process_valid_submission();
+		echo 'full';
 	}
 
 	die();

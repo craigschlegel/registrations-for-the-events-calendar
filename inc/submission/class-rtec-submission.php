@@ -48,6 +48,24 @@ class RTEC_Submission
         
         $this->validate_data();
     }
+
+    public function attendance_limit_not_reached( $num_registered = 0 )
+    {
+	    $options = get_option( 'rtec_options' );
+
+	    if ( $options['limit_registrations'] ) {
+	    	$registrations_left = $options['default_max_registrations'] - (int)$num_registered;
+
+		    if ( $registrations_left > 0 ) {
+		    	return true;
+		    } else {
+		    	return false;
+		    }
+
+	    } else {
+	    	return true;
+	    }
+    }
     
     /**
      * Get the one true instance of EDD_Register_Meta.
@@ -70,6 +88,10 @@ class RTEC_Submission
 
         // for each submitted form field
         foreach ( $submission as $input_key => $input_value ) {
+        	// check spam honeypot, error if not empty
+        	if ( $input_key === 'rtec_user_address' && ! empty( $input_value ) ) {
+        		$this->errors[] = 'user_address';
+	        }
             // if the form field is a required first, last, email, or other
             if ( $input_key === 'rtec_first' && $options['first_require'] ) {
             	
@@ -374,7 +396,7 @@ class RTEC_Submission
         if ( ! empty( $valid_recipients ) ) {
             return $valid_recipients;
         } else {
-        	return false;
+        	return get_option( 'admin_email' );
         }
     }
 

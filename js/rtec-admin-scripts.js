@@ -4,7 +4,6 @@ jQuery(document).ready(function($){
     // FORM tab
     $('.rtec_require_checkbox').change(function(){
         if ($(this).is(':checked')) {
-            console.log('checked');
             $(this).closest('.rtec-checkbox-row').find('.rtec_include_checkbox').prop( "checked", true );
         }
     });
@@ -12,6 +11,39 @@ jQuery(document).ready(function($){
     $('.rtec_include_checkbox').change(function(){
         if (!$(this).is(':checked')) {
             $(this).closest('.rtec-checkbox-row').find('.rtec_require_checkbox').prop( "checked", false );
+        }
+    });
+
+    var $rtecLimitRegistrations = $('#rtec_limit_registrations');
+
+    function rtecCheckLimitOptions() {
+        $('.rtec_attendance_message_type').each(function(){
+            if ($(this).is(':checked')) {
+                rtecToggleLimitOptions($(this).val());
+            }
+        });
+    }
+    rtecCheckLimitOptions();
+
+    function rtecToggleLimitOptions(val) {
+        if (val === 'down' && !$rtecLimitRegistrations.is(':checked')) {
+            $rtecLimitRegistrations.closest('tr').find('td')
+                .css('border','1px solid #ff3300')
+                .css('background', '#ffebe6')
+                .append('<p class="rtec-attendance-limit-error" style="color: #ff3300;">This option must be checked to have the "spots remaining" message work properly</p>');
+        } else {
+            $rtecLimitRegistrations.closest('tr').find('td')
+                .css('border','none')
+                .css('background', 'none')
+                .find('.rtec-attendance-limit-error').remove();
+        }
+    }
+
+    $('.rtec_attendance_message_type, #rtec_limit_registrations').change(function(){
+        rtecCheckLimitOptions();
+        if (!$('#rtec-message-text-alert').length) {
+            $('#rtec-message-text-wrapper').css('border-color', '#ff3300');
+            $('#rtec-message-type-wrapper').append('<p id="rtec-message-text-alert" style="color: #ff3300;">Check the registration limit messages below to make sure they make sense with your choice</p>');
         }
     });
 
@@ -43,7 +75,8 @@ jQuery(document).ready(function($){
         clearTimeout(typingTimer);
         typingTimer = setTimeout(updateText, doneTypingInterval);
     });
-    
+
+    // REGISTRATION tab
     function rtecRegistrationAjax(submitData,successFunc) {
         $.ajax({
             url: rtecAdminScript.ajax_url,

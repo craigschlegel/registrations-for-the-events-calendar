@@ -2,15 +2,15 @@
 /*
 Plugin Name: Registrations for The Events Calendar
 Description: Allows you to collect registrations for events posted using The Events Calendar by Modern Tribe.
-Version: 0.1
-Author: Craig Schlegel
-Author URI: craigschlegel.com
+Version: 1.0
+Author: Roundup WP
+Author URI: roundupwp.com
 License: GPLv2 or later
 Text Domain: rtec
 */
 
 /*
-Copyright 2015 by Craig Schlegel
+Copyright 2016 by Craig Schlegel
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 /**
 * @package RTEC
-* @author Craig Schlegel
+* @author Roundup WP
 * @version 1.0
  */
 
@@ -159,13 +159,17 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 	        if ( ! defined( 'RTEC_PLUGIN_URL' ) ) {
 		        define( 'RTEC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 	        }
+	        // Plugin Base Name
+	        if ( ! defined( 'RTEC_PLUGIN_BASENAME') ) {
+		        define( 'RTEC_PLUGIN_BASENAME', plugin_basename(__FILE__) );
+	        }
             // Plugin Title.
             if ( ! defined( 'RTEC_TITLE' ) ) {
                 define( 'RTEC_TITLE' , 'Registrations for the Events Calendar' );
             }
             // Db version.
             if ( ! defined( 'RTEC_DBVERSION' ) ) {
-                define( 'RTEC_DBVERSION' , '0.1' );
+                define( 'RTEC_DBVERSION' , '1.0' );
             }
             // Table Name.
             if ( ! defined( 'RTEC_TABLENAME' ) ) {
@@ -223,7 +227,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 				    'last_require' => true,
 				    'last_error' => 'Please enter your last name',
 				    'email_show' => true,
-				    'email_require' => false,
+				    'email_require' => true,
 				    'email_error' => 'Please enter a valid email address',
 				    'other_show' => false,
 				    'other_require' => false,
