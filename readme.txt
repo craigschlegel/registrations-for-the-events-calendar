@@ -1,6 +1,6 @@
 === Registrations for The Events Calendar ===
 
-Contributors: roundupwp, Craig Schlegel
+Contributors: Roundup WP
 Support Website: https://roundupwp.com/products/registrations-for-the-events-calendar/support/
 Tags: the events calendar, registration, event registration, event contact, events calendar
 Requires at least: 3.0
@@ -17,9 +17,9 @@ Create a custom contact form that is revealed on a click on the single event pos
 
 The form is submitted without leaving the page using AJAX.
 
-Notification emails are sent to email addresses of your choosing, the form submitter, and details of the submission are saved in a custom table in the WordPress database.
+Notification emails are sent to email addresses of your choosing as well as the form submitter. Details of the submission are saved in a custom table in the WordPress database.
 
-Just about everything in the form is customizable including the text, required fields, and the email messages.
+Just about everything in the form is customizable including the text, required fields, registration limits, and the email messages.
 
 == Feedback or Support ==
 
@@ -50,6 +50,16 @@ Follow these steps:
 2. Default "Email" options
 3. Example "Registrations" tab
 4. Form on the frontend
+
+== Frequently Asked Questions ==
+
+= Can I limit the number of registrations for an event? =
+
+Yes. You can set up the maximum number of registrants on the "Form" tab
+
+= The form is not hidden initially. Why is that? =
+
+It's likely that you have a javascript error somewhere on that page. Try disabling other plugins or switching themes to see i this corrects the issue.
 
 == Changelog ==
 
