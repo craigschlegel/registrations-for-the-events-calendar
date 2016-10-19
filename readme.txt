@@ -2,7 +2,7 @@
 
 Contributors: roundupwp, Craig Schlegel
 Support Website: https://roundupwp.com/products/registrations-for-the-events-calendar/support/
-Tags: The Events Calendar, Registrations for the Events Calendar
+Tags: the events calendar, registration, event registration, event contact, events calendar
 Requires at least: 3.0
 Tested up to: 4.6
 Stable tag: 1.0
