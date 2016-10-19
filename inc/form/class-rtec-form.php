@@ -61,8 +61,6 @@ class RTEC_Form
     {
 		global $rtec_options;
 
-	    $working_rtec_options =
-
         $fields = array( 'first', 'last', 'email', 'other' );
         foreach ( $fields as $field ) {
 
