@@ -61,12 +61,24 @@ class RTEC_Form
     {
 		global $rtec_options;
 
+	    $working_rtec_options =
+
         $fields = array( 'first', 'last', 'email', 'other' );
         foreach ( $fields as $field ) {
+
+	        // prevent errors from popping up by defaulting all settings to true
+	        if ( ! isset( $rtec_options[$field . '_show'] ) ) {
+		        $rtec_options[$field . '_show'] = true;
+	        }
             // create an array of all to be shown
             if ( $rtec_options[$field . '_show'] == true ) {
                 $this->show_fields[] = $field;
             }
+
+            // prevent errors from popping up by defaulting all settings to true
+	        if ( ! isset( $rtec_options[$field . '_require'] ) ) {
+		        $rtec_options[$field . '_require'] = true;
+	        }
             // create an array of all to be required
             if ( $rtec_options[$field . '_require'] == true ) {
                 $this->required_fields[] = $field;
@@ -134,7 +146,7 @@ class RTEC_Form
             if ( in_array( $type, $show_fields ) ) {
                 $input_fields_data[$type]['name'] = $type;
                 $input_fields_data[$type]['require'] = in_array( $type, $required_fields );
-                $input_fields_data[$type]['error_message'] = $rtec_options[$type . '_error'];
+                $input_fields_data[$type]['error_message'] = isset( $rtec_options[$type . '_error'] ) ? $rtec_options[$type . '_error'] : 'Error';
 
                 switch( $type ) {
                     case 'first':
@@ -153,9 +165,9 @@ class RTEC_Form
         // the "other" fields is handled slightly differently
         if ( in_array( 'other', $show_fields ) ) {
             $input_fields_data['other']['name'] = 'other';
-            $input_fields_data['other']['require'] = $rtec_options['other_require'];
-            $input_fields_data['other']['error_message'] = $rtec_options['other_error'];
-            $input_fields_data['other']['label'] = $rtec_options['other_label'];
+            $input_fields_data['other']['require'] = isset( $rtec_options['other_require'] ) ? $rtec_options['other_require'] : true;
+            $input_fields_data['other']['error_message'] = isset( $rtec_options['other_error'] ) ? $rtec_options['other_error'] : 'Error';
+            $input_fields_data['other']['label'] = isset( $rtec_options['other_label'] ) ? $rtec_options['other_label'] : 'Other';
         }
 
         $this->input_fields_data = $input_fields_data;
@@ -195,7 +207,7 @@ class RTEC_Form
     	global $rtec_options;
 
     	$max_registrations = $this->get_max_registrations();
-	    if ( ! $rtec_options['limit_registrations'] ) {
+	    if ( isset( $rtec_options['limit_registrations'] ) && ! $rtec_options['limit_registrations'] ) {
 	    	return true;
 	    }
 
@@ -267,7 +279,7 @@ class RTEC_Form
 	    $attendance_message_type = isset( $rtec_options['attendance_message_type'] ) ? $rtec_options['attendance_message_type'] : 'up';
 
 	    // a "count down" type of message won't work if there isn't a limit so we check to see if that's true here
-	    if ( ! $rtec_options['limit_registrations'] ) {
+	    if ( isset( $rtec_options['limit_registrations'] ) && ! $rtec_options['limit_registrations'] ) {
 		    $attendance_message_type = 'up';
 	    }
 
@@ -275,18 +287,20 @@ class RTEC_Form
 
             if ( $attendance_message_type === 'up' ) {
                 $display_num = $this->event_meta['num_registered'];
-                $text_before = isset( $rtec_options['attendance_text_before'] ) ? esc_html( $rtec_options['attendance_text_before'] ) : 'Join';
-                $text_after = isset( $rtec_options['attendance_text_after'] ) ? esc_html( $rtec_options['attendance_text_after'] ) : 'others.';
+                $text_before = isset( $rtec_options['attendance_text_before_up'] ) ? esc_html( $rtec_options['attendance_text_before_up'] ) : 'Join';
+                $text_after = isset( $rtec_options['attendance_text_after_up'] ) ? esc_html( $rtec_options['attendance_text_after_up'] ) : 'others!';
             } else {
                 $display_num = $this->get_max_registrations() - $this->event_meta['num_registered'];
-                $text_before = isset( $rtec_options['attendance_text_before'] ) ? esc_html( $rtec_options['attendance_text_before'] ) : 'Only';
-                $text_after = isset( $rtec_options['attendance_text_after'] ) ? esc_html( $rtec_options['attendance_text_after'] ) : 'spots left.';
+	            $text_before = isset( $rtec_options['attendance_text_before_down'] ) ? esc_html( $rtec_options['attendance_text_before_down'] ) : 'Only';
+	            $text_after = isset( $rtec_options['attendance_text_after_down'] ) ? esc_html( $rtec_options['attendance_text_after_down'] ) : 'spots left';
             }
 
             $text_string = sprintf( '%s %s %s', $text_before, (string)$display_num, $text_after );
-            if ( $display_num == "1" ) {
-                $text_string = isset( $rtec_options['attendance_text_one'] ) ? esc_html( $rtec_options['attendance_text_one'] ) : 'Join one other person';
-            }
+            if ( $display_num == '1' && $attendance_message_type === 'up' ) {
+	            $text_string = isset( $rtec_options['attendance_text_one_up'] ) ? esc_html( $rtec_options['attendance_text_one_up'] ) : 'Join one other person';
+            } elseif ( $display_num == '1' && $attendance_message_type === 'down' ) {
+			    $text_string = isset( $rtec_options['attendance_text_one_down'] ) ? esc_html( $rtec_options['attendance_text_one_down'] ) : 'Only one spot left!';
+		    }
 
             if ( $display_num < 1 ) {
                 $text_string = isset( $rtec_options['attendance_text_none_yet'] ) ? esc_html( $rtec_options['attendance_text_none_yet'] ) : 'Be the first!';

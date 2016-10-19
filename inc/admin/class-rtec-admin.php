@@ -259,7 +259,8 @@ class RTEC_Admin
             'rows' => '3',
             'class' => '',
             'page' => 'rtec_form_custom_text',
-            'section' => 'rtec_form_custom_text'
+            'section' => 'rtec_form_custom_text',
+            'legend' => false
         ));
 
         /* Form Styling */
@@ -357,7 +358,8 @@ class RTEC_Admin
             'callback'  => 'default_text',
             'class' => 'large-text',
             'page' => 'rtec_email_notification',
-            'section' => 'rtec_email_notification'
+            'section' => 'rtec_email_notification',
+            'default' => get_option( 'admin_email' )
         ));
 
         // notification from
@@ -370,7 +372,8 @@ class RTEC_Admin
             'callback'  => 'default_text',
             'class' => 'regular-text',
             'page' => 'rtec_email_notification',
-            'section' => 'rtec_email_notification'
+            'section' => 'rtec_email_notification',
+            'default' => 'New Registration'
         ));
 
         /* Confirmation Email Settings Section */
@@ -392,7 +395,8 @@ class RTEC_Admin
             'callback'  => 'default_text',
             'class' => 'regular-text',
             'page' => 'rtec_email_confirmation',
-            'section' => 'rtec_email_confirmation'
+            'section' => 'rtec_email_confirmation',
+            'default' => 'Thank You'
         ));
 
         // confirmation from address
@@ -405,7 +409,8 @@ class RTEC_Admin
             'callback'  => 'default_text',
             'class' => 'regular-text',
             'page' => 'rtec_email_confirmation',
-            'section' => 'rtec_email_confirmation'
+            'section' => 'rtec_email_confirmation',
+            'default' => get_option( 'admin_email' )
         ));
 
         // confirmation subject
@@ -418,7 +423,8 @@ class RTEC_Admin
             'callback'  => 'default_text',
             'class' => 'regular-text',
             'page' => 'rtec_email_confirmation',
-            'section' => 'rtec_email_confirmation'
+            'section' => 'rtec_email_confirmation',
+            'default' => 'Registration Confirmation'
         ));
 
         // confirmation message
@@ -434,7 +440,8 @@ class RTEC_Admin
             'page' => 'rtec_email_confirmation',
             'section' => 'rtec_email_confirmation',
 	        'columns' => '60',
-	        'preview' => true
+	        'preview' => true,
+            'legend' => true
         ));
     }
 
@@ -554,10 +561,13 @@ class RTEC_Admin
     
     public function num_registrations_messages( $args ) {
         $options = get_option( $args['option'] );
-        $text_before = ( isset( $options['attendance_text_before'] ) ) ? esc_attr( $options['attendance_text_before'] ) : 'Join';
-        $text_after = ( isset( $options['attendance_text_after'] ) ) ? esc_attr( $options['attendance_text_after'] ) : 'others';
-	    $one = ( isset( $options['attendance_text_one'] ) ) ? esc_attr( $options['attendance_text_one'] ) : 'Join one other person';
-	    $none_yet = ( isset( $options['attendance_text_none_yet'] ) ) ? esc_attr( $options['attendance_text_none_yet'] ) : 'Be the first!';
+        $text_before_up = ( isset( $options['attendance_text_before_up'] ) ) ? esc_attr( $options['attendance_text_before_up'] ) : 'Join';
+        $text_after_up = ( isset( $options['attendance_text_after_up'] ) ) ? esc_attr( $options['attendance_text_after_up'] ) : 'others';
+        $one_up = ( isset( $options['attendance_text_one_up'] ) ) ? esc_attr( $options['attendance_text_one_up'] ) : 'Join one other person';
+        $text_before_down = ( isset( $options['attendance_text_before_down'] ) ) ? esc_attr( $options['attendance_text_before_down'] ) : 'Only';
+        $text_after_down = ( isset( $options['attendance_text_after_down'] ) ) ? esc_attr( $options['attendance_text_after_down'] ) : 'spots left';
+        $one_down = ( isset( $options['attendance_text_one_down'] ) ) ? esc_attr( $options['attendance_text_one_down'] ) : 'Only one spot left!';
+        $none_yet = ( isset( $options['attendance_text_none_yet_up'] ) ) ? esc_attr( $options['attendance_text_none_yet_up'] ) : 'Be the first!';
         $closed = ( isset( $options['registrations_closed_message'] ) ) ? esc_attr( $options['registrations_closed_message'] ) : 'Registrations are closed for this event';
         $option_checked = ( isset( $options['include_attendance_message'] ) ) ? $options['include_attendance_message'] : true;
         $option_selected = ( isset( $options['attendance_message_type'] ) ) ? $options['attendance_message_type'] : 'up';
@@ -574,17 +584,37 @@ class RTEC_Admin
                 <label for="rtec_spots_remaining_type"><?php _e( 'spots remaining (count down)', 'rtec' ); ?></label>
             </div>
         </div>
-        <div class="rtec-availability-options-wrapper" id="rtec-message-text-wrapper">
+        
+        <div class="rtec-availability-options-wrapper rtec-admin-2-columns" id="rtec-message-text-wrapper-up">
 
-            <h4><?php _e( 'Message Text', 'rtec' ); ?></h4>
+            <h4><?php _e( 'Guests Attending Message Text', 'rtec' ); ?></h4>
 
-            <label for="rtec_text_before"><?php _e( 'Text Before: ', 'rtec' ); ?></label><input id="rtec_text_before" type="text" name="<?php echo $args['option'].'[attendance_text_before]'; ?>" value="<?php echo $text_before; ?>"/>
-            <label for="rtec_text_after"><?php _e( 'Text After: ', 'rtec' ); ?></label><input id="rtec_text_after" type="text" name="<?php echo $args['option'].'[attendance_text_after]'; ?>" value="<?php echo $text_after; ?>"/>
-            <p class="description">Example: "<strong>Join</strong> 20 <strong>others.</strong>", "<strong>Only</strong> 5 <strong>spots left.</strong>"</p>
+            <label for="rtec_text_before_up"><?php _e( 'Text Before: ', 'rtec' ); ?></label><input id="rtec_text_before_up" type="text" name="<?php echo $args['option'].'[attendance_text_before_up]'; ?>" value="<?php echo $text_before_up; ?>"/></br>
+            <label for="rtec_text_after_up"><?php _e( 'Text After: ', 'rtec' ); ?></label><input id="rtec_text_after_up" type="text" name="<?php echo $args['option'].'[attendance_text_after_up]'; ?>" value="<?php echo $text_after_up; ?>"/>
+            <p class="description">Example: "<strong>Join</strong> 20 <strong>others.</strong>"</p>
 	        <br>
-	        <label for="rtec_text_one"><?php _e( 'Message if exactly 1 registration: ', 'rtec' ); ?></label>
-	        <input id="rtec_text_one" type="text" class="large-text" name="<?php echo $args['option'].'[attendance_text_one]'; ?>" value="<?php echo $one; ?>"/>
-	        <br><br>
+	        <label for="rtec_text_one_up"><?php _e( 'Message if exactly 1 registration: ', 'rtec' ); ?></label>
+	        <input id="rtec_text_one_up" type="text" class="large-text" name="<?php echo $args['option'].'[attendance_text_one_up]'; ?>" value="<?php echo $one_up; ?>"/>
+
+        </div>
+        
+        <div class="rtec-availability-options-wrapper rtec-admin-2-columns" id="rtec-message-text-wrapper-down">
+
+            <h4><?php _e( 'Spots Remaining Message Text', 'rtec' ); ?></h4>
+
+            <label for="rtec_text_before_down"><?php _e( 'Text Before: ', 'rtec' ); ?></label><input id="rtec_text_before_down" type="text" name="<?php echo $args['option'].'[attendance_text_before_down]'; ?>" value="<?php echo $text_before_down; ?>"/></br>
+            <label for="rtec_text_after_down"><?php _e( 'Text After: ', 'rtec' ); ?></label><input id="rtec_text_after_down" type="text" name="<?php echo $args['option'].'[attendance_text_after_down]'; ?>" value="<?php echo $text_after_down; ?>"/>
+            <p class="description">Example: "<strong>Only</strong> 5 <strong>spots left.</strong>"</p>
+            <br>
+            <label for="rtec_text_one_down"><?php _e( 'Message if exactly 1 spot left: ', 'rtec' ); ?></label>
+            <input id="rtec_text_one_down" type="text" class="large-text" name="<?php echo $args['option'].'[attendance_text_one_down]'; ?>" value="<?php echo $one_down; ?>"/>
+
+        </div>
+        
+        <div class="rtec-availability-options-wrapper" id="rtec-message-text-wrapper-other">
+
+            <h4><?php _e( 'Other Messages', 'rtec' ); ?></h4>
+
             <label for="rtec_text_none_yet"><?php _e( 'Message if no registrations yet: ', 'rtec' ); ?></label>
             <input id="rtec_text_none_yet" type="text" class="large-text" name="<?php echo $args['option'].'[attendance_text_none_yet]'; ?>" value="<?php echo $none_yet; ?>"/>
             <br><br>
@@ -605,7 +635,20 @@ class RTEC_Admin
 	    $preview = isset( $args['preview'] ) ? $args['preview'] : false;
         ?>
         <textarea id="confirmation_message_textarea" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" cols="<?php echo $columns; ?>" rows="<?php echo $rows; ?>"><?php echo $option_string; ?></textarea>
-        <span><?php echo( $args['example'] ); ?></span>
+
+        <?php if ( $args['legend'] ) : ?>
+        <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'Legend' ); ?></a>
+        <span class="rtec-tooltip-table rtec-tooltip rtec-availability-options-wrapper">
+            <span class="rtec-col-1">{venue}</span><span class="rtec-col-2">Event venue/location</span>
+            <span class="rtec-col-1">{event-title}</span><span class="rtec-col-2">Title of event</span>
+            <span class="rtec-col-1">{event-date}</span><span class="rtec-col-2">Event start date</span>
+            <span class="rtec-col-1">{first}</span><span class="rtec-col-2">First name of registrant</span>
+            <span class="rtec-col-1">{last}</span><span class="rtec-col-2">Last name of registrant</span>
+            <span class="rtec-col-1">{email}</span><span class="rtec-col-2">Email of registrant</span>
+            <span class="rtec-col-1">{other}</span><span class="rtec-col-2">Information submitted in the "other" field</span>
+            <span class="rtec-col-1">{nl}</span><span class="rtec-col-2">Creates a new line/line break</span>
+        </span>
+        <?php endif; ?>
 
         <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
         <?php if ( $preview ) : ?>

@@ -25,15 +25,15 @@ function rtec_get_event_meta( $id = '' ) {
 	$meta = get_post_meta( $post_obj->ID );
 
 	// set venue meta
-	$venue_meta = get_post_meta( $meta['_EventVenueID'][0] );
+	$venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
 
-	$event_meta['post_id'] = $post_obj->ID;
-	$event_meta['title'] = ! empty( $id ) ? get_the_title( $id ) : get_the_title() ;
-	$event_meta['start_date'] = $post_obj->EventStartDate;
-	$event_meta['end_date'] = $post_obj->EventEndDate;
-	$event_meta['venue_id'] = $meta['_EventVenueID'][0];
-	$event_meta['venue_title'] = $venue_meta["_VenueVenue"][0];
-	$event_meta['num_registered'] = $meta['_RTECnumRegistered'][0];
+	$event_meta['post_id'] = isset( $post_obj->ID ) ? $post_obj->ID : '';
+	$event_meta['title'] = ! empty( $id ) ? get_the_title( $id ) : get_the_title();
+	$event_meta['start_date'] = isset( $post_obj->EventStartDate ) ? $post_obj->EventStartDate : '';
+	$event_meta['end_date'] = isset( $post_obj->EventEndDate ) ? $post_obj->EventEndDate : '';
+	$event_meta['venue_id'] = isset( $meta['_EventVenueID'][0] ) ? $meta['_EventVenueID'][0] : '';
+	$event_meta['venue_title'] = isset( $venue_meta["_VenueVenue"][0] ) ? $venue_meta["_VenueVenue"][0] : '(no location)';
+	$event_meta['num_registered'] = isset( $meta['_RTECnumRegistered'][0] ) ? $meta['_RTECnumRegistered'][0] : 0;
 
 	return $event_meta;
 }

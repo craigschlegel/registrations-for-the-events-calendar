@@ -1,7 +1,10 @@
 .rtec-wrapper {
     box-sizing: border-box;
 }
-
+.rtec-admin-2-columns {
+    width: 45.5%;
+    display: inline-block;
+}
 .rtec-single-event {
     display: inline-block;
     width: 47.5%;
@@ -93,7 +96,11 @@
 .rtec-availability-options-wrapper h4 {
     margin: .5rem 0;
 }
-
+#rtec-message-text-wrapper-up,
+#rtec-message-text-wrapper-down,
+#rtec-message-text-wrapper-other {
+    margin-top: 0px;
+}
 .rtec-field-options-wrapper h4 span {
     font-size: 12px;
     font-weight: normal;
@@ -117,6 +124,27 @@
 .rtec-button-wrapper {
     display: block;
 }
+
+/* Tooltip table */
+.rtec-tooltip-table{
+    display: block;
+    width: 100%;
+    margin: 30px 0;
+}
+.rtec-tooltip-table .rtec-col-1,
+.rtec-tooltip-table .rtec-col-2{
+    padding: 4px 1%;
+    border-bottom: 1px solid #ddd;
+}
+.rtec-tooltip-table .rtec-col-1{
+    display: inline-block;
+    width: 23%;
+}
+.rtec-tooltip-table .rtec-col-2{
+    display: inline-block;
+    width: 73%;
+}
+
 .rtec-support-button {
     border: none;
     border-radius: 4px;

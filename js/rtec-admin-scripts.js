@@ -24,6 +24,10 @@ jQuery(document).ready(function($){
         });
     }
     rtecCheckLimitOptions();
+    $rtecLimitRegistrations.change(function(){
+        rtecCheckLimitOptions();
+    });
+
 
     function rtecToggleLimitOptions(val) {
         if (val === 'down' && !$rtecLimitRegistrations.is(':checked')) {
@@ -39,11 +43,23 @@ jQuery(document).ready(function($){
         }
     }
 
-    $('.rtec_attendance_message_type, #rtec_limit_registrations').change(function(){
+    var $rtecAttendanceMessageType = $('.rtec_attendance_message_type');
+    function rtecToggleMessageTypeOptions(val) {
+        if ( val === 'down' ) {
+            $('#rtec-message-text-wrapper-up').css('opacity', '.7').find('input').prop('disabled', 'true');
+            $('#rtec-message-text-wrapper-down').css('opacity', '1').find('input').removeProp('disabled');
+        } else {
+            $('#rtec-message-text-wrapper-up').css('opacity', '1').find('input').removeProp('disabled');
+            $('#rtec-message-text-wrapper-down').css('opacity', '.7').find('input').prop('disabled', 'true');
+        }
+    }
+    $rtecAttendanceMessageType.change(function(){
+        rtecToggleMessageTypeOptions($(this).val());
         rtecCheckLimitOptions();
-        if (!$('#rtec-message-text-alert').length) {
-            $('#rtec-message-text-wrapper').css('border-color', '#ff3300');
-            $('#rtec-message-type-wrapper').append('<p id="rtec-message-text-alert" style="color: #ff3300;">Check the registration limit messages below to make sure they make sense with your choice</p>');
+    });
+    $rtecAttendanceMessageType.each(function(){
+        if ($(this).is(':checked')) {
+            rtecToggleMessageTypeOptions($(this).val());
         }
     });
 
@@ -75,6 +91,17 @@ jQuery(document).ready(function($){
         clearTimeout(typingTimer);
         typingTimer = setTimeout(updateText, doneTypingInterval);
     });
+
+    // Tooltip
+    $('.rtec-tooltip').hide();
+    $('.rtec-tooltip-link').click( function() {
+        if ($(this).next('.rtec-tooltip').is(':visible')) {
+            $(this).next('.rtec-tooltip').slideUp();
+        } else {
+            $(this).next('.rtec-tooltip').slideDown();
+        }
+    });
+
 
     // REGISTRATION tab
     function rtecRegistrationAjax(submitData,successFunc) {

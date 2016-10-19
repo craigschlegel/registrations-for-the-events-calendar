@@ -1,16 +1,3 @@
-<?php
-
-$db = new RTEC_Db_Admin();
-
-$args = array(
-    'post_type'   => 'tribe_events',
-    'post_status' => 'published',
-    'posts_per_page' => 100
-);
-
-// create a custom WP_Query object just for events
-$the_query = new WP_Query( $args );
-?>
 <h2><?php _e( 'Overview', 'rtec' ); ?></h2>
 <?php if ( ! isset( $options['default_max_registrations'] ) ) : ?>
     <div class="notice notice-info is-dismissible">
@@ -18,7 +5,7 @@ $the_query = new WP_Query( $args );
             <?php esc_attr_e( 'Hey! First time using the plugin? You can start configuring on the' , 'rtec' ); ?>
             <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form">"Form" tab</a><br />
             <?php esc_attr_e( 'Or check out our setup directions' , 'rtec' ); ?>
-            <a href="http://roundupwp.com/products/registrations-for-the-events-calendar/setup/">on our website</a>
+            <a href="http://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank">on our website</a>
         </p>
     </div>
 <?php endif; ?>
@@ -34,37 +21,41 @@ $the_query = new WP_Query( $args );
 
 <div class="rtec-wrapper rtec-overview">
 <?php
-if ( $the_query->have_posts() ) :
-    while ( $the_query->have_posts() ) : $the_query->the_post();
+$db = new RTEC_Db_Admin();
 
-        $id = get_the_ID();
+$events = tribe_get_events( array(
+    'posts_per_page' => 100,
+    'start_date' => date( '2000-1-1 0:0:0' )
+) );
+
+foreach ( $events as $event ) :
 
         $data = array(
             'fields' => 'registration_date, last_name, first_name, email, status',
-            'id' => $id,
+            'id' => $event->ID,
             'order_by' => 'registration_date'
         );
 
         $registrations = $db->retrieve_entries( $data );
 
         // set post meta
-        $meta = get_post_meta( $id );
+        $meta = get_post_meta( $event->ID );
 
-        $event_meta['post_id'] = $id;
-        $event_meta['title'] = get_the_title( $id );
+        $event_meta['post_id'] = $event->ID;
+        $event_meta['title'] = $event->post_title;
         $event_meta['start_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventStartDate'][0] ) );
         $event_meta['end_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventEndDate'][0] ) );
 
 
         // set venue meta
-        $venue_meta = get_post_meta( $meta['_EventVenueID'][0] );
-        $event_meta['venue_title'] = $venue_meta["_VenueVenue"][0];
+        $venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
+        $event_meta['venue_title'] = isset( $venue_meta["_VenueVenue"][0] ) ? $venue_meta["_VenueVenue"][0] : '(no location)';
 ?>
     
     <div class="rtec-single-event">
     
         <div class="rtec-event-meta">
-            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $id; ?>"><h3><?php the_title(); ?></h3></a>
+            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $event->ID; ?>"><h3><?php echo $event_meta['title']; ?></h3></a>
             <p><?php echo $event_meta['start_date']; ?> to <?php echo $event_meta['end_date']; ?></p>
             <p><?php echo $event_meta['venue_title']; ?></p>
         </div>
@@ -105,11 +96,11 @@ if ( $the_query->have_posts() ) :
     
             </tbody>
         </table>
-        <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $id; ?>" class="rtec-admin-secondary-button button action"><?php _e( 'More...', 'rtec' ); ?></a>
+        <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $event->ID; ?>" class="rtec-admin-secondary-button button action"><?php _e( 'More...', 'rtec' ); ?></a>
     
     </div> <!-- rtec-single-event -->
 
-<?php endwhile; endif; // end loop ?>
+<?php endforeach; // end loop ?>
 </div> <!-- rtec-wrapper -->
 
 <?php $db->update_statuses();

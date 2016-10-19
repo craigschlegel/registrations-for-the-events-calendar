@@ -28,7 +28,7 @@ function rtec_the_registration_form()
 		} else {
 			$submission->process_valid_submission();
 
-			$message = $form::get_success_message_html();
+			$message = $form->get_success_message_html();
 			echo $message;
 		}
 

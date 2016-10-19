@@ -215,10 +215,12 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 	     * @return void
 	     */
 	    public static function install() {
-		    global $rtec_options;
-		    RTEC_Db_Admin::create_table();
+		    $rtec_options = get_option( 'rtec_options', false );
+		    $db = new RTEC_Db_Admin();
 
-		    if ( empty( $rtec_options  ) ) {
+		    $db->create_table();
+
+		    if ( ! $rtec_options ) {
 			    $defaults = array(
 				    'first_show' => true,
 				    'first_require' => true,
@@ -237,7 +239,6 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 			    update_option( 'rtec_options', $defaults );
 		    }
 
-		    $db = new RTEC_Db_Admin();
 		    $ids = $db->get_event_post_ids();
 		    foreach ( $ids as $id ) {
 			    $reg_count = $db->get_registration_count( $id );

@@ -31,8 +31,8 @@ $id = (int)$_GET['id'];
                 $event_meta['end_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventEndDate'][0] ) );
 
                 // set venue meta
-                $venue_meta = get_post_meta( $meta['_EventVenueID'][0] );
-                $event_meta['venue_title'] = $venue_meta["_VenueVenue"][0];
+                $venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
+                $event_meta['venue_title'] = isset( $venue_meta["_VenueVenue"][0] ) ? $venue_meta["_VenueVenue"][0] : '(no location)';
 
                 $options = get_option( 'rtec_general' );
                 $other_label = isset( $options['other_label'] ) ? esc_html( $options['other_label'] ) : __( 'Other', 'rtec' );
@@ -49,10 +49,10 @@ $id = (int)$_GET['id'];
                     <table class="widefat wp-list-table fixed striped posts rtec-registrations-data">
                         <thead>
                             <tr>
-                                <th scope="col" class="manage-column column-rtec check-column">
+                                <td scope="col" class="manage-column column-rtec check-column">
                                     <label class="screen-reader-text" for="rtec-select-all-1"><?php _e( 'Select All', 'rtec' ); ?></label>
                                     <input type="checkbox" id="rtec-select-all-1">
-                                </th>
+                                </td>
                                 <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
                                 <th><?php _e( 'Last Name', 'rtec' ) ?></th>
                                 <th><?php _e( 'First Name', 'rtec' ) ?></th>
@@ -79,10 +79,10 @@ $id = (int)$_GET['id'];
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th scope="col" class="manage-column column-rtec check-column">
+                                <td scope="col" class="manage-column column-rtec check-column">
                                     <label class="screen-reader-text" for="rtec-select-all-1"><?php _e( 'Select All', 'rtec' ); ?></label>
                                     <input type="checkbox" id="rtec-select-all-1">
-                                </th>
+                                </td>
                                 <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
                                 <th><?php _e( 'Last Name', 'rtec' ) ?></th>
                                 <th><?php _e( 'First Name', 'rtec' ) ?></th>
