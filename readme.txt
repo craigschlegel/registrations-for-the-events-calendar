@@ -46,10 +46,12 @@ Follow these steps:
 
 == Screenshots ==
 
-1. Default "Form" options
-2. Default "Email" options
-3. Example "Registrations" tab
-4. Form on the frontend
+1. Default position and look of the "Register" button in an event page
+2. View of the registration form revealed on "click"
+3. The "Registrations" tab in at-a-glance view
+4. Detailed view of a single event's registrations. Buttons to edit, delete, and add registrations
+5. View of the settings on the "Form" tab
+6. View of the settings on the "Email" tab
 
 == Frequently Asked Questions ==
 

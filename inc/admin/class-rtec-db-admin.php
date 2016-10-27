@@ -232,4 +232,17 @@ class RTEC_Db_Admin extends RTEC_Db
 
         return $event_ids;
     }
+
+    public function maybe_add_column_to_table( $column )
+    {
+	    global $wpdb;
+
+	    $query = $wpdb->prepare( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = %s AND column_name = %s", $this->table_name, $column );
+	    $row = $wpdb->query( $query );
+
+	    if ( empty( $row ) ){
+		    $query = $wpdb->prepare( "ALTER TABLE $this->table_name ADD $column VARCHAR(40) DEFAULT '' NOT NULL", '' );
+		    $wpdb->query( $query );
+	    }
+    }
 }
