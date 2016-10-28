@@ -5,7 +5,7 @@ jQuery(document).ready(function($) {
 
     $('#rtec-form-toggle-button').on('click', function() {
         $('.rtec-toggle-on-click').toggle('slow');
-        if($(this).hasClass('tribe-bar-filters-open')) {
+        if ($(this).hasClass('tribe-bar-filters-open')) {
             $(this).removeClass('tribe-bar-filters-open');
         } else {
             $(this).addClass('tribe-bar-filters-open');
@@ -20,7 +20,7 @@ jQuery(document).ready(function($) {
 
         showErrorMessage : function(formEl){
             var $formField = formEl.closest($('.rtec-input-wrapper'));
-            if(!$formField.find('.rtec-error-message').length) {
+            if (!$formField.find('.rtec-error-message').length) {
                 $formField.append('<p class="rtec-error-message" role="alert">'+formEl.closest($('.rtec-form-field')).attr('data-rtec-error-message')+'</p>');
             }
             formEl.attr('aria-invalid','true');
@@ -36,14 +36,14 @@ jQuery(document).ready(function($) {
         },
 
         validateLength : function(formEl, min, max){
-            if(formEl.val().length > max || formEl.val().length < min ) {
-                if(formEl.hasClass(Form.validClass)) {
+            if (formEl.val().length > max || formEl.val().length < min ) {
+                if (formEl.hasClass(Form.validClass)) {
                     formEl.removeClass(Form.validClass);
                 }
                 formEl.addClass(Form.invalidClass);
                 Form.showErrorMessage(formEl);
             } else {
-                if(formEl.hasClass(Form.invalidClass)) {
+                if (formEl.hasClass(Form.invalidClass)) {
                     formEl.removeClass(Form.invalidClass);
                 }
                 formEl.addClass(Form.validClass);
@@ -51,17 +51,41 @@ jQuery(document).ready(function($) {
             }
         },
 
-        validateEmail : function(formEl){
-            var regEx = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
-            var emailTest = regEx.test(formEl.val());
-            if(emailTest) {
-                if(formEl.hasClass(Form.invalidClass)) {
+        validateEmail : function(formEl) {
+            var regEx = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/,
+                emailTest = regEx.test(formEl.val());
+            if (emailTest) {
+                if (formEl.hasClass(Form.invalidClass)) {
                     formEl.removeClass(Form.invalidClass);
                 }
                 formEl.addClass(Form.validClass);
                 Form.removeErrorMessage(formEl);
             } else {
-                if(formEl.hasClass(Form.validClass)) {
+                if (formEl.hasClass(Form.validClass)) {
+                    formEl.removeClass(Form.validClass);
+                }
+                formEl.addClass(Form.invalidClass);
+                Form.showErrorMessage(formEl);
+            }
+        },
+
+        validateCount : function(formEl, validCountArr){
+
+            var strippedNumString = formEl.val().replace(/\D/g,''),
+                formElCount = strippedNumString.length,
+                validCountNumbers = validCountArr.map(function(x) {
+                    return parseInt(x);
+                }),
+                countTest = validCountNumbers.indexOf(formElCount);
+
+            if (countTest !== -1) {
+                if (formEl.hasClass(Form.invalidClass)) {
+                    formEl.removeClass(Form.invalidClass);
+                }
+                formEl.addClass(Form.validClass);
+                Form.removeErrorMessage(formEl);
+            } else {
+                if (formEl.hasClass(Form.validClass)) {
                     formEl.removeClass(Form.validClass);
                 }
                 formEl.addClass(Form.invalidClass);
@@ -71,27 +95,30 @@ jQuery(document).ready(function($) {
 
     };
     
-    $('#rtec-form').submit(function(event){
+    $('#rtec-form').submit(function(event) {
 
         event.preventDefault();
         
-        if($('#rtec .rtec-screen-reader-error').length) {
+        if ($('#rtec .rtec-screen-reader-error').length) {
             $('#rtec .rtec-screen-reader-error').remove();
         }
 
         var required = [];
 
         $('#rtec #rtec-form :input').each(function() {
-            if($(this).attr('aria-required') == 'true') {
-                if($(this).attr('name') == 'rtec_email') {
+            if ($(this).attr('aria-required') == 'true') {
+                if ($(this).attr('name') == 'rtec_email') {
                     Form.validateEmail($(this));
+                } else if ($(this).attr('name') == 'rtec_phone') {
+                    console.log($(this).closest('.rtec-form-field').attr('data-rtec-valid-count').replace(' ', '').split(','));
+                    Form.validateCount($(this), $(this).closest('.rtec-form-field').attr('data-rtec-valid-count').replace(' ', '').split(','));
                 } else {
                     Form.validateLength($(this), 2, 25);
                 }
             }
         });
 
-        if(!$('#rtec #rtec-form .rtec-error').length) {
+        if (!$('#rtec #rtec-form .rtec-error').length) {
             $('.rtec-spinner').show();
             $('.rtec-form-wrapper #rtec-form, .rtec-form-wrapper p').fadeTo(500,.1);
             $('#rtec-form-toggle-button').css('visibility','hidden');
@@ -118,7 +145,7 @@ jQuery(document).ready(function($) {
                         scrollTop: $('#rtec').offset().top - 200
                     }, 750);
 
-                    if(data !== 'full') {
+                    if (data !== 'full') {
                         $('#rtec').prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">'+$('#rtec').attr('data-rtec-success-message')+'</p>');
                     } else {
                         $('#rtec').prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">Sorry! Registrations just filled up for this event. You are not registered</p>');

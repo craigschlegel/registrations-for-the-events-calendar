@@ -115,6 +115,21 @@ class RTEC_Submission
                     $this->errors[] = 'email';
                 }
                 
+            } elseif ( $input_key === 'rtec_phone' && $options['phone_require'] ) {
+	            $stripped_input = preg_replace( '/[^0-9]/', '', $input_value );
+	            $valid_counts_arr = isset( $options['phone_valid_counts'] ) ? explode( ',' , $options['phone_valid_counts'] ) : array( 7, 10 );
+	            $valid_length_count = 0;
+
+	            foreach ( $valid_counts_arr as $valid_count ) {
+	            	if ( strlen( $stripped_input ) === $valid_count ) {
+	            		$valid_length_count++;
+		            }
+	            }
+
+	            if ( $valid_length_count < 1 ) {
+		            $this->errors[] = 'phone';
+	            }
+
             } elseif ( $input_key === 'rtec_other' && $options['other_require'] ) {
             	
                 if ( empty( $input_value ) ) {
@@ -250,8 +265,8 @@ class RTEC_Submission
 
         if ( isset( $rtec_options['confirmation_message'] ) ) {
             $raw_body = $rtec_options['confirmation_message'];
-            $search = array( '{venue}', '{event-title}', '{event-date}', '{first}', '{last}', '{email}', '{other}', '{nl}' );
-            $replace   = array( $this->submission['rtec_venue_title'], $this->submission['rtec_title'], $date_str, $this->submission['rtec_first'], $this->submission['rtec_last'], $this->submission['rtec_email'], $this->submission['rtec_other'], "\n" );
+            $search = array( '{venue}', '{event-title}', '{event-date}', '{first}', '{last}', '{email}', '{phone}', '{other}', '{nl}' );
+            $replace = array( $this->submission['rtec_venue_title'], $this->submission['rtec_title'], $date_str, $this->submission['rtec_first'], $this->submission['rtec_last'], $this->submission['rtec_email'], $this->submission['rtec_phone'], $this->submission['rtec_other'], "\n" );
 
             $body = str_replace( $search, $replace, $raw_body );
         } else {
@@ -263,6 +278,11 @@ class RTEC_Submission
             $last = ! empty( $this->submission['rtec_last'] ) ? esc_html( $this->submission['rtec_last'] ) : '';
             $body .= sprintf ( 'Registered Name: %1$s%2$s', $first, $last ) . "\n";
 
+	        if ( ! empty( $this->submission['rtec_phone'] ) ) {
+		        $phone = esc_html( $this->submission['rtec_phone'] );
+		        $body .= sprintf ( 'Phone: %1$s', $phone ) . "\n";
+	        }
+	        
             if ( ! empty( $this->submission['rtec_other'] ) ) {
                 $other = esc_html( $this->submission['rtec_other'] );
                 $body .= sprintf ( 'Other: %1$s', $other ) . "\n";
@@ -346,7 +366,12 @@ class RTEC_Submission
             $email = esc_html( $this->submission['rtec_email'] );
             $body .= sprintf ( 'Email: %1$s', $email ) . "\n";
         }
-
+        
+	    if ( ! empty( $this->submission['rtec_phone'] ) ) {
+		    $phone = esc_html( $this->submission['rtec_phone'] );
+		    $body .= sprintf ( 'Phone: %1$s', $phone ) . "\n";
+	    }
+	    
         if ( ! empty( $this->submission['rtec_other'] ) ) {
             $other = esc_html( $this->submission['rtec_other'] );
             $body .= sprintf ( 'Other: %1$s', $other ) . "\n";

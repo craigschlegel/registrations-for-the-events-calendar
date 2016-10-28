@@ -24,7 +24,7 @@ class RTEC_Db_Admin extends RTEC_Db
         $table_name = $wpdb->prefix . RTEC_TABLENAME;
         $charset_collate = $wpdb->get_charset_collate();
 
-        if ( $wpdb->get_var("show tables like '$table_name'" ) != $table_name ) {
+        if ( $wpdb->get_var( "show tables like '$table_name'" ) != $table_name ) {
             $sql = "CREATE TABLE " . $table_name . " (
                 id MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
                 event_id SMALLINT NOT NULL,
@@ -33,6 +33,7 @@ class RTEC_Db_Admin extends RTEC_Db
                 first_name VARCHAR(40) NOT NULL,
                 email VARCHAR(60) NOT NULL,
                 venue VARCHAR(100) NOT NULL,
+                phone VARCHAR(40) DEFAULT '' NOT NULL,
                 other VARCHAR(100) DEFAULT '' NOT NULL,
                 status CHAR(1) DEFAULT 'y' NOT NULL,
                 UNIQUE KEY id (id)
@@ -233,6 +234,12 @@ class RTEC_Db_Admin extends RTEC_Db
         return $event_ids;
     }
 
+	/**
+	 * Used to update the database to accommodate new columns added since release
+	 *
+	 * @param $column string    name of column to add if it doesn't exist
+	 * @since 1.1
+	 */
     public function maybe_add_column_to_table( $column )
     {
 	    global $wpdb;

@@ -65,11 +65,12 @@ class RTEC_Db
 		$first = isset( $data['rtec_first'] ) ? $data['rtec_first'] : '';
 		$email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
 		$venue = isset( $data['rtec_venue_title'] ) ? $data['rtec_venue_title'] : '';
+		$phone = isset( $data['rtec_phone'] ) ? preg_replace( '/[^0-9]/', '', $data['rtec_phone'] ) : '';
 		$other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
 		$status = isset( $data['rtec_status'] ) ? $data['rtec_status'] : 'n';
 		$wpdb->query( $wpdb->prepare( "INSERT INTO $this->table_name
-          ( event_id, registration_date, last_name, first_name, email, venue, other, status ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %s )",
-			$event_id, $registration_date, $last, $first, $email, $venue, $other, $status ) );
+          ( event_id, registration_date, last_name, first_name, email, venue, phone, other, status ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %s, %s )",
+			$event_id, $registration_date, $last, $first, $email, $venue, $phone, $other, $status ) );
 	}
 
 	/**

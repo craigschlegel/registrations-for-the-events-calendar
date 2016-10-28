@@ -63,6 +63,7 @@
 }
 #rtec input[type="text"],
 #rtec input[type="email"],
+#rtec input[type="tel"],
 #rtec textarea {
     box-sizing: border-box;
     display: inline-block;

@@ -125,9 +125,10 @@ class RTEC_Admin
         );
 
         $form_fields_array = array(
-            0 => array( 'first', 'First', 'Please enter your first name', true, true ),
-            1 => array( 'last', 'Last', 'Please enter your last name', true, true ),
-            2 => array( 'email', 'Email', 'Please enter a valid email address', true, true )
+            0 => array( 'first', 'First', 'Please enter your first name', true, true, '' ),
+            1 => array( 'last', 'Last', 'Please enter your last name', true, true, '' ),
+            2 => array( 'email', 'Email', 'Please enter a valid email address', true, true, '' ),
+            3 => array( 'phone', 'Phone', 'Please enter a valid phone number', false, false, '7, 10' )
         );
 
         $this->create_settings_field( array(
@@ -506,6 +507,7 @@ class RTEC_Admin
             $show = isset( $options[ $field[0].'_show' ] ) ? esc_attr( $options[ $field[0].'_show' ] ) : $field[3];
             $require = isset( $options[ $field[0].'_require' ] ) ? esc_attr( $options[ $field[0].'_require' ] ) : $field[4];
             $error = isset( $options[ $field[0].'_error' ] ) ? esc_attr( $options[ $field[0].'_error' ] ) : $field[2];
+            $valid_count = isset( $options[ $field[0].'_valid_count' ] ) ? esc_attr( $options[ $field[0].'_valid_count' ] ) : $field[5];
             ?>
             <div class="rtec-field-options-wrapper">
                 <h4><?php _e( $label, 'rtec' ); ?></h4>
@@ -518,8 +520,16 @@ class RTEC_Admin
                 </p>
                 <p>
                     <label><?php _e( 'Error Message:', 'rtec' ); ?></label>
-                    <input type="text" name="<?php echo $args['option'].'['.$field[0].'_error]'; ?>" value="<?php echo $error; ?>" class="large-text">
+                    <input type="text" name="<?php echo $args['option'].'['.$field[0].'_error]'; ?>" value="<?php echo $error; ?>" class="large-text rtec-other-input">
                 </p>
+                <?php if ( ! empty($valid_count ) ) : ?>
+                <p>
+                    <label><?php _e( 'Required length for validation:', 'rtec' ); ?></label>
+                    <input type="text" name="<?php echo $args['option'].'['.$field[0].'_valid_count]'; ?>" value="<?php echo $valid_count; ?>" class="large-text rtec-valid-count-input">
+                    <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'What is this?' ); ?></a>
+                    <span class="rtec-tooltip rtec-availability-options-wrapper"><?php _e( 'Enter the length or lengths of the responses that are valid for this field separated by commas. For example, to accept North American phone numbers with and without area codes you would enter "7, 10". If area code is required, enter "10"' ); ?></span>
+                </p>
+                <?php endif; ?>
             </div>
         <?php
         } // endforeach
@@ -543,7 +553,7 @@ class RTEC_Admin
             </p>
             <p>
                 <label><?php _e( 'Error Message:', 'rtec' ); ?></label>
-                <input type="text" name="<?php echo $args['option'].'[other_error]'; ?>" value="<?php echo $error; ?>" class="large-text">
+                <input type="text" name="<?php echo $args['option'].'[other_error]'; ?>" value="<?php echo $error; ?>" class="large-text rtec-other-input">
             </p>
         </div>
         <?php
@@ -798,7 +808,7 @@ class RTEC_Admin
         $leave_spaces = array();
 
         if ( isset( $input['default_max_registrations'] ) ) {
-            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'other_show', 'other_require', 'limit_registrations', 'include_attendance_message', 'preserve_db' );
+            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'limit_registrations', 'include_attendance_message', 'preserve_db' );
             $leave_spaces = array( 'custom_js', 'custom_css' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $checkbox_settings = array();

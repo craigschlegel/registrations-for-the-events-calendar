@@ -61,7 +61,7 @@ class RTEC_Form
     {
 		global $rtec_options;
 
-        $fields = array( 'first', 'last', 'email', 'other' );
+        $fields = array( 'first', 'last', 'email', 'phone', 'other' );
         foreach ( $fields as $field ) {
 
 	        // prevent errors from popping up by defaulting all settings to true
@@ -138,13 +138,14 @@ class RTEC_Form
         $show_fields = $this->show_fields;
         $required_fields = $this->required_fields;
         
-        $standard_field_types = array( 'first', 'last', 'email' );
+        $standard_field_types = array( 'first', 'last', 'email', 'phone' );
         
         foreach ( $standard_field_types as $type ) {
             if ( in_array( $type, $show_fields ) ) {
                 $input_fields_data[$type]['name'] = $type;
                 $input_fields_data[$type]['require'] = in_array( $type, $required_fields );
                 $input_fields_data[$type]['error_message'] = isset( $rtec_options[$type . '_error'] ) ? $rtec_options[$type . '_error'] : 'Error';
+	            $input_fields_data[$type]['valid_count'] = isset( $rtec_options[$type . '_valid_count'] ) ? ' data-rtec-valid-count="' . $rtec_options[$type . '_valid_count'].'"' : '';
 
                 switch( $type ) {
                     case 'first':
@@ -156,6 +157,9 @@ class RTEC_Form
                     case 'email':
                         $input_fields_data['email']['label'] = 'Email';
                         break;
+	                case 'phone':
+		                $input_fields_data['phone']['label'] = 'Phone';
+		                break;
                 }
             }
         }
@@ -369,13 +373,15 @@ class RTEC_Form
 
             if ( $field['name'] === 'email' ) {
                 $type = 'email';
+            } elseif ( $field['name'] === 'phone' ) {
+	            $type = 'tel';
             }
 
             if ( isset( $this->submission_data['rtec_' . $field['name']] ) ) {
                 $value = $this->submission_data['rtec_' . $field['name']];
             }
 
-            $html .= '<div class="rtec-form-field rtec-'. $field['name'] . '" data-rtec-error-message="'.$field['error_message'].'">';
+            $html .= '<div class="rtec-form-field rtec-'. $field['name'] . '" data-rtec-error-message="'.$field['error_message'].'"'.$field['valid_count'].'>';
                 $html .= '<label for="rtec_' . $field['name'] . '" class="rtec_text_label">' . $label . '</label>';
 	            $html .= '<div class="rtec-input-wrapper">';
 	                $html .= '<input type="' . $type . '" name="rtec_' . $field['name'] . '" value="'. $value . '" id="rtec_' . $field['name'] . '"' . $required_data . ' />';

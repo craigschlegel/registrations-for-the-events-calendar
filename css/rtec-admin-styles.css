@@ -105,8 +105,11 @@
     font-size: 12px;
     font-weight: normal;
 }
-.rtec-field-options-wrapper input[type=text] {
+.rtec-field-options-wrapper .rtec-other-input {
     width: 300px;
+}
+.rtec-field-options-wrapper .rtec-valid-count-input {
+    width: 130px;
 }
 .rtec-availability-options-wrapper input[type=text] {
     margin-right: 1em;

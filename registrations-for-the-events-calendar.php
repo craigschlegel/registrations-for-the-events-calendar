@@ -231,6 +231,10 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 				    'email_show' => true,
 				    'email_require' => true,
 				    'email_error' => 'Please enter a valid email address',
+				    'phone_show' => false,
+				    'phone_require' => false,
+				    'phone_error' => 'Please enter a valid phone number',
+				    'phone_valid_count' => '7, 10',
 				    'other_show' => false,
 				    'other_require' => false,
 				    'other_error' => 'There is an error with your entry'

@@ -1,7 +1,6 @@
 <?php
 
 // create a custom WP_Query object just for events
-
 $id = (int)$_GET['id'];
 
 ?>
@@ -15,7 +14,7 @@ $id = (int)$_GET['id'];
                 $db = new RTEC_Db_Admin();
 
                 $data = array(
-                    'fields' => 'registration_date, id, last_name, first_name, email, other',
+                    'fields' => 'registration_date, id, last_name, first_name, email, phone, other',
                     'id' => $id,
                     'order_by' => 'registration_date'
                 );
@@ -57,6 +56,7 @@ $id = (int)$_GET['id'];
                                 <th><?php _e( 'Last Name', 'rtec' ) ?></th>
                                 <th><?php _e( 'First Name', 'rtec' ) ?></th>
                                 <th><?php _e( 'Email', 'rtec' ) ?></th>
+                                <th><?php _e( 'Phone', 'rtec' ) ?></th>
                                 <th><?php echo $other_label; ?></th>
                             </tr>
                         </thead>
@@ -73,6 +73,7 @@ $id = (int)$_GET['id'];
                                     <td class="rtec-reg-last"><?php echo $registration['last_name']; ?></td>
                                     <td class="rtec-reg-first"><?php echo $registration['first_name']; ?></td>
                                     <td class="rtec-reg-email"><?php echo $registration['email']; ?></td>
+                                    <td class="rtec-reg-phone"><?php echo rtec_format_phone_number( $registration['phone'] ); ?></td>
                                     <td class="rtec-reg-other"><?php echo $registration['other']; ?></td>
                                 </tr>
                             <?php endforeach; ?>
@@ -87,6 +88,7 @@ $id = (int)$_GET['id'];
                                 <th><?php _e( 'Last Name', 'rtec' ) ?></th>
                                 <th><?php _e( 'First Name', 'rtec' ) ?></th>
                                 <th><?php _e( 'Email', 'rtec' ) ?></th>
+                                <th><?php _e( 'Phone', 'rtec' ) ?></th>
                                 <th><?php echo $other_label; ?></th>
                             </tr>
                         </tfoot>

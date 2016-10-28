@@ -201,6 +201,11 @@ function rtec_plugin_meta_links( $links, $file ) {
 }
 add_filter( 'plugin_row_meta', 'rtec_plugin_meta_links', 10, 2 );
 
+/**
+ * Add phone column if custom table does not have it
+ *
+ * @since 1.1
+ */
 function rtec_db_update_check() {
 	$db_ver = get_option( 'rtec_db_version', 0 );
 	if ( $db_ver < 1.1 ) {
