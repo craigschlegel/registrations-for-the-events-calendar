@@ -12,6 +12,9 @@
     border-radius: 3px;
     background: #23282d;
 }
+.rtec-single-event:nth-child(2n) {
+    float: right;
+}
 .rtec-event-meta {
     padding: .5em 1em .5em 1em;
 }
@@ -162,4 +165,52 @@
 }
 .rtec-support-button:hover {
     background-color: rgb(0, 102, 102);
+}
+.rtec-admin-event-registration-options-wrapper {
+    width: 100%;
+}
+.rtec-admin-event-registration-options-wrapper a {
+    float: right;
+}
+
+/** Styles added that can be removed once sortable elements introduced **/
+
+.rtec-wrapper .rtec-event-options.postbox.open .toggle-indicator:before {
+    content: "\f142";
+    display: inline-block;
+    font: 400 20px/1 dashicons;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-decoration: none!important;
+}
+.rtec-wrapper .rtec-event-options.postbox.closed .toggle-indicator:before {
+    content: "\f140";
+    display: inline-block;
+    font: 400 20px/1 dashicons;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-decoration: none!important;
+}
+
+.rtec-event-options.postbox {
+    margin-bottom: 0;
+    padding: 8px 2px 8px 10px;
+    background: #e5e5e5;
+    border: 1px solid #bbb;
+    cursor: pointer;
+}
+.rtec-event-options.postbox .handlediv {
+    width: 32px;
+    height: 32px;
+    margin-top: -8px;
+}
+.rtec-event-options.postbox .hndle {
+    cursor: pointer;
+    border-bottom: none;
+}
+.rtec-event-options .rtec-update-event-options {
+    float: left;
+    margin: 16px 0 0;
 }

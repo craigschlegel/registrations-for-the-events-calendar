@@ -102,8 +102,41 @@ jQuery(document).ready(function($){
         }
     });
 
+    // REGISTRATIONS overview tab
+    $('.rtec-hidden-options').hide();
+    var $rtecOptionsHandle = $('.rtec-event-options .handlediv');
 
-    // REGISTRATION tab
+    $rtecOptionsHandle.click(function() {
+        var $rtecEventOptions = $(this).closest('.rtec-event-options')
+        $rtecEventOptions.next().slideToggle();
+        if ($rtecEventOptions.hasClass('open')) {
+            $rtecEventOptions.addClass('closed').removeClass('open');
+        } else {
+            $rtecEventOptions.addClass('open').removeClass('closed');
+        }
+    });
+
+    $('.rtec-update-event-options').click(function() {
+        event.preventDefault();
+        $(this).after('<div class="rtec-table-changing spinner is-active"></div>')
+            .attr('disabled', true);
+
+        var $targetForm = $(this).closest('.rtec-event-options-form'),
+            eventOptionsData = $targetForm.serializeArray(),
+            submitData = {
+                action: 'rtec_update_event_options',
+                event_options_data: eventOptionsData,
+                rtec_nonce : rtecAdminScript.rtec_nonce
+            },
+            successFunc = function () {
+                // remove spinner
+                $targetForm.find('.rtec-table-changing').remove();
+                $targetForm.find('.rtec-update-event-options').removeAttr('disabled');
+            };
+        rtecRegistrationAjax(submitData,successFunc);
+    });
+
+    // REGISTRATION single tab
     function rtecRegistrationAjax(submitData,successFunc) {
         $.ajax({
             url: rtecAdminScript.ajax_url,

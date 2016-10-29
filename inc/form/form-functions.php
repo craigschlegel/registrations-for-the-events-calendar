@@ -13,6 +13,7 @@ function rtec_the_registration_form()
 {
 	$rtec = RTEC();
 	$form = $rtec->form->instance();
+	$form->set_event_meta();
 
 	if ( $rtec->submission != NULL ) {
 		$submission = $rtec->submission->instance();
@@ -32,8 +33,7 @@ function rtec_the_registration_form()
 			echo $message;
 		}
 
-	} else {
-		$form->set_event_meta();
+	} elseif ( ! $form->registrations_are_disabled() ) {
 		$form->set_max_registrations();
 		if ( $form->registrations_available() ) {
 			$form->set_input_fields_data();

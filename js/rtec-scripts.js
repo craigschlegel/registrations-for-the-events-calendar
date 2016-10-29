@@ -97,8 +97,6 @@ jQuery(document).ready(function($) {
     
     $('#rtec-form').submit(function(event) {
 
-        event.preventDefault();
-        
         if ($('#rtec .rtec-screen-reader-error').length) {
             $('#rtec .rtec-screen-reader-error').remove();
         }

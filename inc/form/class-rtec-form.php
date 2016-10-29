@@ -127,6 +127,32 @@ class RTEC_Form
     }
 
 	/**
+	 * @param string $id    optional manual input of post ID
+	 * @since 1.1
+	 *
+	 * @return array
+	 */
+	public function get_event_meta( $id = '' )
+	{
+		if ( ! isset( $this->event_meta ) ) {
+			$this->event_meta = rtec_get_event_meta( $id );
+			return $this->event_meta;
+		} else {
+			return $this->event_meta;
+		}
+	}
+
+	/**
+	 * @since 1.1
+	 *
+	 * @return bool
+	 */
+	public function registrations_are_disabled()
+	{
+		return ( $this->event_meta['registrations_disabled'] === '1' );
+	}
+
+	/**
 	 * Combine required and included fields to use in a loop later
 	 * @since 1.0
 	 */

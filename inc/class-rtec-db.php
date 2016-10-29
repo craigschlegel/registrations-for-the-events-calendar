@@ -85,5 +85,19 @@ class RTEC_Db
 		$new = (int)$current + (int)$num;
 		update_post_meta( $id, '_RTECnumRegistered', $new );
 	}
+
+	/**
+	 * Update event meta
+	 *
+	 * @param int $id
+	 * @param array $key_value_meta
+	 * @since 1.1
+	 */
+	public function update_event_meta( $id, $key_value_meta )
+	{
+		foreach ( $key_value_meta as $key => $value ) {
+			update_post_meta( $id, $key, $value );
+		}
+	}
 }
 RTEC_Db::instance();

@@ -64,6 +64,11 @@ Yes. You can set up the maximum number of registrants on the "Form" tab
 It's likely that you have a javascript error somewhere on that page. Try disabling other plugins or switching themes to see i this corrects the issue.
 
 == Changelog ==
+= 1.1 =
+* New: Added support for a phone number input field. This can be added to the form and everywhere else user data is normally available
+* New: Added the ability to customize how phone numbers are validated. Enter accepted number of digits for your needs on the "Form" tab "Phone" input options
+* New: Added the ability to disable registrations for specific events. This can be done either on the "Edit Event" page or on the "Registrations" tab "Overview" page.
+* Fix: Fixed display issue when viewing the "Registrations" tab on small devices
 
 = 1.0 =
 * Release

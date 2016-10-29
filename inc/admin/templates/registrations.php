@@ -45,7 +45,7 @@ foreach ( $events as $event ) :
         $event_meta['title'] = $event->post_title;
         $event_meta['start_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventStartDate'][0] ) );
         $event_meta['end_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventEndDate'][0] ) );
-
+		$event_meta['disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] : 0;
 
         // set venue meta
         $venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
@@ -59,7 +59,21 @@ foreach ( $events as $event ) :
             <p><?php echo $event_meta['start_date']; ?> to <?php echo $event_meta['end_date']; ?></p>
             <p><?php echo $event_meta['venue_title']; ?></p>
         </div>
-    
+	    <div class="rtec-event-options postbox closed">
+		    <button type="button" class="handlediv button-link" aria-expanded="false"><span class="screen-reader-text">Toggle panel: Information</span><span class="toggle-indicator" aria-hidden="true"></span></button>
+		    <span class="hndle"><span>Event Options</span></span>
+	    </div>
+	    <div class="rtec-event-options rtec-hidden-options postbox">
+		    <form class="rtec-event-options-form" action="">
+			    <input type="hidden" name="rtec_event_id" value="<?php echo $event_meta['post_id']; ?>" />
+			    <input type="hidden" name="rtec_checkboxes" value="_RTECregistrationsDisabled" />
+			    <input type="checkbox" id="rtec-disable-<?php echo $event_meta['post_id']; ?>" name="_RTECregistrationsDisabled" <?php if( $event_meta['disabled'] == '1' ) { echo 'checked'; } ?> value="1"/>
+			    <label for="rtec-disable-<?php echo $event_meta['post_id']; ?>"><?php _e( 'Disable registrations for this event', 'rtec' ); ?></label>
+			    <div class="clear"></div>
+			    <button class="button action rtec-admin-secondary-button rtec-update-event-options"><?php _e( 'Update', 'rtec'  ); ?></button>
+			    <div class="clear"></div>
+		    </form>
+	    </div>
         <table class="widefat rtec-registrations-data">
             <thead>
                 <tr>
@@ -96,8 +110,7 @@ foreach ( $events as $event ) :
     
             </tbody>
         </table>
-        <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $event->ID; ?>" class="rtec-admin-secondary-button button action"><?php _e( 'More...', 'rtec' ); ?></a>
-    
+	    <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $event->ID; ?>" class="rtec-admin-secondary-button button action"><?php _e( 'Detailed View', 'rtec' ); ?></a>
     </div> <!-- rtec-single-event -->
 
 <?php endforeach; // end loop ?>

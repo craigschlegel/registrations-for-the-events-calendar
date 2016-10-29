@@ -56,6 +56,42 @@ function rtec_registrations_bubble() {
 }
 add_action( 'admin_menu', 'rtec_registrations_bubble' );
 
+
+function rtec_update_event_options() {
+	$nonce = $_POST['rtec_nonce'];
+
+	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
+		die ( 'You did not do this the right way!' );
+	}
+
+	$event_id = (int)$_POST['event_options_data'][0]['value'];
+	$checkbox_fields = explode( ',' , $_POST['event_options_data']['1']['value'] );
+	$meta_fields = array();
+	foreach ( $checkbox_fields as $checkbox_field ) {
+		$meta_fields[$checkbox_field] = 0;
+	}
+
+	foreach ( $_POST['event_options_data'] as $event_datum ) {
+		if ( $event_datum['name'] !== 'rtec_checkboxes' && $event_datum['name'] !== 'rtec_event_id' ) {
+			$meta_fields[$event_datum['name']] = $event_datum['value'];
+		}
+	}
+
+	if ( isset( $event_id ) && is_array( $meta_fields ) ){
+		//require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-db.php';
+
+		$db = new RTEC_Db();
+		$db->update_event_meta( $event_id, $meta_fields );
+		echo '1';
+	} else {
+		var_dump( $meta_fields );
+	}
+	//var_dump( $event_id );
+
+	die();
+}
+add_action( 'wp_ajax_rtec_update_event_options', 'rtec_update_event_options' );
+
 /**
  * Used to remove registrations from the dashboard
  * 

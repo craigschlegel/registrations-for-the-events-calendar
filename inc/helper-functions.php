@@ -34,6 +34,7 @@ function rtec_get_event_meta( $id = '' ) {
 	$event_meta['venue_id'] = isset( $meta['_EventVenueID'][0] ) ? $meta['_EventVenueID'][0] : '';
 	$event_meta['venue_title'] = isset( $venue_meta['_VenueVenue'][0] ) ? $venue_meta['_VenueVenue'][0] : '(no location)';
 	$event_meta['num_registered'] = isset( $meta['_RTECnumRegistered'][0] ) ? $meta['_RTECnumRegistered'][0] : 0;
+	$event_meta['registrations_disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] : 0;
 
 	return $event_meta;
 }
