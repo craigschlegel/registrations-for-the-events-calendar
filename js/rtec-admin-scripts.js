@@ -108,7 +108,7 @@ jQuery(document).ready(function($){
 
     $rtecOptionsHandle.click(function() {
         var $rtecEventOptions = $(this).closest('.rtec-event-options')
-        $rtecEventOptions.next().slideToggle();
+        $rtecEventOptions.next().toggle();
         if ($rtecEventOptions.hasClass('open')) {
             $rtecEventOptions.addClass('closed').removeClass('open');
         } else {

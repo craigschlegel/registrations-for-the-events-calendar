@@ -86,11 +86,81 @@ function rtec_update_event_options() {
 	} else {
 		var_dump( $meta_fields );
 	}
-	//var_dump( $event_id );
 
 	die();
 }
 add_action( 'wp_ajax_rtec_update_event_options', 'rtec_update_event_options' );
+
+/**
+ * Adds the meta box for the plugins individual event options
+ *
+ * @since 1.1
+ */
+function rtec_meta_boxes_init(){
+	add_meta_box( 'rtec-event-details',
+		'Registrations for The Events Calendar',
+		'rtec_meta_boxes_html',
+		'tribe_events',
+		'normal',
+		'high'
+	);
+}
+add_action( 'admin_init', 'rtec_meta_boxes_init' );
+
+/**
+ * Generates the html for the plugin's individual event options meta boxes
+ *
+ * @since 1.1
+ */
+function rtec_meta_boxes_html(){
+	global $post;
+	$meta = get_post_meta ( $post->ID, '_RTECregistrationsDisabled' );
+	?>
+	<div id="eventDetails" class="inside eventForm">
+		<table cellspacing="0" cellpadding="0" id="EventInfo">
+			<tbody>
+			<tr>
+				<td colspan="2" class="tribe_sectionheader">
+					<div class="tribe_sectionheader" style="">
+						<h4><?php _e( 'Event Registration Options', 'rtec' ); ?></h4>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<table class="eventtable">
+						<tbody>
+						<tr>
+							<td class="tribe-table-field-label"><?php _e( 'Disable Registrations:', 'rtec' ); ?></td>
+							<td>
+								<input type="checkbox" id="rtec-disable-checkbox" name="_RTECregistrationsDisabled" <?php if( $meta[0] == '1' ) { echo 'checked'; } ?> value="1"/>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	<?php
+}
+
+/**
+ * This saves the meta when the event post is updated
+ *
+ * @since 1.1
+ */
+function rtec_save_meta(){
+	global $post;
+
+	$registrations_disabled_status = 0;
+	if ( isset( $_POST['_RTECregistrationsDisabled'] ) ){
+		$registrations_disabled_status = $_POST['_RTECregistrationsDisabled'];
+	}
+	update_post_meta( $post->ID, '_RTECregistrationsDisabled', $registrations_disabled_status );
+}
+add_action( 'save_post', 'rtec_save_meta' );
 
 /**
  * Used to remove registrations from the dashboard
