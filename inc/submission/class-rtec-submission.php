@@ -265,7 +265,7 @@ class RTEC_Submission
 
         if ( isset( $rtec_options['confirmation_message'] ) ) {
             $raw_body = $rtec_options['confirmation_message'];
-            $search = array( '{venue}', '{event-title}', '{event-date}', '{first}', '{last}', '{email}', '{phone}', '{other}', '{nl}' );
+            $search = array( '{venue}', '{venue-address}', '{venue-city}', '{venue-state}', '{venue-zip}', '{event-title}', '{event-date}', '{first}', '{last}', '{email}', '{phone}', '{other}', '{nl}' );
             $replace = array( $this->submission['rtec_venue_title'], $this->submission['rtec_title'], $date_str, $this->submission['rtec_first'], $this->submission['rtec_last'], $this->submission['rtec_email'], $this->submission['rtec_phone'], $this->submission['rtec_other'], "\n" );
 
             $body = str_replace( $search, $replace, $raw_body );
@@ -273,10 +273,9 @@ class RTEC_Submission
             $body = 'You are registered!'."\n\n";
             $body .= sprintf( 'Event: %1$s at %2$s on %3$s'. "\n",
                 esc_html( $this->submission['rtec_title'] ) , esc_html( $this->submission['rtec_venue_title'] ) , $date_str );
-
             $first = ! empty( $this->submission['rtec_first'] ) ? esc_html( $this->submission['rtec_first'] ) . ' ' : ' ';
             $last = ! empty( $this->submission['rtec_last'] ) ? esc_html( $this->submission['rtec_last'] ) : '';
-            $body .= sprintf ( 'Registered Name: %1$s%2$s', $first, $last ) . "\n";
+            $body .= sprintf ( 'Registered Name: %1$s %2$s', $first, $last ) . "\n";
 
 	        if ( ! empty( $this->submission['rtec_phone'] ) ) {
 		        $phone = esc_html( $this->submission['rtec_phone'] );
@@ -285,8 +284,15 @@ class RTEC_Submission
 	        
             if ( ! empty( $this->submission['rtec_other'] ) ) {
                 $other = esc_html( $this->submission['rtec_other'] );
-                $body .= sprintf ( 'Other: %1$s', $other ) . "\n";
+                $body .= sprintf ( 'Other: %1$s', $other ) . "\n\n";
             }
+
+	        if ( ! empty( $this->submission['rtec_venue_address'] ) ) {
+		        $body .= 'The event will be held at this location:'. "\n\n";
+		        $body .= sprintf( '%1$s'. "\n", esc_html( $this->submission['rtec_venue_address'] ) );
+		        $body .= sprintf( '%1$s, %2$s %3$s'. "\n\n", esc_html( $this->submission['rtec_venue_city'] ), esc_html( $this->submission['rtec_venue_state'] ), esc_html( $this->submission['rtec_venue_zip'] ) );
+	        }
+	        $body .= 'See you there!';
         }
 
         return $body;

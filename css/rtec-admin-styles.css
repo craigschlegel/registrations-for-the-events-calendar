@@ -134,7 +134,7 @@
 /* Tooltip table */
 .rtec-tooltip-table{
     display: block;
-    width: 100%;
+    width: 94%;
     margin: 30px 0;
 }
 .rtec-tooltip-table .rtec-col-1,
@@ -144,11 +144,11 @@
 }
 .rtec-tooltip-table .rtec-col-1{
     display: inline-block;
-    width: 23%;
+    width: 26%;
 }
 .rtec-tooltip-table .rtec-col-2{
     display: inline-block;
-    width: 73%;
+    width: 70%;
 }
 
 .rtec-support-button {

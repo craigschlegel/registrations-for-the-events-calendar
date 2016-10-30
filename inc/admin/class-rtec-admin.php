@@ -434,7 +434,7 @@ class RTEC_Admin
             'name' => 'confirmation_message',
             'title' => '<label>Confirmation Message</label>',
             'example' => '',
-            'default' => 'You are registered!{nl}{nl}Here are the details of your registration.{nl}{nl}Event: {event-title} at {venue} on {event-date}{nl}Registered Name: {first} {last}{nl}Other: {other}',
+            'default' => 'You are registered!{nl}{nl}Here are the details of your registration.{nl}{nl}Event: {event-title} at {venue} on {event-date}{nl}Registered Name: {first} {last}{nl}Phone: {phone}{nl}Other: {other}{nl}{nl}The event will be held at this location:{nl}{nl}{venue-address}{nl}{venue-city}, {venue-state} {venue-zip}{nl}{nl}See you there!',
             'description' => 'Enter the message you would like customers to receive along with details of the event',
             'callback'  => 'message_text_area',
             'class' => 'rtec-confirmation-message-tr',
@@ -650,11 +650,16 @@ class RTEC_Admin
         <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'Legend' ); ?></a>
         <span class="rtec-tooltip-table rtec-tooltip rtec-availability-options-wrapper">
             <span class="rtec-col-1">{venue}</span><span class="rtec-col-2">Event venue/location</span>
+            <span class="rtec-col-1">{venue-address}</span><span class="rtec-col-2">Venue street address</span>
+            <span class="rtec-col-1">{venue-city}</span><span class="rtec-col-2">Venue city</span>
+            <span class="rtec-col-1">{venue-state}</span><span class="rtec-col-2">Venue state/province</span>
+            <span class="rtec-col-1">{venue-zip}</span><span class="rtec-col-2">Venue zip code</span>
             <span class="rtec-col-1">{event-title}</span><span class="rtec-col-2">Title of event</span>
             <span class="rtec-col-1">{event-date}</span><span class="rtec-col-2">Event start date</span>
             <span class="rtec-col-1">{first}</span><span class="rtec-col-2">First name of registrant</span>
             <span class="rtec-col-1">{last}</span><span class="rtec-col-2">Last name of registrant</span>
             <span class="rtec-col-1">{email}</span><span class="rtec-col-2">Email of registrant</span>
+            <span class="rtec-col-1">{phone}</span><span class="rtec-col-2">Phone number of registrant</span>
             <span class="rtec-col-1">{other}</span><span class="rtec-col-2">Information submitted in the "other" field</span>
             <span class="rtec-col-1">{nl}</span><span class="rtec-col-2">Creates a new line/line break</span>
         </span>

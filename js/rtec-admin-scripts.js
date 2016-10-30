@@ -74,12 +74,17 @@ jQuery(document).ready(function($){
         doneTypingInterval = 1500;
     function updateText() {
         var confirmationMessage = $rtecConfirmationTextarea.val();
-        confirmationMessage = confirmationMessage.replaceAll('{venue}', 'MI6 Headquarters');
-        confirmationMessage = confirmationMessage.replaceAll('{event-title}', 'Top Secret Meeting');
+        confirmationMessage = confirmationMessage.replaceAll('{venue}', 'Secret Headquarters');
+        confirmationMessage = confirmationMessage.replaceAll('{event-title}', 'Secret Meeting');
+        confirmationMessage = confirmationMessage.replaceAll('{venue-address}', '123 1st Street');
+        confirmationMessage = confirmationMessage.replaceAll('{venue-city}', 'Miami');
+        confirmationMessage = confirmationMessage.replaceAll('{venue-state}', 'Florida');
+        confirmationMessage = confirmationMessage.replaceAll('{venue-zip}', '55555');
         confirmationMessage = confirmationMessage.replaceAll('{event-date}', 'July 3');
         confirmationMessage = confirmationMessage.replaceAll('{first}', 'James');
         confirmationMessage = confirmationMessage.replaceAll('{last}', 'Bond');
         confirmationMessage = confirmationMessage.replaceAll('{email}', 'Bond007@ohmss.com');
+        confirmationMessage = confirmationMessage.replaceAll('{phone}', '(007) 555-5555');
         confirmationMessage = confirmationMessage.replaceAll('{other}', 'Shaken not Stirred');
         confirmationMessage = confirmationMessage.replaceAll('{nl}', "\n");
         $rtecJsPreview.text(confirmationMessage);

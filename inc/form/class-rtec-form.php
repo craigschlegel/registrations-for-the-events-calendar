@@ -357,6 +357,10 @@ class RTEC_Form
         $html .= '<input type="hidden" name="rtec_email_submission" value="1" />';
         $html .= '<input type="hidden" name="rtec_title" value="'. $event_meta['title'] . '" />';
         $html .= '<input type="hidden" name="rtec_venue_title" value="'. $event_meta['venue_title'] . '" />';
+	    $html .= '<input type="hidden" name="rtec_venue_address" value="'. $event_meta['venue_address'] . '" />';
+	    $html .= '<input type="hidden" name="rtec_venue_city" value="'. $event_meta['venue_city'] . '" />';
+	    $html .= '<input type="hidden" name="rtec_venue_state" value="'. $event_meta['venue_state'] . '" />';
+	    $html .= '<input type="hidden" name="rtec_venue_zip" value="'. $event_meta['venue_zip'] . '" />';
         $html .= '<input type="hidden" name="rtec_date" value="'. $event_meta['start_date'] . '" />';
         $html .= '<input type="hidden" name="rtec_event_id" value="' . $event_meta['post_id'] . '" />';
 	    $html .= '<input type="hidden" name="rtec_num_registered" value="' . $event_meta['num_registered'] . '" />';
