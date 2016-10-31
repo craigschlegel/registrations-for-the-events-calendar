@@ -31,8 +31,8 @@ $id = (int)$_GET['id'];
 
                 // set venue meta
                 $venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
-                $event_meta['venue_title'] = isset( $venue_meta["_VenueVenue"][0] ) ? $venue_meta["_VenueVenue"][0] : '(no location)';
-
+                $venue = rtec_get_venue( $id );
+                $event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
                 $options = get_option( 'rtec_general' );
                 $other_label = isset( $options['other_label'] ) ? esc_html( $options['other_label'] ) : __( 'Other', 'rtec' );
                 ?>

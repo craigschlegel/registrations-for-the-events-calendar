@@ -49,8 +49,9 @@ foreach ( $events as $event ) :
 
         // set venue meta
         $venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
-        $event_meta['venue_title'] = isset( $venue_meta["_VenueVenue"][0] ) ? $venue_meta["_VenueVenue"][0] : '(no location)';
-?>
+		$venue = rtec_get_venue( $event->ID );
+		$event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
+	?>
     
     <div class="rtec-single-event">
     

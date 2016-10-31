@@ -32,7 +32,8 @@ function rtec_get_event_meta( $id = '' ) {
 	$event_meta['start_date'] = isset( $post_obj->EventStartDate ) ? $post_obj->EventStartDate : '';
 	$event_meta['end_date'] = isset( $post_obj->EventEndDate ) ? $post_obj->EventEndDate : '';
 	$event_meta['venue_id'] = isset( $meta['_EventVenueID'][0] ) ? $meta['_EventVenueID'][0] : '';
-	$event_meta['venue_title'] = isset( $venue_meta['_VenueVenue'][0] ) ? $venue_meta['_VenueVenue'][0] : '(no location)';
+	$venue = rtec_get_venue( $post_obj->ID );
+	$event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
 	$event_meta['venue_address'] = isset( $venue_meta['_VenueAddress'][0] ) ? $venue_meta['_VenueAddress'][0] : '';
 	$event_meta['venue_city'] = isset( $venue_meta['_VenueCity'][0] ) ? $venue_meta['_VenueCity'][0] : '';
 	$event_meta['venue_state'] = isset( $venue_meta['_VenueStateProvince'][0] ) ? $venue_meta['_VenueStateProvince'][0] : '';
@@ -63,5 +64,23 @@ function rtec_format_phone_number( $raw_number ) {
 		default:
 			return preg_replace( '/([0-9]{3})([0-9]{3})([0-9]{4})/', '($1) $2-$3', $raw_number );
 			break;
+	}
+}
+
+/**
+ * Retrieves venue title using TEC function. Checks to make sure it exists first
+ *
+ * @param mixed $event_id   id of the event
+ * @since 1.1
+ *
+ * @return string           venue title
+ */
+function rtec_get_venue( $event_id = NULL ) {
+	if ( function_exists( 'tribe_get_venue' ) ) {
+		$venue = tribe_get_venue( $event_id );
+
+		return $venue;
+	} else {
+		return '';
 	}
 }
