@@ -91,11 +91,31 @@ jQuery(document).ready(function($) {
                 formEl.addClass(Form.invalidClass);
                 Form.showErrorMessage(formEl);
             }
+        },
+
+        validateSum : function(formEl, val1, val2 ){
+
+            var eqTest = (parseInt(val1) === parseInt(val2));
+
+            if (eqTest) {
+                if (formEl.hasClass(Form.invalidClass)) {
+                    formEl.removeClass(Form.invalidClass);
+                }
+                formEl.addClass(Form.validClass);
+                Form.removeErrorMessage(formEl);
+            } else {
+                if (formEl.hasClass(Form.validClass)) {
+                    formEl.removeClass(Form.validClass);
+                }
+                formEl.addClass(Form.invalidClass);
+                Form.showErrorMessage(formEl);
+            }
         }
 
     };
     
     $('#rtec-form').submit(function(event) {
+        event.preventDefault();
 
         if ($('#rtec .rtec-screen-reader-error').length) {
             $('#rtec .rtec-screen-reader-error').remove();
@@ -108,8 +128,9 @@ jQuery(document).ready(function($) {
                 if ($(this).attr('name') == 'rtec_email') {
                     Form.validateEmail($(this));
                 } else if ($(this).attr('name') == 'rtec_phone') {
-                    console.log($(this).closest('.rtec-form-field').attr('data-rtec-valid-count').replace(' ', '').split(','));
                     Form.validateCount($(this), $(this).closest('.rtec-form-field').attr('data-rtec-valid-count').replace(' ', '').split(','));
+                } else if ($(this).attr('name') == 'rtec_recaptcha_input') {
+                    Form.validateSum($(this), $(this).val(), $(this).closest('.rtec-form').find('.rtec-recaptcha-sum').val());
                 } else {
                     Form.validateLength($(this), 2, 25);
                 }

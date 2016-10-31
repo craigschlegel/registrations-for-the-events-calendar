@@ -86,6 +86,7 @@ jQuery(document).ready(function($){
         confirmationMessage = confirmationMessage.replaceAll('{email}', 'Bond007@ohmss.com');
         confirmationMessage = confirmationMessage.replaceAll('{phone}', '(007) 555-5555');
         confirmationMessage = confirmationMessage.replaceAll('{other}', 'Shaken not Stirred');
+        confirmationMessage = confirmationMessage.replaceAll('{ical-url}', 'http://example.com/event/secret-meeting/?ical=1');
         confirmationMessage = confirmationMessage.replaceAll('{nl}', "\n");
         $rtecJsPreview.text(confirmationMessage);
     }
@@ -108,12 +109,13 @@ jQuery(document).ready(function($){
     });
 
     // REGISTRATIONS overview tab
+    $('.rtec-single-event:nth-child(2n)').css('float', 'right').after('<div class="clear"></div>');
     $('.rtec-hidden-options').hide();
     var $rtecOptionsHandle = $('.rtec-event-options .handlediv');
 
     $rtecOptionsHandle.click(function() {
         var $rtecEventOptions = $(this).closest('.rtec-event-options')
-        $rtecEventOptions.next().toggle();
+        $rtecEventOptions.next().slideToggle();
         if ($rtecEventOptions.hasClass('open')) {
             $rtecEventOptions.addClass('closed').removeClass('open');
         } else {
@@ -206,6 +208,7 @@ jQuery(document).ready(function($){
                         lastName = $closestRegRow.find('.rtec-reg-last').text(),
                         firstName = $closestRegRow.find('.rtec-reg-first').text(),
                         email = $closestRegRow.find('.rtec-reg-email').text(),
+                        phone = $closestRegRow.find('.rtec-reg-phone').text(),
                         other = $closestRegRow.find('.rtec-reg-other').text();
 
                     editCount = 1;
@@ -217,6 +220,7 @@ jQuery(document).ready(function($){
                     $closestRegRow.find('.rtec-reg-last').html('<input type="text" name="last" id="rtec-last" data-rtec-val="'+lastName+'" value="'+lastName+'" />');
                     $closestRegRow.find('.rtec-reg-first').html('<input type="text" name="first" id="rtec-first" data-rtec-val="'+firstName+'" value="'+firstName+'" />');
                     $closestRegRow.find('.rtec-reg-email').html('<input type="text" name="email" id="rtec-email" data-rtec-val="'+email+'" value="'+email+'" />');
+                    $closestRegRow.find('.rtec-reg-phone').html('<input type="text" name="phone" id="rtec-phone" data-rtec-val="'+phone+'" value="'+phone+'" />');
                     $closestRegRow.find('.rtec-reg-other').html('<input type="text" name="other" id="rtec-other" data-rtec-val="'+other+'" value="'+other+'" />');
 
                     $(this).addClass('rtec-editing');
@@ -237,6 +241,7 @@ jQuery(document).ready(function($){
             addBackRowData($editingClosestRegRow,'.rtec-reg-last','.rtec-reg-last input');
             addBackRowData($editingClosestRegRow,'.rtec-reg-first','.rtec-reg-first input');
             addBackRowData($editingClosestRegRow,'.rtec-reg-email','.rtec-reg-email input');
+            addBackRowData($editingClosestRegRow,'.rtec-reg-phone','.rtec-reg-phone input');
             addBackRowData($editingClosestRegRow,'.rtec-reg-other','.rtec-reg-other input');
 
             $rtecEditing.removeClass('rtec-editing');
@@ -262,6 +267,7 @@ jQuery(document).ready(function($){
                 rtec_other: $table.find('input[name=other]').val(),
                 rtec_first: $table.find('input[name=first]').val(),
                 rtec_email: $table.find('input[name=email]').val(),
+                rtec_phone: $table.find('input[name=phone]').val(),
                 rtec_last: $table.find('input[name=last]').val(),
                 rtec_nonce : rtecAdminScript.rtec_nonce
             },
@@ -290,6 +296,7 @@ jQuery(document).ready(function($){
                         '<td><input type="text" name="last" id="last" placeholder="Last" /></td>' +
                         '<td><input type="text" name="first" id="first" placeholder="First" /></td>' +
                         '<td><input type="email" name="email" id="email" placeholder="you@example.com" /></td>' +
+                        '<td><input type="phone" name="phone" id="phone" placeholder="4445556666" /></td>' +
                         '<td><input type="text" name="other" id="other" placeholder="Other" /></td>' +
                     '</tr>'
                 );
@@ -309,6 +316,7 @@ jQuery(document).ready(function($){
                 rtec_other: $table.find('input[name=other]').val(),
                 rtec_first: $table.find('input[name=first]').val(),
                 rtec_email: $table.find('input[name=email]').val(),
+                rtec_phone: $table.find('input[name=phone]').val().replace(/\D/g,''),
                 rtec_last: $table.find('input[name=last]').val(),
                 rtec_venue_title: $table.closest('.rtec-single-event').find('.rtec-venue-title').text(),
                 rtec_end_time: $table.closest('.rtec-single-event').find('.rtec-end-time').text(),

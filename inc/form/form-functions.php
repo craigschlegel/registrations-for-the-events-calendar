@@ -17,7 +17,6 @@ function rtec_the_registration_form()
 
 	if ( $rtec->submission != NULL ) {
 		$submission = $rtec->submission->instance();
-		$submission->validate_data();
 
 		if ( $submission->has_errors() ) {
 			$form->set_errors( $submission->get_errors() );
@@ -35,8 +34,13 @@ function rtec_the_registration_form()
 
 	} elseif ( ! $form->registrations_are_disabled() ) {
 		$form->set_max_registrations();
-		if ( $form->registrations_available() ) {
+		if ( $form->registrations_available() && ! $form->registration_deadline_has_passed() ) {
 			$form->set_input_fields_data();
+
+			if ( function_exists( 'tribe_get_single_ical_link' ) ) {
+				$form->set_ical_url( esc_url( tribe_get_single_ical_link() ) );
+			}
+
 			echo $form->get_form_html();
 		} else {
 			echo $form->registrations_closed_message();

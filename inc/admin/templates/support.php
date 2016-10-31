@@ -1,4 +1,4 @@
-<h2><?php _e( 'Support/Additional Features', 'rtec' ); ?></h2>
+<h1><?php _e( 'Support/Additional Features', 'rtec' ); ?></h1>
 
 <p><?php _e( 'Need help setting things up? Check out our set up directions', 'rtec' ); ?>.</p>
 <div class="rtec-button-wrapper">
@@ -15,7 +15,7 @@
 	<a href="http://roundupwp.com/products/registrations-for-the-events-calendar/support" class="rtec-support-button" target="_blank"><?php _e( 'Request a Feature', 'rtec' ); ?></a>
 </div>
 <br />
-<h3><?php _e('System Info', 'rtec' ); ?></h3>
+<h2><?php _e('System Info', 'rtec' ); ?></h2>
 <p><?php _e( 'Click the text below to select all', 'rtec' ); ?></p>
 
 <textarea readonly="readonly" onclick="this.focus();this.select()" title="To copy, click the field then press Ctrl + C (PC) or Cmd + C (Mac)." style="width: 70%; height: 500px; white-space: pre; font-family: Menlo,Monaco,monospace;">

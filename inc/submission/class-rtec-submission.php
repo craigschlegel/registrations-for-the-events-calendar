@@ -45,7 +45,7 @@ class RTEC_Submission
     public function __construct( $post )
     {
         $this->submission = $post;
-        
+
         $this->validate_data();
     }
 
@@ -71,7 +71,7 @@ class RTEC_Submission
      * Get the one true instance of EDD_Register_Meta.
      *
      * @since  1.0
-     * @return $instance
+     * @return object $instance
      */
     static public function instance() {
         if ( !self::$instance ) {
@@ -138,6 +138,16 @@ class RTEC_Submission
                 
             }
         }
+
+	    if ( isset( $options['recaptcha_require'] ) && $options['recaptcha_require'] ) {
+
+	    	if ( ! isset( $submission['rtec_recaptcha_sum'] ) || ! isset( $submission['rtec_recaptcha_input'] ) ) {
+			    $this->errors[] = 'recaptcha';
+		    } elseif ( $submission['rtec_recaptcha_sum'] !== $submission['rtec_recaptcha_input'] ) {
+			    $this->errors[] = 'recaptcha';
+		    }
+
+	    }
     }
 
 	/**
@@ -183,13 +193,20 @@ class RTEC_Submission
         $submission = $this->submission;
         // for each submitted form field
         foreach ( $submission as $input_key => $input_value ) {
-            // sanitize the input value
-            $new_val = sanitize_text_field( $input_value );
+        	if ( $input_key === 'ical_url' ) {
+        		// the ical has url so escaped
+		        $new_val = esc_url( $input_value );
+	        } else {
+		        // sanitize the input value
+		        $new_val = sanitize_text_field( $input_value );
+	        }
+
             // strip potentially malicious header strings
             $new_val = $this->strip_malicious( $new_val );
             // assign the sanitized value
             $this->submission[$input_key] = $new_val;
         }
+
     }
 
 	/**
@@ -255,6 +272,7 @@ class RTEC_Submission
 	 * Email message sent to user
 	 * 
 	 * @since 1.0
+	 * @since 1.1   updated some of the fields that can be dynamically set from user
 	 * @return mixed|string
 	 */
     private function get_conf_message()
@@ -265,8 +283,8 @@ class RTEC_Submission
 
         if ( isset( $rtec_options['confirmation_message'] ) ) {
             $raw_body = $rtec_options['confirmation_message'];
-            $search = array( '{venue}', '{venue-address}', '{venue-city}', '{venue-state}', '{venue-zip}', '{event-title}', '{event-date}', '{first}', '{last}', '{email}', '{phone}', '{other}', '{nl}' );
-            $replace = array( $this->submission['rtec_venue_title'], $this->submission['rtec_title'], $date_str, $this->submission['rtec_first'], $this->submission['rtec_last'], $this->submission['rtec_email'], $this->submission['rtec_phone'], $this->submission['rtec_other'], "\n" );
+            $search = array( '{venue}', '{venue-address}', '{venue-city}', '{venue-state}', '{venue-zip}', '{event-title}', '{event-date}', '{first}', '{last}', '{email}', '{phone}', '{other}', '{ical-url}', '{nl}' );
+            $replace = array( $this->submission['rtec_venue_title'], $this->submission['rtec_venue_address'], $this->submission['rtec_venue_city'], $this->submission['rtec_venue_state'], $this->submission['rtec_venue_zip'], $this->submission['rtec_title'], $date_str, isset( $this->submission['rtec_first'] ) ? $this->submission['rtec_first'] : '', isset( $this->submission['rtec_last'] ) ? $this->submission['rtec_last'] : '', isset( $this->submission['rtec_email'] ) ? $this->submission['rtec_email'] : '', isset( $this->submission['rtec_phone'] ) ? rtec_format_phone_number( $this->submission['rtec_phone'] ) : '', isset( $this->submission['rtec_other'] ) ? $this->submission['rtec_other'] : '', $this->submission['ical_url'], "\n" );
 
             $body = str_replace( $search, $replace, $raw_body );
         } else {
@@ -374,7 +392,7 @@ class RTEC_Submission
         }
         
 	    if ( ! empty( $this->submission['rtec_phone'] ) ) {
-		    $phone = esc_html( $this->submission['rtec_phone'] );
+		    $phone = rtec_format_phone_number( esc_html( $this->submission['rtec_phone'] ) );
 		    $body .= sprintf ( 'Phone: %1$s', $phone ) . "\n";
 	    }
 	    

@@ -142,31 +142,6 @@ class RTEC_Admin
             'fields' => $form_fields_array
         ));
 
-        // Template Location
-        $this->create_settings_field( array(
-            'name' => 'template_location',
-            'title' => 'Form Location', // label for the input field
-            'callback'  => 'default_select', // name of the function that outputs the html
-            'page' => 'rtec_form_form_fields', // matches the section name
-            'section' => 'rtec_form_form_fields', // matches the section name
-            'option' => 'rtec_options', // matches the options name
-            'class' => 'default-text', // class for the wrapper and input field
-            'fields' => array(
-                1 => array( 'tribe_events_single_event_before_the_content', 'Before the content' ),
-                2 => array( 'tribe_events_single_event_after_the_content', 'After the content' ),
-                3 => array( 'tribe_events_single_event_before_the_meta', 'Before the meta' ),
-                4 => array( 'tribe_events_single_event_after_the_meta', 'After the meta' )
-            ),
-            'description' => "Location where the form will appear in the single event template" // what is this? text
-        ) );
-
-        add_settings_section(
-            'rtec_form_registration_availability',
-            'Registration Availability',
-            array( $this, 'blank' ),
-            'rtec_form_registration_availability'
-        );
-
         /* Registration Messages */
 
         $this->create_settings_field( array(
@@ -195,6 +170,17 @@ class RTEC_Admin
             'type' => 'number',
             'default' => 30
         ));
+
+        // Registration Deadline
+        $this->create_settings_field( array(
+            'name' => 'registration_deadline',
+            'title' => '<label for="rtec_registration_deadline">Registration Deadline</label>', // label for the input field
+            'callback'  => 'deadline_offset', // name of the function that outputs the html
+            'page' => 'rtec_form_registration_availability', // matches the section name
+            'section' => 'rtec_form_registration_availability', // matches the section name
+            'option' => 'rtec_options', // matches the options name
+            'class' => 'short-text', // class for the wrapper and input field
+        ) );
 
         $this->create_settings_field( array(
             'option' => 'rtec_options',
@@ -267,11 +253,36 @@ class RTEC_Admin
         /* Form Styling */
 
         add_settings_section(
+            'rtec_form_registration_availability',
+            'Registration Availability',
+            array( $this, 'blank' ),
+            'rtec_form_registration_availability'
+        );
+
+        add_settings_section(
             'rtec_form_styles',
             'Styling',
             array( $this, 'blank' ),
             'rtec_form_styles'
         );
+
+        // Template Location
+        $this->create_settings_field( array(
+            'name' => 'template_location',
+            'title' => 'Form Location', // label for the input field
+            'callback'  => 'default_select', // name of the function that outputs the html
+            'page' => 'rtec_form_styles', // matches the section name
+            'section' => 'rtec_form_styles', // matches the section name
+            'option' => 'rtec_options', // matches the options name
+            'class' => 'default-text', // class for the wrapper and input field
+            'fields' => array(
+                1 => array( 'tribe_events_single_event_before_the_content', 'Before the content' ),
+                2 => array( 'tribe_events_single_event_after_the_content', 'After the content' ),
+                3 => array( 'tribe_events_single_event_before_the_meta', 'Before the meta' ),
+                4 => array( 'tribe_events_single_event_after_the_meta', 'After the meta' )
+            ),
+            'description' => "Location where the form will appear in the single event template" // what is this? text
+        ) );
 
         // width
         $this->create_settings_field( array(
@@ -464,9 +475,9 @@ class RTEC_Admin
         $options = get_option( $args['option'] );
         $selected = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
         ?>
-        <select name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="ctf_<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>">
+        <select name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>">
             <?php foreach ( $args['fields'] as $field ) : ?>
-                <option value="<?php echo $field[0]; ?>" id="ctf-<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>"<?php if( $selected == $field[0] ) { echo ' selected'; } ?>><?php _e( $field[1], 'custom-twitter-feeds' ); ?></option>
+                <option value="<?php echo $field[0]; ?>" id="rtec-<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>"<?php if( $selected == $field[0] ) { echo ' selected'; } ?>><?php _e( $field[1], 'rtec' ); ?></option>
             <?php endforeach; ?>
         </select>
         <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
@@ -557,6 +568,27 @@ class RTEC_Admin
             </p>
         </div>
         <?php
+        // the other field is treated specially
+        $label = isset( $options[ 'recaptcha_label' ] ) ? esc_attr( $options[ 'recaptcha_label' ] ) : 'What is';
+        $require = isset( $options[ 'recaptcha_require' ] ) ? esc_attr( $options[ 'recaptcha_require' ] ) : false;
+        $error = isset( $options[ 'recaptcha_error' ] ) ? esc_attr( $options[ 'recaptcha_error' ] ) : 'Please try again';
+        ?>
+        <div class="rtec-field-options-wrapper">
+            <h4><?php _e( 'Recaptcha', 'rtec' ); ?> <span>(<?php _e( 'Simple math question to avoid spam entries. Spam "honey pot" field is in the form by default', 'rtec' ); ?>)</span></h4>
+            <p>
+                <label><?php _e( 'Custom Label: ', 'rtec' ); ?></label><input type="text" name="<?php echo $args['option'].'[recaptcha_label]'; ?>" value="<?php echo $label; ?>" />
+                <span> 2 + 5</span>
+            </p>
+            <p class="rtec-checkbox-row">
+                <input type="checkbox" class="rtec_require_checkbox" name="<?php echo $args['option'].'[recaptcha_require]'; ?>" <?php if( $require == true ) { echo 'checked'; } ?>>
+                <label><?php _e( 'require and include', 'rtec' ); ?></label>
+            </p>
+            <p>
+                <label><?php _e( 'Error Message:', 'rtec' ); ?></label>
+                <input type="text" name="<?php echo $args['option'].'[recaptcha_error]'; ?>" value="<?php echo $error; ?>" class="large-text rtec-recaptcha-input">
+            </p>
+        </div>
+        <?php
     }
 
     public function custom_code( $args )
@@ -564,9 +596,27 @@ class RTEC_Admin
         $options = get_option( $args['option'] );
         $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
         ?>
-        <p><?php _e( $args['description'], 'custom-twitter-feeds' ) ; ?></p>
-        <textarea name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="ctf_<?php echo $args['name']; ?>" style="width: 70%;" rows="7"><?php esc_attr_e( stripslashes( $option_string ) ); ?></textarea>
+        <p><?php _e( $args['description'], 'rtec' ) ; ?></p>
+        <textarea name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" style="width: 70%;" rows="7"><?php esc_attr_e( stripslashes( $option_string ) ); ?></textarea>
         <?php
+    }
+
+    public function deadline_offset( $args )
+    {
+        $options = get_option( $args['option'] );
+        $default = 0;
+        $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $default;
+        $selected = ( isset( $options[ $args['name'] . '_unit' ] ) ) ? esc_attr( $options[ $args['name'] . '_unit' ] ) : '3600';
+        ?>
+        <span><?php _e( 'Accept registrations up until', 'rtec' ); ?></span>
+        <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="number" value="<?php echo $option_string; ?>"/>
+        <select name="<?php echo $args['option'].'['.$args['name'].'_unit]'; ?>">
+            <option value="60" <?php if ( $selected == "60" ) echo 'selected="selected"' ?> ><?php esc_attr_e( 'Minutes' ); ?></option>
+            <option value="3600" <?php if ( $selected == "3600" ) echo 'selected="selected"' ?> ><?php esc_attr_e( 'Hours' ); ?></option>
+            <option value="86400" <?php if ( $selected == "86400" ) echo 'selected="selected"' ?> ><?php esc_attr_e( 'Days' ); ?></option>
+        </select>
+        <span><?php _e( 'before event start time', 'rtec' ); ?></span>
+     <?php
     }
     
     public function num_registrations_messages( $args ) {
@@ -661,6 +711,7 @@ class RTEC_Admin
             <span class="rtec-col-1">{email}</span><span class="rtec-col-2">Email of registrant</span>
             <span class="rtec-col-1">{phone}</span><span class="rtec-col-2">Phone number of registrant</span>
             <span class="rtec-col-1">{other}</span><span class="rtec-col-2">Information submitted in the "other" field</span>
+            <span class="rtec-col-1">{ical-url}</span><span class="rtec-col-2">Plain text web address to download ical file for event</span>
             <span class="rtec-col-1">{nl}</span><span class="rtec-col-2">Creates a new line/line break</span>
         </span>
         <?php endif; ?>
@@ -813,7 +864,7 @@ class RTEC_Admin
         $leave_spaces = array();
 
         if ( isset( $input['default_max_registrations'] ) ) {
-            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'limit_registrations', 'include_attendance_message', 'preserve_db' );
+            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'limit_registrations', 'include_attendance_message', 'preserve_db' );
             $leave_spaces = array( 'custom_js', 'custom_css' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $checkbox_settings = array();

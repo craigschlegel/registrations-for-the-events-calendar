@@ -60,13 +60,14 @@ class RTEC_Db_Admin extends RTEC_Db
         $last = isset( $data['rtec_last'] ) ? $data['rtec_last'] : '';
         $first = isset( $data['rtec_first'] ) ? $data['rtec_first'] : '';
         $email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
-        $other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
+	    $phone = isset( $data['rtec_phone'] ) ? $data['rtec_phone'] : '';
+	    $other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
 
         if ( ! empty( $id ) ) {
             $wpdb->query( $wpdb->prepare( "UPDATE $this->table_name
-                SET last_name=%s, first_name=%s, email=%s, other=%s
+                SET last_name=%s, first_name=%s, email=%s, phone=%s, other=%s
                 WHERE id=%d",
-                $last, $first, $email, $other, $id ) );
+                $last, $first, $email, $phone, $other, $id ) );
         }
 
     }

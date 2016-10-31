@@ -55,6 +55,18 @@ class RTEC_Form
     private $max_registrations;
 
 	/**
+	 * @var array
+	 * @since 1.1
+	 */
+	private $ical_url;
+
+	/**
+	 * @var array
+	 * @since 1.1
+	 */
+	private $recaptcha = array();
+
+	/**
 	 * RTEC_Form constructor. Set up basic field info
 	 */
     public function __construct()
@@ -82,6 +94,17 @@ class RTEC_Form
                 $this->required_fields[] = $field;
             }
         }
+
+        // recaptcha field calculations for spam check
+        if ( isset( $rtec_options['recaptcha_require'] ) && $rtec_options['recaptcha_require'] )  {
+        	$this->recaptcha = array(
+        		'value_1' => rand(2,5),
+		        'value_2' => rand(2,5)
+	        );
+	        $this->recaptcha['sum'] = (int)$this->recaptcha['value_1'] + (int)$this->recaptcha['value_2'];
+        }
+
+
     }
     
     /**
@@ -118,13 +141,22 @@ class RTEC_Form
 	}
 
 	/**
-	 * @param string $id    optional manual input of post ID
-	 * @since 1.0
+ * @param string $id    optional manual input of post ID
+ * @since 1.0
+ */
+	public function set_event_meta( $id = '' )
+	{
+		$this->event_meta = rtec_get_event_meta( $id );
+	}
+
+	/**
+	 * @param string $url    url retrieved using tribe_get_single_ical_link
+	 * @since 1.1
 	 */
-    public function set_event_meta( $id = '' )
-    {
-        $this->event_meta = rtec_get_event_meta( $id );
-    }
+	public function set_ical_url( $url )
+	{
+		$this->ical_url = $url;
+	}
 
 	/**
 	 * @param string $id    optional manual input of post ID
@@ -153,7 +185,24 @@ class RTEC_Form
 	}
 
 	/**
+	 * @since 1.1
+	 *
+	 * @return bool
+	 */
+	public function registration_deadline_has_passed()
+	{
+		global $rtec_options;
+
+		$deadline_multiplier = isset( $rtec_options['registration_deadline'] ) ? sanitize_text_field( $rtec_options['registration_deadline'] ) : 0;
+		$deadline_unit = isset( $rtec_options['registration_deadline_unit'] ) ? sanitize_text_field( $rtec_options['registration_deadline_unit'] ) : 0;
+		$deadline_time = strtotime( $this->event_meta['start_date'] ) - $deadline_multiplier * $deadline_unit;
+
+		return( $deadline_time < time() );
+	}
+
+	/**
 	 * Combine required and included fields to use in a loop later
+	 *
 	 * @since 1.0
 	 */
     public function set_input_fields_data()
@@ -196,13 +245,13 @@ class RTEC_Form
             $input_fields_data['other']['require'] = isset( $rtec_options['other_require'] ) ? $rtec_options['other_require'] : true;
             $input_fields_data['other']['error_message'] = isset( $rtec_options['other_error'] ) ? $rtec_options['other_error'] : 'Error';
             $input_fields_data['other']['label'] = isset( $rtec_options['other_label'] ) ? $rtec_options['other_label'] : 'Other';
+	        $input_fields_data['other']['valid_count'] = isset( $rtec_options['other_valid_count'] ) ? ' data-rtec-valid-count="' . $rtec_options['other_valid_count'].'"' : '';
         }
 
         $this->input_fields_data = $input_fields_data;
     }
 
 	/**
-	 * @param string $default_max_registrations default to infinite
 	 * @since 1.0
 	 */
     public function set_max_registrations()
@@ -361,12 +410,48 @@ class RTEC_Form
 	    $html .= '<input type="hidden" name="rtec_venue_city" value="'. $event_meta['venue_city'] . '" />';
 	    $html .= '<input type="hidden" name="rtec_venue_state" value="'. $event_meta['venue_state'] . '" />';
 	    $html .= '<input type="hidden" name="rtec_venue_zip" value="'. $event_meta['venue_zip'] . '" />';
-        $html .= '<input type="hidden" name="rtec_date" value="'. $event_meta['start_date'] . '" />';
+	    $html .= '<input type="hidden" name="ical_url" value="'. $this->ical_url . '" />';
+	    $html .= '<input type="hidden" name="rtec_date" value="'. $event_meta['start_date'] . '" />';
         $html .= '<input type="hidden" name="rtec_event_id" value="' . $event_meta['post_id'] . '" />';
 	    $html .= '<input type="hidden" name="rtec_num_registered" value="' . $event_meta['num_registered'] . '" />';
 
         return $html;
     }
+
+	/**
+	 * Return html for a recaptcha robot detection field
+	 *
+	 * @since 1.1
+	 * @return string
+	 */
+	private function get_recaptcha_html() {
+		global $rtec_options;
+
+		$recaptcha_error_message = isset( $rtec_options['recaptcha_error'] ) ? sanitize_text_field( $rtec_options['recaptcha_error'] ) : 'Please try again';
+		$recaptcha_label = isset( $rtec_options['recaptcha_label'] ) ? sanitize_text_field( $rtec_options['recaptcha_label'] ) : 'What is';
+
+		$required_data = ' aria-required="true"';
+
+		$error_html = '';
+
+		if ( in_array( 'recaptcha', $this->errors ) ) {
+			$required_data .= ' aria-invalid="true"';
+			$error_html = '<p class="rtec-error-message" role="alert">' . $recaptcha_error_message . '</p>';
+		} else {
+			$required_data .= ' aria-invalid="false"';
+		}
+
+		$html = '<input type="hidden" name="rtec_recaptcha_sum" value="'.( $this->recaptcha['value_1'] + $this->recaptcha['value_2'] ).'" class="rtec-recaptcha-sum" />';
+		$html .= '<div class="rtec-form-field rtec-recaptcha" data-rtec-error-message="'.$recaptcha_error_message.'">';
+			$html .= '<label for="rtec_recaptcha" class="rtec_text_label">'.$recaptcha_label.' '.$this->recaptcha['value_1'].' &#43; '.$this->recaptcha['value_2'].'&#42;</label>';
+			$html .= '<div class="rtec-input-wrapper">';
+				$html .= '<input type="text" name="rtec_recaptcha_input" id="rtec_recaptcha"' . $required_data . ' />';
+				$html .= $error_html;
+			$html .= '</div>';
+		$html .= '</div>';
+
+		return $html;
+	}
 
 	/**
 	 * The html that creates the feed is broken into parts and pieced together
@@ -387,7 +472,7 @@ class RTEC_Form
 
             if ( in_array( $field['name'], $this->required_fields ) ) {
                 $required_data = ' aria-required="true"';
-                $label .= '*';
+                $label .= '&#42;';
             } else {
                 $required_data = ' aria-required="false"';
             }
@@ -418,6 +503,10 @@ class RTEC_Form
                     $html .= $error_html;
 	            $html .= '</div>';
             $html .= '</div>';
+        }
+
+        if ( ! empty( $this->recaptcha ) ) {
+	        $html .= $this->get_recaptcha_html();
         }
         $html .= '</div>'; // rtec-form-fields-wrapper
 

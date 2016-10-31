@@ -4,7 +4,7 @@
 $id = (int)$_GET['id'];
 
 ?>
-<h2><?php _e( 'Single Event Details', 'rtec' ); ?></h2>
+<h1><?php _e( 'Single Event Details', 'rtec' ); ?></h1>
 <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations"><?php _e( 'Back to Overview', 'rtec' ); ?></a>
 
 <input type="hidden" value="<?php echo $id; ?>" name="event_id">

@@ -1,7 +1,7 @@
 <?php
 
 settings_errors(); ?>
-<h2><?php _e( 'Email Settings', 'rtec' ); ?></h2>
+<h1><?php _e( 'Email Settings', 'rtec' ); ?></h1>
 <form method="post" action="options.php">
     <?php settings_fields( 'rtec_options' ); ?>
     <?php do_settings_sections( 'rtec_email_notification' ); ?>

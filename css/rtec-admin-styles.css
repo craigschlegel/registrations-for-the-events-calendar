@@ -1,6 +1,12 @@
 .rtec-wrapper {
     box-sizing: border-box;
 }
+.clear:after {
+    display: table;
+    clear: both;
+    content: " ";
+    visibility: hidden;
+}
 .rtec-admin-2-columns {
     width: 45.5%;
     display: inline-block;
@@ -9,17 +15,20 @@
     display: inline-block;
     width: 47.5%;
     margin: 2em 2% 2em 0;
-    border-radius: 3px;
-    background: #23282d;
 }
-.rtec-single-event:nth-child(2n) {
-    float: right;
+.rtec-single-event .rtec-event-meta,
+.rtec-single-event .rtec-event-actions {
+    background: #23282d;
+    border-radius: 3px 3px 0 0;
+}
+.rtec-single-event .rtec-event-actions {
+    border-radius: 0 0 3px 3px;
 }
 .rtec-event-meta {
     padding: .5em 1em .5em 1em;
 }
 .rtec-event-meta h3 {
-    margin: .5em 0em;
+    margin: .5em 0;
     color: #fff;
 }
 .rtec-event-meta a {
@@ -29,7 +38,7 @@
     color: #00a0d2;
 }
 .rtec-event-meta p {
-    margin: 0em 0em .25em;
+    margin: 0 0 .25em;
     color: #fff;
 }
 
@@ -57,7 +66,7 @@
 }
 .rtec-single table td input[type="checkbox"] {
     width: auto;
-    margin: 0px 0px 0px 8px;
+    margin: 0 0 0 8px;
 }
 .rtec-single table .rtec-checkbox {
     padding: 11px 0 0 3px;
@@ -102,7 +111,7 @@
 #rtec-message-text-wrapper-up,
 #rtec-message-text-wrapper-down,
 #rtec-message-text-wrapper-other {
-    margin-top: 0px;
+    margin-top: 0;
 }
 .rtec-field-options-wrapper h4 span {
     font-size: 12px;
@@ -129,6 +138,9 @@
 }
 .rtec-button-wrapper {
     display: block;
+}
+#rtec_registration_deadline {
+    width: 70px;
 }
 
 /* Tooltip table */
@@ -213,4 +225,19 @@
 .rtec-event-options .rtec-update-event-options {
     float: left;
     margin: 16px 0 0;
+}
+
+@media all and (max-width: 910px) and (min-width: 600px){
+    .rtec-overview .rtec-single-event tr th:nth-child(4),
+    .rtec-overview .rtec-single-event tr td:nth-child(4) {
+        display: none;
+    }
+}
+
+@media all and (max-width: 600px){
+    .rtec-overview .rtec-single-event,
+    .rtec-overview .rtec-single-event {
+        width: 100%;
+        margin: 2em 2% 2em 2%;
+    }
 }

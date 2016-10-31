@@ -1,4 +1,4 @@
-<h2><?php _e( 'Overview', 'rtec' ); ?></h2>
+<h1><?php _e( 'Overview', 'rtec' ); ?></h1>
 <?php if ( ! isset( $options['default_max_registrations'] ) ) : ?>
     <div class="notice notice-info is-dismissible">
         <p>
@@ -24,7 +24,7 @@
 $db = new RTEC_Db_Admin();
 
 $events = tribe_get_events( array(
-    'posts_per_page' => 100,
+    'posts_per_page' => 50,
     'start_date' => date( '2000-1-1 0:0:0' )
 ) );
 
@@ -110,7 +110,9 @@ foreach ( $events as $event ) :
     
             </tbody>
         </table>
-	    <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $event->ID; ?>" class="rtec-admin-secondary-button button action"><?php _e( 'Detailed View', 'rtec' ); ?></a>
+	    <div class="rtec-event-actions clear">
+	        <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $event->ID; ?>" class="rtec-admin-secondary-button button action"><?php _e( 'Detailed View', 'rtec' ); ?></a>
+	    </div>
     </div> <!-- rtec-single-event -->
 
 <?php endforeach; // end loop ?>

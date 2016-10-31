@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Registrations for The Events Calendar
-Description: Allows you to collect registrations for events posted using The Events Calendar by Modern Tribe.
+Description: Collect and manage registrations for events posted using The Events Calendar by Modern Tribe.
 Version: 1.0
 Author: Roundup WP
 Author URI: roundupwp.com
@@ -195,11 +195,11 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 	    private function includes() {
 		    global $rtec_options;
             $rtec_options = get_option( 'rtec_options', array() );
+		    require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-db.php';
+		    require_once RTEC_PLUGIN_DIR . 'inc/helper-functions.php';
 		    require_once RTEC_PLUGIN_DIR . 'inc/form/class-rtec-form.php';
 		    require_once RTEC_PLUGIN_DIR . 'inc/form/form-functions.php';
 		    require_once RTEC_PLUGIN_DIR . 'inc/submission/class-rtec-submission.php';
-		    require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-db.php';
-		    require_once RTEC_PLUGIN_DIR . 'inc/helper-functions.php';
 		    if ( is_admin() ) {
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/class-rtec-db-admin.php';
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/admin-functions.php';
@@ -235,6 +235,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 				    'phone_require' => false,
 				    'phone_error' => 'Please enter a valid phone number',
 				    'phone_valid_count' => '7, 10',
+				    'recaptcha_require' => false,
 				    'other_show' => false,
 				    'other_require' => false,
 				    'other_error' => 'There is an error with your entry'
