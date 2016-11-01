@@ -149,7 +149,7 @@ class RTEC_Db_Admin extends RTEC_Db
         }
 
         $wpdb->query( $wpdb->prepare( "DELETE FROM $this->table_name
-        WHERE $where IN($registrations_to_be_deleted)" ) );
+        WHERE $where IN($registrations_to_be_deleted)", '' ) );
 
         return true;
     }

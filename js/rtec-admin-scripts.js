@@ -279,7 +279,7 @@ jQuery(document).ready(function($){
     }); // registration submit
 
     $('.rtec-add-registration').click( function() {
-        var $table = $(this).closest('.tablenav').prev(),
+        var $table = $(this).closest('.rtec-single-event').find('table'),
             $nav = $table.next();
         // remove if input fields already displayed
         if ($table.find('.rtec-new-registration').length) {

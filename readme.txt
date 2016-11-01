@@ -44,6 +44,10 @@ Follow these steps:
 5. You can configure the email options on the "Email" tab
 6. Add, edit, and remove registrations manually by navigating to the "Registrations" tab and clicking "More" for an event
 
+== Special Thanks ==
+
+Special thanks to Marco (demontechx) for his valuable input on the plugin!
+
 == Screenshots ==
 
 1. Default position and look of the "Register" button in an event page
