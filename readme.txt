@@ -4,8 +4,8 @@ Contributors: Roundup WP
 Support Website: https://roundupwp.com/products/registrations-for-the-events-calendar/support/
 Tags: the events calendar, registration, event registration, event contact, events calendar
 Requires at least: 3.0
-Tested up to: 4.6
-Stable tag: 1.0
+Tested up to: 4.6.1
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,14 +61,30 @@ Yes. You can set up the maximum number of registrants on the "Form" tab
 
 = The form is not hidden initially. Why is that? =
 
-It's likely that you have a javascript error somewhere on that page. Try disabling other plugins or switching themes to see i this corrects the issue.
+It's likely that you have a javascript error somewhere on that page. Try disabling other plugins or switching themes to see if this corrects the issue.
 
+= How do I disable registrations for a specific event? =
+
+By default, registrations are enabled for every event. You can disable registrations for a specific event by checking the appropriate box on the "Edit Event" page or on the "Registrations" tab "Overview" page.
+
+= Can I set a deadline for when registrations are accepted? =
+
+You can configure an offset for how long registrations will be available relative to the event start time
+
+= What do I do if I have a request or need help? =
+
+Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
 = 1.1 =
-* New: Added support for a phone number input field. This can be added to the form and everywhere else user data is normally available
+* New: Added support for a phone number input field. This can be added to the form and data can be used everywhere else user data is normally available
 * New: Added the ability to customize how phone numbers are validated. Enter accepted number of digits for your needs on the "Form" tab "Phone" input options
 * New: Added the ability to disable registrations for specific events. This can be done either on the "Edit Event" page or on the "Registrations" tab "Overview" page.
-* Fix: Fixed display issue when viewing the "Registrations" tab on small devices
+* New: Added the ability to set a deadline for registrations. This can be configured on the "Form" tab.
+* New: Several more fields including the ical download url and venue address information can be added to confirmation email.
+* New: Added support for a recaptcha spam detection field. Simple math question that robots can not answer correctly.
+* Tweak: Move form location setting to the "Styling" area on the same tab.
+* Fix: Fixed display issue when viewing the "Registrations" tab on small devices.
+* Fix: Fixed issue where venue title would not update when the venue was changed for an event.
 
 = 1.0 =
 * Release

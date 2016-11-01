@@ -71,6 +71,9 @@
 .rtec-single table .rtec-checkbox {
     padding: 11px 0 0 3px;
 }
+.rtec-single .rtec-event-actions {
+    padding-top: 1px;
+}
 .rtec-new-registration input,
 .rtec-reg-row input {
     max-width: 100%;
