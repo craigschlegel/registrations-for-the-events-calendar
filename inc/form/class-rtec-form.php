@@ -74,6 +74,12 @@ class RTEC_Form
 		global $rtec_options;
 
         $fields = array( 'first', 'last', 'email', 'phone', 'other' );
+	    // phone should be false by default
+	    if ( ! isset( $rtec_options['phone_show'] ) ) {
+		    $rtec_options['phone_show'] = false;
+		    $rtec_options['phone_require'] = false;
+	    }
+
         foreach ( $fields as $field ) {
 
 	        // prevent errors from popping up by defaulting all settings to true

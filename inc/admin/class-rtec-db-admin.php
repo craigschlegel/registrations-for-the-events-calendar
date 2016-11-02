@@ -148,8 +148,10 @@ class RTEC_Db_Admin extends RTEC_Db
             $registrations_to_be_deleted = $records;
         }
 
-        $wpdb->query( $wpdb->prepare( "DELETE FROM $this->table_name
-        WHERE $where IN($registrations_to_be_deleted)", '' ) );
+	    $table_name = esc_sql( $this->table_name );
+	    $registrations_to_be_deleted_string = esc_sql( $registrations_to_be_deleted );
+
+        $wpdb->query( "DELETE FROM $table_name WHERE $where IN( $registrations_to_be_deleted_string )" );
 
         return true;
     }
@@ -184,7 +186,7 @@ class RTEC_Db_Admin extends RTEC_Db
 
         $new = 'n';
 
-        return $wpdb->query( $wpdb->prepare("SELECT status
+        return $wpdb->query( $wpdb->prepare( "SELECT status
         FROM $this->table_name WHERE status=%s", $new ) );
     }
 
@@ -201,7 +203,7 @@ class RTEC_Db_Admin extends RTEC_Db
     {
         global $wpdb;
 
-        $result = $wpdb->get_results( $wpdb->prepare("SELECT event_id, COUNT(*) AS num_registered
+        $result = $wpdb->get_results( $wpdb->prepare( "SELECT event_id, COUNT(*) AS num_registered
         FROM $this->table_name WHERE event_id = %d", $id ), ARRAY_A );
 
         return $result[0]['num_registered'];
@@ -245,12 +247,13 @@ class RTEC_Db_Admin extends RTEC_Db
     {
 	    global $wpdb;
 
-	    $query = $wpdb->prepare( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = %s AND column_name = %s", $this->table_name, $column );
-	    $row = $wpdb->query( $query );
+	    $table_name = esc_sql( $this->table_name );
+	    $column_name = esc_sql( $column );
+
+	    $row = $wpdb->query( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$table_name' AND column_name = '$column_name'" );
 
 	    if ( empty( $row ) ){
-		    $query = $wpdb->prepare( "ALTER TABLE $this->table_name ADD $column VARCHAR(40) DEFAULT '' NOT NULL", '' );
-		    $wpdb->query( $query );
+		    $wpdb->query( "ALTER TABLE $table_name ADD $column_name VARCHAR(40) DEFAULT '' NOT NULL" );
 	    }
     }
 }
