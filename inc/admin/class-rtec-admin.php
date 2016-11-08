@@ -455,6 +455,18 @@ class RTEC_Admin
 	        'preview' => true,
             'legend' => true
         ));
+
+        // date format
+        $this->create_settings_field( array(
+            'name' => 'custom_date_format',
+            'title' => '<label for="rtec_custom_date_format">Custom Date Format</label>', // label for the input field
+            'callback'  => 'customize_custom_date_format', // name of the function that outputs the html
+            'page' => 'rtec_email_confirmation', // matches the section name
+            'section' => 'rtec_email_confirmation', // matches the section name
+            'option' => 'rtec_options', // matches the options name
+            'class' => 'default-text', // class for the wrapper and input field
+            'description' => 'If you would like a custom date format in your messages, enter it here using the examples as a guide',
+        ));
     }
 
     public function default_text( $args )
@@ -515,6 +527,7 @@ class RTEC_Admin
         $options = get_option( $args['option'] );
         foreach( $args['fields'] as $field ) {
             $label = isset( $field[1] ) ? $field[1] : '';
+            $custom_label = isset( $options[ $field[0].'_label' ] ) ? esc_attr( $options[ $field[0].'_label' ]  ) : $label;
             $show = isset( $options[ $field[0].'_show' ] ) ? esc_attr( $options[ $field[0].'_show' ] ) : $field[3];
             $require = isset( $options[ $field[0].'_require' ] ) ? esc_attr( $options[ $field[0].'_require' ] ) : $field[4];
             $error = isset( $options[ $field[0].'_error' ] ) ? esc_attr( $options[ $field[0].'_error' ] ) : $field[2];
@@ -522,6 +535,9 @@ class RTEC_Admin
             ?>
             <div class="rtec-field-options-wrapper">
                 <h4><?php _e( $label, 'rtec' ); ?></h4>
+                <p>
+                    <label><?php _e( 'Custom Label:', 'rtec' ); ?></label><input type="text" name="<?php echo $args['option'].'['.$field[0].'_label]'; ?>" value="<?php echo $custom_label; ?>" class="large-text">
+                </p>
                 <p class="rtec-checkbox-row">
                     <input type="checkbox" class="rtec_include_checkbox" name="<?php echo $args['option'].'['.$field[0].'_show]'; ?>" <?php if ( $show == true ) { echo 'checked'; } ?>>
                     <label><?php _e( 'include', 'rtec' ); ?></label>
@@ -533,7 +549,7 @@ class RTEC_Admin
                     <label><?php _e( 'Error Message:', 'rtec' ); ?></label>
                     <input type="text" name="<?php echo $args['option'].'['.$field[0].'_error]'; ?>" value="<?php echo $error; ?>" class="large-text rtec-other-input">
                 </p>
-                <?php if ( ! empty($valid_count ) ) : ?>
+                <?php if ( ! empty( $valid_count ) ) : ?>
                 <p>
                     <label><?php _e( 'Required length for validation:', 'rtec' ); ?></label>
                     <input type="text" name="<?php echo $args['option'].'['.$field[0].'_valid_count]'; ?>" value="<?php echo $valid_count; ?>" class="large-text rtec-valid-count-input">
@@ -627,7 +643,7 @@ class RTEC_Admin
         $text_before_down = ( isset( $options['attendance_text_before_down'] ) ) ? esc_attr( $options['attendance_text_before_down'] ) : 'Only';
         $text_after_down = ( isset( $options['attendance_text_after_down'] ) ) ? esc_attr( $options['attendance_text_after_down'] ) : 'spots left';
         $one_down = ( isset( $options['attendance_text_one_down'] ) ) ? esc_attr( $options['attendance_text_one_down'] ) : 'Only one spot left!';
-        $none_yet = ( isset( $options['attendance_text_none_yet_up'] ) ) ? esc_attr( $options['attendance_text_none_yet_up'] ) : 'Be the first!';
+        $none_yet = ( isset( $options['attendance_text_none_yet'] ) ) ? esc_attr( $options['attendance_text_none_yet'] ) : 'Be the first!';
         $closed = ( isset( $options['registrations_closed_message'] ) ) ? esc_attr( $options['registrations_closed_message'] ) : 'Registrations are closed for this event';
         $option_checked = ( isset( $options['include_attendance_message'] ) ) ? $options['include_attendance_message'] : true;
         $option_selected = ( isset( $options['attendance_message_type'] ) ) ? $options['attendance_message_type'] : 'up';
@@ -827,6 +843,17 @@ class RTEC_Admin
             <option value="Pacific/Kiritimati" <?php if( $rtec_timezone == "Pacific/Kiritimati" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+14:00) Kiritimati' ) ?></option>
         </select>
     <?php
+    }
+
+    public function customize_custom_date_format( $args )
+    {
+        $options = get_option( $args['option'] );
+        $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
+        ?>
+        <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="text" value="<?php esc_attr_e( $option_string ); ?>" size="10" placeholder="Eg. F jS, Y" />
+        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
+        <a href="https://www.roundupwp.com/products/registrations-for-the-events-calendar/docs/date-formatting-guide/" target="_blank"><?php _e( 'Examples' , 'rtec'); ?></a>
+        <?php
     }
 
     /**

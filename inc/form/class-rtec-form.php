@@ -230,16 +230,16 @@ class RTEC_Form
 
                 switch( $type ) {
                     case 'first':
-                        $input_fields_data['first']['label'] = 'First';
+                        $input_fields_data['first']['label'] = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : 'First';
                         break;
                     case 'last':
-                        $input_fields_data['last']['label'] = 'Last';
+                        $input_fields_data['last']['label'] = isset( $rtec_options['last_label'] ) ? esc_html( $rtec_options['last_label'] ) : 'Last';
                         break;
                     case 'email':
-                        $input_fields_data['email']['label'] = 'Email';
+                        $input_fields_data['email']['label'] = isset( $rtec_options['email_label'] ) ? esc_html( $rtec_options['email_label'] ) : 'Email';
                         break;
 	                case 'phone':
-		                $input_fields_data['phone']['label'] = 'Phone';
+		                $input_fields_data['phone']['label'] = isset( $rtec_options['phone_label'] ) ? esc_html( $rtec_options['phone_label'] ) : 'Phone';
 		                break;
                 }
             }

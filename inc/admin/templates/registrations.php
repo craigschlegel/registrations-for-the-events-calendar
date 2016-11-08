@@ -23,11 +23,18 @@
 <?php
 $db = new RTEC_Db_Admin();
 
-$events = tribe_get_events( array(
-    'posts_per_page' => 50,
-    'start_date' => date( '2000-1-1 0:0:0' )
-) );
+$offset = isset( $_GET['offset'] ) ? (int)$_GET['offset'] : 0;
+$posts_per_page = 20;
 
+$events = tribe_get_events( array(
+    'posts_per_page' => $posts_per_page,
+    'start_date' => date( '2000-1-1 0:0:0' ),
+    'orderby' => 'date',
+    'order' => 'DESC',
+	'offset' => $offset
+) );
+//echo '<pre>';
+//var_dump($events);
 foreach ( $events as $event ) :
 
         $data = array(
@@ -117,6 +124,17 @@ foreach ( $events as $event ) :
     </div> <!-- rtec-single-event -->
 
 <?php endforeach; // end loop ?>
+	<div class="clear">
+	<?php if ( $offset > 0 ) : ?>
+		<a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations&offset=<?php echo ( $offset - $posts_per_page ); ?>" class="rtec-primary-button"><?php _e( 'Previous Events', 'rtec' ); ?></a>
+	<?php endif; ?>
+
+	<?php if ( ! empty( $events ) ) : ?>
+		<a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations&offset=<?php echo ( $offset + $posts_per_page ); ?>" class="rtec-primary-button rtec-next"><?php _e( 'Next Events', 'rtec' ); ?></a>
+	<?php else : ?>
+		<p><?php _e( 'No more events to display', 'rtec' ); ?></p>
+	<?php endif; ?>
+	</div>
 </div> <!-- rtec-wrapper -->
 
 <?php $db->update_statuses();

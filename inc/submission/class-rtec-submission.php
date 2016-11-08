@@ -279,7 +279,8 @@ class RTEC_Submission
     {
 	    global $rtec_options;
 
-        $date_str = date_i18n( 'F jS, g:i a', strtotime( $this->submission['rtec_date'] ) );
+	    $date_format = isset( $rtec_options['custom_date_format'] ) ? $rtec_options['custom_date_format'] : 'F j, Y';
+	    $date_str = date_i18n( $date_format, strtotime( $this->submission['rtec_date'] ) );
 
         if ( isset( $rtec_options['confirmation_message'] ) ) {
             $raw_body = $rtec_options['confirmation_message'];
@@ -378,8 +379,11 @@ class RTEC_Submission
 	 */
     public function get_not_message()
     {
+	    global $rtec_options;
+
         $body = '';
-        $date_str = date_i18n( 'F j, Y', strtotime( $this->submission['rtec_date'] ) );
+	    $date_format = isset( $rtec_options['custom_date_format'] ) ? $rtec_options['custom_date_format'] : 'F j, Y';
+        $date_str = date_i18n( $date_format, strtotime( $this->submission['rtec_date'] ) );
         $body .= sprintf( 'The following submission was made for: %1$s at %2$s on %3$s'. "\n",
             esc_html( $this->submission['rtec_title'] ) , esc_html( $this->submission['rtec_venue_title'] ) , $date_str );
         $first = ! empty( $this->submission['rtec_first'] ) ? esc_html( $this->submission['rtec_first'] ) . ' ' : ' ';
