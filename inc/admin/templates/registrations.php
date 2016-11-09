@@ -27,6 +27,7 @@ global $rtec_options;
 $offset = isset( $_GET['offset'] ) ? (int)$_GET['offset'] : 0;
 $posts_per_page = 20;
 
+$events = array();
 $events = tribe_get_events( array(
     'posts_per_page' => $posts_per_page,
     'start_date' => date( '2000-1-1 0:0:0' ),
