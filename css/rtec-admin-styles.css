@@ -175,6 +175,13 @@
 #rtec_registration_deadline {
     width: 70px;
 }
+.rtec-admin-wrap .form-table tbody tr td .description {
+    display: block;
+    width: 415px;
+}
+.rtec-admin-wrap .form-table th {
+    min-width: 200px;
+}
 
 /* Tooltip table */
 .rtec-tooltip-table{

@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/products/registrations-for-the-events-cal
 Tags: the events calendar, registration, event registration, event contact, events calendar
 Requires at least: 3.0
 Tested up to: 4.6.1
-Stable tag: 1.1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,12 +79,20 @@ You can configure an offset for how long registrations will be available relativ
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 1.2 =
+* New: Pagination for Registrations tab, "Overview" page. Now you can view events 20 at a time with option to paginate through using navigation buttons at the bottom of the page.
+* New: Labels for First, Last, Email, and Phone input fields are now translatable on the "Form" tab and are applied wherever relevant.
+* New: Custom date formatting added for emails messaging on the "Email" tab.
+* New: Custom notification messages now supported on the "Email" tab. Click the checkbox to reveal the message area.
+* Tweak: Upcoming events now displayed first on Registrations tab, "Overview" page.
+* Fix: Fixed PHP warning when creating a new event
+
 = 1.1.1 =
-* Fix: Fixed "Message if no registrations yet" setting to reflect changes to the setting in the admin area
+* Fix: Fixed "Message if no registrations yet" setting to reflect changes to the setting in the admin area.
 
 = 1.1 =
-* New: Added support for a phone number input field. This can be added to the form and data can be used everywhere else user data is normally available
-* New: Added the ability to customize how phone numbers are validated. Enter accepted number of digits for your needs on the "Form" tab "Phone" input options
+* New: Added support for a phone number input field. This can be added to the form and data can be used everywhere else user data is normally available.
+* New: Added the ability to customize how phone numbers are validated. Enter accepted number of digits for your needs on the "Form" tab "Phone" input options.
 * New: Added the ability to disable registrations for specific events. This can be done either on the "Edit Event" page or on the "Registrations" tab "Overview" page.
 * New: Added the ability to set a deadline for registrations. This can be configured on the "Form" tab.
 * New: Several more fields including the ical download url and venue address information can be added to confirmation email.

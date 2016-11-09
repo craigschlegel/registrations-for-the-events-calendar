@@ -158,18 +158,28 @@ class RTEC_Db_Admin extends RTEC_Db
 
     /**
      * One a registration has been seen, status changes from (n)ew to (c)urrent
+     *
+     * @param array $ids    event ids to be updated
      * 
      * @return bool
      * @since 1.0
+     * @since 1.1 new parameter allows for specific ids
      */
-    public function update_statuses() 
+    public function update_statuses( $ids = NULL )
     {
         global $wpdb;
 
         $current = 'c';
         $new = 'n';
-        $wpdb->query( $wpdb->prepare( "UPDATE $this->table_name SET status=%s WHERE status=%s", $current, $new ) );
-        set_transient( 'rtec_new_registrations', 0, 60 * 15 );
+	    if ( $ids != NULL ) {
+	    	$id_string = implode( ', ', $ids );
+		    $query = $wpdb->prepare( "UPDATE $this->table_name SET status=%s WHERE status=%s", $current, $new );
+		    $query .=  "AND event_id IN ( " . $id_string . " )";
+		    $wpdb->query( $query );
+	    } else {
+		    $wpdb->query( $wpdb->prepare( "UPDATE $this->table_name SET status=%s WHERE status=%s", $current, $new ) );
+	    }
+        delete_transient( 'rtec_new_registrations' );
 
         return true;
     }

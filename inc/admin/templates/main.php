@@ -1,4 +1,4 @@
-<div class="wrap">
+<div class="wrap rtec-admin-wrap">
     <h1>Registrations for the Events Calendar</h1>
     <?php
     // this controls which view is included based on the selected tab

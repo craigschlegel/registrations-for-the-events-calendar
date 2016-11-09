@@ -360,6 +360,19 @@ class RTEC_Admin
             'rtec_email_notification'
         );
 
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'disable_notification',
+            'title' => '<label for="rtec_disable_notification">Disable Notification Email</label>',
+            'example' => '',
+            'description' => '',
+            'callback'  => 'default_checkbox',
+            'class' => '',
+            'page' => 'rtec_email_notification',
+            'section' => 'rtec_email_notification',
+            'default' => false
+        ));
+
         // notification recipients
         $this->create_settings_field( array(
             'option' => 'rtec_options',
@@ -388,6 +401,36 @@ class RTEC_Admin
             'default' => 'New Registration'
         ));
 
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'use_custom_notification',
+            'title' => '<label for="rtec_disable_notification">Use Custom Notification Message</label>',
+            'example' => '',
+            'description' => 'Click to reveal and use a custom message that you can configure',
+            'callback'  => 'default_checkbox',
+            'class' => '',
+            'page' => 'rtec_email_notification',
+            'section' => 'rtec_email_notification',
+            'default' => false
+        ));
+
+        // notification message
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'notification_message',
+            'title' => '<label>Notification Message</label>',
+            'example' => '',
+            'default' => 'The following submission was made for: {event-title} at {venue} on {event-date}{nl}First: {first}{nl}Last: {last}{nl}Email: {email}',
+            'description' => 'Enter the message you would like your selected recipients to receive when a submission is made',
+            'callback'  => 'message_text_area',
+            'class' => 'rtec-confirmation-message-tr rtec-notification-message-tr',
+            'page' => 'rtec_email_notification',
+            'section' => 'rtec_email_notification',
+            'columns' => '60',
+            'preview' => true,
+            'legend' => true
+        ));
+
         /* Confirmation Email Settings Section */
 
         add_settings_section(
@@ -396,6 +439,19 @@ class RTEC_Admin
             array( $this, 'blank' ),
             'rtec_email_confirmation'
         );
+
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'disable_confirmation',
+            'title' => '<label for="rtec_disable_confirmation">Disable Confirmation Email</label>',
+            'example' => '',
+            'description' => '',
+            'callback'  => 'default_checkbox',
+            'class' => '',
+            'page' => 'rtec_email_confirmation',
+            'section' => 'rtec_email_confirmation',
+            'default' => false
+        ));
 
         // confirmation from name
         $this->create_settings_field( array(
@@ -466,6 +522,7 @@ class RTEC_Admin
             'option' => 'rtec_options', // matches the options name
             'class' => 'default-text', // class for the wrapper and input field
             'description' => 'If you would like a custom date format in your messages, enter it here using the examples as a guide',
+            'default' => 'F j, Y'
         ));
     }
 
@@ -710,7 +767,7 @@ class RTEC_Admin
 	    $columns = isset( $args['columns'] ) ? $args['columns'] : '70';
 	    $preview = isset( $args['preview'] ) ? $args['preview'] : false;
         ?>
-        <textarea id="confirmation_message_textarea" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" cols="<?php echo $columns; ?>" rows="<?php echo $rows; ?>"><?php echo $option_string; ?></textarea>
+        <textarea id="confirmation_message_textarea" class="<?php echo $args['class']; ?> confirmation_message_textarea" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" cols="<?php echo $columns; ?>" rows="<?php echo $rows; ?>"><?php echo $option_string; ?></textarea>
 
         <?php if ( $args['legend'] ) : ?>
         <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'Legend' ); ?></a>
@@ -736,7 +793,7 @@ class RTEC_Admin
         <?php if ( $preview ) : ?>
 	    <td>
 		    <h4>Preview:</h4>
-		    <div id="rtec_js_preview">
+		    <div class="rtec_js_preview">
 			    <pre></pre>
 		    </div>
 	    </td>
@@ -848,11 +905,12 @@ class RTEC_Admin
     public function customize_custom_date_format( $args )
     {
         $options = get_option( $args['option'] );
-        $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
+        $default = isset( $args['default'] ) ? esc_attr( $args['default'] ) : '';
+        $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $default;
         ?>
         <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="text" value="<?php esc_attr_e( $option_string ); ?>" size="10" placeholder="Eg. F jS, Y" />
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
         <a href="https://www.roundupwp.com/products/registrations-for-the-events-calendar/docs/date-formatting-guide/" target="_blank"><?php _e( 'Examples' , 'rtec'); ?></a>
+        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
         <?php
     }
 
@@ -894,7 +952,7 @@ class RTEC_Admin
             $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'limit_registrations', 'include_attendance_message', 'preserve_db' );
             $leave_spaces = array( 'custom_js', 'custom_css' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
-            $checkbox_settings = array();
+            $checkbox_settings = array( 'disable_notification', 'disable_confirmation', 'use_custom_notification' );
         }
 
         foreach ( $checkbox_settings as $checkbox_setting ) {

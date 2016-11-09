@@ -63,32 +63,50 @@ jQuery(document).ready(function($){
         }
     });
 
+    // EMAIL Tab
+    var $rtecNotMessageTr = $('.rtec-notification-message-tr');
+
+    function toggleCustomNotificationTextArea() {
+        if ($(this).is(':checked')) {
+            $rtecNotMessageTr.fadeIn();
+        } else {
+            $rtecNotMessageTr.fadeOut();
+        }
+    }
+    toggleCustomNotificationTextArea.apply($('#rtec_use_custom_notification'));
+
+    $('#rtec_use_custom_notification').click(function() {
+        toggleCustomNotificationTextArea.apply($(this));
+    });
+
     String.prototype.replaceAll = function(search, replacement) {
         var target = this;
         return target.replace(new RegExp(search, 'g'), replacement);
     };
 
-    var $rtecJsPreview = $('#rtec_js_preview').find('pre'),
-        $rtecConfirmationTextarea = $('#confirmation_message_textarea'),
+    var $rtecConfirmationTextarea = $('.confirmation_message_textarea'),
         typingTimer,
         doneTypingInterval = 1500;
     function updateText() {
-        var confirmationMessage = $rtecConfirmationTextarea.val();
-        confirmationMessage = confirmationMessage.replaceAll('{venue}', 'Secret Headquarters');
-        confirmationMessage = confirmationMessage.replaceAll('{event-title}', 'Secret Meeting');
-        confirmationMessage = confirmationMessage.replaceAll('{venue-address}', '123 1st Street');
-        confirmationMessage = confirmationMessage.replaceAll('{venue-city}', 'Miami');
-        confirmationMessage = confirmationMessage.replaceAll('{venue-state}', 'Florida');
-        confirmationMessage = confirmationMessage.replaceAll('{venue-zip}', '55555');
-        confirmationMessage = confirmationMessage.replaceAll('{event-date}', 'July 3');
-        confirmationMessage = confirmationMessage.replaceAll('{first}', 'James');
-        confirmationMessage = confirmationMessage.replaceAll('{last}', 'Bond');
-        confirmationMessage = confirmationMessage.replaceAll('{email}', 'Bond007@ohmss.com');
-        confirmationMessage = confirmationMessage.replaceAll('{phone}', '(007) 555-5555');
-        confirmationMessage = confirmationMessage.replaceAll('{other}', 'Shaken not Stirred');
-        confirmationMessage = confirmationMessage.replaceAll('{ical-url}', 'http://example.com/event/secret-meeting/?ical=1');
-        confirmationMessage = confirmationMessage.replaceAll('{nl}', "\n");
-        $rtecJsPreview.text(confirmationMessage);
+        $('.confirmation_message_textarea').each( function() {
+            var confirmationMessage = $(this).val();
+            confirmationMessage = confirmationMessage.replaceAll('{venue}', 'Secret Headquarters');
+            confirmationMessage = confirmationMessage.replaceAll('{event-title}', 'Secret Meeting');
+            confirmationMessage = confirmationMessage.replaceAll('{venue-address}', '123 1st Street');
+            confirmationMessage = confirmationMessage.replaceAll('{venue-city}', 'Miami');
+            confirmationMessage = confirmationMessage.replaceAll('{venue-state}', 'Florida');
+            confirmationMessage = confirmationMessage.replaceAll('{venue-zip}', '55555');
+            confirmationMessage = confirmationMessage.replaceAll('{event-date}', 'July 3');
+            confirmationMessage = confirmationMessage.replaceAll('{first}', 'James');
+            confirmationMessage = confirmationMessage.replaceAll('{last}', 'Bond');
+            confirmationMessage = confirmationMessage.replaceAll('{email}', 'Bond007@ohmss.com');
+            confirmationMessage = confirmationMessage.replaceAll('{phone}', '(007) 555-5555');
+            confirmationMessage = confirmationMessage.replaceAll('{other}', 'Shaken not Stirred');
+            confirmationMessage = confirmationMessage.replaceAll('{ical-url}', 'http://example.com/event/secret-meeting/?ical=1');
+            confirmationMessage = confirmationMessage.replaceAll('{nl}', "\n");
+            $(this).closest('tr').find('.rtec_js_preview').find('pre').text(confirmationMessage);
+        });
+
     }
     if ( $rtecConfirmationTextarea.length){
         updateText();

@@ -276,6 +276,7 @@ class RTEC_Form
     	if ( !isset( $this->max_registrations ) ) {
     		$this->set_max_registrations();
 	    }
+
         return $this->max_registrations;
     }
 
@@ -330,7 +331,8 @@ class RTEC_Form
         $width_unit = isset( $rtec_options['width_unit'] ) ? esc_attr( $rtec_options['width_unit'] ) : '%';
         $width = isset( $rtec_options['width'] ) ? ' style="width: ' . esc_attr( $rtec_options['width'] ) . $width_unit . ';"' : '';
         $data = isset( $rtec_options['success_message'] ) ? ' data-rtec-success-message="' . esc_html( $rtec_options['success_message'] ) . '"' : ' data-rtec-success-message="Success! Please check your email inbox for a confirmation message"';
-        $html = '<div id="rtec" class="rtec"' . $data . '>';
+
+	    $html = '<div id="rtec" class="rtec"' . $data . '>';
             $html .= '<button type="button" id="rtec-form-toggle-button" class="rtec-register-button rtec-js-show">' . $button_text . '<span class="tribe-bar-toggle-arrow"></span></button>';
             $html .= '<h3 class="rtec-js-hide">' . $button_text . '</h3>';
             $html .= '<div class="rtec-form-wrapper rtec-js-hide rtec-toggle-on-click"'.$width.'>';

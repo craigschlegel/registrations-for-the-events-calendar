@@ -114,7 +114,8 @@ add_action( 'admin_init', 'rtec_meta_boxes_init' );
  */
 function rtec_meta_boxes_html(){
 	global $post;
-	$meta = get_post_meta ( $post->ID, '_RTECregistrationsDisabled' );
+	$meta = get_post_meta( $post->ID, '_RTECregistrationsDisabled' );
+	$meta_output = isset( $meta[0] ) ? $meta[0] : 0;
 	?>
 	<div id="eventDetails" class="inside eventForm">
 		<table cellspacing="0" cellpadding="0" id="EventInfo">
@@ -133,7 +134,7 @@ function rtec_meta_boxes_html(){
 						<tr>
 							<td class="tribe-table-field-label"><?php _e( 'Disable Registrations:', 'rtec' ); ?></td>
 							<td>
-								<input type="checkbox" id="rtec-disable-checkbox" name="_RTECregistrationsDisabled" <?php if( $meta[0] == '1' ) { echo 'checked'; } ?> value="1"/>
+								<input type="checkbox" id="rtec-disable-checkbox" name="_RTECregistrationsDisabled" <?php if( $meta_output == '1' ) { echo 'checked'; } ?> value="1"/>
 							</td>
 						</tr>
 						</tbody>
@@ -153,12 +154,15 @@ function rtec_meta_boxes_html(){
  */
 function rtec_save_meta(){
 	global $post;
-
 	$registrations_disabled_status = 0;
+
 	if ( isset( $_POST['_RTECregistrationsDisabled'] ) ){
 		$registrations_disabled_status = $_POST['_RTECregistrationsDisabled'];
 	}
-	update_post_meta( $post->ID, '_RTECregistrationsDisabled', $registrations_disabled_status );
+
+	if ( isset( $post->ID ) ) {
+		update_post_meta( $post->ID, '_RTECregistrationsDisabled', $registrations_disabled_status );
+	}
 }
 add_action( 'save_post', 'rtec_save_meta' );
 

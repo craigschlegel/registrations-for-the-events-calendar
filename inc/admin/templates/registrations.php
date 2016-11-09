@@ -22,6 +22,7 @@
 <div class="rtec-wrapper rtec-overview">
 <?php
 $db = new RTEC_Db_Admin();
+global $rtec_options;
 
 $offset = isset( $_GET['offset'] ) ? (int)$_GET['offset'] : 0;
 $posts_per_page = 20;
@@ -33,8 +34,8 @@ $events = tribe_get_events( array(
     'order' => 'DESC',
 	'offset' => $offset
 ) );
-//echo '<pre>';
-//var_dump($events);
+$event_ids_on_page = array();
+
 foreach ( $events as $event ) :
 
         $data = array(
@@ -42,6 +43,7 @@ foreach ( $events as $event ) :
             'id' => $event->ID,
             'order_by' => 'registration_date'
         );
+		$event_ids_on_page[] = $event->ID;
 
         $registrations = $db->retrieve_entries( $data );
 
@@ -58,6 +60,11 @@ foreach ( $events as $event ) :
         $venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
 		$venue = rtec_get_venue( $event->ID );
 		$event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
+	
+		// labels
+		$first_label = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : __( 'First', 'rtec' );
+		$last_label = isset( $rtec_options['last_label'] ) ? esc_html( $rtec_options['last_label'] ) : __( 'Last', 'rtec' );
+		$email_label = isset( $rtec_options['email_label'] ) ? esc_html( $rtec_options['email_label'] ) : __( 'Email', 'rtec' );
 	?>
     
     <div class="rtec-single-event">
@@ -86,9 +93,9 @@ foreach ( $events as $event ) :
             <thead>
                 <tr>
                     <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
-                    <th><?php _e( 'Last Name', 'rtec' ) ?></th>
-                    <th><?php _e( 'First Name', 'rtec' ) ?></th>
-                    <th><?php _e( 'Email', 'rtec' ) ?></th>
+                    <th><?php echo $first_label; ?></th>
+                    <th><?php echo $last_label; ?></th>
+                    <th><?php echo $email_label; ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -137,4 +144,4 @@ foreach ( $events as $event ) :
 	</div>
 </div> <!-- rtec-wrapper -->
 
-<?php $db->update_statuses();
+<?php $db->update_statuses( $event_ids_on_page );

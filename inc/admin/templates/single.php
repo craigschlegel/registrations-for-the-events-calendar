@@ -12,6 +12,7 @@ $id = (int)$_GET['id'];
     <div class="rtec-wrapper rtec-single">
         <?php
                 $db = new RTEC_Db_Admin();
+                global $rtec_options;
 
                 $data = array(
                     'fields' => 'registration_date, id, last_name, first_name, email, phone, other',
@@ -34,6 +35,10 @@ $id = (int)$_GET['id'];
                 $venue = rtec_get_venue( $id );
                 $event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
                 $options = get_option( 'rtec_general' );
+                $first_label = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : __( 'First', 'rtec' );
+                $last_label = isset( $rtec_options['last_label'] ) ? esc_html( $rtec_options['last_label'] ) : __( 'Last', 'rtec' );
+                $email_label = isset( $rtec_options['email_label'] ) ? esc_html( $rtec_options['email_label'] ) : __( 'Email', 'rtec' );
+                $phone_label = isset( $rtec_options['phone_label'] ) ? esc_html( $rtec_options['phone_label'] ) : __( 'Phone', 'rtec' );
                 $other_label = isset( $options['other_label'] ) ? esc_html( $options['other_label'] ) : __( 'Other', 'rtec' );
                 ?>
 
@@ -53,10 +58,10 @@ $id = (int)$_GET['id'];
                                     <input type="checkbox" id="rtec-select-all-1">
                                 </td>
                                 <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
-                                <th><?php _e( 'Last Name', 'rtec' ) ?></th>
-                                <th><?php _e( 'First Name', 'rtec' ) ?></th>
-                                <th><?php _e( 'Email', 'rtec' ) ?></th>
-                                <th><?php _e( 'Phone', 'rtec' ) ?></th>
+                                <th><?php echo $first_label; ?></th>
+                                <th><?php echo $last_label; ?></th>
+                                <th><?php echo $email_label; ?></th>
+                                <th><?php echo $phone_label; ?></th>
                                 <th><?php echo $other_label; ?></th>
                             </tr>
                         </thead>
@@ -85,10 +90,10 @@ $id = (int)$_GET['id'];
                                     <input type="checkbox" id="rtec-select-all-1">
                                 </td>
                                 <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
-                                <th><?php _e( 'Last Name', 'rtec' ) ?></th>
-                                <th><?php _e( 'First Name', 'rtec' ) ?></th>
-                                <th><?php _e( 'Email', 'rtec' ) ?></th>
-                                <th><?php _e( 'Phone', 'rtec' ) ?></th>
+                                <th><?php echo $first_label; ?></th>
+                                <th><?php echo $last_label; ?></th>
+                                <th><?php echo $email_label; ?></th>
+                                <th><?php echo $phone_label; ?></th>
                                 <th><?php echo $other_label; ?></th>
                             </tr>
                         </tfoot>

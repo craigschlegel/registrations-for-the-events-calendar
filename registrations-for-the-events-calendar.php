@@ -2,7 +2,7 @@
 /*
 Plugin Name: Registrations for The Events Calendar
 Description: Collect and manage registrations for events posted using The Events Calendar by Modern Tribe.
-Version: 1.1.1
+Version: 1.2
 Author: Roundup WP
 Author URI: roundupwp.com
 License: GPLv2 or later
@@ -130,7 +130,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
         /**
          * Disable unserializing of the class.
          *
-         * @since 1.6
+         * @since 1.0
          * @access protected
          * @return void
          */
@@ -143,13 +143,13 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
          * Setup plugin constants.
          *
          * @access private
-         * @since 1.4
+         * @since 1.0
          * @return void
          */
         private function constants() {
             // Plugin version.
             if ( ! defined( 'RTEC_VERSION' ) ) {
-                define( 'RTEC_VERSION', '1.1.1' );
+                define( 'RTEC_VERSION', '1.2' );
             }
             // Plugin Folder Path.
             if ( ! defined( 'RTEC_PLUGIN_DIR' ) ) {
@@ -242,6 +242,8 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 			    );
 			    // get form options from the db
 			    update_option( 'rtec_options', $defaults );
+			    // add cues to find the plugin for three days
+			    set_transient( 'rtec_new_messages', 'yes', 60 * 60 * 24 * 3 );
 		    }
 
 		    $ids = $db->get_event_post_ids();
@@ -250,7 +252,6 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 			    update_post_meta( $id, '_RTECnumRegistered', $reg_count );
 		    }
 
-		    set_transient( 'rtec_new_messages', 'yes', 60 * 60 * 24 * 3 );
 	    }
     }
 endif; // End if class_exists check.
@@ -261,7 +262,6 @@ register_activation_hook( __FILE__, array( 'Registrations_For_The_Events_Calenda
  *
  * The main function responsible for returning the one true Registrations_For_The_Events_Calendar
  * Instance to functions everywhere.
- *
  *
  * @since 1.0
  * @return object|Registrations_For_The_Events_Calendar The one true Registrations_For_The_Events_Calendar Instance.
