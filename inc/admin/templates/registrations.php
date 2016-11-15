@@ -63,8 +63,8 @@ foreach ( $events as $event ) :
 		$event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
 	
 		// labels
-		$first_label = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : __( 'First', 'rtec' );
 		$last_label = isset( $rtec_options['last_label'] ) ? esc_html( $rtec_options['last_label'] ) : __( 'Last', 'rtec' );
+		$first_label = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : __( 'First', 'rtec' );
 		$email_label = isset( $rtec_options['email_label'] ) ? esc_html( $rtec_options['email_label'] ) : __( 'Email', 'rtec' );
 	?>
     
@@ -94,9 +94,9 @@ foreach ( $events as $event ) :
             <thead>
                 <tr>
                     <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
-                    <th><?php echo $first_label; ?></th>
                     <th><?php echo $last_label; ?></th>
-                    <th><?php echo $email_label; ?></th>
+	                <th><?php echo $first_label; ?></th>
+	                <th><?php echo $email_label; ?></th>
                 </tr>
             </thead>
             <tbody>

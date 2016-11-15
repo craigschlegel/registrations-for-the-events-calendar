@@ -95,16 +95,14 @@ class RTEC_Submission
             // if the form field is a required first, last, email, or other
             if ( $input_key === 'rtec_first' && $options['first_require'] ) {
             	
-                if ( preg_match( '~[0-9]~', $input_value ) ||
-                   ( strlen( $input_value ) > 40 ) ||
+                if ( ( strlen( $input_value ) > 40 ) ||
                    ( strlen( $input_value ) < 2 ) ) {
                     $this->errors[] = 'first';
                 }
                 
             } elseif ( $input_key === 'rtec_last' && $options['last_require'] ) {
             	
-                if ( preg_match( '~[0-9]~', $input_value ) ||
-                   ( strlen( $input_value ) > 40 ) ||
+                if ( ( strlen( $input_value ) > 40 ) ||
                    ( strlen( $input_value ) < 2 ) ) {
                     $this->errors[] = 'last';
                 }

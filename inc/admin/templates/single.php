@@ -58,8 +58,8 @@ $id = (int)$_GET['id'];
                                     <input type="checkbox" id="rtec-select-all-1">
                                 </td>
                                 <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
-                                <th><?php echo $first_label; ?></th>
                                 <th><?php echo $last_label; ?></th>
+                                <th><?php echo $first_label; ?></th>
                                 <th><?php echo $email_label; ?></th>
                                 <th><?php echo $phone_label; ?></th>
                                 <th><?php echo $other_label; ?></th>
@@ -90,8 +90,8 @@ $id = (int)$_GET['id'];
                                     <input type="checkbox" id="rtec-select-all-1">
                                 </td>
                                 <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
-                                <th><?php echo $first_label; ?></th>
                                 <th><?php echo $last_label; ?></th>
+                                <th><?php echo $first_label; ?></th>
                                 <th><?php echo $email_label; ?></th>
                                 <th><?php echo $phone_label; ?></th>
                                 <th><?php echo $other_label; ?></th>

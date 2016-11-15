@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/products/registrations-for-the-events-cal
 Tags: the events calendar, registration, event registration, event contact, events calendar
 Requires at least: 3.0
 Tested up to: 4.6.1
-Stable tag: 1.2
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,12 @@ You can configure an offset for how long registrations will be available relativ
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 1.2.2 =
+* Fix: A second validation of the "First" and "Last" fields would cause the form to not submit even though no errors were shown to the form submitter. The second check was fixed.
+
+= 1.2.1 =
+* Fix: "Last" and "First" labels on "Registrations" tab were reversed.
+
 = 1.2 =
 * New: Pagination for Registrations tab, "Overview" page. Now you can view events 20 at a time with option to paginate through using navigation buttons at the bottom of the page.
 * New: Labels for First, Last, Email, and Phone input fields are now translatable on the "Form" tab and are applied wherever relevant.
