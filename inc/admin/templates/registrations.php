@@ -85,9 +85,9 @@ foreach ( $events as $event ) :
 			    <input type="hidden" name="rtec_checkboxes" value="_RTECregistrationsDisabled" />
 			    <input type="checkbox" id="rtec-disable-<?php echo $event_meta['post_id']; ?>" name="_RTECregistrationsDisabled" <?php if( $event_meta['disabled'] == '1' ) { echo 'checked'; } ?> value="1"/>
 			    <label for="rtec-disable-<?php echo $event_meta['post_id']; ?>"><?php _e( 'Disable registrations for this event', 'rtec' ); ?></label>
-			    <div class="clear"></div>
+			    <div class="rtec-clear"></div>
 			    <button class="button action rtec-admin-secondary-button rtec-update-event-options"><?php _e( 'Update', 'rtec'  ); ?></button>
-			    <div class="clear"></div>
+			    <div class="rtec-clear"></div>
 		    </form>
 	    </div>
         <table class="widefat rtec-registrations-data">
@@ -126,13 +126,13 @@ foreach ( $events as $event ) :
     
             </tbody>
         </table>
-	    <div class="rtec-event-actions clear">
+	    <div class="rtec-event-actions rtec-clear">
 	        <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $event->ID; ?>" class="rtec-admin-secondary-button button action"><?php _e( 'Detailed View', 'rtec' ); ?></a>
 	    </div>
     </div> <!-- rtec-single-event -->
 
 <?php endforeach; // end loop ?>
-	<div class="clear">
+	<div class="rtec-clear">
 	<?php if ( $offset > 0 ) : ?>
 		<a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations&offset=<?php echo ( $offset - $posts_per_page ); ?>" class="rtec-primary-button"><?php _e( 'Previous Events', 'rtec' ); ?></a>
 	<?php endif; ?>

@@ -324,7 +324,7 @@ class RTEC_Submission
 
 	        $body .= 'See you there!';
         }
-
+	    var_dump($body);
         return $body;
     }
 
@@ -439,6 +439,8 @@ class RTEC_Submission
 			    $body .= sprintf( '%s: %s', $other_label, $other ) . "\n";
 		    }
 	    }
+
+	    var_dump($body);
 
         return $body;
     }

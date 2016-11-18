@@ -105,7 +105,7 @@ $id = (int)$_GET['id'];
                         </tbody>
                         <?php endif; // registrations not empty?>
                     </table>
-                    <div class="rtec-event-actions clear">
+                    <div class="rtec-event-actions rtec-clear">
                         <div class="tablenav">
                             <button class="button action rtec-admin-secondary-button rtec-delete-registration">- <?php _e( 'Delete Selected', 'rtec'  ); ?></button>
                             <button class="button action rtec-admin-secondary-button rtec-edit-registration"><?php _e( 'Edit Selected', 'rtec'  ); ?></button>

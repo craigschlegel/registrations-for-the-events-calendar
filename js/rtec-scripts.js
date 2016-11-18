@@ -12,7 +12,7 @@ jQuery(document).ready(function($) {
         }
     });
 
-    var Form = {
+    var RtecForm = {
 
         validClass : 'rtec-valid',
 
@@ -37,17 +37,17 @@ jQuery(document).ready(function($) {
 
         validateLength : function(formEl, min, max){
             if (formEl.val().length > max || formEl.val().length < min ) {
-                if (formEl.hasClass(Form.validClass)) {
-                    formEl.removeClass(Form.validClass);
+                if (formEl.hasClass(RtecForm.validClass)) {
+                    formEl.removeClass(RtecForm.validClass);
                 }
-                formEl.addClass(Form.invalidClass);
-                Form.showErrorMessage(formEl);
+                formEl.addClass(RtecForm.invalidClass);
+                RtecForm.showErrorMessage(formEl);
             } else {
-                if (formEl.hasClass(Form.invalidClass)) {
-                    formEl.removeClass(Form.invalidClass);
+                if (formEl.hasClass(RtecForm.invalidClass)) {
+                    formEl.removeClass(RtecForm.invalidClass);
                 }
-                formEl.addClass(Form.validClass);
-                Form.removeErrorMessage(formEl);
+                formEl.addClass(RtecForm.validClass);
+                RtecForm.removeErrorMessage(formEl);
             }
         },
 
@@ -55,17 +55,17 @@ jQuery(document).ready(function($) {
             var regEx = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/,
                 emailTest = regEx.test(formEl.val());
             if (emailTest) {
-                if (formEl.hasClass(Form.invalidClass)) {
-                    formEl.removeClass(Form.invalidClass);
+                if (formEl.hasClass(RtecForm.invalidClass)) {
+                    formEl.removeClass(RtecForm.invalidClass);
                 }
-                formEl.addClass(Form.validClass);
-                Form.removeErrorMessage(formEl);
+                formEl.addClass(RtecForm.validClass);
+                RtecForm.removeErrorMessage(formEl);
             } else {
-                if (formEl.hasClass(Form.validClass)) {
-                    formEl.removeClass(Form.validClass);
+                if (formEl.hasClass(RtecForm.validClass)) {
+                    formEl.removeClass(RtecForm.validClass);
                 }
-                formEl.addClass(Form.invalidClass);
-                Form.showErrorMessage(formEl);
+                formEl.addClass(RtecForm.invalidClass);
+                RtecForm.showErrorMessage(formEl);
             }
         },
 
@@ -79,17 +79,17 @@ jQuery(document).ready(function($) {
                 countTest = validCountNumbers.indexOf(formElCount);
 
             if (countTest !== -1) {
-                if (formEl.hasClass(Form.invalidClass)) {
-                    formEl.removeClass(Form.invalidClass);
+                if (formEl.hasClass(RtecForm.invalidClass)) {
+                    formEl.removeClass(RtecForm.invalidClass);
                 }
-                formEl.addClass(Form.validClass);
-                Form.removeErrorMessage(formEl);
+                formEl.addClass(RtecForm.validClass);
+                RtecForm.removeErrorMessage(formEl);
             } else {
-                if (formEl.hasClass(Form.validClass)) {
-                    formEl.removeClass(Form.validClass);
+                if (formEl.hasClass(RtecForm.validClass)) {
+                    formEl.removeClass(RtecForm.validClass);
                 }
-                formEl.addClass(Form.invalidClass);
-                Form.showErrorMessage(formEl);
+                formEl.addClass(RtecForm.invalidClass);
+                RtecForm.showErrorMessage(formEl);
             }
         },
 
@@ -98,17 +98,17 @@ jQuery(document).ready(function($) {
             var eqTest = (parseInt(val1) === parseInt(val2));
 
             if (eqTest) {
-                if (formEl.hasClass(Form.invalidClass)) {
-                    formEl.removeClass(Form.invalidClass);
+                if (formEl.hasClass(RtecForm.invalidClass)) {
+                    formEl.removeClass(RtecForm.invalidClass);
                 }
-                formEl.addClass(Form.validClass);
-                Form.removeErrorMessage(formEl);
+                formEl.addClass(RtecForm.validClass);
+                RtecForm.removeErrorMessage(formEl);
             } else {
-                if (formEl.hasClass(Form.validClass)) {
-                    formEl.removeClass(Form.validClass);
+                if (formEl.hasClass(RtecForm.validClass)) {
+                    formEl.removeClass(RtecForm.validClass);
                 }
-                formEl.addClass(Form.invalidClass);
-                Form.showErrorMessage(formEl);
+                formEl.addClass(RtecForm.invalidClass);
+                RtecForm.showErrorMessage(formEl);
             }
         }
 
@@ -126,13 +126,13 @@ jQuery(document).ready(function($) {
         $('#rtec #rtec-form :input').each(function() {
             if ($(this).attr('aria-required') == 'true') {
                 if ($(this).attr('name') == 'rtec_email') {
-                    Form.validateEmail($(this));
+                    RtecForm.validateEmail($(this));
                 } else if ($(this).attr('name') == 'rtec_phone') {
-                    Form.validateCount($(this), $(this).closest('.rtec-form-field').attr('data-rtec-valid-count').replace(' ', '').split(','));
+                    RtecForm.validateCount($(this), $(this).closest('.rtec-form-field').attr('data-rtec-valid-count').replace(' ', '').split(','));
                 } else if ($(this).attr('name') == 'rtec_recaptcha_input') {
-                    Form.validateSum($(this), $(this).val(), $(this).closest('.rtec-form').find('.rtec-recaptcha-sum').val());
+                    RtecForm.validateSum($(this), $(this).val(), $(this).closest('.rtec-form').find('.rtec-recaptcha-sum').val());
                 } else {
-                    Form.validateLength($(this), 2, 25);
+                    RtecForm.validateLength($(this), 2, 1000);
                 }
             }
         });
@@ -173,7 +173,7 @@ jQuery(document).ready(function($) {
                 }
             }); // ajax
         } else { // if not .rtec-error
-            Form.addScreenReaderError();
+            RtecForm.addScreenReaderError();
         } // if not .rtec-error
     }); // on rtec-form submit
 

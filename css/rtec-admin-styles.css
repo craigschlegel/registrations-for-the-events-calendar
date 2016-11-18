@@ -1,7 +1,7 @@
 .rtec-wrapper {
     box-sizing: border-box;
 }
-.clear:after {
+.rtec-clear:after {
     display: table;
     clear: both;
     content: " ";
