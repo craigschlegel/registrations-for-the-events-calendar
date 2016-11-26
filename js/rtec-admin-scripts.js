@@ -346,4 +346,15 @@ jQuery(document).ready(function($){
             };
         rtecRegistrationAjax(submitData,successFunc);
     }); // registration submit
+
+    $('.rtec_download_csv').click( function() {
+        var submitData = {
+                action : 'rtec_download_csv',
+                //rtec_nonce : rtecAdminScript.rtec_nonce
+            },
+            successFunc = function () {
+                console.log('done');
+            };
+        rtecRegistrationAjax(submitData,successFunc);
+    });
 });

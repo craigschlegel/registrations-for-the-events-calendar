@@ -21,6 +21,9 @@
     background: #23282d;
     border-radius: 3px 3px 0 0;
 }
+#rtec_csv_export_form {
+    display: inline-block;
+}
 .rtec-single-event .rtec-event-actions {
     border-radius: 0 0 3px 3px;
 }

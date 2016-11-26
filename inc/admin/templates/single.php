@@ -110,6 +110,12 @@ $id = (int)$_GET['id'];
                             <button class="button action rtec-admin-secondary-button rtec-delete-registration">- <?php _e( 'Delete Selected', 'rtec'  ); ?></button>
                             <button class="button action rtec-admin-secondary-button rtec-edit-registration"><?php _e( 'Edit Selected', 'rtec'  ); ?></button>
                             <button class="button action rtec-admin-secondary-button rtec-add-registration">+ <?php _e( 'Add New Registration', 'rtec'  ); ?></button>
+
+                            <form method="post" id="rtec_csv_export_form" action="">
+                                <?php wp_nonce_field( 'rtec_csv_export', 'rtec_csv_export_nonce' ); ?>
+                                <input type="hidden" name="rtec_id" value="<?php echo $id; ?>" />
+                                <input type="submit" name="rtec_event_csv" class="button action rtec-admin-secondary-button" value="<?php _e( 'Export Registrations (.csv)', 'rtec' ); ?>" />
+                            </form>
                         </div>
                     </div>
                 </div> <!-- rtec-single-event -->

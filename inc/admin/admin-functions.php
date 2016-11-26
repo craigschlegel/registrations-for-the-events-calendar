@@ -311,6 +311,79 @@ function rtec_plugin_meta_links( $links, $file ) {
 }
 add_filter( 'plugin_row_meta', 'rtec_plugin_meta_links', 10, 2 );
 
+function rtec_event_csv() {
+	if ( isset( $_POST['rtec_event_csv'] ) && current_user_can( 'edit_posts' ) ) {
+
+		$nonce = $_POST['rtec_csv_export_nonce'];
+
+		if ( ! wp_verify_nonce( $nonce, 'rtec_csv_export' ) ) {
+			die ( 'You did not do this the right way!' );
+		}
+		global $rtec_options;
+
+		$db = new RTEC_Db_Admin();
+		$id = (int)$_POST['rtec_id'];
+
+
+		$data = array(
+			'fields' => 'last_name, first_name, email, phone, other',
+			'id' => $id,
+			'order_by' => 'registration_date'
+		);
+
+		$registrations = $db->retrieve_entries( $data );
+
+		$meta = get_post_meta( $id );
+
+		$event_meta['post_id'] = $id;
+		$event_meta['title'] = get_the_title( $id );
+		$event_meta['start_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventStartDate'][0] ) );
+		$event_meta['end_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventEndDate'][0] ) );
+		$venue = rtec_get_venue( $id );
+		$last_label = isset( $rtec_options['last_label'] ) ? esc_html( $rtec_options['last_label'] ) : __( 'Last', 'rtec' );
+		$first_label = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : __( 'First', 'rtec' );
+		$email_label = isset( $rtec_options['email_label'] ) ? esc_html( $rtec_options['email_label'] ) : __( 'Email', 'rtec' );
+		$phone_label = isset( $rtec_options['phone_label'] ) ? esc_html( $rtec_options['phone_label'] ) : __( 'Phone', 'rtec' );
+		$other_label = isset( $rtec_options['other_label'] ) ? esc_html( $rtec_options['other_label'] ) : __( 'Other', 'rtec' );
+
+		$event_meta_string = array(
+			array( $event_meta['title'] ) ,
+			array( $event_meta['start_date'] ) ,
+			array( $event_meta['end_date'] ) ,
+			array( $venue ),
+			array( $last_label, $first_label, $email_label, $phone_label, $other_label )
+		);
+
+		$file_name = str_replace( ' ', '-', substr( $event_meta['title'], 0, 10 ) ) . date_i18n( 'm.d', strtotime( $meta['_EventStartDate'][0] ) ) . '-' . time();
+
+		// output headers so that the file is downloaded rather than displayed
+		header( 'Content-Type: text/csv; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename=' . $file_name . '.csv' );
+
+		// create a file pointer connected to the output stream
+		$output = fopen( 'php://output', 'w' );
+		foreach ( $event_meta_string as $meta ) {
+			if ( function_exists( 'mb_convert_variables' ) ) {
+				mb_convert_variables( 'UTF-8', 'UTF-8', $meta );
+			}
+			fputcsv( $output, $meta );
+		}
+
+		foreach ( $registrations as $fields ) {
+			if ( function_exists( 'mb_convert_variables' ) ) {
+				mb_convert_variables( 'UTF-8', 'UTF-8', $fields );
+			}
+			fputcsv( $output, $fields );
+		}
+
+		fclose( $output );
+
+		die();
+	}
+}
+add_action( 'admin_init', 'rtec_event_csv' );
+
+
 /**
  * Add phone column if custom table does not have it
  *
