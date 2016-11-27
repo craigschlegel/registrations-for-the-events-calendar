@@ -260,10 +260,33 @@ class RTEC_Db_Admin extends RTEC_Db
 	    $table_name = esc_sql( $this->table_name );
 	    $column_name = esc_sql( $column );
 
-	    $row = $wpdb->query( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$table_name' AND column_name = '$column_name'" );
+	    $results = $wpdb->query( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$table_name' AND column_name = '$column_name'" );
 
-	    if ( empty( $row ) ){
+	    if ( $results == 0 ){
 		    $wpdb->query( "ALTER TABLE $table_name ADD $column_name VARCHAR(40) DEFAULT '' NOT NULL" );
+	    }
+    }
+
+	/**
+	 * Used to add indices to registrations table
+	 *
+	 * @param $index_name string    name of index to add if it doesn't exist
+	 * @param $column string        name of column to add index to
+	 * @since 1.3
+	 */
+    public function maybe_add_index( $index, $column )
+    {
+	    global $wpdb;
+
+	    $table_name = esc_sql( $this->table_name );
+	    $column_name = esc_sql( $column );
+	    $index_name = esc_sql( $index );
+
+	    $results = $wpdb->get_results( "SELECT COUNT(1) indexExists FROM INFORMATION_SCHEMA.STATISTICS 
+			WHERE table_schema=DATABASE() AND table_name = '$table_name' AND index_name = '$index_name'" );
+
+	    if ( $results[0]->indexExists == '0' ){
+		    $wpdb->query( "ALTER TABLE $table_name ADD INDEX $index_name ($column_name)" );
 	    }
     }
 }

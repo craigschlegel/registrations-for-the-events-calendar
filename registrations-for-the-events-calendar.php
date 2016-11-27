@@ -169,7 +169,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
             }
             // Db version.
             if ( ! defined( 'RTEC_DBVERSION' ) ) {
-                define( 'RTEC_DBVERSION' , '1.1' );
+                define( 'RTEC_DBVERSION' , '1.2' );
             }
             // Table Name.
             if ( ! defined( 'RTEC_TABLENAME' ) ) {

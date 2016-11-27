@@ -324,7 +324,6 @@ function rtec_event_csv() {
 		$db = new RTEC_Db_Admin();
 		$id = (int)$_POST['rtec_id'];
 
-
 		$data = array(
 			'fields' => 'last_name, first_name, email, phone, other',
 			'id' => $id,
@@ -388,14 +387,24 @@ add_action( 'admin_init', 'rtec_event_csv' );
  * Add phone column if custom table does not have it
  *
  * @since 1.1
+ * @since 1.3   added check and add for index on event_id
  */
 function rtec_db_update_check() {
 	$db_ver = get_option( 'rtec_db_version', 0 );
+
 	if ( $db_ver < 1.1 ) {
 		update_option( 'rtec_db_version', RTEC_DBVERSION );
 
 		$db = new RTEC_Db_Admin();
 		$db->maybe_add_column_to_table( 'phone' );
 	}
+
+	if ( $db_ver < 1.2 ) {
+		update_option( 'rtec_db_version', RTEC_DBVERSION );
+
+		$db = new RTEC_Db_Admin();
+		$db->maybe_add_index( 'event_id', 'event_id' );
+	}
 }
 add_action( 'plugins_loaded', 'rtec_db_update_check' );
+
