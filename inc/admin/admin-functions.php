@@ -382,16 +382,66 @@ function rtec_event_csv() {
 }
 add_action( 'admin_init', 'rtec_event_csv' );
 
+function rtec_get_event_columns() {
+	global $rtec_options;
+
+	$first_label = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : __( 'First', 'rtec' );
+	$last_label = isset( $rtec_options['last_label'] ) ? esc_html( $rtec_options['last_label'] ) : __( 'Last', 'rtec' );
+	$email_label = isset( $rtec_options['email_label'] ) ? esc_html( $rtec_options['email_label'] ) : __( 'Email', 'rtec' );
+	$phone_label = isset( $rtec_options['phone_label'] ) ? esc_html( $rtec_options['phone_label'] ) : __( 'Phone', 'rtec' );
+	$other_label = isset( $rtec_options['other_label'] ) ? esc_html( $rtec_options['other_label'] ) : __( 'Other', 'rtec' );
+
+	$labels = array( $last_label, $first_label, $email_label, $phone_label, $other_label );
+
+	// add custom labels
+	if ( isset( $rtec_options['custom_field_names'] ) ) {
+		$custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+	} else {
+		$custom_field_names = array();
+	}
+
+	foreach ( $custom_field_names as $field ) {
+		$labels[] = $rtec_options[$field . '_label'];
+	}
+
+	return $labels;
+}
+
+function rtec_get_parsed_custom_field_data( $raw_data ) {
+	global $rtec_options;
+
+	$custom_data = maybe_unserialize( $raw_data );
+
+	if ( isset( $rtec_options['custom_field_names'] ) ) {
+		$custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+	} else {
+		$custom_field_names = array();
+	}
+
+	$parsed_data = array();
+	foreach ( $custom_field_names as $field ) {
+
+		if ( isset( $custom_data[$rtec_options[$field . '_label']] ) ) {
+			$parsed_data[$rtec_options[$field . '_label']] = $custom_data[$rtec_options[$field . '_label']];
+		} else {
+			$parsed_data[$rtec_options[$field . '_label']] = '';
+		}
+
+	}
+
+	return $parsed_data;
+}
 
 /**
- * Add phone column if custom table does not have it
+ * Check db version and update if necessary
  *
- * @since 1.1
- * @since 1.3   added check and add for index on event_id
+ * @since 1.1   added check and add for "phone" column
+ * @since 1.3   added check and add for index on event_id and add "custom" column
  */
 function rtec_db_update_check() {
 	$db_ver = get_option( 'rtec_db_version', 0 );
 
+	// adds "phone" column to database
 	if ( $db_ver < 1.1 ) {
 		update_option( 'rtec_db_version', RTEC_DBVERSION );
 
@@ -399,11 +449,13 @@ function rtec_db_update_check() {
 		$db->maybe_add_column_to_table( 'phone' );
 	}
 
+	// adds "custom" column
 	if ( $db_ver < 1.2 ) {
 		update_option( 'rtec_db_version', RTEC_DBVERSION );
 
 		$db = new RTEC_Db_Admin();
 		$db->maybe_add_index( 'event_id', 'event_id' );
+		$db->maybe_add_column_to_table( 'custom' );
 	}
 }
 add_action( 'plugins_loaded', 'rtec_db_update_check' );

@@ -38,7 +38,7 @@ class RTEC_Db
 	 * Get the one true instance of EDD_Register_Meta.
 	 *
 	 * @since  1.0
-	 * @return $instance
+	 * @return object $instance
 	 */
 	static public function instance() {
 		if ( !self::$instance ) {
@@ -67,10 +67,11 @@ class RTEC_Db
 		$venue = isset( $data['rtec_venue_title'] ) ? $data['rtec_venue_title'] : '';
 		$phone = isset( $data['rtec_phone'] ) ? preg_replace( '/[^0-9]/', '', $data['rtec_phone'] ) : '';
 		$other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
+		$custom = rtec_serialize_custom_data( $data );
 		$status = isset( $data['rtec_status'] ) ? $data['rtec_status'] : 'n';
 		$wpdb->query( $wpdb->prepare( "INSERT INTO $this->table_name
-          ( event_id, registration_date, last_name, first_name, email, venue, phone, other, status ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %s, %s )",
-			$event_id, $registration_date, $last, $first, $email, $venue, $phone, $other, $status ) );
+          ( event_id, registration_date, last_name, first_name, email, venue, phone, other, custom, status ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %s, %s, %s )",
+			$event_id, $registration_date, $last, $first, $email, $venue, $phone, $other, $custom, $status ) );
 	}
 
 	/**

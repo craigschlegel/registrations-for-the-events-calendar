@@ -1,6 +1,11 @@
 .rtec-wrapper {
     box-sizing: border-box;
 }
+/*
+9EE6DE
+46A99E
+
+*/
 .rtec-clear:after {
     display: table;
     clear: both;
@@ -71,6 +76,10 @@
 }
 .rtec-next { float: right; }
 
+.rtec-admin-wrap .rtec-add-field {
+    width: 455px;
+    margin-bottom: 8px;
+}
 .rtec-single-event table td {
     word-wrap: break-word;
     max-width: 120px;
@@ -81,6 +90,24 @@
 .rtec-overview .rtec-admin-secondary-button {
     float: right;
     margin: .5em 1em .5em 1em;
+}
+.rtec-admin-wrap .rtec-green-bg {
+    font-weight: 700;
+    background-color: #9EE6DE;
+    border-color: #46A99E;
+    color: #009688;
+}
+.rtec-admin-wrap .rtec-green-bg:hover,
+.rtec-admin-wrap .rtec-green-bg:active,
+.rtec-admin-wrap .rtec-green-bg:focus {
+    background-color: #CFF7F3;
+    color: #009688;
+}
+
+.rtec-admin-wrap .rtec-green-bg:focus {
+    border-color: #46A99E;
+    -webkit-box-shadow: 0 0 3px #46A99E;
+    box-shadow: 0 0 3px #46A99E;
 }
 
 /* Single */
@@ -133,12 +160,12 @@
 }
 .rtec-field-options-wrapper,
 .rtec-availability-options-wrapper {
+    position: relative;
     padding: 1em;
     margin-bottom: .5em;
     border: 1px solid #ddd;
     border-radius: 5px;
     background: #fbfbfb;
-
 }
 .rtec-field-options-wrapper h4,
 .rtec-availability-options-wrapper h4 {
@@ -161,6 +188,11 @@
 }
 .rtec-availability-options-wrapper input[type=text] {
     margin-right: 1em;
+}
+.rtec-custom-field-remove {
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 .rtec-checkbox-row label {
     margin-right: 1em;

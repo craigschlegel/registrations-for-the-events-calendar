@@ -32,6 +32,12 @@ class RTEC_Submission
 
 	/**
 	 * @var array
+	 * @since 1.3
+	 */
+	protected $custom_required_fields = array();
+
+	/**
+	 * @var array
 	 * @since 1.0
 	 */
     public $validate_check = array();
@@ -81,10 +87,38 @@ class RTEC_Submission
         return self::$instance;
     }
 
+	/**
+	 * Custom fields are set slightly differently so this method exists
+	 *
+	 * @since  1.3
+	 */
+    private function set_custom_fields_required()
+    {
+		global $rtec_options;
+
+	    if ( isset( $rtec_options['custom_field_names'] ) ) {
+		    $custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+	    } else {
+		    $custom_field_names = array();
+	    }
+
+	    $required = array();
+	    foreach ( $custom_field_names as $field ) {
+
+		    if ( isset( $rtec_options[$field . '_require'] ) && $rtec_options[$field . '_require']  ) {
+			    $required[] = 'rtec_' . $field;
+		    }
+
+	    }
+
+	    $this->custom_required_fields = $required;
+    }
+
     public function validate_data() {
         // get form options from the db
         $options = get_option( 'rtec_options' );
         $submission = $this->submission;
+	    $this->set_custom_fields_required();
 
         // for each submitted form field
         foreach ( $submission as $input_key => $input_value ) {
@@ -134,6 +168,12 @@ class RTEC_Submission
                     $this->errors[] = 'other';
                 }
                 
+            } elseif ( in_array( $input_key, $this->custom_required_fields ) ) {
+
+	            if ( empty( $input_value ) ) {
+		            $this->errors[] = str_replace( 'rtec_', '', $input_key );
+	            }
+
             }
         }
 
@@ -239,6 +279,18 @@ class RTEC_Submission
 		    $change = 1;
 		    $db->update_num_registered_meta( $data['rtec_event_id'], $data['rtec_num_registered'], $change );
 	    }
+/*
+	    if ( $confirmation_success && $notification_success ) {
+	    	return 'success';
+	    } else {
+	    	return 'email';
+	    }*/
+
+	    if ( true ) {
+		    return 'success';
+	    } else {
+		    return 'email';
+	    }
     }
 
 	/**
@@ -324,7 +376,7 @@ class RTEC_Submission
 
 	        $body .= 'See you there!';
         }
-	    var_dump($body);
+
         return $body;
     }
 
@@ -439,8 +491,6 @@ class RTEC_Submission
 			    $body .= sprintf( '%s: %s', $other_label, $other ) . "\n";
 		    }
 	    }
-
-	    var_dump($body);
 
         return $body;
     }

@@ -15,7 +15,7 @@ $id = (int)$_GET['id'];
                 global $rtec_options;
 
                 $data = array(
-                    'fields' => 'registration_date, id, last_name, first_name, email, phone, other',
+                    'fields' => 'registration_date, id, last_name, first_name, email, phone, other, custom',
                     'id' => $id,
                     'order_by' => 'registration_date'
                 );
@@ -34,12 +34,8 @@ $id = (int)$_GET['id'];
                 $venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
                 $venue = rtec_get_venue( $id );
                 $event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
-                $options = get_option( 'rtec_general' );
-                $first_label = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : __( 'First', 'rtec' );
-                $last_label = isset( $rtec_options['last_label'] ) ? esc_html( $rtec_options['last_label'] ) : __( 'Last', 'rtec' );
-                $email_label = isset( $rtec_options['email_label'] ) ? esc_html( $rtec_options['email_label'] ) : __( 'Email', 'rtec' );
-                $phone_label = isset( $rtec_options['phone_label'] ) ? esc_html( $rtec_options['phone_label'] ) : __( 'Phone', 'rtec' );
-                $other_label = isset( $rtec_options['other_label'] ) ? esc_html( $rtec_options['other_label'] ) : __( 'Other', 'rtec' );
+
+                $labels = rtec_get_event_columns();
                 ?>
 
                 <div class="rtec-single-event" data-rtec-event-id="<?php echo $id; ?>">
@@ -58,16 +54,15 @@ $id = (int)$_GET['id'];
                                     <input type="checkbox" id="rtec-select-all-1">
                                 </td>
                                 <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
-                                <th><?php echo $last_label; ?></th>
-                                <th><?php echo $first_label; ?></th>
-                                <th><?php echo $email_label; ?></th>
-                                <th><?php echo $phone_label; ?></th>
-                                <th><?php echo $other_label; ?></th>
+                                <?php foreach ( $labels as $label ) : ?>
+                                    <th><?php echo $label; ?></th>
+                                <?php endforeach; ?>
                             </tr>
                         </thead>
                         <?php if ( ! empty( $registrations ) ) : ?>
                         <tbody>
                             <?php foreach( $registrations as $registration ): ?>
+                                <?php $custom_fields = rtec_get_parsed_custom_field_data( $registration['custom'] ); ?>
                                 <tr class="rtec-reg-row" data-rtec-id="<?php echo (int)$registration['id']; ?>">
                                     <td scope="row" class="check-column rtec-checkbox">
                                         <label class="screen-reader-text" for="rtec-select-<?php echo (int)$registration['id']; ?>">Select <?php echo esc_attr( $registration['first_name'] ) . ' ' . esc_attr( $registration['last_name'] ); ?></label>
@@ -80,6 +75,11 @@ $id = (int)$_GET['id'];
                                     <td class="rtec-reg-email"><?php echo $registration['email']; ?></td>
                                     <td class="rtec-reg-phone"><?php echo rtec_format_phone_number( $registration['phone'] ); ?></td>
                                     <td class="rtec-reg-other"><?php echo $registration['other']; ?></td>
+                                    <?php if ( is_array( $custom_fields ) ) : ?>
+                                        <?php foreach ( $custom_fields as $key => $value ) : ?>
+                                            <td class="rtec-reg-custom" data-rtec-key="<?php echo $key; ?>"><?php echo $value; ?></td>
+                                        <?php endforeach; ?>
+                                    <?php endif ;?>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -90,11 +90,9 @@ $id = (int)$_GET['id'];
                                     <input type="checkbox" id="rtec-select-all-1">
                                 </td>
                                 <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
-                                <th><?php echo $last_label; ?></th>
-                                <th><?php echo $first_label; ?></th>
-                                <th><?php echo $email_label; ?></th>
-                                <th><?php echo $phone_label; ?></th>
-                                <th><?php echo $other_label; ?></th>
+                                <?php foreach ( $labels as $label ) : ?>
+                                    <th><?php echo $label; ?></th>
+                                <?php endforeach; ?>
                             </tr>
                         </tfoot>
                         <?php else: ?>

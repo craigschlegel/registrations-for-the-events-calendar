@@ -35,6 +35,7 @@ class RTEC_Db_Admin extends RTEC_Db
                 venue VARCHAR(100) NOT NULL,
                 phone VARCHAR(40) DEFAULT '' NOT NULL,
                 other VARCHAR(100) DEFAULT '' NOT NULL,
+                custom LONGTEXT DEFAULT '' NOT NULL,
                 status CHAR(1) DEFAULT 'y' NOT NULL,
                 UNIQUE KEY id (id)
             ) $charset_collate;";

@@ -640,6 +640,42 @@ class RTEC_Admin
                 <input type="text" name="<?php echo $args['option'].'[other_error]'; ?>" value="<?php echo $error; ?>" class="large-text rtec-other-input">
             </p>
         </div>
+
+        <?php
+            $custom_field_names = isset( $options['custom_field_names'] ) ? explode( ',', $options['custom_field_names'] ) : array();
+            $custom_field_string = isset( $options['custom_field_names'] ) ? $options['custom_field_names'] : '';
+        ?>
+        <?php foreach( $custom_field_names as $custom_field ) : ?>
+            <?php if ( !empty( $custom_field) ) : ?>
+            <?php
+            $custom_field_id = str_replace( 'custom', '', $custom_field );
+            $label = isset( $options[$custom_field . '_label'] ) ? $options[$custom_field . '_label'] : 'Custom '.$custom_field_id;
+            $error = isset( $options[$custom_field . '_error'] ) ? $options[$custom_field . '_error'] : 'Error';
+            $show = isset( $options[$custom_field . '_show'] ) ? true : false;
+            $require = isset( $options[$custom_field . '_require'] ) ? true : false;
+            ?>
+            <div id="rtec-custom-field-<?php echo $custom_field_id; ?>" class="rtec-field-options-wrapper rtec-custom-field"  data-name="<?php echo $custom_field; ?>">
+                <a href="JavaScript:void(0);" class="rtec-custom-field-remove">Remove X</a>
+                <h4>Custom Field <?php echo $custom_field_id; ?></h4>
+                <p>
+                    <label>Label:</label><input type="text" name="rtec_options[<?php echo $custom_field; ?>_label]" value="<?php echo $label; ?>" class="large-text">
+                </p>
+                <p class="rtec-checkbox-row">
+                    <input type="checkbox" class="rtec_include_checkbox" name="rtec_options[<?php echo $custom_field; ?>_show]" <?php if ( $show ) { echo 'checked=checked'; } ?>>
+                    <label>include</label>
+
+                    <input type="checkbox" class="rtec_require_checkbox" name="rtec_options[<?php echo $custom_field; ?>_require]" <?php if ( $require ) { echo 'checked=checked'; } ?>>
+                    <label>require</label>
+                </p>
+                <p>
+                    <label>Error Message:</label>
+                    <input type="text" name="rtec_options[<?php echo $custom_field; ?>_error]" value="<?php echo $error; ?>" class="large-text rtec-other-input">
+                </p>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <button class="button action rtec-add-field rtec-green-bg">+ <?php _e( 'Add Field', 'rtec'  ); ?></button>
+        <input type="hidden" id="rtec_custom_field_names" name="rtec_options[custom_field_names]" value="<?php echo $custom_field_string; ?>"/>
         <?php
         // the other field is treated specially
         $label = isset( $options[ 'recaptcha_label' ] ) ? esc_attr( $options[ 'recaptcha_label' ] ) : 'What is';

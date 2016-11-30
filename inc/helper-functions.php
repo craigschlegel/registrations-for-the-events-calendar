@@ -84,3 +84,24 @@ function rtec_get_venue( $event_id = NULL ) {
 		return '';
 	}
 }
+
+function rtec_serialize_custom_data( $submission_data ) {
+	$options = get_option( 'rtec_options', array() );
+
+	if ( isset( $options['custom_field_names'] ) ) {
+		$custom_field_names = explode( ',', $options['custom_field_names'] );
+	} else {
+		$custom_field_names = array();
+	}
+
+	$custom_data = array();
+	foreach ( $custom_field_names as $field ) {
+
+		if ( isset( $submission_data['rtec_' . $field] ) ) {
+			$custom_data[$options[$field . '_label']] = $submission_data['rtec_' . $field];
+		}
+
+	}
+
+	return maybe_serialize( $custom_data );
+}

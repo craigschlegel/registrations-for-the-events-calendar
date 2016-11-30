@@ -2,15 +2,16 @@ jQuery(document).ready(function($){
 
 
     // FORM tab
-    $('.rtec_require_checkbox').change(function(){
-        if ($(this).is(':checked')) {
-            $(this).closest('.rtec-checkbox-row').find('.rtec_include_checkbox').prop( "checked", true );
+    var $body = $('body');
+    $body.on('click', '.rtec_require_checkbox', function (event) {
+        if ($(event.target).is(':checked')) {
+            $(event.target).closest('.rtec-checkbox-row').find('.rtec_include_checkbox').prop( "checked", true );
         }
     });
 
-    $('.rtec_include_checkbox').change(function(){
-        if (!$(this).is(':checked')) {
-            $(this).closest('.rtec-checkbox-row').find('.rtec_require_checkbox').prop( "checked", false );
+    $body.on('click', '.rtec_include_checkbox', function (event) {
+        if (!$(event.target).is(':checked')) {
+            $(event.target).closest('.rtec-checkbox-row').find('.rtec_require_checkbox').prop( "checked", false );
         }
     });
 
@@ -61,6 +62,53 @@ jQuery(document).ready(function($){
         if ($(this).is(':checked')) {
             rtecToggleMessageTypeOptions($(this).val());
         }
+    });
+
+    function rtecUpdateCustomNames() {
+        var names = [];
+        $('.rtec-custom-field').each(function() {
+            names.push($(this).attr('data-name'));
+        });
+
+        $('#rtec_custom_field_names').val(names.join(','));
+    }
+
+
+    $('.rtec-add-field').click(function() {
+        event.preventDefault();
+
+        var rtecFieldIndex = 1;
+        while($('#rtec-custom-field-'+rtecFieldIndex).length) {
+            rtecFieldIndex++;
+        }
+        var customFieldID = rtecFieldIndex;
+
+        $(this).before(
+            '<div id="rtec-custom-field-'+customFieldID+'" class="rtec-field-options-wrapper rtec-custom-field" data-name="custom'+customFieldID+'">' +
+                '<a href="JavaScript:void(0);" class="rtec-custom-field-remove">Remove X</a>' +
+                '<h4>Custom Field '+customFieldID+'</h4> ' +
+                '<p>' +
+                    '<label>Label:</label><input type="text" name="rtec_options[custom'+customFieldID+'_label]" value="Custom '+customFieldID+'" class="large-text">' +
+                '</p>' +
+                '<p class="rtec-checkbox-row">' +
+                    '<input type="checkbox" class="rtec_include_checkbox" name="rtec_options[custom'+customFieldID+'_show]" checked="checked">' +
+                    '<label>include</label>' +
+
+                    '<input type="checkbox" class="rtec_require_checkbox" name="rtec_options[custom'+customFieldID+'_require]">' +
+                    '<label>require</label>' +
+                '</p>' +
+                '<p>' +
+                    '<label>Error Message:</label>' +
+                    '<input type="text" name="rtec_options[custom'+customFieldID+'_error]" value="Error" class="large-text rtec-other-input">' +
+                '</p>' +
+            '</div>'
+        );
+        rtecUpdateCustomNames();
+    });
+
+    $body.on('click', '.rtec-custom-field-remove', function (event) {
+        $(event.target).closest('.rtec-field-options-wrapper').remove();
+        rtecUpdateCustomNames();
     });
 
     // EMAIL Tab
@@ -227,7 +275,8 @@ jQuery(document).ready(function($){
                         firstName = $closestRegRow.find('.rtec-reg-first').text(),
                         email = $closestRegRow.find('.rtec-reg-email').text(),
                         phone = $closestRegRow.find('.rtec-reg-phone').text(),
-                        other = $closestRegRow.find('.rtec-reg-other').text();
+                        other = $closestRegRow.find('.rtec-reg-other').text(),
+                        custom = [];
 
                     editCount = 1;
 
@@ -240,6 +289,12 @@ jQuery(document).ready(function($){
                     $closestRegRow.find('.rtec-reg-email').html('<input type="text" name="email" id="rtec-email" data-rtec-val="'+email+'" value="'+email+'" />');
                     $closestRegRow.find('.rtec-reg-phone').html('<input type="text" name="phone" id="rtec-phone" data-rtec-val="'+phone+'" value="'+phone+'" />');
                     $closestRegRow.find('.rtec-reg-other').html('<input type="text" name="other" id="rtec-other" data-rtec-val="'+other+'" value="'+other+'" />');
+                    $closestRegRow.find('td').each(function() {
+                        if (jQuery(this).hasClass('rtec-reg-custom')) {
+                            var val = jQuery(this).text();
+                            jQuery(this).html('<input type="text" name="'+jQuery(this).attr('data-rtec-key')+'" id="rtec-other" data-rtec-val="'+val+'" value="'+val+'" />');
+                        }
+                    });
 
                     $(this).addClass('rtec-editing');
 
@@ -261,7 +316,12 @@ jQuery(document).ready(function($){
             addBackRowData($editingClosestRegRow,'.rtec-reg-email','.rtec-reg-email input');
             addBackRowData($editingClosestRegRow,'.rtec-reg-phone','.rtec-reg-phone input');
             addBackRowData($editingClosestRegRow,'.rtec-reg-other','.rtec-reg-other input');
-
+            $editingClosestRegRow.find('td').each(function() {
+                if (jQuery(this).hasClass('rtec-reg-custom')) {
+                    var html = jQuery(this).find('input').attr('data-rtec-val');
+                    jQuery(this).html(html);
+                }
+            });
             $rtecEditing.removeClass('rtec-editing');
 
             $('.rtec-edit-registration').text('Edit Selected');
@@ -270,7 +330,6 @@ jQuery(document).ready(function($){
 
     }); // edit registration click
 
-    var $body = $('body');
     $body.on('click', '.rtec-submit-edit', function () {
         var $table = $(this).closest('table');
         // start spinner to show user that request is processing

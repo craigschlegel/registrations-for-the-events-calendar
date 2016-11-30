@@ -32,6 +32,12 @@ class RTEC_Form
 
 	/**
 	 * @var array
+	 * @since 1.3
+	 */
+	private $custom_fields = array();
+
+	/**
+	 * @var array
 	 * @since 1.0
 	 */
     private $input_fields_data = array();
@@ -110,7 +116,6 @@ class RTEC_Form
 	        $this->recaptcha['sum'] = (int)$this->recaptcha['value_1'] + (int)$this->recaptcha['value_2'];
         }
 
-
     }
     
     /**
@@ -119,11 +124,49 @@ class RTEC_Form
      * @since  1.0
      * @return object $instance
      */
-    static public function instance() {
+    static public function instance() 
+    {
         if ( !self::$instance ) {
             self::$instance = new RTEC_Form();
         }
         return self::$instance;
+    }
+
+	/**
+	 * Set any custom field data set up by user
+	 *
+	 * @since 1.3
+	 */
+    public function set_custom_fields() 
+    {
+    	global $rtec_options;
+	    
+	    if ( isset( $rtec_options['custom_field_names'] ) ) {
+	    	$custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+	    } else {
+		    $custom_field_names = array();
+	    }
+
+	    foreach ( $custom_field_names as $field ) {
+
+		    // if the option is set then it will be true
+		    if ( isset( $rtec_options[$field . '_show'] ) ) {
+			    $rtec_options[$field . '_show'] = true;
+		    } else {
+			    $rtec_options[$field . '_show'] = false;
+		    }
+
+		    if ( isset( $rtec_options[$field . '_require'] ) ) {
+			    $rtec_options[$field . '_require'] = true;
+		    } else {
+			    $rtec_options[$field . '_require'] = false;
+		    }
+
+	    }
+
+	    $rtec_options['custom_field_names'] = $custom_field_names;
+
+	    $this->custom_fields = $rtec_options;
     }
 
 	/**
@@ -427,6 +470,60 @@ class RTEC_Form
     }
 
 	/**
+	 * Return html for custom text fields
+	 *
+	 * @since 1.3
+	 * @return string
+	 */
+	private function get_custom_fields_html() {
+		$html = '';
+		$custom_fields = $this->custom_fields;
+		$custom_field_names = $this->custom_fields['custom_field_names'];
+
+		foreach ( $custom_field_names as $field ) {
+
+			if ( $custom_fields[$field . '_show'] ) {
+				// check to see if there was an error and fill in
+				// previous data
+				$value = '';
+				$label = $custom_fields[$field . '_label'];
+				$type = 'text';
+
+				if ( $custom_fields[$field . '_require'] ) {
+					$required_data = ' aria-required="true"';
+					$label .= '&#42;';
+				} else {
+					$required_data = ' aria-required="false"';
+				}
+
+				$error_html = '';
+
+				if ( in_array( $field, $this->errors ) ) {
+					$required_data .= ' aria-invalid="true"';
+					$error_html = '<p class="rtec-error-message" role="alert">' . $custom_fields[$field . '_error'] . '</p>';
+				} else {
+					$required_data .= ' aria-invalid="false"';
+				}
+
+				if ( isset( $this->submission_data['rtec_' . $field] ) ) {
+					$value = $this->submission_data['rtec_' . $field];
+				}
+
+				$html .= '<div class="rtec-form-field rtec-'. $field . '" data-rtec-error-message="'.$custom_fields[$field . '_error'].'">';
+				$html .= '<label for="rtec_' . $field . '" class="rtec_text_label">' . $label . '</label>';
+				$html .= '<div class="rtec-input-wrapper">';
+				$html .= '<input type="' . $type . '" name="rtec_' . $field . '" value="'. $value . '" id="rtec_' . $field . '"' . $required_data . ' />';
+				$html .= $error_html;
+				$html .= '</div>';
+				$html .= '</div>';
+			} // if show
+
+		} // foreach
+
+		return $html;
+	}
+
+	/**
 	 * Return html for a recaptcha robot detection field
 	 *
 	 * @since 1.1
@@ -513,9 +610,12 @@ class RTEC_Form
             $html .= '</div>';
         }
 
+        $html .= $this->get_custom_fields_html();
+
         if ( ! empty( $this->recaptcha ) ) {
 	        $html .= $this->get_recaptcha_html();
         }
+
         $html .= '</div>'; // rtec-form-fields-wrapper
 
 	    return $html;
