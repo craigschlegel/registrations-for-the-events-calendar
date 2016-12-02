@@ -35,38 +35,41 @@ $events = tribe_get_events( array(
     'order' => 'DESC',
 	'offset' => $offset
 ) );
+
 $event_ids_on_page = array();
+$columns = rtec_get_current_columns( 3 );
+$fields = array( 'registration_date' );
+foreach ( $columns as $key => $value ) {
+	$fields[] = $key;
+}
+$fields[] = 'status';
 
 foreach ( $events as $event ) :
 
-        $data = array(
-            'fields' => 'registration_date, last_name, first_name, email, status',
-            'id' => $event->ID,
-            'order_by' => 'registration_date'
-        );
-		$event_ids_on_page[] = $event->ID;
+	// used to update new vs current registrations in db
+	$event_ids_on_page[] = $event->ID;
 
-        $registrations = $db->retrieve_entries( $data );
+	$data = array(
+		'fields' => $fields,
+		'id' => $event->ID,
+		'order_by' => 'registration_date'
+	);
+    $registrations = $db->retrieve_entries( $data );
 
-        // set post meta
-        $meta = get_post_meta( $event->ID );
+    // set post meta
+    $meta = get_post_meta( $event->ID );
 
-        $event_meta['post_id'] = $event->ID;
-        $event_meta['title'] = $event->post_title;
-        $event_meta['start_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventStartDate'][0] ) );
-        $event_meta['end_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventEndDate'][0] ) );
-		$event_meta['disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] : 0;
+    $event_meta['post_id'] = $event->ID;
+    $event_meta['title'] = $event->post_title;
+    $event_meta['start_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventStartDate'][0] ) );
+    $event_meta['end_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventEndDate'][0] ) );
+	$event_meta['disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] : 0;
 
-        // set venue meta
-        $venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
-		$venue = rtec_get_venue( $event->ID );
-		$event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
-	
-		// labels
-		$last_label = isset( $rtec_options['last_label'] ) ? esc_html( $rtec_options['last_label'] ) : __( 'Last', 'rtec' );
-		$first_label = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : __( 'First', 'rtec' );
-		$email_label = isset( $rtec_options['email_label'] ) ? esc_html( $rtec_options['email_label'] ) : __( 'Email', 'rtec' );
-	?>
+    // set venue meta
+    $venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
+	$venue = rtec_get_venue( $event->ID );
+	$event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
+?>
     
     <div class="rtec-single-event">
     
@@ -94,9 +97,9 @@ foreach ( $events as $event ) :
             <thead>
                 <tr>
                     <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
-                    <th><?php echo $last_label; ?></th>
-	                <th><?php echo $first_label; ?></th>
-	                <th><?php echo $email_label; ?></th>
+                <?php foreach ( $columns as $column ) : ?>
+                    <th><?php echo $column; ?></th>
+                <?php endforeach; ?>
                 </tr>
             </thead>
             <tbody>
@@ -110,9 +113,17 @@ foreach ( $events as $event ) :
                         }
                         echo date_i18n( 'm/d g:i a', strtotime( $registration['registration_date'] ) + $tz_offset ); ?>
                     </td>
-                    <td><?php echo $registration['last_name']; ?></td>
-                    <td><?php echo $registration['first_name']; ?></td>
-                    <td><?php echo $registration['email']; ?></td>
+	                <?php foreach ( $columns as $key => $value ) : ?>
+		                <td><?php
+			                if ( isset( $registration[$key] ) ) {
+				                echo $registration[$key];
+			                } else if ( isset( $registration[$key.'_name'] ) ) {
+				                echo $registration[$key];
+			                } else if ( isset( $registration['custom'][$value] ) ) {
+				                echo $registration['custom'][$value];
+			                }
+			                ?></td>
+	                <?php endforeach; ?>
                 </tr>
             <?php endforeach; ?>
     

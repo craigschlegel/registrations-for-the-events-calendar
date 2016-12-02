@@ -78,8 +78,6 @@ function rtec_update_event_options() {
 	}
 
 	if ( isset( $event_id ) && is_array( $meta_fields ) ){
-		//require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-db.php';
-
 		$db = new RTEC_Db();
 		$db->update_event_meta( $event_id, $meta_fields );
 		echo '1';
@@ -170,10 +168,12 @@ add_action( 'save_post', 'rtec_save_meta' );
  * Used to remove registrations from the dashboard
  * 
  * @since 1.0
+ * @since 1.3 changed so only the current event's count is recalculated
  */
 function rtec_delete_registrations()
 {
 	$nonce = $_POST['rtec_nonce'];
+	$id = $_POST['rtec_event_id'];
 
 	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
 		die ( 'You did not do this the right way!' );
@@ -188,13 +188,10 @@ function rtec_delete_registrations()
 	$db = new RTEC_Db_Admin();
 
 	$db->remove_records( $registrations_to_be_deleted );
-	$ids = $db->get_event_post_ids();
 
-	foreach ( $ids as $id ) {
-		$reg_count = $db->get_registration_count( $id );
+	$reg_count = $db->get_registration_count( $id );
 
-		update_post_meta( $id, '_RTECnumRegistered', $reg_count );
-	}
+	update_post_meta( $id, '_RTECnumRegistered', $reg_count );
 
 	die();
 }
@@ -204,10 +201,12 @@ add_action( 'wp_ajax_rtec_delete_registrations', 'rtec_delete_registrations' );
  * Used to manually add a registration from the dashboard
  * 
  * @since 1.0
+ * @since 1.3 changed so only the current event's count is recalculated
  */
 function rtec_add_registration()
 {
 	$nonce = $_POST['rtec_nonce'];
+	$id = $_POST['rtec_event_id'];
 
 	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
 		die ( 'You did not do this the right way!' );
@@ -229,12 +228,8 @@ function rtec_add_registration()
 
 	$new_reg->insert_entry( $data );
 
-	$ids = $new_reg->get_event_post_ids();
-
-	foreach ( $ids as $id ) {
-		$reg_count = $new_reg->get_registration_count( $id );
-		update_post_meta( $id, '_RTECnumRegistered', $reg_count );
-	}
+	$reg_count = $new_reg->get_registration_count( $id );
+	update_post_meta( $id, '_RTECnumRegistered', $reg_count );
 
 	die();
 }
@@ -248,17 +243,20 @@ add_action( 'wp_ajax_rtec_add_registration', 'rtec_add_registration' );
 function rtec_update_registration()
 {
 	$nonce = $_POST['rtec_nonce'];
+
 	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
 		die ( 'You did not do this the right way!' );
 	}
-	
+
+	$custom_data = json_decode( str_replace( '\"', '"', sanitize_text_field( $_POST['rtec_custom'] ) ), true );
+var_dump($_POST['rtec_custom']);
 	$data = array();
 	foreach( $_POST as $key => $value ) {
 		$data[$key] = esc_sql( $value );
 	}
 	
 	$edit_reg = new RTEC_Db_Admin();
-	$edit_reg->update_entry( $data );
+	$edit_reg->update_entry( $data, $custom_data );
 
 	die();
 }
@@ -382,7 +380,7 @@ function rtec_event_csv() {
 }
 add_action( 'admin_init', 'rtec_event_csv' );
 
-function rtec_get_event_columns() {
+function rtec_get_event_columns( $full = false ) {
 	global $rtec_options;
 
 	$first_label = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : __( 'First', 'rtec' );
@@ -393,18 +391,53 @@ function rtec_get_event_columns() {
 
 	$labels = array( $last_label, $first_label, $email_label, $phone_label, $other_label );
 
-	// add custom labels
-	if ( isset( $rtec_options['custom_field_names'] ) ) {
-		$custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+	if ( ! $full ) {
+		// add custom labels
+		if ( isset( $rtec_options['custom_field_names'] ) ) {
+			$custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+		} else {
+			$custom_field_names = array();
+		}
+
+		foreach ( $custom_field_names as $field ) {
+			$labels[] = $rtec_options[$field . '_label'];
+		}
 	} else {
-		$custom_field_names = array();
+		$labels[] = 'custom';
 	}
 
-	foreach ( $custom_field_names as $field ) {
-		$labels[] = $rtec_options[$field . '_label'];
-	}
 
 	return $labels;
+}
+
+function rtec_get_current_columns( $num_columns ) {
+	global $rtec_options;
+
+	$standard_columns = array( 'last', 'last_name', 'first', 'first_name', 'email', 'phone', 'other' );
+
+	// add custom labels
+	if ( isset( $rtec_options['custom_field_names'] ) ) {
+		$custom_columns = explode( ',', $rtec_options['custom_field_names'] );
+	} else {
+		$custom_columns = array();
+	}
+
+	$columns = array_merge( $standard_columns, $custom_columns );
+
+	$needed_column_names = array();
+	$i = 0;
+	while( isset( $columns[$i] ) && ( count( $needed_column_names ) < $num_columns ) ) {
+		if ( isset( $rtec_options[$columns[$i].'_show'] ) && ( $rtec_options[$columns[$i].'_show'] !== false ) ) {
+			if ( $columns[$i] === 'first' || $columns[$i] === 'last' ){
+				$needed_column_names[$columns[$i].'_name'] = $rtec_options[$columns[$i].'_label'];
+			} else {
+				$needed_column_names[$columns[$i]] = $rtec_options[$columns[$i].'_label'];
+			}
+		}
+		$i++;
+	}
+
+	return $needed_column_names;
 }
 
 function rtec_get_parsed_custom_field_data( $raw_data ) {

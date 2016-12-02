@@ -239,6 +239,7 @@ jQuery(document).ready(function($){
                 var submitData = {
                     action: 'rtec_delete_registrations',
                     registrations_to_be_deleted: idsToRemove,
+                    rtec_event_id: $('.rtec-single-event').attr('data-rtec-event-id'),
                     rtec_nonce : rtecAdminScript.rtec_nonce
                 },
                 successFunc = function () {
@@ -292,7 +293,7 @@ jQuery(document).ready(function($){
                     $closestRegRow.find('td').each(function() {
                         if (jQuery(this).hasClass('rtec-reg-custom')) {
                             var val = jQuery(this).text();
-                            jQuery(this).html('<input type="text" name="'+jQuery(this).attr('data-rtec-key')+'" id="rtec-other" data-rtec-val="'+val+'" value="'+val+'" />');
+                            jQuery(this).html('<input type="text" name="'+jQuery(this).attr('data-rtec-key')+'" class="rtec-edit-input" id="'+jQuery(this).attr('data-rtec-key')+'" data-rtec-val="'+val+'" value="'+val+'" />');
                         }
                     });
 
@@ -317,9 +318,9 @@ jQuery(document).ready(function($){
             addBackRowData($editingClosestRegRow,'.rtec-reg-phone','.rtec-reg-phone input');
             addBackRowData($editingClosestRegRow,'.rtec-reg-other','.rtec-reg-other input');
             $editingClosestRegRow.find('td').each(function() {
-                if (jQuery(this).hasClass('rtec-reg-custom')) {
-                    var html = jQuery(this).find('input').attr('data-rtec-val');
-                    jQuery(this).html(html);
+                if ($(this).hasClass('rtec-reg-custom')) {
+                    var html = $(this).find('input').attr('data-rtec-val');
+                    $(this).html(html);
                 }
             });
             $rtecEditing.removeClass('rtec-editing');
@@ -332,16 +333,26 @@ jQuery(document).ready(function($){
 
     $body.on('click', '.rtec-submit-edit', function () {
         var $table = $(this).closest('table');
+
+        var custom = {};
+        $('.rtec-reg-custom').each(function() {
+            custom[$(this).attr('data-rtec-key')] = $(this).firstChild().val();
+        }).promise.done();
+        console.log(custom);
+
         // start spinner to show user that request is processing
         $('.rtec-single table tbody')
             .after('<div class="rtec-table-changing spinner is-active"></div>')
             .fadeTo("slow", .2);
+        setTimeout(function() {
+            console.log(custom);
 
-        var submitData = {
+            var submitData = {
                 action : 'rtec_update_registration',
                 rtec_id: $table.find('.rtec-editing').val(),
                 rtec_registration_date: $table.find('.rtec-reg-date').attr('data-rtec-val'),
                 rtec_other: $table.find('input[name=other]').val(),
+                rtec_custom: JSON.stringify(custom),
                 rtec_first: $table.find('input[name=first]').val(),
                 rtec_email: $table.find('input[name=email]').val(),
                 rtec_phone: $table.find('input[name=phone]').val(),
@@ -350,9 +361,11 @@ jQuery(document).ready(function($){
             },
             successFunc = function () {
                 //reload the page on success to show the added registration
-                location.reload();
+                //location.reload();
             };
-        rtecRegistrationAjax(submitData,successFunc);
+
+                //rtecRegistrationAjax(submitData,successFunc);
+            }, 500);
     }); // registration submit
 
     $('.rtec-add-registration').click( function() {
@@ -373,7 +386,7 @@ jQuery(document).ready(function($){
                         '<td><input type="text" name="last" id="last" placeholder="Last" /></td>' +
                         '<td><input type="text" name="first" id="first" placeholder="First" /></td>' +
                         '<td><input type="email" name="email" id="email" placeholder="you@example.com" /></td>' +
-                        '<td><input type="phone" name="phone" id="phone" placeholder="4445556666" /></td>' +
+                        '<td><input type="tel" name="phone" id="phone" placeholder="4445556666" /></td>' +
                         '<td><input type="text" name="other" id="other" placeholder="Other" /></td>' +
                     '</tr>'
                 );
@@ -408,8 +421,7 @@ jQuery(document).ready(function($){
 
     $('.rtec_download_csv').click( function() {
         var submitData = {
-                action : 'rtec_download_csv',
-                //rtec_nonce : rtecAdminScript.rtec_nonce
+                action : 'rtec_download_csv'
             },
             successFunc = function () {
                 console.log('done');

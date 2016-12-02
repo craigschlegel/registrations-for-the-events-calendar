@@ -50,10 +50,11 @@ class RTEC_Db_Admin extends RTEC_Db
     /**
      * Used to make changes to existing registrations
      * 
-     * @param $data array   information to be updated
+     * @param $data array           information to be updated
+     * @param $custom_data array    custom data to be updated
      * @since 1.0
      */
-    public function update_entry( $data )
+    public function update_entry( $data, $custom_data = '' )
     {
         global $wpdb;
 
@@ -63,34 +64,85 @@ class RTEC_Db_Admin extends RTEC_Db
         $email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
 	    $phone = isset( $data['rtec_phone'] ) ? $data['rtec_phone'] : '';
 	    $other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
+	    $custom = '';
+var_dump( $custom_data );
+	    if ( ! empty( $custom_data ) ) {
+		    $custom = $this->get_custom_data( $id );
+		    $custom = $this->update_custom_data_for_db( $custom, $custom_data );
+	    }
 
         if ( ! empty( $id ) ) {
             $wpdb->query( $wpdb->prepare( "UPDATE $this->table_name
-                SET last_name=%s, first_name=%s, email=%s, phone=%s, other=%s
+                SET last_name=%s, first_name=%s, email=%s, phone=%s, other=%s, custom=%s
                 WHERE id=%d",
-                $last, $first, $email, $phone, $other, $id ) );
+                $last, $first, $email, $phone, $other, $custom, $id ) );
         }
 
+    }
+
+    public function get_custom_data( $id )
+    {
+    	global $wpdb;
+
+	    $results = $wpdb->get_results( $wpdb->prepare( "SELECT custom FROM $this->table_name
+                WHERE id=%d", $id ), ARRAY_A );
+
+	    return maybe_unserialize( $results[0]['custom'] );
+    }
+
+    public function update_custom_data_for_db( $db_custom, $new_custom )
+    {
+    	var_dump( $db_custom );
+	    var_dump( $new_custom );
+		if ( ! empty( $new_custom ) ) {
+			foreach ( $new_custom as $key => $value ) {
+				$db_custom[$key] = $value;
+			}
+		}
+
+		return maybe_serialize( $db_custom );
     }
 
     /**
      * Gets all entries that meet a set of parameters
      * 
      * @param $data array       parameters for what entries to retrieve
+     * @param $full boolean     whether to return the full custom field
      *
      * @return mixed bool/array false if no results, registrations if there are
      * @since 1.0
      */
-    public function retrieve_entries( $data )
+    public function retrieve_entries( $data, $full = false )
     {
         global $wpdb;
 
         $fields = $data['fields'];
+	    if ( ! is_array( $fields ) ) {
+	    	$fields = explode( ',', str_replace( ' ', '', $fields ) );
+	    }
 
-        if ( is_array( $fields ) ) {
-            $fields = implode( ',' , $fields );
-        }
+	    $standard_fields = array( 'id', 'event_id', 'registration_date', 'last_name', 'first_name', 'last', 'first', 'email', 'venue', 'other', 'custom', 'phone', 'status' );
+	    $request_fields = array();
+	    $custom_flag = 0;
 
+	    foreach ( $fields as $field ) {
+
+			if ( in_array( $field, $standard_fields ) ) {
+				if ( $field === 'first' || $field === 'last' ) {
+					$field .= '_name';
+				}
+				$request_fields[] = $field;
+			} else {
+				$custom_flag++;
+			}
+
+	    }
+
+	    if ( $custom_flag > 0 ) {
+	    	$request_fields[] = 'custom';
+	    }
+
+	    $fields = implode( ',' , $request_fields );
         $id = isset( $data['id'] ) ? $data['id'] : '';
         $order_by = isset( $data['order_by'] ) ? $data['order_by'] : 'last_name';
         $type = ARRAY_A;
@@ -122,6 +174,24 @@ class RTEC_Db_Admin extends RTEC_Db
         }
 
         $results = $wpdb->get_results( $sql, $type );
+
+	    if ( $custom_flag > 0 ) {
+		    $i = 0;
+
+		    foreach ( $results as $result ) {
+
+			    if ( isset( $result['custom'] ) ) {
+			    	if ( ! $full ) {
+					    $results[$i]['custom'] = rtec_get_parsed_custom_field_data( $result['custom'] );
+				    } else {
+					    $results[$i]['custom'] = $result['custom'];
+				    }
+			    }
+
+			    $i++;
+		    }
+
+	    }
 
         return $results;
     }

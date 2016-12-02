@@ -2,6 +2,7 @@
 
 // create a custom WP_Query object just for events
 $id = (int)$_GET['id'];
+$show = (int)$_GET['show'];
 
 ?>
 <h1><?php _e( 'Single Event Details', 'rtec' ); ?></h1>
@@ -20,7 +21,7 @@ $id = (int)$_GET['id'];
                     'order_by' => 'registration_date'
                 );
 
-                $registrations = $db->retrieve_entries( $data );
+                $registrations = $db->retrieve_entries( $data, ( $show === 1 ) );
 
                 // set post meta
                 $meta = get_post_meta( $id );
@@ -35,7 +36,7 @@ $id = (int)$_GET['id'];
                 $venue = rtec_get_venue( $id );
                 $event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
 
-                $labels = rtec_get_event_columns();
+                $labels = rtec_get_event_columns( ( $show === 1 ) );
                 ?>
 
                 <div class="rtec-single-event" data-rtec-event-id="<?php echo $id; ?>">
@@ -55,7 +56,9 @@ $id = (int)$_GET['id'];
                                 </td>
                                 <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
                                 <?php foreach ( $labels as $label ) : ?>
+                                    <?php if ( ! empty( $label ) ) : ?>
                                     <th><?php echo $label; ?></th>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             </tr>
                         </thead>
@@ -75,11 +78,24 @@ $id = (int)$_GET['id'];
                                     <td class="rtec-reg-email"><?php echo $registration['email']; ?></td>
                                     <td class="rtec-reg-phone"><?php echo rtec_format_phone_number( $registration['phone'] ); ?></td>
                                     <td class="rtec-reg-other"><?php echo $registration['other']; ?></td>
-                                    <?php if ( is_array( $custom_fields ) ) : ?>
-                                        <?php foreach ( $custom_fields as $key => $value ) : ?>
-                                            <td class="rtec-reg-custom" data-rtec-key="<?php echo $key; ?>"><?php echo $value; ?></td>
-                                        <?php endforeach; ?>
-                                    <?php endif ;?>
+                                    <?php if ( $show === 1 ) {
+                                        echo '<td class="rtec-reg-custom">';
+                                        $custom_array = maybe_unserialize( $registration['custom'] );
+                                        if ( is_array( $custom_array ) ) {
+                                            foreach ( $custom_array as $key => $value ) {
+                                                echo '<p>' . $key . ': ' . $value . '</p>';
+                                            }
+                                        } else {
+                                            echo $registration['custom'];
+                                        }
+                                        echo '</td>';
+                                    } elseif ( is_array( $custom_fields ) ) {
+                                        foreach ( $custom_fields as $key => $value ) {
+                                            if ( ! empty( $key ) ) { ?>
+                                                <td class="rtec-reg-custom" data-rtec-key="<?php echo $key; ?>"><?php echo $value; ?></td>
+                                            <?php }
+                                        }
+                                    } ?>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -91,7 +107,9 @@ $id = (int)$_GET['id'];
                                 </td>
                                 <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
                                 <?php foreach ( $labels as $label ) : ?>
-                                    <th><?php echo $label; ?></th>
+                                    <?php if ( ! empty( $label ) ) : ?>
+                                        <th><?php echo $label; ?></th>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             </tr>
                         </tfoot>
@@ -114,6 +132,7 @@ $id = (int)$_GET['id'];
                                 <input type="hidden" name="rtec_id" value="<?php echo $id; ?>" />
                                 <input type="submit" name="rtec_event_csv" class="button action rtec-admin-secondary-button" value="<?php _e( 'Export Registrations (.csv)', 'rtec' ); ?>" />
                             </form>
+                            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $id; ?>&show=1" class="rtec-admin-secondary-button button action"><?php _e( 'View All Custom Data', 'rtec' ); ?></a>
                         </div>
                     </div>
                 </div> <!-- rtec-single-event -->
