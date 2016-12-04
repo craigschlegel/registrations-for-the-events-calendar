@@ -95,14 +95,14 @@ class RTEC_Submission
             // if the form field is a required first, last, email, or other
             if ( $input_key === 'rtec_first' && $options['first_require'] ) {
             	
-                if ( ( strlen( $input_value ) > 40 ) ||
+                if ( ( strlen( $input_value ) > 100 ) ||
                    ( strlen( $input_value ) < 2 ) ) {
                     $this->errors[] = 'first';
                 }
                 
             } elseif ( $input_key === 'rtec_last' && $options['last_require'] ) {
             	
-                if ( ( strlen( $input_value ) > 40 ) ||
+                if ( ( strlen( $input_value ) > 100 ) ||
                    ( strlen( $input_value ) < 2 ) ) {
                     $this->errors[] = 'last';
                 }
@@ -115,11 +115,11 @@ class RTEC_Submission
                 
             } elseif ( $input_key === 'rtec_phone' && $options['phone_require'] ) {
 	            $stripped_input = preg_replace( '/[^0-9]/', '', $input_value );
-	            $valid_counts_arr = isset( $options['phone_valid_counts'] ) ? explode( ',' , $options['phone_valid_counts'] ) : array( 7, 10 );
+	            $valid_counts_arr = isset( $options['phone_valid_count'] ) ? explode( ',' , $options['phone_valid_count'] ) : array( 7, 10 );
 	            $valid_length_count = 0;
 
 	            foreach ( $valid_counts_arr as $valid_count ) {
-	            	if ( strlen( $stripped_input ) === $valid_count ) {
+	            	if ( strlen( $stripped_input ) === (int)$valid_count ) {
 	            		$valid_length_count++;
 		            }
 	            }
@@ -324,7 +324,7 @@ class RTEC_Submission
 
 	        $body .= 'See you there!';
         }
-	    var_dump($body);
+
         return $body;
     }
 
@@ -439,8 +439,6 @@ class RTEC_Submission
 			    $body .= sprintf( '%s: %s', $other_label, $other ) . "\n";
 		    }
 	    }
-
-	    var_dump($body);
 
         return $body;
     }

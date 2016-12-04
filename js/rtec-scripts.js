@@ -132,7 +132,7 @@ jQuery(document).ready(function($) {
                 } else if ($(this).attr('name') == 'rtec_recaptcha_input') {
                     RtecForm.validateSum($(this), $(this).val(), $(this).closest('.rtec-form').find('.rtec-recaptcha-sum').val());
                 } else {
-                    RtecForm.validateLength($(this), 2, 1000);
+                    RtecForm.validateLength($(this), 2, 100);
                 }
             }
         });
