@@ -1,6 +1,6 @@
 === Registrations for The Events Calendar ===
 
-Contributors: Roundup WP
+Contributors: roundupwp
 Support Website: https://roundupwp.com/products/registrations-for-the-events-calendar/support/
 Tags: the events calendar, registration, event registration, event contact, events calendar
 Requires at least: 3.0
@@ -80,7 +80,9 @@ You can configure an offset for how long registrations will be available relativ
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
 = 1.2.3 =
+* Tweak: Allowed up to 100 characters in "Other" field instead of only 20
 * Fix: Phone validatation counts were not working correctly in certain circumstances
+* Fix: Fixed name spacing issue that was hiding some of the tools in the "Registrations" tab in certain circumstances
 
 = 1.2.2 =
 * Fix: A second validation of the "First" and "Last" fields would cause the form to not submit even though no errors were shown to the form submitter. The second check was fixed.
