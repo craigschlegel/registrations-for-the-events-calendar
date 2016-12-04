@@ -64,12 +64,9 @@ class RTEC_Db_Admin extends RTEC_Db
         $email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
 	    $phone = isset( $data['rtec_phone'] ) ? $data['rtec_phone'] : '';
 	    $other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
-	    $custom = '';
-var_dump( $custom_data );
-	    if ( ! empty( $custom_data ) ) {
-		    $custom = $this->get_custom_data( $id );
-		    $custom = $this->update_custom_data_for_db( $custom, $custom_data );
-	    }
+
+	    $custom = $this->get_custom_data( $id );
+	    $custom = $this->update_custom_data_for_db( $custom, $custom_data );
 
         if ( ! empty( $id ) ) {
             $wpdb->query( $wpdb->prepare( "UPDATE $this->table_name
@@ -92,8 +89,6 @@ var_dump( $custom_data );
 
     public function update_custom_data_for_db( $db_custom, $new_custom )
     {
-    	var_dump( $db_custom );
-	    var_dump( $new_custom );
 		if ( ! empty( $new_custom ) ) {
 			foreach ( $new_custom as $key => $value ) {
 				$db_custom[$key] = $value;

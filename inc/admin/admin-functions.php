@@ -249,8 +249,8 @@ function rtec_update_registration()
 	}
 
 	$custom_data = json_decode( str_replace( '\"', '"', sanitize_text_field( $_POST['rtec_custom'] ) ), true );
-var_dump($_POST['rtec_custom']);
 	$data = array();
+
 	foreach( $_POST as $key => $value ) {
 		$data[$key] = esc_sql( $value );
 	}

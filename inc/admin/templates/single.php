@@ -55,11 +55,11 @@ $show = (int)$_GET['show'];
                                     <input type="checkbox" id="rtec-select-all-1">
                                 </td>
                                 <th><?php _e( 'Registration Date', 'rtec' ) ?></th>
-                                <?php foreach ( $labels as $label ) : ?>
-                                    <?php if ( ! empty( $label ) ) : ?>
-                                    <th><?php echo $label; ?></th>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
+                            <?php foreach ( $labels as $label ) : ?>
+                                <?php if ( ! empty( $label ) ) : ?>
+                                <th><?php echo $label; ?></th>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
                             </tr>
                         </thead>
                         <?php if ( ! empty( $registrations ) ) : ?>
@@ -79,7 +79,7 @@ $show = (int)$_GET['show'];
                                     <td class="rtec-reg-phone"><?php echo rtec_format_phone_number( $registration['phone'] ); ?></td>
                                     <td class="rtec-reg-other"><?php echo $registration['other']; ?></td>
                                     <?php if ( $show === 1 ) {
-                                        echo '<td class="rtec-reg-custom">';
+                                        echo '<td class="rtec-reg-custom-all">';
                                         $custom_array = maybe_unserialize( $registration['custom'] );
                                         if ( is_array( $custom_array ) ) {
                                             foreach ( $custom_array as $key => $value ) {
@@ -132,7 +132,11 @@ $show = (int)$_GET['show'];
                                 <input type="hidden" name="rtec_id" value="<?php echo $id; ?>" />
                                 <input type="submit" name="rtec_event_csv" class="button action rtec-admin-secondary-button" value="<?php _e( 'Export Registrations (.csv)', 'rtec' ); ?>" />
                             </form>
+                            <?php if ( $show === 1 ) : ?>
+                            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $id; ?>" class="rtec-admin-secondary-button button action"><?php _e( 'View Current Custom Data', 'rtec' ); ?></a>
+                            <?php else : ?>
                             <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo $id; ?>&show=1" class="rtec-admin-secondary-button button action"><?php _e( 'View All Custom Data', 'rtec' ); ?></a>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div> <!-- rtec-single-event -->
