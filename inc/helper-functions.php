@@ -85,7 +85,7 @@ function rtec_get_venue( $event_id = NULL ) {
 	}
 }
 
-function rtec_serialize_custom_data( $submission_data ) {
+function rtec_serialize_custom_data( $submission_data, $from_form = true ) {
 	$options = get_option( 'rtec_options', array() );
 
 	if ( isset( $options['custom_field_names'] ) ) {
@@ -95,12 +95,16 @@ function rtec_serialize_custom_data( $submission_data ) {
 	}
 
 	$custom_data = array();
-	foreach ( $custom_field_names as $field ) {
+	if ( $from_form ) {
+		foreach ( $custom_field_names as $field ) {
 
-		if ( isset( $submission_data['rtec_' . $field] ) ) {
-			$custom_data[$options[$field . '_label']] = $submission_data['rtec_' . $field];
+			if ( isset( $submission_data['rtec_' . $field] ) ) {
+				$custom_data[$options[$field . '_label']] = $submission_data['rtec_' . $field];
+			}
+
 		}
-
+	} else {
+		$custom_data = $submission_data['rtec_custom'];
 	}
 
 	return maybe_serialize( $custom_data );

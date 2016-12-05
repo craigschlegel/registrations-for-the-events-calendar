@@ -131,8 +131,12 @@ jQuery(document).ready(function($) {
                     RtecForm.validateCount($(this), $(this).closest('.rtec-form-field').attr('data-rtec-valid-count').replace(' ', '').split(','));
                 } else if ($(this).attr('name') == 'rtec_recaptcha_input') {
                     RtecForm.validateSum($(this), $(this).val(), $(this).closest('.rtec-form').find('.rtec-recaptcha-sum').val());
+                } else if ($(this).attr('name') == 'rtec_last') {
+                    RtecForm.validateLength($(this), 1, 50);
+                } else if ($(this).attr('name') == 'rtec_first') {
+                    RtecForm.validateLength($(this), 1, 40);
                 } else {
-                    RtecForm.validateLength($(this), 1, 100);
+                    RtecForm.validateLength($(this), 1, 1000);
                 }
             }
         });

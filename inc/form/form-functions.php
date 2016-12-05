@@ -13,11 +13,13 @@ function rtec_the_registration_form()
 {
 	$rtec = RTEC();
 	$form = $rtec->form->instance();
+	$form->set_inc_and_req_fields();
 	$form->set_event_meta();
 	$form->set_custom_fields();
 
 	if ( $rtec->submission != NULL ) {
 		$submission = $rtec->submission->instance();
+		$submission->validate_input( $_POST );
 
 		if ( $submission->has_errors() ) {
 			$form->set_errors( $submission->get_errors() );
@@ -60,7 +62,9 @@ function rtec_process_form_submission()
 {
 	require_once RTEC_PLUGIN_DIR . 'inc/submission/class-rtec-submission.php';
 
-	$submission = new RTEC_Submission( $_POST );
+	$submission = new RTEC_Submission();
+	$submission->validate_input( $_POST );
+
 	$event_meta = rtec_get_event_meta( sanitize_text_field( $_POST['rtec_event_id'] ) );
 
 	if ( $submission->attendance_limit_not_reached( $event_meta['num_registered'] ) ) {

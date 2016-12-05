@@ -71,52 +71,6 @@ class RTEC_Form
 	 * @since 1.1
 	 */
 	private $recaptcha = array();
-
-	/**
-	 * RTEC_Form constructor. Set up basic field info
-	 */
-    public function __construct()
-    {
-		global $rtec_options;
-
-        $fields = array( 'first', 'last', 'email', 'phone', 'other' );
-	    // phone should be false by default
-	    if ( ! isset( $rtec_options['phone_show'] ) ) {
-		    $rtec_options['phone_show'] = false;
-		    $rtec_options['phone_require'] = false;
-	    }
-
-        foreach ( $fields as $field ) {
-
-	        // prevent errors from popping up by defaulting all settings to true
-	        if ( ! isset( $rtec_options[$field . '_show'] ) ) {
-		        $rtec_options[$field . '_show'] = true;
-	        }
-            // create an array of all to be shown
-            if ( $rtec_options[$field . '_show'] == true ) {
-                $this->show_fields[] = $field;
-            }
-
-            // prevent errors from popping up by defaulting all settings to true
-	        if ( ! isset( $rtec_options[$field . '_require'] ) ) {
-		        $rtec_options[$field . '_require'] = true;
-	        }
-            // create an array of all to be required
-            if ( $rtec_options[$field . '_require'] == true ) {
-                $this->required_fields[] = $field;
-            }
-        }
-
-        // recaptcha field calculations for spam check
-        if ( isset( $rtec_options['recaptcha_require'] ) && $rtec_options['recaptcha_require'] )  {
-        	$this->recaptcha = array(
-        		'value_1' => rand(2,5),
-		        'value_2' => rand(2,5)
-	        );
-	        $this->recaptcha['sum'] = (int)$this->recaptcha['value_1'] + (int)$this->recaptcha['value_2'];
-        }
-
-    }
     
     /**
      * Get the one true instance of RTEC_Form.
@@ -131,6 +85,51 @@ class RTEC_Form
         }
         return self::$instance;
     }
+
+	/**
+	 * Set included and required fields for this form
+	 *
+	 */
+	public function set_inc_and_req_fields() {
+		global $rtec_options;
+
+		$fields = array( 'first', 'last', 'email', 'phone', 'other' );
+		// phone should be false by default
+		if ( ! isset( $rtec_options['phone_show'] ) ) {
+			$rtec_options['phone_show'] = false;
+			$rtec_options['phone_require'] = false;
+		}
+
+		foreach ( $fields as $field ) {
+
+			// prevent errors from popping up by defaulting all settings to true
+			if ( ! isset( $rtec_options[$field . '_show'] ) ) {
+				$rtec_options[$field . '_show'] = true;
+			}
+			// create an array of all to be shown
+			if ( $rtec_options[$field . '_show'] == true ) {
+				$this->show_fields[] = $field;
+			}
+
+			// prevent errors from popping up by defaulting all settings to true
+			if ( ! isset( $rtec_options[$field . '_require'] ) ) {
+				$rtec_options[$field . '_require'] = true;
+			}
+			// create an array of all to be required
+			if ( $rtec_options[$field . '_require'] == true ) {
+				$this->required_fields[] = $field;
+			}
+		}
+
+		// recaptcha field calculations for spam check
+		if ( isset( $rtec_options['recaptcha_require'] ) && $rtec_options['recaptcha_require'] )  {
+			$this->recaptcha = array(
+				'value_1' => rand(2,5),
+				'value_2' => rand(2,5)
+			);
+			$this->recaptcha['sum'] = (int)$this->recaptcha['value_1'] + (int)$this->recaptcha['value_2'];
+		}
+	}
 
 	/**
 	 * Set any custom field data set up by user

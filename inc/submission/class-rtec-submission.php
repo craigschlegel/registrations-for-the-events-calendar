@@ -43,16 +43,16 @@ class RTEC_Submission
     public $validate_check = array();
 
 	/**
-	 * RTEC_Submission constructor.
+	 * Validates the initial data
 	 *
 	 * @param $post $_POST data
 	 * @since 1.0
 	 */
-    public function __construct( $post )
+    public function validate_input( $post )
     {
-        $this->submission = $post;
+	    $this->submission = $post;
 
-        $this->validate_data();
+	    $this->validate_data();
     }
 
     public function attendance_limit_not_reached( $num_registered = 0 )
@@ -97,7 +97,11 @@ class RTEC_Submission
 		global $rtec_options;
 
 	    if ( isset( $rtec_options['custom_field_names'] ) ) {
-		    $custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+	    	if ( ! is_array( $rtec_options['custom_field_names'] ) ) {
+			    $custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+		    } else {
+			    $custom_field_names = $rtec_options['custom_field_names'];
+		    }
 	    } else {
 		    $custom_field_names = array();
 	    }
@@ -129,15 +133,15 @@ class RTEC_Submission
             // if the form field is a required first, last, email, or other
             if ( $input_key === 'rtec_first' && $options['first_require'] ) {
             	
-                if ( ( strlen( $input_value ) > 40 ) ||
-                   ( strlen( $input_value ) < 2 ) ) {
+                if ( ( strlen( $input_value ) > 41 ) ||
+                   ( strlen( $input_value ) < 1 ) ) {
                     $this->errors[] = 'first';
                 }
                 
             } elseif ( $input_key === 'rtec_last' && $options['last_require'] ) {
             	
-                if ( ( strlen( $input_value ) > 40 ) ||
-                   ( strlen( $input_value ) < 2 ) ) {
+                if ( ( strlen( $input_value ) > 51 ) ||
+                   ( strlen( $input_value ) < 1 ) ) {
                     $this->errors[] = 'last';
                 }
                 

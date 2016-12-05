@@ -211,11 +211,15 @@ function rtec_add_registration()
 	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
 		die ( 'You did not do this the right way!' );
 	}
-	
+
 	$data = array();
 
 	foreach( $_POST as $key => $value ) {
-		$data[$key] = sanitize_text_field( $value );
+		if ( $key === 'rtec_custom' ) {
+			$data[$key] = json_decode( str_replace( '\"', '"', sanitize_text_field( $_POST['rtec_custom'] ) ), true );
+		} else {
+			$data[$key] = sanitize_text_field( $value );
+		}
 	}
 
 	if ( ( time() - strtotime( $data['rtec_end_time'] ) ) > 0 ) {
@@ -225,8 +229,7 @@ function rtec_add_registration()
 	}
 	
 	$new_reg = new RTEC_Db_Admin();
-
-	$new_reg->insert_entry( $data );
+	$new_reg->insert_entry( $data, false );
 
 	$reg_count = $new_reg->get_registration_count( $id );
 	update_post_meta( $id, '_RTECnumRegistered', $reg_count );
@@ -469,7 +472,8 @@ function rtec_get_parsed_custom_field_data( $raw_data ) {
  * Check db version and update if necessary
  *
  * @since 1.1   added check and add for "phone" column
- * @since 1.3   added check and add for index on event_id and add "custom" column
+ * @since 1.3   added check and add for index on event_id and add "custom" column,
+ *              raise character limit for "other" column
  */
 function rtec_db_update_check() {
 	$db_ver = get_option( 'rtec_db_version', 0 );
@@ -489,7 +493,9 @@ function rtec_db_update_check() {
 		$db = new RTEC_Db_Admin();
 		$db->maybe_add_index( 'event_id', 'event_id' );
 		$db->maybe_add_column_to_table( 'custom' );
+		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'other' );
 	}
+
 }
 add_action( 'plugins_loaded', 'rtec_db_update_check' );
 

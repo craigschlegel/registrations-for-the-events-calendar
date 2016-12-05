@@ -401,10 +401,16 @@ jQuery(document).ready(function($){
             .after('<div class="rtec-table-changing spinner is-active"></div>')
             .fadeTo("slow", .2);
 
+        var custom = {};
+        $('.rtec-custom-add-new').each(function() {
+            custom[$(this).attr('name')] = $(this).val();
+        });
+
         var submitData = {
                 action : 'rtec_add_registration',
                 rtec_event_id: $('.rtec-single-event').attr('data-rtec-event-id'),
                 rtec_other: $table.find('input[name=other]').val(),
+                rtec_custom: JSON.stringify(custom),
                 rtec_first: $table.find('input[name=first]').val(),
                 rtec_email: $table.find('input[name=email]').val(),
                 rtec_phone: $table.find('input[name=phone]').val().replace(/\D/g,''),

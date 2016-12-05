@@ -54,7 +54,7 @@ class RTEC_Db
 	 * @since 1.0
 	 * @param $data
 	 */
-	public function insert_entry( $data )
+	public function insert_entry( $data, $from_form = true )
 	{
 		global $wpdb;
 
@@ -67,7 +67,7 @@ class RTEC_Db
 		$venue = isset( $data['rtec_venue_title'] ) ? $data['rtec_venue_title'] : '';
 		$phone = isset( $data['rtec_phone'] ) ? preg_replace( '/[^0-9]/', '', $data['rtec_phone'] ) : '';
 		$other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
-		$custom = rtec_serialize_custom_data( $data );
+		$custom = rtec_serialize_custom_data( $data, $from_form );
 		$status = isset( $data['rtec_status'] ) ? $data['rtec_status'] : 'n';
 		$wpdb->query( $wpdb->prepare( "INSERT INTO $this->table_name
           ( event_id, registration_date, last_name, first_name, email, venue, phone, other, custom, status ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %s, %s, %s )",

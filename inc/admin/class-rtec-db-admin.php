@@ -336,7 +336,7 @@ class RTEC_Db_Admin extends RTEC_Db
 	/**
 	 * Used to add indices to registrations table
 	 *
-	 * @param $index_name string    name of index to add if it doesn't exist
+	 * @param $index string    name of index to add if it doesn't exist
 	 * @param $column string        name of column to add index to
 	 * @since 1.3
 	 */
@@ -355,4 +355,22 @@ class RTEC_Db_Admin extends RTEC_Db
 		    $wpdb->query( "ALTER TABLE $table_name ADD INDEX $index_name ($column_name)" );
 	    }
     }
+
+	/**
+	 * Used to add indices to registrations table
+	 *
+	 * @param $edit string    name of index to add if it doesn't exist
+	 * @param $column string        name of column to add index to
+	 * @since 1.3
+	 */
+	public function maybe_update_column( $edit, $column )
+	{
+		global $wpdb;
+
+		$edit = esc_sql( $edit );
+
+		$results = $wpdb->query( "ALTER TABLE $this->table_name MODIFY $column $edit" );
+
+		echo $results;
+	}
 }
