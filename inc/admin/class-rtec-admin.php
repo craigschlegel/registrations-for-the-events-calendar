@@ -822,6 +822,24 @@ class RTEC_Admin
             <span class="rtec-col-1">{other}</span><span class="rtec-col-2">Information submitted in the "other" field</span>
             <span class="rtec-col-1">{ical-url}</span><span class="rtec-col-2">Plain text web address to download ical file for event</span>
             <span class="rtec-col-1">{nl}</span><span class="rtec-col-2">Creates a new line/line break</span>
+            <?php
+            // add custom
+            if ( isset( $options['custom_field_names'] ) ) {
+
+                if ( is_array( $options['custom_field_names'] ) ) {
+                    $custom_field_names = $options['custom_field_names'];
+                } else {
+                    $custom_field_names = explode( ',', $options['custom_field_names'] );
+                }
+
+            } else {
+                $custom_field_names = array();
+            }
+
+            foreach ( $custom_field_names as $field ) {
+                echo '<span class="rtec-col-1">' . '{' . $options[$field . '_label'] . '}' . '</span><span class="rtec-col-2">Custom field</span>';
+            }
+            ?>
         </span>
         <?php endif; ?>
 
