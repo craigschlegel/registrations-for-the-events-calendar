@@ -374,7 +374,5 @@ class RTEC_Db_Admin extends RTEC_Db
 		$edit = esc_sql( $edit );
 
 		$results = $wpdb->query( "ALTER TABLE $table_name MODIFY $column_name $edit" );
-
-		echo $results;
 	}
 }

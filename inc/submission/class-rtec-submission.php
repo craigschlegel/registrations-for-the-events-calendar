@@ -298,18 +298,9 @@ class RTEC_Submission
 		    $change = 1;
 		    $db->update_num_registered_meta( $data['rtec_event_id'], $data['rtec_num_registered'], $change );
 	    }
-/*
-	    if ( $confirmation_success && $notification_success ) {
-	    	return 'success';
-	    } else {
-	    	return 'email';
-	    }*/
 
-	    if ( true ) {
-		    return 'success';
-	    } else {
-		    return 'email';
-	    }
+	    return 'success';
+
     }
 
 	/**
