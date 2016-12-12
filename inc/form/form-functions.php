@@ -147,7 +147,7 @@ add_action( 'wp_head', 'rtec_custom_css' );
  */
 function rtec_scripts_and_styles() {
 	wp_enqueue_style( 'rtec_styles', RTEC_PLUGIN_URL . '/css/rtec-styles.css', array(), RTEC_VERSION );
-	//wp_enqueue_script( 'rtec_scripts', RTEC_PLUGIN_URL . '/js/rtec-scripts.js', array( 'jquery' ), RTEC_VERSION, true );
+	wp_enqueue_script( 'rtec_scripts', RTEC_PLUGIN_URL . '/js/rtec-scripts.js', array( 'jquery' ), RTEC_VERSION, true );
 	wp_localize_script( 'rtec_scripts', 'rtec', array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' )
 		)

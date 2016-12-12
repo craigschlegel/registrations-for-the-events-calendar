@@ -85,6 +85,15 @@ function rtec_get_venue( $event_id = NULL ) {
 	}
 }
 
+/**
+ * Takes the custom data array and converts to serialized data for
+ * adding to the db
+ *
+ * @param $submission_data
+ * @param bool $from_form
+ *
+ * @return mixed
+ */
 function rtec_serialize_custom_data( $submission_data, $from_form = true ) {
 	$options = get_option( 'rtec_options', array() );
 

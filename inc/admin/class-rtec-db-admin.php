@@ -34,7 +34,7 @@ class RTEC_Db_Admin extends RTEC_Db
                 email VARCHAR(60) NOT NULL,
                 venue VARCHAR(100) NOT NULL,
                 phone VARCHAR(40) DEFAULT '' NOT NULL,
-                other VARCHAR(100) DEFAULT '' NOT NULL,
+                other VARCHAR(1000) DEFAULT '' NOT NULL,
                 custom LONGTEXT DEFAULT '' NOT NULL,
                 status CHAR(1) DEFAULT 'y' NOT NULL,
                 UNIQUE KEY id (id)
@@ -106,6 +106,7 @@ class RTEC_Db_Admin extends RTEC_Db
      *
      * @return mixed bool/array false if no results, registrations if there are
      * @since 1.0
+     * @since 1.3   expanded to work with custom fields and dynamic entries
      */
     public function retrieve_entries( $data, $full = false )
     {
@@ -319,17 +320,18 @@ class RTEC_Db_Admin extends RTEC_Db
 	 * @param $column string    name of column to add if it doesn't exist
 	 * @since 1.1
 	 */
-    public function maybe_add_column_to_table( $column )
+    public function maybe_add_column_to_table( $column, $type = 'VARCHAR(40)' )
     {
 	    global $wpdb;
 
 	    $table_name = esc_sql( $this->table_name );
 	    $column_name = esc_sql( $column );
+	    $type_name = esc_sql( $type );
 
 	    $results = $wpdb->query( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$table_name' AND column_name = '$column_name'" );
 
 	    if ( $results == 0 ){
-		    $wpdb->query( "ALTER TABLE $table_name ADD $column_name VARCHAR(40) DEFAULT '' NOT NULL" );
+		    $wpdb->query( "ALTER TABLE $table_name ADD $column_name $type_name DEFAULT '' NOT NULL" );
 	    }
     }
 
@@ -367,9 +369,11 @@ class RTEC_Db_Admin extends RTEC_Db
 	{
 		global $wpdb;
 
+		$table_name = esc_sql( $this->table_name );
+		$column_name = esc_sql( $column );
 		$edit = esc_sql( $edit );
 
-		$results = $wpdb->query( "ALTER TABLE $this->table_name MODIFY $column $edit" );
+		$results = $wpdb->query( "ALTER TABLE $table_name MODIFY $column_name $edit" );
 
 		echo $results;
 	}

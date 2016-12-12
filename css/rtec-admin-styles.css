@@ -84,10 +84,12 @@
     word-wrap: break-word;
     max-width: 120px;
 }
-.rtec-wrapper .rtec-admin-secondary-button {
-    margin-left: 1em;
+.rtec-wrapper .rtec-admin-secondary-button,
+.rtec-wrapper .tablenav a.button {
+    margin: 0 0 0 1em;
+    display: inline-block;
 }
-.rtec-overview .rtec-admin-secondary-button {
+.rtec-overview .rtec-admin-secondary-button{
     float: right;
     margin: .5em 1em .5em 1em;
 }

@@ -1,5 +1,4 @@
 <?php
-
 settings_errors(); ?>
 <h1><?php _e( 'Email Settings', 'rtec' ); ?></h1>
 <form method="post" action="options.php">

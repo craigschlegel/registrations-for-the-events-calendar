@@ -84,6 +84,9 @@
 #rtec .rtec-form-buttons input{
     margin: 0;
 }
+#rtec .rtec-custom-hover:hover {
+    opacity: .8;
+}
 
 #rtec .rtec-valid {
     border: 1px solid rgb(20, 220, 70) !important;

@@ -111,6 +111,13 @@ jQuery(document).ready(function($){
         rtecUpdateCustomNames();
     });
 
+    // color picker
+    var $rtecColorpicker = $('.rtec-colorpicker');
+
+    if ($rtecColorpicker.length > 0){
+        $rtecColorpicker.wpColorPicker();
+    }
+
     // EMAIL Tab
     var $rtecNotMessageTr = $('.rtec-notification-message-tr');
 

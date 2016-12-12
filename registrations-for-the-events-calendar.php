@@ -6,7 +6,7 @@ Version: 1.2.2
 Author: Roundup WP
 Author URI: roundupwp.com
 License: GPLv2 or later
-Text Domain: rtec
+Text Domain: registrations-for-the-events-calendar
 */
 
 /*
@@ -124,7 +124,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
          */
         public function __clone() {
             // Cloning instances of the class is forbidden.
-            _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'rtec' ), '1.0' );
+            _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'registrations-for-the-events-calendar' ), '1.0' );
         }
 
         /**
@@ -136,7 +136,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
          */
         public function __wakeup() {
             // Unserializing instances of the class is forbidden.
-            _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'rtec' ), '1.0' );
+            _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'registrations-for-the-events-calendar' ), '1.0' );
         }
 
         /**
@@ -149,7 +149,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
         private function constants() {
             // Plugin version.
             if ( ! defined( 'RTEC_VERSION' ) ) {
-                define( 'RTEC_VERSION', '1.2.3' );
+                define( 'RTEC_VERSION', '1.2.5' );
             }
             // Plugin Folder Path.
             if ( ! defined( 'RTEC_PLUGIN_DIR' ) ) {
@@ -253,9 +253,15 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 		    }
 
 	    }
+
+	    public function text_domain() {
+		    load_plugin_textdomain( 'registrations-for-the-events-calendar', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
+	    }
     }
 endif; // End if class_exists check.
 register_activation_hook( __FILE__, array( 'Registrations_For_The_Events_Calendar', 'install' ) );
+add_action( 'plugins_loaded', array( 'Registrations_For_The_Events_Calendar', 'text_domain' ) );
+
 
 /**
  * The main function for Registrations_For_The_Events_Calendar
