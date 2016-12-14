@@ -2,7 +2,7 @@
 /*
 Plugin Name: Registrations for The Events Calendar
 Description: Collect and manage registrations for events posted using The Events Calendar by Modern Tribe.
-Version: 1.2.2
+Version: 1.3
 Author: Roundup WP
 Author URI: roundupwp.com
 License: GPLv2 or later

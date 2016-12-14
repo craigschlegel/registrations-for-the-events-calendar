@@ -224,11 +224,25 @@ class RTEC_Form
 	{
 		global $rtec_options;
 
+		$options = get_option( 'rtec_options' );
+		$WP_offset = get_option( 'gmt_offset' );
+
+		if ( ! empty( $WP_offset ) ) {
+			$tz_offset = $WP_offset * HOUR_IN_SECONDS;
+		} else {
+			$timezone = isset( $options['timezone'] ) ? $options['timezone'] : 'America/New_York';
+			// use php DateTimeZone class to handle the date formatting and offsets
+			$date_obj = new DateTime( date( 'm/d g:i a' ), new DateTimeZone( "UTC" ) );
+			$date_obj->setTimeZone( new DateTimeZone( $timezone ) );
+			$utc_offset = $date_obj->getOffset();
+			$tz_offset = $utc_offset;
+		}
+
 		$deadline_multiplier = isset( $rtec_options['registration_deadline'] ) ? sanitize_text_field( $rtec_options['registration_deadline'] ) : 0;
 		$deadline_unit = isset( $rtec_options['registration_deadline_unit'] ) ? sanitize_text_field( $rtec_options['registration_deadline_unit'] ) : 0;
 		$deadline_time = strtotime( $this->event_meta['start_date'] ) - $deadline_multiplier * $deadline_unit;
 
-		return( $deadline_time < time() );
+		return( $deadline_time < ( time() + $tz_offset ) );
 	}
 
 	/**
