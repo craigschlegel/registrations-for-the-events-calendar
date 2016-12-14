@@ -299,6 +299,10 @@ class RTEC_Submission
 		    $db->update_num_registered_meta( $data['rtec_event_id'], $data['rtec_num_registered'], $change );
 	    }
 
+	    if ( $this->email_given() && ! $disable_confirmation && ! $confirmation_success ) {
+		    return 'email';
+	    }
+
 	    return 'success';
 
     }
@@ -625,7 +629,15 @@ class RTEC_Submission
 	 */
     public function get_not_subject()
     {
-        return __( 'New Registration', 'registrations-for-the-events-calendar' );
+	    global $rtec_options;
+
+	    if ( isset( $rtec_options['notification_subject'] ) && ! empty ( $rtec_options['notification_subject'] ) ) {
+		    $subject = $this->strip_malicious( $this->find_and_replace( $rtec_options['notification_subject'] ) );
+
+		    return $subject;
+	    }
+
+	    return __( 'New Registration', 'registrations-for-the-events-calendar' );
     }
 
 	/**

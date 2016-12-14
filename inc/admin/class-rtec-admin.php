@@ -425,6 +425,20 @@ class RTEC_Admin
             'default' => 'WordPress'
         ));
 
+        // notification subject
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'notification_subject',
+            'title' => '<label>Notification Subject</label>',
+            'example' => 'example: Registration Notification',
+            'description' => 'Enter a subject for the notification email',
+            'callback'  => 'default_text',
+            'class' => 'regular-text',
+            'page' => 'rtec_email_notification',
+            'section' => 'rtec_email_notification',
+            'default' => 'Registration Notification'
+        ));
+
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'use_custom_notification',
