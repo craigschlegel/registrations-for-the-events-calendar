@@ -29,8 +29,8 @@ function rtec_get_event_meta( $id = '' ) {
 
 	$event_meta['post_id'] = isset( $post_obj->ID ) ? $post_obj->ID : '';
 	$event_meta['title'] = ! empty( $id ) ? get_the_title( $id ) : get_the_title();
-	$event_meta['start_date'] = isset( $post_obj->EventStartDate ) ? $post_obj->EventStartDate : '';
-	$event_meta['end_date'] = isset( $post_obj->EventEndDate ) ? $post_obj->EventEndDate : '';
+	$event_meta['start_date'] = isset( $meta['_EventStartDate'][0] ) ? $meta['_EventStartDate'][0] : '';
+	$event_meta['end_date'] = isset( $meta['_EventEndDate'][0] ) ? $meta['_EventEndDate'][0] : '';
 	$event_meta['venue_id'] = isset( $meta['_EventVenueID'][0] ) ? $meta['_EventVenueID'][0] : '';
 	$venue = rtec_get_venue( $post_obj->ID );
 	$event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
