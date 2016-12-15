@@ -99,6 +99,7 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 * Tweak: The bottom row of labels in the "Detailed View" are conditionally displayed when there are 15 registrations or more.
 * Tweak: You can now use the dynamic text fields in the "Confirmation From" field i.e. "{event-title}"
 * Fix: Text domain changed from "rtec" to "registrations-for-the-events-calendar" (more internationalization/translation improvements to come).
+* Fix: Fixed issue where event start time was not being retrieved correctly and causing a problem with the registration deadline
 
 = 1.2.3 =
 * Tweak: Allowed up to 100 characters in "Other" field instead of only 20
