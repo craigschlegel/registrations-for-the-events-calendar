@@ -566,7 +566,12 @@ class RTEC_Submission
 			    $body .= sprintf( '%s: %s', $other_label, $other ) . "\n";
 		    }
 
-		    if ( isset( $rtec_options['custom_field_names'] ) && is_array( $rtec_options['custom_field_names'] ) ) {
+		    if ( isset( $rtec_options['custom_field_names'] ) ) {
+
+		    	if ( ! is_array( $rtec_options['custom_field_names'] ) ) {
+				    $rtec_options['custom_field_names'] = explode( ',', $rtec_options['custom_field_names'] );
+			    }
+
 			    foreach ( $rtec_options['custom_field_names'] as $field ) {
 
 				    if ( ! empty( $this->submission[ 'rtec_' . $field ] ) ) {
