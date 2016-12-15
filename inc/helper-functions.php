@@ -84,3 +84,37 @@ function rtec_get_venue( $event_id = NULL ) {
 		return '';
 	}
 }
+
+/**
+ * Takes the custom data array and converts to serialized data for
+ * adding to the db
+ *
+ * @param $submission_data
+ * @param bool $from_form
+ *
+ * @return mixed
+ */
+function rtec_serialize_custom_data( $submission_data, $from_form = true ) {
+	$options = get_option( 'rtec_options', array() );
+
+	if ( isset( $options['custom_field_names'] ) ) {
+		$custom_field_names = explode( ',', $options['custom_field_names'] );
+	} else {
+		$custom_field_names = array();
+	}
+
+	$custom_data = array();
+	if ( $from_form ) {
+		foreach ( $custom_field_names as $field ) {
+
+			if ( isset( $submission_data['rtec_' . $field] ) ) {
+				$custom_data[$options[$field . '_label']] = $submission_data['rtec_' . $field];
+			}
+
+		}
+	} else {
+		$custom_data = $submission_data['rtec_custom'];
+	}
+
+	return maybe_serialize( $custom_data );
+}

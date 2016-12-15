@@ -36,7 +36,7 @@ class RTEC_Admin
         $new_registrations_count = rtec_get_existing_new_reg_count();
 
         if ( $new_registrations_count > 0 ) {
-            $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . $new_registrations_count . '</span></span>';
+            $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . esc_html( $new_registrations_count ) . '</span></span>';
         } else {
             if ( get_transient( 'rtec_new_messages' ) === 'yes' ) {
                 $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>New!</span></span>';
@@ -300,6 +300,30 @@ class RTEC_Admin
             'default_unit' => '%'
         ));
 
+        // form background color
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'form_bg_color',
+            'title' => '<label for="rtec_form_bg_color">Form Background Color</label>',
+            'example' => '',
+            'callback'  => 'default_color',
+            'class' => 'small-text',
+            'page' => 'rtec_form_styles',
+            'section' => 'rtec_form_styles'
+        ));
+
+        // button background color
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'button_bg_color',
+            'title' => '<label for="rtec_button_bg_color">Button Background Color</label>',
+            'example' => '',
+            'callback'  => 'default_color',
+            'class' => 'small-text',
+            'page' => 'rtec_form_styles',
+            'section' => 'rtec_form_styles'
+        ));
+
         // Custom CSS
         $this->create_settings_field( array(
             'name' => 'custom_css',
@@ -398,7 +422,21 @@ class RTEC_Admin
             'class' => 'regular-text',
             'page' => 'rtec_email_notification',
             'section' => 'rtec_email_notification',
-            'default' => 'New Registration'
+            'default' => 'WordPress'
+        ));
+
+        // notification subject
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'notification_subject',
+            'title' => '<label>Notification Subject</label>',
+            'example' => 'example: Registration Notification',
+            'description' => 'Enter a subject for the notification email',
+            'callback'  => 'default_text',
+            'class' => 'regular-text',
+            'page' => 'rtec_email_notification',
+            'section' => 'rtec_email_notification',
+            'default' => 'Registration Notification'
         ));
 
         $this->create_settings_field( array(
@@ -535,7 +573,7 @@ class RTEC_Admin
         $type = ( isset( $args['type'] ) ) ? 'type="'. $args['type'].'"' : 'type="text"';
         ?>
         <input id="rtec-<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" <?php echo $type; ?> value="<?php echo $option_string; ?>"/>
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
+        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
         <?php
     }
 
@@ -546,20 +584,29 @@ class RTEC_Admin
         ?>
         <select name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>">
             <?php foreach ( $args['fields'] as $field ) : ?>
-                <option value="<?php echo $field[0]; ?>" id="rtec-<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>"<?php if( $selected == $field[0] ) { echo ' selected'; } ?>><?php _e( $field[1], 'rtec' ); ?></option>
+                <option value="<?php echo $field[0]; ?>" id="rtec-<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>"<?php if( $selected == $field[0] ) { echo ' selected'; } ?>><?php _e( $field[1], 'registrations-for-the-events-calendar' ); ?></option>
             <?php endforeach; ?>
         </select>
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
+        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
         <?php
     }
 
     public function default_checkbox( $args )
     {
         $options = get_option( $args['option'] );
-        $option_checked = ( isset( $options[ $args['name'] ] ) ) ? $options[ $args['name'] ] : $args['default'];
+        $option_checked = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $args['default'];
         ?>
-        <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="checkbox" <?php if ( $option_checked === true ) echo "checked"; ?> />
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
+        <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="checkbox" <?php if ( $option_checked == true ) echo "checked"; ?> />
+        <br><span class="description"><?php esc_html( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+        <?php
+    }
+
+    public function default_color( $args )
+    {
+        $options = get_option( $args['option'] );
+        $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
+        ?>
+        <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" value="#<?php esc_attr_e( str_replace('#', '', $option_string ) ); ?>" class="rtec-colorpicker" />
         <?php
     }
     
@@ -591,24 +638,24 @@ class RTEC_Admin
             $valid_count = isset( $options[ $field[0].'_valid_count' ] ) ? esc_attr( $options[ $field[0].'_valid_count' ] ) : $field[5];
             ?>
             <div class="rtec-field-options-wrapper">
-                <h4><?php _e( $label, 'rtec' ); ?></h4>
+                <h4><?php _e( $label, 'registrations-for-the-events-calendar' ); ?></h4>
                 <p>
-                    <label><?php _e( 'Custom Label:', 'rtec' ); ?></label><input type="text" name="<?php echo $args['option'].'['.$field[0].'_label]'; ?>" value="<?php echo $custom_label; ?>" class="large-text">
+                    <label><?php _e( 'Custom Label:', 'registrations-for-the-events-calendar' ); ?></label><input type="text" name="<?php echo $args['option'].'['.$field[0].'_label]'; ?>" value="<?php echo $custom_label; ?>" class="large-text">
                 </p>
                 <p class="rtec-checkbox-row">
                     <input type="checkbox" class="rtec_include_checkbox" name="<?php echo $args['option'].'['.$field[0].'_show]'; ?>" <?php if ( $show == true ) { echo 'checked'; } ?>>
-                    <label><?php _e( 'include', 'rtec' ); ?></label>
+                    <label><?php _e( 'include', 'registrations-for-the-events-calendar' ); ?></label>
 
                     <input type="checkbox" class="rtec_require_checkbox" name="<?php echo $args['option'].'['.$field[0].'_require]'; ?>" <?php if ( $require == true ) { echo 'checked'; } ?>>
-                    <label><?php _e( 'require', 'rtec' ); ?></label><br>
+                    <label><?php _e( 'require', 'registrations-for-the-events-calendar' ); ?></label><br>
                 </p>
                 <p>
-                    <label><?php _e( 'Error Message:', 'rtec' ); ?></label>
+                    <label><?php _e( 'Error Message:', 'registrations-for-the-events-calendar' ); ?></label>
                     <input type="text" name="<?php echo $args['option'].'['.$field[0].'_error]'; ?>" value="<?php echo $error; ?>" class="large-text rtec-other-input">
                 </p>
                 <?php if ( ! empty( $valid_count ) ) : ?>
                 <p>
-                    <label><?php _e( 'Required length for validation:', 'rtec' ); ?></label>
+                    <label><?php _e( 'Required length for validation:', 'registrations-for-the-events-calendar' ); ?></label>
                     <input type="text" name="<?php echo $args['option'].'['.$field[0].'_valid_count]'; ?>" value="<?php echo $valid_count; ?>" class="large-text rtec-valid-count-input">
                     <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'What is this?' ); ?></a>
                     <span class="rtec-tooltip rtec-availability-options-wrapper"><?php _e( 'Enter the length or lengths of the responses that are valid for this field separated by commas. For example, to accept North American phone numbers with and without area codes you would enter "7, 10". If area code is required, enter "10"' ); ?></span>
@@ -624,22 +671,58 @@ class RTEC_Admin
         $error = isset( $options[ 'other_error' ] ) ? esc_attr( $options[ 'other_error' ] ) : false;
         ?>
         <div class="rtec-field-options-wrapper">
-            <h4><?php _e( 'Other', 'rtec' ); ?> <span>(<?php _e( 'will create a plain text field with your label', 'rtec' ); ?>)</span></h4>
+            <h4><?php _e( 'Other', 'registrations-for-the-events-calendar' ); ?> <span>(<?php _e( 'will create a plain text field with your label', 'registrations-for-the-events-calendar' ); ?>)</span></h4>
             <p>
-                <label><?php _e( 'Custom Label:', 'rtec' ); ?></label><input type="text" name="<?php echo $args['option'].'[other_label]'; ?>" value="<?php echo $label; ?>" class="large-text">
+                <label><?php _e( 'Custom Label:', 'registrations-for-the-events-calendar' ); ?></label><input type="text" name="<?php echo $args['option'].'[other_label]'; ?>" value="<?php echo $label; ?>" class="large-text">
             </p>
             <p class="rtec-checkbox-row">
                 <input type="checkbox" class="rtec_include_checkbox" name="<?php echo $args['option'].'[other_show]'; ?>" <?php if( $show == true ) { echo 'checked'; } ?>>
-                <label><?php _e( 'include', 'rtec' ); ?></label>
+                <label><?php _e( 'include', 'registrations-for-the-events-calendar' ); ?></label>
 
                 <input type="checkbox" class="rtec_require_checkbox" name="<?php echo $args['option'].'[other_require]'; ?>" <?php if( $require == true ) { echo 'checked'; } ?>>
-                <label><?php _e( 'require', 'rtec' ); ?></label>
+                <label><?php _e( 'require', 'registrations-for-the-events-calendar' ); ?></label>
             </p>
             <p>
-                <label><?php _e( 'Error Message:', 'rtec' ); ?></label>
+                <label><?php _e( 'Error Message:', 'registrations-for-the-events-calendar' ); ?></label>
                 <input type="text" name="<?php echo $args['option'].'[other_error]'; ?>" value="<?php echo $error; ?>" class="large-text rtec-other-input">
             </p>
         </div>
+
+        <?php
+            $custom_field_names = isset( $options['custom_field_names'] ) ? explode( ',', $options['custom_field_names'] ) : array();
+            $custom_field_string = isset( $options['custom_field_names'] ) ? $options['custom_field_names'] : '';
+        ?>
+        <?php foreach( $custom_field_names as $custom_field ) : ?>
+            <?php if ( !empty( $custom_field) ) : ?>
+            <?php
+            $custom_field_id = str_replace( 'custom', '', $custom_field );
+            $label = isset( $options[$custom_field . '_label'] ) ? $options[$custom_field . '_label'] : 'Custom '.$custom_field_id;
+            $error = isset( $options[$custom_field . '_error'] ) ? $options[$custom_field . '_error'] : 'Error';
+            $show = isset( $options[$custom_field . '_show'] ) ? $options[$custom_field . '_show'] : false;
+            $require = isset( $options[$custom_field . '_require'] ) ? $options[$custom_field . '_require'] : false;
+            ?>
+            <div id="rtec-custom-field-<?php echo $custom_field_id; ?>" class="rtec-field-options-wrapper rtec-custom-field"  data-name="<?php echo $custom_field; ?>">
+                <a href="JavaScript:void(0);" class="rtec-custom-field-remove">Remove X</a>
+                <h4>Custom Field <?php echo $custom_field_id; ?></h4>
+                <p>
+                    <label>Label:</label><input type="text" name="rtec_options[<?php echo $custom_field; ?>_label]" value="<?php echo $label; ?>" class="large-text">
+                </p>
+                <p class="rtec-checkbox-row">
+                    <input type="checkbox" class="rtec_include_checkbox" name="rtec_options[<?php echo $custom_field; ?>_show]" <?php if ( $show ) { echo 'checked=checked'; } ?>>
+                    <label>include</label>
+
+                    <input type="checkbox" class="rtec_require_checkbox" name="rtec_options[<?php echo $custom_field; ?>_require]" <?php if ( $require ) { echo 'checked=checked'; } ?>>
+                    <label>require</label>
+                </p>
+                <p>
+                    <label>Error Message:</label>
+                    <input type="text" name="rtec_options[<?php echo $custom_field; ?>_error]" value="<?php echo $error; ?>" class="large-text rtec-other-input">
+                </p>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <button class="button action rtec-add-field rtec-green-bg">+ <?php _e( 'Add Field', 'registrations-for-the-events-calendar'  ); ?></button>
+        <input type="hidden" id="rtec_custom_field_names" name="rtec_options[custom_field_names]" value="<?php echo $custom_field_string; ?>"/>
         <?php
         // the other field is treated specially
         $label = isset( $options[ 'recaptcha_label' ] ) ? esc_attr( $options[ 'recaptcha_label' ] ) : 'What is';
@@ -647,17 +730,17 @@ class RTEC_Admin
         $error = isset( $options[ 'recaptcha_error' ] ) ? esc_attr( $options[ 'recaptcha_error' ] ) : 'Please try again';
         ?>
         <div class="rtec-field-options-wrapper">
-            <h4><?php _e( 'Recaptcha', 'rtec' ); ?> <span>(<?php _e( 'Simple math question to avoid spam entries. Spam "honey pot" field is in the form by default', 'rtec' ); ?>)</span></h4>
+            <h4><?php _e( 'Recaptcha', 'registrations-for-the-events-calendar' ); ?> <span>(<?php _e( 'Simple math question to avoid spam entries. Spam "honey pot" field is in the form by default', 'registrations-for-the-events-calendar' ); ?>)</span></h4>
             <p>
-                <label><?php _e( 'Custom Label: ', 'rtec' ); ?></label><input type="text" name="<?php echo $args['option'].'[recaptcha_label]'; ?>" value="<?php echo $label; ?>" />
+                <label><?php _e( 'Custom Label: ', 'registrations-for-the-events-calendar' ); ?></label><input type="text" name="<?php echo $args['option'].'[recaptcha_label]'; ?>" value="<?php echo $label; ?>" />
                 <span> 2 + 5</span>
             </p>
             <p class="rtec-checkbox-row">
                 <input type="checkbox" class="rtec_require_checkbox" name="<?php echo $args['option'].'[recaptcha_require]'; ?>" <?php if( $require == true ) { echo 'checked'; } ?>>
-                <label><?php _e( 'require and include', 'rtec' ); ?></label>
+                <label><?php _e( 'require and include', 'registrations-for-the-events-calendar' ); ?></label>
             </p>
             <p>
-                <label><?php _e( 'Error Message:', 'rtec' ); ?></label>
+                <label><?php _e( 'Error Message:', 'registrations-for-the-events-calendar' ); ?></label>
                 <input type="text" name="<?php echo $args['option'].'[recaptcha_error]'; ?>" value="<?php echo $error; ?>" class="large-text rtec-recaptcha-input">
             </p>
         </div>
@@ -669,7 +752,7 @@ class RTEC_Admin
         $options = get_option( $args['option'] );
         $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
         ?>
-        <p><?php _e( $args['description'], 'rtec' ) ; ?></p>
+        <p><?php _e( $args['description'], 'registrations-for-the-events-calendar' ) ; ?></p>
         <textarea name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" style="width: 70%;" rows="7"><?php esc_attr_e( stripslashes( $option_string ) ); ?></textarea>
         <?php
     }
@@ -681,14 +764,14 @@ class RTEC_Admin
         $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $default;
         $selected = ( isset( $options[ $args['name'] . '_unit' ] ) ) ? esc_attr( $options[ $args['name'] . '_unit' ] ) : '3600';
         ?>
-        <span><?php _e( 'Accept registrations up until', 'rtec' ); ?></span>
+        <span><?php _e( 'Accept registrations up until', 'registrations-for-the-events-calendar' ); ?></span>
         <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="number" value="<?php echo $option_string; ?>"/>
         <select name="<?php echo $args['option'].'['.$args['name'].'_unit]'; ?>">
             <option value="60" <?php if ( $selected == "60" ) echo 'selected="selected"' ?> ><?php esc_attr_e( 'Minutes' ); ?></option>
             <option value="3600" <?php if ( $selected == "3600" ) echo 'selected="selected"' ?> ><?php esc_attr_e( 'Hours' ); ?></option>
             <option value="86400" <?php if ( $selected == "86400" ) echo 'selected="selected"' ?> ><?php esc_attr_e( 'Days' ); ?></option>
         </select>
-        <span><?php _e( 'before event start time', 'rtec' ); ?></span>
+        <span><?php _e( 'before event start time', 'registrations-for-the-events-calendar' ); ?></span>
      <?php
     }
     
@@ -706,52 +789,52 @@ class RTEC_Admin
         $option_selected = ( isset( $options['attendance_message_type'] ) ) ? $options['attendance_message_type'] : 'up';
         ?>
         <input name="<?php echo $args['option'].'[include_attendance_message]'; ?>" id="rtec_include_attendance_message" type="checkbox" <?php if ( $option_checked ) echo "checked"; ?> />
-        <label for="rtec_include_attendance_message"><?php _e( 'include registrations availability message', 'rtec' ); ?></label>
+        <label for="rtec_include_attendance_message"><?php _e( 'include registrations availability message', 'registrations-for-the-events-calendar' ); ?></label>
         <br>
         <div class="rtec-availability-options-wrapper" id="rtec-message-type-wrapper">
             <div class="rtec-checkbox-row">
-                <h4><?php _e( 'Message Type', 'rtec' ); ?></h4>
+                <h4><?php _e( 'Message Type', 'registrations-for-the-events-calendar' ); ?></h4>
                 <input class="rtec_attendance_message_type" id="rtec_guests_attending_type" name="<?php echo $args['option'].'[attendance_message_type]'; ?>" type="radio" value="up" <?php if ( $option_selected == 'up' ) echo "checked"; ?> />
-                <label for="rtec_guests_attending_type"><?php _e( 'guests attending (count up)', 'rtec' ); ?></label>
+                <label for="rtec_guests_attending_type"><?php _e( 'guests attending (count up)', 'registrations-for-the-events-calendar' ); ?></label>
                 <input class="rtec_attendance_message_type" id="rtec_spots_remaining_type" name="<?php echo $args['option'].'[attendance_message_type]'; ?>" type="radio" value="down" <?php if ( $option_selected == 'down' ) echo "checked"; ?>/>
-                <label for="rtec_spots_remaining_type"><?php _e( 'spots remaining (count down)', 'rtec' ); ?></label>
+                <label for="rtec_spots_remaining_type"><?php _e( 'spots remaining (count down)', 'registrations-for-the-events-calendar' ); ?></label>
             </div>
         </div>
         
         <div class="rtec-availability-options-wrapper rtec-admin-2-columns" id="rtec-message-text-wrapper-up">
 
-            <h4><?php _e( 'Guests Attending Message Text', 'rtec' ); ?></h4>
+            <h4><?php _e( 'Guests Attending Message Text', 'registrations-for-the-events-calendar' ); ?></h4>
 
-            <label for="rtec_text_before_up"><?php _e( 'Text Before: ', 'rtec' ); ?></label><input id="rtec_text_before_up" type="text" name="<?php echo $args['option'].'[attendance_text_before_up]'; ?>" value="<?php echo $text_before_up; ?>"/></br>
-            <label for="rtec_text_after_up"><?php _e( 'Text After: ', 'rtec' ); ?></label><input id="rtec_text_after_up" type="text" name="<?php echo $args['option'].'[attendance_text_after_up]'; ?>" value="<?php echo $text_after_up; ?>"/>
+            <label for="rtec_text_before_up"><?php _e( 'Text Before: ', 'registrations-for-the-events-calendar' ); ?></label><input id="rtec_text_before_up" type="text" name="<?php echo $args['option'].'[attendance_text_before_up]'; ?>" value="<?php echo $text_before_up; ?>"/></br>
+            <label for="rtec_text_after_up"><?php _e( 'Text After: ', 'registrations-for-the-events-calendar' ); ?></label><input id="rtec_text_after_up" type="text" name="<?php echo $args['option'].'[attendance_text_after_up]'; ?>" value="<?php echo $text_after_up; ?>"/>
             <p class="description">Example: "<strong>Join</strong> 20 <strong>others.</strong>"</p>
 	        <br>
-	        <label for="rtec_text_one_up"><?php _e( 'Message if exactly 1 registration: ', 'rtec' ); ?></label>
+	        <label for="rtec_text_one_up"><?php _e( 'Message if exactly 1 registration: ', 'registrations-for-the-events-calendar' ); ?></label>
 	        <input id="rtec_text_one_up" type="text" class="large-text" name="<?php echo $args['option'].'[attendance_text_one_up]'; ?>" value="<?php echo $one_up; ?>"/>
 
         </div>
         
         <div class="rtec-availability-options-wrapper rtec-admin-2-columns" id="rtec-message-text-wrapper-down">
 
-            <h4><?php _e( 'Spots Remaining Message Text', 'rtec' ); ?></h4>
+            <h4><?php _e( 'Spots Remaining Message Text', 'registrations-for-the-events-calendar' ); ?></h4>
 
-            <label for="rtec_text_before_down"><?php _e( 'Text Before: ', 'rtec' ); ?></label><input id="rtec_text_before_down" type="text" name="<?php echo $args['option'].'[attendance_text_before_down]'; ?>" value="<?php echo $text_before_down; ?>"/></br>
-            <label for="rtec_text_after_down"><?php _e( 'Text After: ', 'rtec' ); ?></label><input id="rtec_text_after_down" type="text" name="<?php echo $args['option'].'[attendance_text_after_down]'; ?>" value="<?php echo $text_after_down; ?>"/>
+            <label for="rtec_text_before_down"><?php _e( 'Text Before: ', 'registrations-for-the-events-calendar' ); ?></label><input id="rtec_text_before_down" type="text" name="<?php echo $args['option'].'[attendance_text_before_down]'; ?>" value="<?php echo $text_before_down; ?>"/></br>
+            <label for="rtec_text_after_down"><?php _e( 'Text After: ', 'registrations-for-the-events-calendar' ); ?></label><input id="rtec_text_after_down" type="text" name="<?php echo $args['option'].'[attendance_text_after_down]'; ?>" value="<?php echo $text_after_down; ?>"/>
             <p class="description">Example: "<strong>Only</strong> 5 <strong>spots left.</strong>"</p>
             <br>
-            <label for="rtec_text_one_down"><?php _e( 'Message if exactly 1 spot left: ', 'rtec' ); ?></label>
+            <label for="rtec_text_one_down"><?php _e( 'Message if exactly 1 spot left: ', 'registrations-for-the-events-calendar' ); ?></label>
             <input id="rtec_text_one_down" type="text" class="large-text" name="<?php echo $args['option'].'[attendance_text_one_down]'; ?>" value="<?php echo $one_down; ?>"/>
 
         </div>
         
         <div class="rtec-availability-options-wrapper" id="rtec-message-text-wrapper-other">
 
-            <h4><?php _e( 'Other Messages', 'rtec' ); ?></h4>
+            <h4><?php _e( 'Other Messages', 'registrations-for-the-events-calendar' ); ?></h4>
 
-            <label for="rtec_text_none_yet"><?php _e( 'Message if no registrations yet: ', 'rtec' ); ?></label>
+            <label for="rtec_text_none_yet"><?php _e( 'Message if no registrations yet: ', 'registrations-for-the-events-calendar' ); ?></label>
             <input id="rtec_text_none_yet" type="text" class="large-text" name="<?php echo $args['option'].'[attendance_text_none_yet]'; ?>" value="<?php echo $none_yet; ?>"/>
             <br><br>
-            <label for="rtec_registrations_closed_message"><?php _e( 'Message if registrations are closed or filled: ', 'rtec' ); ?></label>
+            <label for="rtec_registrations_closed_message"><?php _e( 'Message if registrations are closed or filled: ', 'registrations-for-the-events-calendar' ); ?></label>
             <input id="rtec_registrations_closed_message" type="text" class="large-text" name="<?php echo $args['option'].'[registrations_closed_message]'; ?>" value="<?php echo $closed; ?>"/>
 
         </div>
@@ -786,10 +869,30 @@ class RTEC_Admin
             <span class="rtec-col-1">{other}</span><span class="rtec-col-2">Information submitted in the "other" field</span>
             <span class="rtec-col-1">{ical-url}</span><span class="rtec-col-2">Plain text web address to download ical file for event</span>
             <span class="rtec-col-1">{nl}</span><span class="rtec-col-2">Creates a new line/line break</span>
+            <?php
+            // add custom
+            if ( isset( $options['custom_field_names'] ) ) {
+
+                if ( is_array( $options['custom_field_names'] ) ) {
+                    $custom_field_names = $options['custom_field_names'];
+                } else {
+                    $custom_field_names = explode( ',', $options['custom_field_names'] );
+                }
+
+            } else {
+                $custom_field_names = array();
+            }
+
+            foreach ( $custom_field_names as $field ) {
+                if ( $options[$field . '_show'] ) {
+                    echo '<span class="rtec-col-1">' . '{' . $options[$field . '_label'] . '}' . '</span><span class="rtec-col-2">Custom field</span>';
+                }
+            }
+            ?>
         </span>
         <?php endif; ?>
 
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
+        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
         <?php if ( $preview ) : ?>
 	    <td>
 		    <h4>Preview:</h4>
@@ -909,8 +1012,8 @@ class RTEC_Admin
         $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $default;
         ?>
         <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="text" value="<?php esc_attr_e( $option_string ); ?>" size="10" placeholder="Eg. F jS, Y" />
-        <a href="https://www.roundupwp.com/products/registrations-for-the-events-calendar/docs/date-formatting-guide/" target="_blank"><?php _e( 'Examples' , 'rtec'); ?></a>
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'rtec' ); ?></span>
+        <a href="https://www.roundupwp.com/products/registrations-for-the-events-calendar/docs/date-formatting-guide/" target="_blank"><?php _e( 'Examples' , 'registrations-for-the-events-calendar'); ?></a>
+        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
         <?php
     }
 
@@ -943,16 +1046,37 @@ class RTEC_Admin
     public function validate_options( $input )
     {
         $tab = isset( $_GET["tab"] ) ? $_GET["tab"] : 'registrations';
-        
+
         $updated_options = get_option( 'rtec_options', false );
         $checkbox_settings = array();
         $leave_spaces = array();
-
         if ( isset( $input['default_max_registrations'] ) ) {
             $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'limit_registrations', 'include_attendance_message', 'preserve_db' );
             $leave_spaces = array( 'custom_js', 'custom_css' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $checkbox_settings = array( 'disable_notification', 'disable_confirmation', 'use_custom_notification' );
+        }
+
+        if ( isset( $input['custom_field_names'] ) ) {
+            $custom_field_names = explode( ',', $input['custom_field_names'] );
+        } else {
+            $custom_field_names = array();
+        }
+
+        foreach ( $custom_field_names as $field ) {
+
+            if ( isset( $input[$field . '_require'] ) ) {
+                $updated_options[$field . '_require'] = true;
+            } else {
+                $updated_options[$field . '_require'] = false;
+            }
+
+            if ( isset( $input[$field . '_show'] ) ) {
+                $updated_options[$field . '_show'] = true;
+            } else {
+                $updated_options[$field . '_show'] = false;
+            }
+
         }
 
         foreach ( $checkbox_settings as $checkbox_setting ) {
@@ -971,7 +1095,6 @@ class RTEC_Admin
                     $updated_options[$key] = sanitize_text_field( $val );
                 }
             }
-
             if ( $tab === 'email' ) {
                 $updated_options[$key] = $this->check_malicious_headers( $val );
             }

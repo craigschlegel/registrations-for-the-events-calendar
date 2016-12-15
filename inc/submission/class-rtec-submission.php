@@ -32,23 +32,37 @@ class RTEC_Submission
 
 	/**
 	 * @var array
+	 * @since 1.3
+	 */
+	protected $custom_required_fields = array();
+
+	/**
+	 * @var array
 	 * @since 1.0
 	 */
     public $validate_check = array();
 
 	/**
-	 * RTEC_Submission constructor.
+	 * Validates the initial data
 	 *
 	 * @param $post $_POST data
 	 * @since 1.0
 	 */
-    public function __construct( $post )
+    public function validate_input( $post )
     {
-        $this->submission = $post;
+	    $this->submission = $post;
 
-        $this->validate_data();
+	    $this->validate_data();
     }
 
+	/**
+	 * Compares the allowed number of registrations with the current number
+	 *
+	 * @param int $num_registered
+	 *
+	 * @since 1.2
+	 * @return bool
+	 */
     public function attendance_limit_not_reached( $num_registered = 0 )
     {
 	    $options = get_option( 'rtec_options' );
@@ -81,10 +95,49 @@ class RTEC_Submission
         return self::$instance;
     }
 
+	/**
+	 * Custom fields are set slightly differently so this method exists
+	 *
+	 * @since  1.3
+	 */
+    private function set_custom_fields_required()
+    {
+		global $rtec_options;
+
+	    if ( isset( $rtec_options['custom_field_names'] ) ) {
+
+	    	if ( ! is_array( $rtec_options['custom_field_names'] ) ) {
+			    $custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+		    } else {
+			    $custom_field_names = $rtec_options['custom_field_names'];
+		    }
+
+	    } else {
+		    $custom_field_names = array();
+	    }
+
+	    $required = array();
+	    foreach ( $custom_field_names as $field ) {
+
+		    if ( isset( $rtec_options[$field . '_require'] ) && $rtec_options[$field . '_require']  ) {
+			    $required[] = 'rtec_' . $field;
+		    }
+
+	    }
+
+	    $this->custom_required_fields = $required;
+    }
+
+	/**
+	 * Validates the data submitted by the user
+	 *
+	 * @since 1.3
+	 */
     public function validate_data() {
         // get form options from the db
         $options = get_option( 'rtec_options' );
         $submission = $this->submission;
+	    $this->set_custom_fields_required();
 
         // for each submitted form field
         foreach ( $submission as $input_key => $input_value ) {
@@ -94,16 +147,17 @@ class RTEC_Submission
 	        }
             // if the form field is a required first, last, email, or other
             if ( $input_key === 'rtec_first' && $options['first_require'] ) {
-            	
-                if ( ( strlen( $input_value ) > 100 ) ||
-                   ( strlen( $input_value ) < 2 ) ) {
+
+                if ( ( strlen( $input_value ) > 1000 ) ||
+                   ( strlen( $input_value ) < 1 ) ) {
+
                     $this->errors[] = 'first';
                 }
                 
             } elseif ( $input_key === 'rtec_last' && $options['last_require'] ) {
-            	
-                if ( ( strlen( $input_value ) > 100 ) ||
-                   ( strlen( $input_value ) < 2 ) ) {
+
+                if ( ( strlen( $input_value ) > 1000 ) ||
+                   ( strlen( $input_value ) < 1 ) ) {
                     $this->errors[] = 'last';
                 }
                 
@@ -119,9 +173,11 @@ class RTEC_Submission
 	            $valid_length_count = 0;
 
 	            foreach ( $valid_counts_arr as $valid_count ) {
+
 	            	if ( strlen( $stripped_input ) === (int)$valid_count ) {
 	            		$valid_length_count++;
 		            }
+
 	            }
 
 	            if ( $valid_length_count < 1 ) {
@@ -134,6 +190,12 @@ class RTEC_Submission
                     $this->errors[] = 'other';
                 }
                 
+            } elseif ( in_array( $input_key, $this->custom_required_fields ) ) {
+
+	            if ( empty( $input_value ) ) {
+		            $this->errors[] = str_replace( 'rtec_', '', $input_key );
+	            }
+
             }
         }
 
@@ -239,6 +301,13 @@ class RTEC_Submission
 		    $change = 1;
 		    $db->update_num_registered_meta( $data['rtec_event_id'], $data['rtec_num_registered'], $change );
 	    }
+
+	    if ( $this->email_given() && ! $disable_confirmation && ! $confirmation_success ) {
+		    return 'email';
+	    }
+
+	    return 'success';
+
     }
 
 	/**
@@ -253,9 +322,11 @@ class RTEC_Submission
         $malicious = array( 'to:', 'cc:', 'bcc:', 'content-type:', 'mime-version:', 'multipart-mixed:', 'content-transfer-encoding:' );
         
 	    foreach ( $malicious as $m ) {
+
             if( stripos( $value, $m ) !== false ) {
                 return 'untrusted';
             }
+
         }
         $value = str_replace( array( '\r', '\n', '%0a', '%0d'), ' ' , $value);
 	    
@@ -278,6 +349,68 @@ class RTEC_Submission
     }
 
 	/**
+	 * Used by some features to add dynamic fields to emails, etc..
+	 *
+	 * @param $text string  text from email that needs to replace dynamic fields
+	 *
+	 * @since 1.3
+	 * @return string   text with dynamic fields inserted
+	 */
+    private function find_and_replace( $text )
+    {
+	    global $rtec_options;
+
+	    $working_text = $text;
+	    $date_format = isset( $rtec_options['custom_date_format'] ) ? $rtec_options['custom_date_format'] : 'F j, Y';
+	    $date_str = date_i18n( $date_format, strtotime( $this->submission['rtec_date'] ) );
+	    $first = isset( $this->submission['rtec_first'] ) ? $this->submission['rtec_first'] : '';
+	    $last = isset( $this->submission['rtec_last'] ) ? $this->submission['rtec_last'] : '';
+	    $email = isset( $this->submission['rtec_email'] ) ? $this->submission['rtec_email'] : '';
+	    $phone = isset( $this->submission['rtec_phone'] ) ? rtec_format_phone_number( $this->submission['rtec_phone'] ) : '';
+	    $other = isset( $this->submission['rtec_other'] ) ? $this->submission['rtec_other'] : '';
+
+	    $search_replace = array(
+	    	'{venue}' => $this->submission['rtec_venue_title'],
+		    '{venue-address}' => $this->submission['rtec_venue_address'],
+		    '{venue-city}' => $this->submission['rtec_venue_city'],
+		    '{venue-state}' => $this->submission['rtec_venue_state'],
+		    '{venue-zip}' => $this->submission['rtec_venue_zip'],
+		    '{event-title}' => $this->submission['rtec_title'],
+		    '{event-date}' => $date_str,
+		    '{first}' => $first,
+		    '{last}' => $last,
+		    '{email}' => $email,
+		    '{phone}' => $phone,
+		    '{other}' => $other,
+		    '{ical-url}' => $this->submission['ical_url'],
+		    '{nl}' =>"\n"
+	    );
+
+	    // add custom
+	    if ( isset( $rtec_options['custom_field_names'] ) ) {
+
+	    	if ( is_array( $rtec_options['custom_field_names'] ) ) {
+			    $custom_field_names = $rtec_options['custom_field_names'];
+		    } else {
+			    $custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+		    }
+
+	    } else {
+		    $custom_field_names = array();
+	    }
+
+	    foreach ( $custom_field_names as $field ) {
+		    $search_replace['{' . $rtec_options[$field . '_label'] . '}'] = isset( $this->submission['rtec_'.$field] ) ? $this->submission['rtec_'.$field] : '';
+	    }
+
+	    foreach ( $search_replace as $search => $replace ) {
+		    $working_text = str_replace( $search, $replace, $working_text );
+	    }
+
+	    return $working_text;
+    }
+
+	/**
 	 * Email message sent to user
 	 * 
 	 * @since 1.0
@@ -293,11 +426,7 @@ class RTEC_Submission
 	    $date_str = date_i18n( $date_format, strtotime( $this->submission['rtec_date'] ) );
 
         if ( isset( $rtec_options['confirmation_message'] ) ) {
-            $raw_body = $rtec_options['confirmation_message'];
-            $search = array( '{venue}', '{venue-address}', '{venue-city}', '{venue-state}', '{venue-zip}', '{event-title}', '{event-date}', '{first}', '{last}', '{email}', '{phone}', '{other}', '{ical-url}', '{nl}' );
-            $replace = array( $this->submission['rtec_venue_title'], $this->submission['rtec_venue_address'], $this->submission['rtec_venue_city'], $this->submission['rtec_venue_state'], $this->submission['rtec_venue_zip'], $this->submission['rtec_title'], $date_str, isset( $this->submission['rtec_first'] ) ? $this->submission['rtec_first'] : '', isset( $this->submission['rtec_last'] ) ? $this->submission['rtec_last'] : '', isset( $this->submission['rtec_email'] ) ? $this->submission['rtec_email'] : '', isset( $this->submission['rtec_phone'] ) ? rtec_format_phone_number( $this->submission['rtec_phone'] ) : '', isset( $this->submission['rtec_other'] ) ? $this->submission['rtec_other'] : '', $this->submission['ical_url'], "\n" );
-
-            $body = str_replace( $search, $replace, $raw_body );
+            $body = $this->find_and_replace( $rtec_options['confirmation_message'] );
         } else {
             $body = 'You are registered!'."\n\n";
             $body .= sprintf( 'Event: %1$s at %2$s on %3$s'. "\n",
@@ -365,7 +494,9 @@ class RTEC_Submission
         global $rtec_options;
 
         if ( ! empty ( $rtec_options['confirmation_subject'] ) ) {
-            return $this->strip_malicious( $rtec_options['confirmation_subject'] );
+        	$subject = $this->strip_malicious( $this->find_and_replace( $rtec_options['confirmation_subject'] ) );
+
+            return $subject;
         }
 
         return 'Thank You';
@@ -381,7 +512,7 @@ class RTEC_Submission
         $confirmation_recipient = $this->get_conf_recipient();
         $confirmation_subject = $this->get_conf_subject();
 
-        return wp_mail( $confirmation_recipient, $confirmation_subject, $confirmation_message, $confirmation_header );
+	    return wp_mail( $confirmation_recipient, $confirmation_subject, $confirmation_message, $confirmation_header );
     }
 
 	/**
@@ -399,17 +530,13 @@ class RTEC_Submission
 	    $use_custom_notification = isset( $rtec_options['use_custom_notification'] ) ? $rtec_options['use_custom_notification'] : false;
 
 	    if ( $use_custom_notification ) {
-		    $raw_body = $rtec_options['notification_message'];
-		    $search = array( '{venue}', '{venue-address}', '{venue-city}', '{venue-state}', '{venue-zip}', '{event-title}', '{event-date}', '{first}', '{last}', '{email}', '{phone}', '{other}', '{ical-url}', '{nl}' );
-		    $replace = array( $this->submission['rtec_venue_title'], $this->submission['rtec_venue_address'], $this->submission['rtec_venue_city'], $this->submission['rtec_venue_state'], $this->submission['rtec_venue_zip'], $this->submission['rtec_title'], $date_str, isset( $this->submission['rtec_first'] ) ? $this->submission['rtec_first'] : '', isset( $this->submission['rtec_last'] ) ? $this->submission['rtec_last'] : '', isset( $this->submission['rtec_email'] ) ? $this->submission['rtec_email'] : '', isset( $this->submission['rtec_phone'] ) ? rtec_format_phone_number( $this->submission['rtec_phone'] ) : '', isset( $this->submission['rtec_other'] ) ? $this->submission['rtec_other'] : '', $this->submission['ical_url'], "\n" );
-
-		    $body = str_replace( $search, $replace, $raw_body );
+		    $body = $this->find_and_replace( $rtec_options['notification_message'] );
 	    } else {
-		    $first_label = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : __( 'First', 'rtec' );
-		    $last_label = isset( $rtec_options['last_label'] ) ? esc_html( $rtec_options['last_label'] ) : __( 'Last', 'rtec' );
-		    $email_label = isset( $rtec_options['email_label'] ) ? esc_html( $rtec_options['email_label'] ) : __( 'Email', 'rtec' );
-		    $phone_label = isset( $rtec_options['phone_label'] ) ? esc_html( $rtec_options['phone_label'] ) : __( 'Phone', 'rtec' );
-		    $other_label = isset( $options['other_label'] ) ? esc_html( $options['other_label'] ) : __( 'Other', 'rtec' );
+		    $first_label = isset( $rtec_options['first_label'] ) ? esc_html( $rtec_options['first_label'] ) : __( 'First', 'registrations-for-the-events-calendar' );
+		    $last_label = isset( $rtec_options['last_label'] ) ? esc_html( $rtec_options['last_label'] ) : __( 'Last', 'registrations-for-the-events-calendar' );
+		    $email_label = isset( $rtec_options['email_label'] ) ? esc_html( $rtec_options['email_label'] ) : __( 'Email', 'registrations-for-the-events-calendar' );
+		    $phone_label = isset( $rtec_options['phone_label'] ) ? esc_html( $rtec_options['phone_label'] ) : __( 'Phone', 'registrations-for-the-events-calendar' );
+		    $other_label = isset( $options['other_label'] ) ? esc_html( $options['other_label'] ) : __( 'Other', 'registrations-for-the-events-calendar' );
 
 		    $body .= sprintf( 'The following submission was made for: %1$s at %2$s on %3$s'. "\n",
 			    esc_html( $this->submission['rtec_title'] ) , esc_html( $this->submission['rtec_venue_title'] ) , $date_str );
@@ -437,6 +564,17 @@ class RTEC_Submission
 		    if ( ! empty( $this->submission['rtec_other'] ) ) {
 			    $other = esc_html( $this->submission['rtec_other'] );
 			    $body .= sprintf( '%s: %s', $other_label, $other ) . "\n";
+		    }
+
+		    if ( isset( $rtec_options['custom_field_names'] ) && is_array( $rtec_options['custom_field_names'] ) ) {
+			    foreach ( $rtec_options['custom_field_names'] as $field ) {
+
+				    if ( ! empty( $this->submission[ 'rtec_' . $field ] ) ) {
+					    $custom = esc_html( $this->submission[ 'rtec_' . $field ] );
+					    $body .= sprintf( '%s: %s', $rtec_options[ $field . '_label' ], $custom ) . "\n";
+				    }
+
+			    }
 		    }
 	    }
 
@@ -470,7 +608,7 @@ class RTEC_Submission
     {
 	    global $rtec_options;
 
-        $recipients = explode( ',', $rtec_options['recipients'] );
+        $recipients = explode( ',', str_replace( ' ', '', $rtec_options['recipients'] ) );
         $valid_recipients = array();
 
         foreach ( $recipients as $recipient ) {
@@ -494,7 +632,15 @@ class RTEC_Submission
 	 */
     public function get_not_subject()
     {
-        return 'New Registration';
+	    global $rtec_options;
+
+	    if ( isset( $rtec_options['notification_subject'] ) && ! empty ( $rtec_options['notification_subject'] ) ) {
+		    $subject = $this->strip_malicious( $this->find_and_replace( $rtec_options['notification_subject'] ) );
+
+		    return $subject;
+	    }
+
+	    return __( 'New Registration', 'registrations-for-the-events-calendar' );
     }
 
 	/**
@@ -508,7 +654,7 @@ class RTEC_Submission
         $notification_recipient = $this->get_not_recipient();
         $notification_subject = $this->get_not_subject();
 
-        return wp_mail( $notification_recipient, $notification_subject, $notification_message, $notification_header );
+	    return wp_mail( $notification_recipient, $notification_subject, $notification_message, $notification_header );
     }
 
 	/**

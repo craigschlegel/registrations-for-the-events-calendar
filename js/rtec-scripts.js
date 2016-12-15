@@ -131,8 +131,12 @@ jQuery(document).ready(function($) {
                     RtecForm.validateCount($(this), $(this).closest('.rtec-form-field').attr('data-rtec-valid-count').replace(' ', '').split(','));
                 } else if ($(this).attr('name') == 'rtec_recaptcha_input') {
                     RtecForm.validateSum($(this), $(this).val(), $(this).closest('.rtec-form').find('.rtec-recaptcha-sum').val());
+                } else if ($(this).attr('name') == 'rtec_last') {
+                    RtecForm.validateLength($(this), 1, 100);
+                } else if ($(this).attr('name') == 'rtec_first') {
+                    RtecForm.validateLength($(this), 1, 100);
                 } else {
-                    RtecForm.validateLength($(this), 2, 100);
+                    RtecForm.validateLength($(this), 1, 1000);
                 }
             }
         });
@@ -164,10 +168,14 @@ jQuery(document).ready(function($) {
                         scrollTop: $('#rtec').offset().top - 200
                     }, 750);
 
-                    if (data !== 'full') {
-                        $('#rtec').prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">'+$('#rtec').attr('data-rtec-success-message')+'</p>');
-                    } else {
+                    if (data === 'full') {
                         $('#rtec').prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">Sorry! Registrations just filled up for this event. You are not registered</p>');
+                    } else if (data === 'email') {
+                        $('#rtec').prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">There was a problem sending the email confirmation. Please contact the site administrator to confirm your registration</p>');
+                    } else if (data === 'form') {
+                        $('#rtec').prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">There was a problem with one or more of the entries you submitted. Please try again</p>');
+                    } else {
+                        $('#rtec').prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">'+$('#rtec').attr('data-rtec-success-message')+'</p>');
                     }
 
                 }
