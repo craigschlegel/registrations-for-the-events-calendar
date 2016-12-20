@@ -143,6 +143,25 @@ class RTEC_Admin
         ));
 
         /* Registration Messages */
+        add_settings_section(
+            'rtec_form_registration_availability',
+            'Registration Availability',
+            array( $this, 'blank' ),
+            'rtec_form_registration_availability'
+        );
+
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'disable_by_default',
+            'title' => '<label for="rtec_disable_by_default">Disable Registrations by Default</label>',
+            'example' => '',
+            'description' => 'New events and existing events will not allow registrations until enabled manually',
+            'callback'  => 'default_checkbox',
+            'class' => '',
+            'page' => 'rtec_form_registration_availability',
+            'section' => 'rtec_form_registration_availability',
+            'default' => false
+        ));
 
         $this->create_settings_field( array(
             'option' => 'rtec_options',
@@ -251,13 +270,6 @@ class RTEC_Admin
         ));
 
         /* Form Styling */
-
-        add_settings_section(
-            'rtec_form_registration_availability',
-            'Registration Availability',
-            array( $this, 'blank' ),
-            'rtec_form_registration_availability'
-        );
 
         add_settings_section(
             'rtec_form_styles',
@@ -597,7 +609,7 @@ class RTEC_Admin
         $option_checked = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $args['default'];
         ?>
         <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="checkbox" <?php if ( $option_checked == true ) echo "checked"; ?> />
-        <br><span class="description"><?php esc_html( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+        <br><span class="description"><?php echo esc_html( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
         <?php
     }
 
@@ -1051,7 +1063,7 @@ class RTEC_Admin
         $checkbox_settings = array();
         $leave_spaces = array();
         if ( isset( $input['default_max_registrations'] ) ) {
-            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'limit_registrations', 'include_attendance_message', 'preserve_db' );
+            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'disable_by_default', 'limit_registrations', 'include_attendance_message', 'preserve_db' );
             $leave_spaces = array( 'custom_js', 'custom_css' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $checkbox_settings = array( 'disable_notification', 'disable_confirmation', 'use_custom_notification' );

@@ -87,6 +87,10 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 1.3.1 =
+* New: Add a setting on the "Form" tab to disable registrations for new and existing events by default
+* Fix: Fixed encoding issue for .csv exporter that was not encoding certain characters correctly
+
 = 1.3 =
 * New: Add more custom text input fields to the form using the "+ Add Field" button on the "Form" tab.
 * New: Ability to export a single event's registrations to a .csv file now available in the "Detailed View" of each event.
