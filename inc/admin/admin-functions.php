@@ -116,8 +116,17 @@ add_action( 'admin_init', 'rtec_meta_boxes_init' );
  */
 function rtec_meta_boxes_html(){
 	global $post;
+	global $rtec_options;
+
 	$meta = get_post_meta( $post->ID, '_RTECregistrationsDisabled' );
-	$meta_output = isset( $meta[0] ) ? $meta[0] : 0;
+	$default_disabled = isset( $rtec_options['disable_by_default'] ) ? $rtec_options['disable_by_default'] : false;
+	$event_meta['disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] : $default_disabled;
+	if ( $event_meta['disabled'] === true ) {
+		$event_meta['disabled'] = 1;
+	} else {
+		$event_meta['disabled'] = 0;
+	}
+	$meta_output = isset( $meta[0] ) ? $meta[0] : $default_disabled;
 	?>
 	<div id="eventDetails" class="inside eventForm">
 		<table cellspacing="0" cellpadding="0" id="EventInfo">
@@ -365,8 +374,10 @@ function rtec_event_csv() {
 		$file_name = str_replace( ' ', '-', substr( $event_meta['title'], 0, 10 ) ) . '_' . str_replace( ' ', '-', substr( $venue, 0, 10 ) ) . '_'  . date_i18n( 'm.d', strtotime( $meta['_EventStartDate'][0] ) );
 
 		// output headers so that the file is downloaded rather than displayed
-		header( 'Content-Type: text/csv; charset=utf-8' );
+		header( 'Content-Encoding: UTF-8' );
+		header( 'Content-type: text/csv; charset=UTF-8' );
 		header( 'Content-Disposition: attachment; filename=' . $file_name . '.csv' );
+		echo "\xEF\xBB\xBF"; // UTF-8 BOM
 
 		// create a file pointer connected to the output stream
 		$output = fopen( 'php://output', 'w' );
