@@ -414,7 +414,7 @@ function rtec_event_csv() {
 		die();
 	}
 }
-//add_action( 'admin_init', 'rtec_event_csv' );
+add_action( 'admin_init', 'rtec_event_csv' );
 
 /**
  * Returns the columns for the particular event
