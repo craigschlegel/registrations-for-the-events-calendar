@@ -72,14 +72,14 @@ $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
                                         <input type="checkbox" value="<?php echo esc_attr( (int)$registration['id'] ); ?>" id="rtec-select-<?php echo esc_attr( (int)$registration['id'] ) ?>" class="rtec-registration-select check-column">
                                         <div class="locked-indicator"></div>
                                     </td>
-                                    <td class="rtec-reg-date" data-rtec-submit="<?php echo esc_attr( $registration['registration_date'] ); ?>"><?php echo esc_html( date_i18n( 'F jS, g:i a', strtotime( $registration['registration_date'] )+ $tz_offset ) ); ?></td>
-                                    <td class="rtec-reg-last"><?php echo esc_html( $registration['last_name'] ); ?></td>
-                                    <td class="rtec-reg-first"><?php echo esc_html( $registration['first_name'] ); ?></td>
-                                    <td class="rtec-reg-email"><?php echo esc_html( $registration['email'] ); ?></td>
-                                    <td class="rtec-reg-phone"><?php echo esc_html( rtec_format_phone_number( $registration['phone'] ) ); ?></td>
-                                    <td class="rtec-reg-other"><?php echo esc_html( $registration['other'] ); ?></td>
+                                    <td class="rtec-data-cell rtec-reg-date" data-rtec-submit="<?php echo esc_attr( $registration['registration_date'] ); ?>"><?php echo esc_html( date_i18n( 'F jS, g:i a', strtotime( $registration['registration_date'] )+ $tz_offset ) ); ?></td>
+                                    <td class="rtec-data-cell rtec-reg-last"><?php echo esc_html( $registration['last_name'] ); ?></td>
+                                    <td class="rtec-data-cell rtec-reg-first"><?php echo esc_html( $registration['first_name'] ); ?></td>
+                                    <td class="rtec-data-cell rtec-reg-email"><?php echo esc_html( $registration['email'] ); ?></td>
+                                    <td class="rtec-data-cell rtec-reg-phone"><?php echo esc_html( rtec_format_phone_number( $registration['phone'] ) ); ?></td>
+                                    <td class="rtec-data-cell rtec-reg-other"><?php echo esc_html( $registration['other'] ); ?></td>
                                     <?php if ( $show === 1 ) {
-                                        echo '<td class="rtec-reg-custom-all">';
+                                        echo '<td class="rtec-data-cell rtec-reg-custom-all">';
                                         $custom_array = maybe_unserialize( $registration['custom'] );
                                         if ( is_array( $custom_array ) ) {
                                             foreach ( $custom_array as $key => $value ) {
@@ -92,7 +92,7 @@ $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
                                     } elseif ( is_array( $custom_fields ) ) {
                                         foreach ( $custom_fields as $key => $value ) {
                                             if ( ! empty( $key ) ) { ?>
-                                                <td class="rtec-reg-custom" data-rtec-key="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $value ); ?></td>
+                                                <td class="rtec-data-cell rtec-reg-custom" data-rtec-key="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $value ); ?></td>
                                             <?php }
                                         }
                                     } ?>

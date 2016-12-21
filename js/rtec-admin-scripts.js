@@ -217,6 +217,9 @@ jQuery(document).ready(function($){
     });
 
     // REGISTRATION single tab
+    // set table width to a minimum in case of a lot of fields
+    $('.rtec-single').css('min-width', $('.rtec-single table th').length*125);
+
     function rtecRegistrationAjax(submitData,successFunc) {
         $.ajax({
             url: rtecAdminScript.ajax_url,
@@ -279,11 +282,11 @@ jQuery(document).ready(function($){
                     var $closestRegRow = $(this).closest('.rtec-reg-row'),
                         dateStr = $closestRegRow.find('.rtec-reg-date').text(),
                         date = $closestRegRow.find('.rtec-reg-date').attr('data-rtec-submit'),
-                        lastName = $closestRegRow.find('.rtec-reg-last').text(),
-                        firstName = $closestRegRow.find('.rtec-reg-first').text(),
+                        lastName = $closestRegRow.find('.rtec-reg-last').text().replace("'", '`').replace(/\\/g, ""),
+                        firstName = $closestRegRow.find('.rtec-reg-first').text().replace("'", '`').replace(/\\/g, ""),
                         email = $closestRegRow.find('.rtec-reg-email').text(),
                         phone = $closestRegRow.find('.rtec-reg-phone').text(),
-                        other = $closestRegRow.find('.rtec-reg-other').text(),
+                        other = $closestRegRow.find('.rtec-reg-other').text().replace("'", '`').replace(/\\/g, ""),
                         custom = [];
 
                     editCount = 1;
@@ -299,7 +302,7 @@ jQuery(document).ready(function($){
                     $closestRegRow.find('.rtec-reg-other').html('<input type="text" name="other" id="rtec-other" data-rtec-val="'+other+'" value="'+other+'" />');
                     $closestRegRow.find('td').each(function() {
                         if ($(this).hasClass('rtec-reg-custom')) {
-                            var val = $(this).text();
+                            var val = $(this).text().replace("'", '`').replace(/\\/g, "");
                             $(this).addClass('rtec-custom-editing').html('<input type="text" name="'+jQuery(this).attr('data-rtec-key')+'" class="rtec-edit-input" id="'+jQuery(this).attr('data-rtec-key')+'" data-rtec-val="'+val+'" value="'+val+'" />');
                         }
                     });
@@ -355,12 +358,12 @@ jQuery(document).ready(function($){
             action : 'rtec_update_registration',
             rtec_id: $table.find('.rtec-editing').val(),
             rtec_registration_date: $table.find('.rtec-reg-date').attr('data-rtec-val'),
-            rtec_other: $table.find('input[name=other]').val(),
+            rtec_other: $table.find('input[name=other]').val().replace("'", '`').replace(/\\/g, ""),
             rtec_custom: JSON.stringify(custom),
-            rtec_first: $table.find('input[name=first]').val(),
-            rtec_email: $table.find('input[name=email]').val(),
-            rtec_phone: $table.find('input[name=phone]').val(),
-            rtec_last: $table.find('input[name=last]').val(),
+            rtec_first: $table.find('input[name=first]').val().replace("'", '`').replace(/\\/g, ""),
+            rtec_email: $table.find('input[name=email]').val().replace("'", '`').replace(/\\/g, ""),
+            rtec_phone: $table.find('input[name=phone]').val().replace("'", '`').replace(/\\/g, ""),
+            rtec_last: $table.find('input[name=last]').val().replace("'", '`').replace(/\\/g, ""),
             rtec_nonce : rtecAdminScript.rtec_nonce
         },
         successFunc = function () {
@@ -410,19 +413,19 @@ jQuery(document).ready(function($){
 
         var custom = {};
         $('.rtec-custom-add-new').each(function() {
-            custom[$(this).attr('name')] = $(this).val();
+            custom[$(this).attr('name')] = $(this).val().replace("'", '`').replace(/\\/g, "");
         });
 
         var submitData = {
                 action : 'rtec_add_registration',
                 rtec_event_id: $('.rtec-single-event').attr('data-rtec-event-id'),
-                rtec_other: $table.find('input[name=other]').val(),
+                rtec_other: $table.find('input[name=other]').val().replace("'", '`').replace(/\\/g, ""),
                 rtec_custom: JSON.stringify(custom),
-                rtec_first: $table.find('input[name=first]').val(),
+                rtec_first: $table.find('input[name=first]').val().replace("'", '`').replace(/\\/g, ""),
                 rtec_email: $table.find('input[name=email]').val(),
                 rtec_phone: $table.find('input[name=phone]').val().replace(/\D/g,''),
-                rtec_last: $table.find('input[name=last]').val(),
-                rtec_venue_title: $table.closest('.rtec-single-event').find('.rtec-venue-title').text(),
+                rtec_last: $table.find('input[name=last]').val().replace("'", '`').replace(/\\/g, ""),
+                rtec_venue_title: $table.closest('.rtec-single-event').find('.rtec-venue-title').text().replace("'", '`').replace(/\\/g, ""),
                 rtec_end_time: $table.closest('.rtec-single-event').find('.rtec-end-time').text(),
                 rtec_nonce : rtecAdminScript.rtec_nonce
             },

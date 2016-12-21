@@ -1063,22 +1063,6 @@ class RTEC_Admin
             $custom_field_names = array();
         }
 
-        foreach ( $custom_field_names as $field ) {
-
-            if ( isset( $input[$field . '_require'] ) ) {
-                $updated_options[$field . '_require'] = true;
-            } else {
-                $updated_options[$field . '_require'] = false;
-            }
-
-            if ( isset( $input[$field . '_show'] ) ) {
-                $updated_options[$field . '_show'] = true;
-            } else {
-                $updated_options[$field . '_show'] = false;
-            }
-
-        }
-
         foreach ( $checkbox_settings as $checkbox_setting ) {
             $updated_options[$checkbox_setting] = false;
         }
@@ -1098,6 +1082,26 @@ class RTEC_Admin
             if ( $tab === 'email' ) {
                 $updated_options[$key] = $this->check_malicious_headers( $val );
             }
+        }
+
+        foreach ( $custom_field_names as $field ) {
+
+            if ( isset( $input[$field . '_require'] ) ) {
+                $updated_options[$field . '_require'] = true;
+            } else {
+                $updated_options[$field . '_require'] = false;
+            }
+
+            if ( isset( $input[$field . '_show'] ) ) {
+                $updated_options[$field . '_show'] = true;
+            } else {
+                $updated_options[$field . '_show'] = false;
+            }
+
+            if ( isset( $input[$field . '_label'] ) ) {
+                $updated_options[$field . '_label'] = sanitize_text_field( str_replace( "'", '`', $input[$field . '_label'] ) );
+            }
+
         }
 
         return $updated_options;

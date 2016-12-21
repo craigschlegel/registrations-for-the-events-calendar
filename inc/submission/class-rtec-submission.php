@@ -263,6 +263,8 @@ class RTEC_Submission
 
             // strip potentially malicious header strings
             $new_val = $this->strip_malicious( $new_val );
+	        // replace single quotes
+	        $new_val = str_replace( "'", '`', $new_val );
             // assign the sanitized value
             $this->submission[$input_key] = $new_val;
         }

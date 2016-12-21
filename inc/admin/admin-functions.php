@@ -1,7 +1,7 @@
 <?php
 /**
  * New registrations are counted and added as alerts to the menu items
- * 
+ *
  * @return false|int    false if no new registrations, else the count
  * @since 1.0
  */
@@ -26,7 +26,7 @@ function rtec_get_existing_new_reg_count() {
 
 /**
  * Creates the alert next to the menu item
- * 
+ *
  * @since 1.0
  */
 function rtec_registrations_bubble() {
@@ -170,7 +170,7 @@ add_action( 'save_post', 'rtec_save_meta' );
 
 /**
  * Used to remove registrations from the dashboard
- * 
+ *
  * @since 1.0
  * @since 1.3 changed so only the current event's count is recalculated
  */
@@ -203,7 +203,7 @@ add_action( 'wp_ajax_rtec_delete_registrations', 'rtec_delete_registrations' );
 
 /**
  * Used to manually add a registration from the dashboard
- * 
+ *
  * @since 1.0
  * @since 1.3 changed so only the current event's count is recalculated
  */
@@ -231,7 +231,7 @@ function rtec_add_registration()
 	} else {
 		$data['rtec_status'] = 'c';
 	}
-	
+
 	$new_reg = new RTEC_Db_Admin();
 	$new_reg->insert_entry( $data, false );
 
@@ -244,7 +244,7 @@ add_action( 'wp_ajax_rtec_add_registration', 'rtec_add_registration' );
 
 /**
  * Makes alterations to existing registrations in the dashboard
- * 
+ *
  * @since 1.0
  */
 function rtec_update_registration()
@@ -261,7 +261,7 @@ function rtec_update_registration()
 	foreach( $_POST as $key => $value ) {
 		$data[$key] = esc_sql( $value );
 	}
-	
+
 	$edit_reg = new RTEC_Db_Admin();
 	$edit_reg->update_entry( $data, $custom_data );
 
@@ -272,7 +272,7 @@ add_action( 'wp_ajax_rtec_update_registration', 'rtec_update_registration' );
 
 /**
  * Some CSS and JS needed in the admin area as well
- * 
+ *
  * @since 1.0
  */
 function rtec_admin_scripts_and_styles() {
@@ -403,7 +403,7 @@ function rtec_event_csv() {
 		die();
 	}
 }
-add_action( 'admin_init', 'rtec_event_csv' );
+//add_action( 'admin_init', 'rtec_event_csv' );
 
 /**
  * Returns the columns for the particular event

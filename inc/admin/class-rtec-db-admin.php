@@ -59,11 +59,11 @@ class RTEC_Db_Admin extends RTEC_Db
         global $wpdb;
 
         $id = isset( $data['rtec_id'] ) ? $data['rtec_id'] : '';
-        $last = isset( $data['rtec_last'] ) ? $data['rtec_last'] : '';
-        $first = isset( $data['rtec_first'] ) ? $data['rtec_first'] : '';
+	    $last = isset( $data['rtec_last'] ) ? str_replace( "'", '`', $data['rtec_last'] ) : '';
+	    $first = isset( $data['rtec_first'] ) ? str_replace( "'", '`', $data['rtec_first'] ) : '';
         $email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
 	    $phone = isset( $data['rtec_phone'] ) ? $data['rtec_phone'] : '';
-	    $other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
+	    $other = isset( $data['rtec_other'] ) ? str_replace( "'", '`', $data['rtec_other'] ) : '';
 
 	    $custom = $this->get_custom_data( $id );
 	    $custom = $this->update_custom_data_for_db( $custom, $custom_data );

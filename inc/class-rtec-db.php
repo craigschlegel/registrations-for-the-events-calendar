@@ -61,12 +61,12 @@ class RTEC_Db
 		$now = date( "Y-m-d H:i:s" );
 		$event_id = isset( $data['rtec_event_id'] ) ? $data['rtec_event_id'] : '';
 		$registration_date = isset( $data['rtec_entry_date'] ) ? $data['rtec_entry_date'] : $now;
-		$last = isset( $data['rtec_last'] ) ? $data['rtec_last'] : '';
-		$first = isset( $data['rtec_first'] ) ? $data['rtec_first'] : '';
+		$last = isset( $data['rtec_last'] ) ? str_replace( "'", '`', $data['rtec_last'] ) : '';
+		$first = isset( $data['rtec_first'] ) ? str_replace( "'", '`', $data['rtec_first'] ) : '';
 		$email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
 		$venue = isset( $data['rtec_venue_title'] ) ? $data['rtec_venue_title'] : '';
 		$phone = isset( $data['rtec_phone'] ) ? preg_replace( '/[^0-9]/', '', $data['rtec_phone'] ) : '';
-		$other = isset( $data['rtec_other'] ) ? $data['rtec_other'] : '';
+		$other = isset( $data['rtec_other'] ) ? str_replace( "'", '`', $data['rtec_other'] ) : '';
 		$custom = rtec_serialize_custom_data( $data, $from_form );
 		$status = isset( $data['rtec_status'] ) ? $data['rtec_status'] : 'n';
 		$wpdb->query( $wpdb->prepare( "INSERT INTO $this->table_name
