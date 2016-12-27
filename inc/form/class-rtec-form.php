@@ -212,7 +212,7 @@ class RTEC_Form
 	 */
 	public function registrations_are_disabled()
 	{
-		return ( $this->event_meta['registrations_disabled'] === '1' );
+		return ( $this->event_meta['registrations_disabled'] === '1' || $this->event_meta['registrations_disabled'] === true );
 	}
 
 	/**

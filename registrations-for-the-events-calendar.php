@@ -222,12 +222,15 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 
 		    if ( ! $rtec_options ) {
 			    $defaults = array(
+				    'first_label' => 'First',
 				    'first_show' => true,
 				    'first_require' => true,
 				    'first_error' => 'Please enter your first name',
+				    'last_label' => 'Last',
 				    'last_show' => true,
 				    'last_require' => true,
 				    'last_error' => 'Please enter your last name',
+				    'email_label' => 'Email',
 				    'email_show' => true,
 				    'email_require' => true,
 				    'email_error' => 'Please enter a valid email address',

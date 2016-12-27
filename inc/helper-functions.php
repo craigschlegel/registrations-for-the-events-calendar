@@ -12,6 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function rtec_get_event_meta( $id = '' ) {
+	global $rtec_options;
+
 	$event_meta = array();
 
 	// construct post object
@@ -40,7 +42,8 @@ function rtec_get_event_meta( $id = '' ) {
 	$event_meta['venue_zip'] = isset( $venue_meta['_VenueZip'][0] ) ? $venue_meta['_VenueZip'][0] : '';
 
 	$event_meta['num_registered'] = isset( $meta['_RTECnumRegistered'][0] ) ? $meta['_RTECnumRegistered'][0] : 0;
-	$event_meta['registrations_disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] : 0;
+	$default_disabled = isset( $rtec_options['disable_by_default'] ) ? $rtec_options['disable_by_default'] : 0;
+	$event_meta['registrations_disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] : $default_disabled;
 
 	return $event_meta;
 }

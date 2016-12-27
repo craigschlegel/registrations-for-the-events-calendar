@@ -64,11 +64,6 @@ foreach ( $events as $event ) :
     $event_meta['start_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventStartDate'][0] ) );
     $event_meta['end_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventEndDate'][0] ) );
 	$default_disabled = isset( $rtec_options['disable_by_default'] ) ? $rtec_options['disable_by_default'] : false;
-	if ( $event_meta['disabled'] === true ) {
-		$event_meta['disabled'] = 1;
-	} else {
-		$event_meta['disabled'] = 0;
-	}
 	$event_meta['disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] : $default_disabled;
 
     // set venue meta
@@ -122,11 +117,11 @@ foreach ( $events as $event ) :
 	                <?php foreach ( $columns as $key => $value ) : ?>
 		                <td><?php
 			                if ( isset( $registration[$key] ) ) {
-				                echo esc_html( $registration[$key] );
+				                echo esc_html( str_replace( '\\', '', $registration[$key] ) );
 			                } else if ( isset( $registration[$key.'_name'] ) ) {
-				                echo esc_html( $registration[$key] );
+				                echo esc_html( str_replace( '\\', '', $registration[$key] ) );
 			                } else if ( isset( $registration['custom'][$value] ) ) {
-				                echo esc_html( $registration['custom'][$value] );
+				                echo esc_html( str_replace( '\\', '', $registration['custom'][$value] ) );
 			                }
 			                ?></td>
 	                <?php endforeach; ?>

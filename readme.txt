@@ -4,7 +4,7 @@ Contributors: roundupwp
 Support Website: https://roundupwp.com/products/registrations-for-the-events-calendar/support/
 Tags: the events calendar, registration, event registration, event contact, events calendar, events
 Requires at least: 3.0
-Tested up to: 4.6.1
+Tested up to: 4.7
 Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -88,8 +88,9 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
 = 1.3.1 =
-* New: Add a setting on the "Form" tab to disable registrations for new and existing events by default
-* Fix: Fixed encoding issue for .csv exporter that was not encoding certain characters correctly
+* New: Add a setting on the "Form" tab to disable registrations for new and existing events by default.
+* Fix: Fixed encoding issue for .csv exporter that was not encoding certain characters correctly.
+* Fix: Improved sanitization of some custom field entries.
 
 = 1.3 =
 * New: Add more custom text input fields to the form using the "+ Add Field" button on the "Form" tab.
