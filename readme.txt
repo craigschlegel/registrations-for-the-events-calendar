@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/products/registrations-for-the-events-cal
 Tags: the events calendar, registration, event registration, event contact, events calendar, events
 Requires at least: 3.0
 Tested up to: 4.7
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
