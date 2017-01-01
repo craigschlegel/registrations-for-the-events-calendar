@@ -2,7 +2,7 @@
 
 Contributors: roundupwp
 Support Website: https://roundupwp.com/products/registrations-for-the-events-calendar/support/
-Tags: the events calendar, registration, event registration, event contact, events calendar, events
+Tags: The Events Calendar, registration, event registration, event contact, events calendar, events, RSVP, seminar, conference, workshop, meetup, meetings, calendar, add-on, extension, class, tournament
 Requires at least: 3.0
 Tested up to: 4.7
 Stable tag: 1.3.1
@@ -33,24 +33,27 @@ We would love to hear feedback and support the plugin so please visit the "Suppo
 
 Follow these steps:
 
-1. From the dashboard of your site, navigate to Plugins -> Add New.
-2. Select the Upload option and click "Choose File."
-3. A popup message will appear. Upload the plugin files from your desktop.
-4. Follow any instructions that appear.
-5. Activate the plugin from the Plugins page and navigate to Events -> Registrations to get started setting up options.
+1. Make sure you have the plugin "The Events Calendar" by Modern Tribe installed and activated.
+2. From the dashboard of your site, navigate to Plugins -> Add New.
+3. Select the Upload option and click "Choose File."
+4. A popup message will appear. Upload the plugin files from your desktop.
+5. Follow any instructions that appear.
+6. Activate the plugin from the Plugins page and navigate to Events -> Registrations to get started setting up options.
 
 == Setting up Registrations for the Events Calendar ==
 
-1. Make sure you have the Events Calendar by Modern Tribe installed and active
-2. Create a new event by going to the WordPress dashboard and navigating to Events -> Add New
-3. A registration form will now appear on any published event
-4. You can configure the form fields, messaging, registrations limits etc by navigating to Events -> Registrations and then selecting the "Form" tab
-5. You can configure the email options on the "Email" tab
-6. Add, edit, and remove registrations manually by navigating to the "Registrations" tab and clicking "More" for an event
+1. Make sure you have the plugin "The Events Calendar" by Modern Tribe installed and activated.
+2. If you haven't created an event. Create a new event by going to the WordPress dashboard and navigating to Events -> Add New.
+3. A registration form will now appear on you created event or any other published event.
+4. You can configure the form fields, messaging, registrations limits etc by navigating to Events -> Registrations and then selecting the "Form" tab.
+5. You can configure the email options on the "Email" tab.
+6. See a quick overview of your events and registrations on the "Registrations" tab.
+7. Add, edit, and remove registrations manually by navigating to the "Registrations" tab and clicking "Detailed View" for an event. You can also export or view submission details here.
 
 == Special Thanks ==
 
 Special thanks to Marco (demontechx) for his valuable input on the plugin!
+Special thanks to Henrik (hjald) for fixing a bug in the .csv exporter!
 
 == Screenshots ==
 
@@ -73,11 +76,15 @@ Yes. There is a button to add custom text input fields on the "Form" tab.
 
 = How do I disable registrations for a specific event? =
 
-By default, registrations are enabled for every event. You can disable registrations for a specific event by checking the appropriate box on the "Edit Event" page or on the "Registrations" tab "Overview" page.
+By default, registrations are enabled for every event. You can disable registrations for a specific event by checking the appropriate box on the "Edit Event" page or on the "Registrations" tab "Overview" page. You can also disable registrations by default by checking the checkbox on the "Form" tab.
 
 = Can I set a deadline for when registrations are accepted? =
 
 You can configure an offset for how long registrations will be available relative to the event start time.
+
+= Can I edit registrations and export them for an event? =
+
+Yes. Click on the button "Detailed View" for the event in which you'd like to edit or export registrations for.
 
 = The form is not hidden initially. Why is that? =
 
