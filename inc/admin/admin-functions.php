@@ -536,6 +536,7 @@ function rtec_get_parsed_custom_field_data( $raw_data ) {
  * @since 1.1   added check and add for "phone" column
  * @since 1.3   added check and add for index on event_id and add "custom" column,
  *              raise character limit for "other" column
+ * @since 1.3.2 raise character limit for most fields to match "post" table
  */
 function rtec_db_update_check() {
 	$db_ver = get_option( 'rtec_db_version', 0 );
@@ -556,6 +557,18 @@ function rtec_db_update_check() {
 		$db->maybe_add_index( 'event_id', 'event_id' );
 		$db->maybe_add_column_to_table( 'custom', 'longtext' );
 		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'other' );
+	}
+
+	if ( $db_ver < 1.3 ) {
+		update_option( 'rtec_db_version', RTEC_DBVERSION );
+
+		$db = new RTEC_Db_Admin();
+		$db->maybe_update_column( "BIGINT(20) UNSIGNED NOT NULL", 'event_id' );
+		$db->maybe_update_column( "BIGINT(20) UNSIGNED NOT NULL", 'id' );
+		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'first_name' );
+		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'last_name' );
+		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'email' );
+		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'venue' );
 	}
 
 }

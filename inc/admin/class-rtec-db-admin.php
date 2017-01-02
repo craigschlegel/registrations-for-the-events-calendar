@@ -26,13 +26,13 @@ class RTEC_Db_Admin extends RTEC_Db
 
         if ( $wpdb->get_var( "show tables like '$table_name'" ) != $table_name ) {
             $sql = "CREATE TABLE " . $table_name . " (
-                id MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
-                event_id SMALLINT NOT NULL,
+                id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+                event_id BIGINT(20) UNSIGNED NOT NULL,
                 registration_date DATETIME NOT NULL,
-                last_name VARCHAR(50) NOT NULL,
-                first_name VARCHAR(40) NOT NULL,
-                email VARCHAR(60) NOT NULL,
-                venue VARCHAR(100) NOT NULL,
+                last_name VARCHAR(1000) NOT NULL,
+                first_name VARCHAR(1000) NOT NULL,
+                email VARCHAR(1000) NOT NULL,
+                venue VARCHAR(1000) NOT NULL,
                 phone VARCHAR(40) DEFAULT '' NOT NULL,
                 other VARCHAR(1000) DEFAULT '' NOT NULL,
                 custom LONGTEXT DEFAULT '' NOT NULL,
