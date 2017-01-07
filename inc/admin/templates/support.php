@@ -46,11 +46,65 @@ foreach ( $plugins as $plugin_path => $plugin ) {
 $db_options = get_option( 'rtec_db_version', '' );
 echo str_pad( 'database version:', 28 ) . $db_options ."\n";
 $options = get_option( 'rtec_options' );
+
 foreach ( $options as $key => $val ) {
     $label = esc_html( $key ) . ':';
     $value = isset( $val ) ? esc_html( $val ) : 'unset';
     echo str_pad( $label, 28 ) . $value ."\n";
 }
+
+// DB troubleshooting
+global $wpdb;
+$table_name = esc_sql( $wpdb->prefix . RTEC_TABLENAME );
+
+$column_descriptions = $wpdb->get_results( "DESCRIBE $table_name" );
+
+echo "\n";
+
+foreach ( $column_descriptions as $column ) {
+	echo 'Field: ' . $column->Field . ', Type: ' . $column->Type . ', Key: ' . $column->Key . ', Extra: ' . $column->Extra . "\n";
+}
+
+$last_result = $wpdb->get_results( "SELECT * FROM $table_name ORDER BY id DESC LIMIT 1;" );
+
+echo "\n";
+
+if ( is_array( $last_result ) ) {
+	
+	foreach ( $last_result as $column ) {
+
+		foreach ( $column as $key => $value ) {
+
+			if ( $key != 'first_name' && $key != 'last_name' && $key != 'first_name' && $key != 'custom' && $key != 'phone' ) {
+				echo $key . ': ' . $value;
+			} else {
+				echo $key . ': ' . substr( $value, 0, 3 );
+			}
+
+			echo "\n";
+		}
+	}
+
+}
+$event = tribe_get_events( array(
+	'posts_per_page' => 1,
+	'start_date' => date( '2000-1-1 0:0:0' ),
+	'orderby' => 'date',
+	'order' => 'DESC'
+) );
+
+$meta = rtec_get_event_meta( $event[0]->ID );
+echo "\n";
+
+if ( is_array( $meta ) ) {
+
+	foreach ( $meta as $key => $value ) {
+		echo $key.': ' . $value;
+		echo "\n";
+	}
+
+}
+
 ?>
 
 </textarea>
