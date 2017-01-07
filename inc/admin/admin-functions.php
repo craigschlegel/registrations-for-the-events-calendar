@@ -564,7 +564,6 @@ function rtec_db_update_check() {
 
 		$db = new RTEC_Db_Admin();
 		$db->maybe_update_column( "BIGINT(20) UNSIGNED NOT NULL", 'event_id' );
-		$db->maybe_update_column( "BIGINT(20) UNSIGNED NOT NULL", 'id' );
 		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'first_name' );
 		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'last_name' );
 		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'email' );

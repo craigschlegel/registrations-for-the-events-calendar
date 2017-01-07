@@ -402,8 +402,11 @@ class RTEC_Submission
 	    }
 
 	    foreach ( $custom_field_names as $field ) {
-		    $search_replace['{' . $rtec_options[$field . '_label'] . '}'] = isset( $this->submission['rtec_'.$field] ) ? $this->submission['rtec_'.$field] : '';
+		    if ( isset( $rtec_options[ $field . '_label' ] ) && ! empty( $rtec_options[ $field . '_label' ] ) ) {
+			    $search_replace[ '{' . $rtec_options[ $field . '_label' ] . '}' ] = isset( $this->submission[ 'rtec_' . $field ] ) ? $this->submission[ 'rtec_' . $field ] : '';
+		    }
 	    }
+
 
 	    foreach ( $search_replace as $search => $replace ) {
 		    $working_text = str_replace( $search, $replace, $working_text );

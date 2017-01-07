@@ -74,7 +74,7 @@ jQuery(document).ready(function($){
     }
 
 
-    $('.rtec-add-field').click(function() {
+    $('.rtec-add-field').click(function(event) {
         event.preventDefault();
 
         var rtecFieldIndex = 1;
