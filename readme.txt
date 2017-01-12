@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/products/registrations-for-the-events-cal
 Tags: The Events Calendar, registration, event registration, event contact, events calendar, events, RSVP, seminar, conference, workshop, meetup, meetings, calendar, add-on, extension, class, tournament
 Requires at least: 3.0
 Tested up to: 4.7
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,8 @@ Special thanks to Henrik (hjald) for fixing a bug in the .csv exporter!
 4. Detailed view of a single event's registrations. Buttons to edit, delete, and add registrations
 5. View of the settings on the "Form" tab
 6. View of the settings on the "Email" tab
+7. Example "confirmation" email
+8. Example "notification" email
 
 == Frequently Asked Questions ==
 
@@ -94,8 +96,12 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 1.3.3 =
+* Tweak: Additional troubleshooting information added to "System Info".
+* Fix: Fixed "+ Add Field" button not working for some users.
+
 = 1.3.2 =
-* Fix: Updated columns in the "rtec_registrations" table to allow larger values
+* Fix: Updated columns in the "rtec_registrations" table to allow larger values.
 
 = 1.3.1 =
 * New: Add a setting on the "Form" tab to disable registrations for new and existing events by default.

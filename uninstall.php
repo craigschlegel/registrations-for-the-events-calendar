@@ -3,19 +3,15 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
 }
 
-//If the user is preserving the settings then don't delete them
 $options = get_option( 'rtec_options', array() );
+global $wpdb;
 
-if ( ! $options['preserve_db'] ) {
+//If the user is preserving the settings then don't delete them
+if ( !( isset( $options['preserve_db'] ) && $options['preserve_db'] == true ) && !( isset( $options['preserve_settings'] ) && $options['preserve_settings'] == true ) ) {
 	// clean up options from the database
 	delete_option( 'rtec_options' );
 	delete_option( 'rtec_db_version' );
 	delete_transient( 'rtec_new_registrations' );
-
-	global $wpdb;
-
-	// delete the registrations table
-	$wpdb->query( "DROP TABLE IF EXISTS " . esc_sql( $wpdb->prefix ) . "rtec_registrations" );
 
 	if ( function_exists( 'tribe_get_events' ) ) {
 		$events = tribe_get_events( array(
@@ -32,7 +28,7 @@ if ( ! $options['preserve_db'] ) {
 		endforeach;
 	} else {
 		$args = array(
-			'post_type'   => 'tribe_events'
+			'post_type' => 'tribe_events'
 		);
 
 		// loop through events post types and delete meta data added by this plugin
@@ -48,10 +44,17 @@ if ( ! $options['preserve_db'] ) {
 			endwhile;
 		endif;
 	}
-
-	// reset WP_Query
-	wp_reset_postdata();
-
 }
+
+if ( !( isset( $options['preserve_db'] ) && $options['preserve_db'] == true ) && !( isset( $options['preserve_registrations'] ) && $options['preserve_registrations'] == true ) ) {
+	// delete the registrations table
+	$wpdb->query( "DROP TABLE IF EXISTS " . esc_sql( $wpdb->prefix ) . "rtec_registrations" );
+
+	delete_transient( 'rtec_new_registrations' );
+}
+
+// reset WP_Query
+wp_reset_postdata();
+
 
 

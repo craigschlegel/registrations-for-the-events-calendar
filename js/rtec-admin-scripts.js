@@ -196,7 +196,7 @@ jQuery(document).ready(function($){
         }
     });
 
-    $('.rtec-update-event-options').click(function() {
+    $('.rtec-update-event-options').click(function(event) {
         event.preventDefault();
         $(this).after('<div class="rtec-table-changing spinner is-active"></div>')
             .attr('disabled', true);

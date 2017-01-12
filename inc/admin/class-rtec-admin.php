@@ -369,19 +369,33 @@ class RTEC_Admin
             'rtec_advanced'
         );
 
-        // preserve database
+        // preserve database  preserve_db
         $this->create_settings_field( array(
             'option' => 'rtec_options',
-            'name' => 'preserve_db',
-            'title' => '<label for="rtec_preserve_db">Preserve registrations and settings on uninstall</label>',
+            'name' => 'preserve_registrations',
+            'title' => '<label for="rtec_preserve_db">Preserve registrations on uninstall</label>',
             'example' => '',
-            'description' => 'Keep your registration records and settings preserved in the database when you uninstall the plugin',
-            'callback'  => 'default_checkbox',
+            'description' => 'Keep your registration records preserved in the database when you uninstall the plugin',
+            'callback'  => 'preserve_checkbox',
             'class' => 'default-text',
             'page' => 'rtec_advanced',
             'section' => 'rtec_advanced',
             'default' => false
         ));
+
+	    // preserve settings
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'preserve_settings',
+		    'title' => '<label for="rtec_preserve_db">Preserve settings on uninstall</label>',
+		    'example' => '',
+		    'description' => 'Keep your form and email settings preserved when you uninstall the plugin',
+		    'callback'  => 'preserve_checkbox',
+		    'class' => 'default-text',
+		    'page' => 'rtec_advanced',
+		    'section' => 'rtec_advanced',
+		    'default' => false
+	    ));
 
         /**
          * Email Settings
@@ -612,6 +626,20 @@ class RTEC_Admin
         <br><span class="description"><?php echo esc_html( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
         <?php
     }
+
+	public function preserve_checkbox( $args )
+	{
+		$options = get_option( $args['option'] );
+		if ( isset( $options['preserve_db'] ) && $options['preserve_db'] == true ) {
+			$option_checked = true;
+		} else {
+			$option_checked = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $args['default'];
+		}
+		?>
+		<input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="checkbox" <?php if ( $option_checked == true ) echo "checked"; ?> />
+		<br><span class="description"><?php echo esc_html( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+		<?php
+	}
 
     public function default_color( $args )
     {
@@ -1063,7 +1091,7 @@ class RTEC_Admin
         $checkbox_settings = array();
         $leave_spaces = array();
         if ( isset( $input['default_max_registrations'] ) ) {
-            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'disable_by_default', 'limit_registrations', 'include_attendance_message', 'preserve_db' );
+            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'disable_by_default', 'limit_registrations', 'include_attendance_message', 'preserve_db', 'preserve_registrations', 'preserve_settings' );
             $leave_spaces = array( 'custom_js', 'custom_css' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $checkbox_settings = array( 'disable_notification', 'disable_confirmation', 'use_custom_notification' );

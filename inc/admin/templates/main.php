@@ -1,5 +1,6 @@
 <div class="wrap rtec-admin-wrap">
     <h1><?php _e( 'Registrations for the Events Calendar', 'registrations-for-the-events-calendar' ); ?></h1>
+
     <?php
     // this controls which view is included based on the selected tab
     $tab = isset( $_GET["tab"] ) ? $_GET["tab"] : 'registrations';
