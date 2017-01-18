@@ -42,8 +42,8 @@
     width: 100%;
     margin: 0 auto 30px;
     padding: 30px;
-    border: 1px solid #eee;
-    background: #fafafa;
+    border: 1px solid #ddd;
+    background: #eee;
 }
 #rtec .rtec-register-button {
     position: relative;
@@ -64,19 +64,23 @@
 #rtec input[type="text"],
 #rtec input[type="email"],
 #rtec input[type="tel"],
+#rtec input[type="number"],
 #rtec textarea {
     box-sizing: border-box;
     display: inline-block;
-    padding: 5px;
+    padding: 10px 15px;
     margin: 0;
     width: 100%;
-    border: 1px solid #EAEAEA;
+    border: 1px solid #ddd;
     line-height: 20px;
     background: #fff;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    font-size: 16px;
+    font-size: 18px;
+}
+#rtec input[type="number"] {
+    max-width: 100px;
 }
 #rtec .rtec-form-buttons {
     text-align: center;
@@ -97,7 +101,7 @@
 }
 #rtec .rtec-error-message {
     position: absolute;
-    top: 34px;
+    top: 42px;
     margin: 0;
     padding: 0 5px 2px;
     font-size: 16px;

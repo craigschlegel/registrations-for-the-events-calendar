@@ -263,21 +263,21 @@ class RTEC_Form
             if ( in_array( $type, $show_fields ) ) {
                 $input_fields_data[$type]['name'] = $type;
                 $input_fields_data[$type]['require'] = in_array( $type, $required_fields );
-                $input_fields_data[$type]['error_message'] = isset( $rtec_options[$type . '_error'] ) ? $rtec_options[$type . '_error'] : 'Error';
 	            $input_fields_data[$type]['valid_count'] = isset( $rtec_options[$type . '_valid_count'] ) ? ' data-rtec-valid-count="' . $rtec_options[$type . '_valid_count'].'"' : '';
+	            $input_fields_data[$type]['error_message'] = rtec_get_text( $rtec_options[$type . '_error'], __( 'Error', 'registrations-for-the-events-calendar' ) );
 
                 switch( $type ) {
                     case 'first':
-                        $input_fields_data['first']['label'] = isset( $rtec_options['first_label'] ) ? $rtec_options['first_label'] : __( 'First', 'registrations-for-the-events-calendar' );
+                        $input_fields_data['first']['label'] = rtec_get_text( $rtec_options['first_label'], __( 'First', 'registrations-for-the-events-calendar' ) );
                         break;
                     case 'last':
-                        $input_fields_data['last']['label'] = isset( $rtec_options['last_label'] ) ? $rtec_options['last_label'] : __( 'Last', 'registrations-for-the-events-calendar' );
+                        $input_fields_data['last']['label'] = rtec_get_text( $rtec_options['last_label'], __( 'Last', 'registrations-for-the-events-calendar' ) );
                         break;
                     case 'email':
-                        $input_fields_data['email']['label'] = isset( $rtec_options['email_label'] ) ? $rtec_options['email_label'] : __( 'Email', 'registrations-for-the-events-calendar' );
+                        $input_fields_data['email']['label'] = rtec_get_text( $rtec_options['email_label'], __( 'Email', 'registrations-for-the-events-calendar' ) );
                         break;
 	                case 'phone':
-		                $input_fields_data['phone']['label'] = isset( $rtec_options['phone_label'] ) ? $rtec_options['phone_label'] : __( 'Phone', 'registrations-for-the-events-calendar' );
+		                $input_fields_data['phone']['label'] = rtec_get_text( $rtec_options['phone_label'], __( 'Phone', 'registrations-for-the-events-calendar' ) );
 		                break;
                 }
             }
@@ -287,8 +287,8 @@ class RTEC_Form
         if ( in_array( 'other', $show_fields ) ) {
             $input_fields_data['other']['name'] = 'other';
             $input_fields_data['other']['require'] = isset( $rtec_options['other_require'] ) ? $rtec_options['other_require'] : true;
-            $input_fields_data['other']['error_message'] = isset( $rtec_options['other_error'] ) ? $rtec_options['other_error'] : __( 'Error' );
-            $input_fields_data['other']['label'] = isset( $rtec_options['other_label'] ) ? $rtec_options['other_label'] : 'Other';
+            $input_fields_data['other']['error_message'] = rtec_get_text( $rtec_options['other_error'], __( 'Error', 'registrations-for-the-events-calendar' ) );
+            $input_fields_data['other']['label'] = rtec_get_text( $rtec_options['other_label'], __( 'Other', 'registrations-for-the-events-calendar' ) );
 	        $input_fields_data['other']['valid_count'] = isset( $rtec_options['other_valid_count'] ) ? ' data-rtec-valid-count="' . $rtec_options['other_valid_count'].'"' : '';
         }
 
@@ -365,7 +365,7 @@ class RTEC_Form
     {
 	    global $rtec_options;
 
-        $button_text = isset( $rtec_options['register_text'] ) ? esc_attr( $rtec_options['register_text'] ) : __( 'Register', 'registrations-for-the-events-calendar' );
+        $button_text = rtec_get_text( $rtec_options['register_text'], __( 'Register', 'registrations-for-the-events-calendar' ) );
 	    $button_bg_color = isset( $rtec_options['button_bg_color'] ) ? esc_attr( $rtec_options['button_bg_color'] ) : '';
 	    $button_styles = isset( $button_bg_color ) && ! empty( $button_bg_color ) ? 'background-color: ' . $button_bg_color . ';' : '';
 	    $button_hover_class = ! empty( $button_bg_color ) ? ' rtec-custom-hover' : '';
@@ -373,11 +373,11 @@ class RTEC_Form
 	    $form_bg_color = isset( $rtec_options['form_bg_color'] ) && ! empty( $rtec_options['form_bg_color'] ) ? 'background-color: ' . esc_attr( $rtec_options['form_bg_color'] ) . ';' : '';
 	    $width_unit = isset( $rtec_options['width_unit'] ) ? esc_attr( $rtec_options['width_unit'] ) : '%';
         $width = isset( $rtec_options['width'] ) ? 'width: ' . esc_attr( $rtec_options['width'] ) . $width_unit . ';' : '';
-        $data = isset( $rtec_options['success_message'] ) ? ' data-rtec-success-message="' . esc_attr( $rtec_options['success_message'] ) . '"' : ' data-rtec-success-message="' . __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) . '"';
+        $data = ' data-rtec-success-message="' . rtec_get_text( esc_attr( $rtec_options['success_message'] ), __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) ) . '"';
 
 	    $html = '<div id="rtec" class="rtec"' . $data . '>';
-            $html .= '<button type="button" id="rtec-form-toggle-button" class="rtec-register-button rtec-js-show' . $button_classes . '" style="' . $button_styles . '">' . $button_text . '<span class="tribe-bar-toggle-arrow"></span></button>';
-            $html .= '<h3 class="rtec-js-hide">' . $button_text . '</h3>';
+            $html .= '<button type="button" id="rtec-form-toggle-button" class="rtec-register-button rtec-js-show' . $button_classes . '" style="' . $button_styles . '">' . esc_html( $button_text ). '<span class="tribe-bar-toggle-arrow"></span></button>';
+            $html .= '<h3 class="rtec-js-hide">' . esc_html( $button_text ) . '</h3>';
             $html .= '<div class="rtec-form-wrapper rtec-js-hide rtec-toggle-on-click"' . ' style="'. $width . $form_bg_color . '">';
 
             if ( ! empty( $this->errors ) ) {
@@ -415,27 +415,27 @@ class RTEC_Form
 
             if ( $attendance_message_type === 'up' ) {
                 $display_num = $this->event_meta['num_registered'];
-                $text_before = isset( $rtec_options['attendance_text_before_up'] ) ? esc_html( $rtec_options['attendance_text_before_up'] ) : 'Join';
-                $text_after = isset( $rtec_options['attendance_text_after_up'] ) ? esc_html( $rtec_options['attendance_text_after_up'] ) : 'others!';
+                $text_before = rtec_get_text( $rtec_options['attendance_text_before_up'], __( 'Join', 'registrations-for-the-events-calendar' ) );
+                $text_after = rtec_get_text( $rtec_options['attendance_text_after_up'], __( 'others!', 'registrations-for-the-events-calendar' ) );
             } else {
                 $display_num = $this->get_max_registrations() - $this->event_meta['num_registered'];
-	            $text_before = isset( $rtec_options['attendance_text_before_down'] ) ? esc_html( $rtec_options['attendance_text_before_down'] ) : 'Only';
-	            $text_after = isset( $rtec_options['attendance_text_after_down'] ) ? esc_html( $rtec_options['attendance_text_after_down'] ) : 'spots left';
+	            $text_before = rtec_get_text( $rtec_options['attendance_text_before_down'], __( 'Only', 'registrations-for-the-events-calendar' ) );
+	            $text_after = rtec_get_text( $rtec_options['attendance_text_after_down'], __( 'spots left', 'registrations-for-the-events-calendar' ) );
             }
 
             $text_string = sprintf( '%s %s %s', $text_before, (string)$display_num, $text_after );
             if ( $display_num == '1' && $attendance_message_type === 'up' ) {
-	            $text_string = isset( $rtec_options['attendance_text_one_up'] ) ? esc_html( $rtec_options['attendance_text_one_up'] ) : 'Join one other person';
+	            $text_string = rtec_get_text( $rtec_options['attendance_text_one_up'], __( 'Join one other person', 'registrations-for-the-events-calendar' ) );
             } elseif ( $display_num == '1' && $attendance_message_type === 'down' ) {
-			    $text_string = isset( $rtec_options['attendance_text_one_down'] ) ? esc_html( $rtec_options['attendance_text_one_down'] ) : 'Only one spot left!';
+			    $text_string = rtec_get_text( $rtec_options['attendance_text_one_down'], __( 'Only one spot left!', 'registrations-for-the-events-calendar' ) );
 		    }
 
             if ( $display_num < 1 ) {
-                $text_string = isset( $rtec_options['attendance_text_none_yet'] ) ? esc_html( $rtec_options['attendance_text_none_yet'] ) : 'Be the first!';
+                $text_string = rtec_get_text( $rtec_options['attendance_text_none_yet'], __( 'Be the first!', 'registrations-for-the-events-calendar' ) );
             }
 
             $html .= '<div class="rtec-attendance tribe-events-notices">';
-                $html .= '<p>' . $text_string . '</p>';
+                $html .= '<p>' . esc_html( $text_string ) . '</p>';
             $html .= '</div>';
 
         return $html;
@@ -532,8 +532,8 @@ class RTEC_Form
 	private function get_recaptcha_html() {
 		global $rtec_options;
 
-		$recaptcha_error_message = isset( $rtec_options['recaptcha_error'] ) ? $rtec_options['recaptcha_error'] : __( 'Please try again', 'registrations-for-the-events-calendar' );
-		$recaptcha_label = isset( $rtec_options['recaptcha_label'] ) ? $rtec_options['recaptcha_label'] : __( 'What is', 'registrations-for-the-events-calendar' );
+		$recaptcha_error_message = rtec_get_text( $rtec_options['recaptcha_error'], __( 'Please try again', 'registrations-for-the-events-calendar' ) );
+		$recaptcha_label = rtec_get_text( $rtec_options['recaptcha_label'], __( 'What is', 'registrations-for-the-events-calendar' ) );
 
 		$required_data = ' aria-required="true"';
 
@@ -550,8 +550,8 @@ class RTEC_Form
 		$html .= '<div class="rtec-form-field rtec-recaptcha" data-rtec-error-message="'. esc_attr( $recaptcha_error_message ) . '">';
 			$html .= '<label for="rtec_recaptcha" class="rtec_text_label">'. esc_html( $recaptcha_label ).' '.$this->recaptcha['value_1'].' &#43; '.$this->recaptcha['value_2'].'&#42;</label>';
 			$html .= '<div class="rtec-input-wrapper">';
-				$html .= '<input type="text" name="rtec_recaptcha_input" id="rtec_recaptcha"' . $required_data . ' />';
-				$html .= $error_html;
+				$html .= '<input type="text" name="rtec_recaptcha_input" id="rtec_recaptcha"' . esc_attr( $required_data ) . ' />';
+				$html .= esc_html( $error_html );
 			$html .= '</div>';
 		$html .= '</div>';
 
@@ -631,7 +631,7 @@ class RTEC_Form
 		global $rtec_options;
 
         $success_html = '<p class="rtec-success-message tribe-events-notices">';
-        $success_html .= isset( $rtec_options['success_message'] ) ? esc_html( $rtec_options['success_message'] ) : __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' );
+        $success_html .= rtec_get_text( $rtec_options['success_message'], __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) );
         $success_html .= '</p>';
 
 	    return $success_html;
@@ -647,7 +647,7 @@ class RTEC_Form
     {
 	    global $rtec_options;
 
-        $button_text = isset( $rtec_options['submit_text'] ) ? esc_attr( $rtec_options['submit_text'] ) : __( 'Submit', 'registrations-for-the-events-calendar' );
+        $button_text = rtec_get_text( $rtec_options['submit_text'], __( 'Submit', 'registrations-for-the-events-calendar' ) );
 	    $button_bg_color = isset( $rtec_options['button_bg_color'] ) ? esc_attr( $rtec_options['button_bg_color'] ) : '';
 	    $button_styles = isset( $button_bg_color ) && ! empty( $button_bg_color ) ? 'background-color: ' . $button_bg_color . ';' : '';
 	    $button_hover_class = ! empty( $button_bg_color ) ? ' rtec-custom-hover' : '';

@@ -223,6 +223,25 @@ class RTEC_Admin
             'rtec_form_custom_text'
         );
 
+        // translate
+        $translation_options = array(
+            0 => array( 'custom', 'Custom' ),
+            1 => array( 'translate', 'Translations (if available)' )
+        );
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'message_source',
+            'title' => '<label for="use_translations">Messaging</label>',
+            'example' => '',
+            'values' => $translation_options,
+            'description' => 'Select "Custom" for custom text. Select "Translations" to use available translations for the pluginf',
+            'callback'  => 'default_radio',
+            'class' => 'default-text',
+            'page' => 'rtec_form_custom_text',
+            'section' => 'rtec_form_custom_text',
+            'default' => 'custom'
+        ));
+
         // register text
         $this->create_settings_field( array(
             'option' => 'rtec_options',
@@ -623,6 +642,18 @@ class RTEC_Admin
         $option_checked = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $args['default'];
         ?>
         <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="checkbox" <?php if ( $option_checked == true ) echo "checked"; ?> />
+        <br><span class="description"><?php echo esc_html( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+        <?php
+    }
+
+    public function default_radio( $args )
+    {
+        $options = get_option( $args['option'] );
+        $option_checked = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $args['default'];
+        ?>
+        <?php foreach ( $args['values'] as $value ) : ?>
+        <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="radio" value="<?php echo $value[0]; ?>" <?php if ( $option_checked == $value[0] ) echo "checked"; ?> /><label class="rtec-radio-label"><?php echo $value[1]; ?></label>
+        <?php endforeach; ?>
         <br><span class="description"><?php echo esc_html( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
         <?php
     }

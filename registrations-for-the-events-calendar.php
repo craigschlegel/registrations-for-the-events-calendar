@@ -257,15 +257,14 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 
 	    }
 
-	    public function text_domain() {
-		    load_plugin_textdomain( 'registrations-for-the-events-calendar', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
-	    }
     }
 endif; // End if class_exists check.
 register_activation_hook( __FILE__, array( 'Registrations_For_The_Events_Calendar', 'install' ) );
-add_action( 'plugins_loaded', array( 'Registrations_For_The_Events_Calendar', 'text_domain' ) );
 
-
+function rtec_text_domain() {
+	load_plugin_textdomain( 'registrations-for-the-events-calendar', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
+}
+add_action( 'plugins_loaded', 'rtec_text_domain' );
 /**
  * The main function for Registrations_For_The_Events_Calendar
  *

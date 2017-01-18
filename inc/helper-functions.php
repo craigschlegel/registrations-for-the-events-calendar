@@ -121,3 +121,15 @@ function rtec_serialize_custom_data( $submission_data, $from_form = true ) {
 
 	return maybe_serialize( $custom_data );
 }
+
+function rtec_get_text( $custom, $translation ) {
+	global $rtec_options;
+	$text = $translation;
+
+	if ( isset( $rtec_options['message_source'] ) && $rtec_options['message_source'] === 'custom' ) {
+		$text = isset( $custom ) ? $custom : $translation;
+	}
+
+	return $text;
+
+}
