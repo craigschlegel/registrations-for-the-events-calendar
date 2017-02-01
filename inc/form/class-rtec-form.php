@@ -550,7 +550,7 @@ class RTEC_Form
 		$html .= '<div class="rtec-form-field rtec-recaptcha" data-rtec-error-message="'. esc_attr( $recaptcha_error_message ) . '">';
 			$html .= '<label for="rtec_recaptcha" class="rtec_text_label">'. esc_html( $recaptcha_label ).' '.$this->recaptcha['value_1'].' &#43; '.$this->recaptcha['value_2'].'&#42;</label>';
 			$html .= '<div class="rtec-input-wrapper">';
-				$html .= '<input type="text" name="rtec_recaptcha_input" id="rtec_recaptcha"' . esc_attr( $required_data ) . ' />';
+				$html .= '<input type="text" name="rtec_recaptcha_input" id="rtec_recaptcha"' . $required_data . ' />';
 				$html .= esc_html( $error_html );
 			$html .= '</div>';
 		$html .= '</div>';

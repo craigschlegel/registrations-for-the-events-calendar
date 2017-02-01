@@ -9,6 +9,16 @@
         </p>
     </div>
 <?php endif; ?>
+<?php
+$view = isset( $_GET['show_setting'] ) ? $_GET['show_setting'] : 'upcoming';
+?>
+<div class="rtec-view-selector">
+	<?php if ( $view === 'all' ) : ?>
+	<a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations&show_setting=upcoming"><?php _e( 'Show upcoming events with registrations', 'registrations-for-the-events-calendar' ); ?></a>
+	<?php else : ?>
+	<a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations&show_setting=all"><?php _e( 'Show all events', 'registrations-for-the-events-calendar' ); ?></a>
+	<?php endif; ?>
+</div>
 
 <?php if ( empty( $tz_offset )) : ?>
 <form method="post" action="options.php">
@@ -28,13 +38,39 @@ $offset = isset( $_GET['offset'] ) ? (int)$_GET['offset'] : 0;
 $posts_per_page = 20;
 
 $events = array();
-$events = tribe_get_events( array(
-    'posts_per_page' => $posts_per_page,
-    'start_date' => date( '2000-1-1 0:0:0' ),
-    'orderby' => 'date',
-    'order' => 'DESC',
-	'offset' => $offset
-) );
+if ( $view === 'all' ) {
+	$args = array(
+		'posts_per_page' => $posts_per_page,
+		'start_date' => date( '2000-1-1 0:0:0' ),
+		'orderby' => 'date',
+		'order' => 'DESC',
+		'offset' => $offset
+	);
+} else {
+	if ( isset( $rtec_options['disable_by_default'] ) && $rtec_options['disable_by_default'] === true ) {
+		$args = array(
+			'meta_query' => array(
+				'key' => '_RTECregistrationsDisabled',
+				'value' => '0',
+				'compare' => '='
+			),
+			'orderby' => '_EventStartDate',
+			'order' => 'ASC',
+			'posts_per_page' => $posts_per_page,
+			'start_date' => date( 'Y-m-d H:i:s' ),
+			'offset' => $offset
+		);
+	} else {
+		$args = array(
+			'orderby' => '_EventStartDate',
+			'order' => 'ASC',
+			'posts_per_page' => $posts_per_page,
+			'start_date' => date( 'Y-m-d H:i:s' ),
+			'offset' => $offset
+		);
+	}
+}
+$events = tribe_get_events( $args );
 
 $event_ids_on_page = array();
 $columns = rtec_get_current_columns( 3 );
@@ -45,7 +81,6 @@ foreach ( $columns as $key => $value ) {
 $fields[] = 'status';
 
 foreach ( $events as $event ) :
-
 	// used to update new vs current registrations in db
 	$event_ids_on_page[] = $event->ID;
 
@@ -54,7 +89,7 @@ foreach ( $events as $event ) :
 		'id' => $event->ID,
 		'order_by' => 'registration_date'
 	);
-    $registrations = $db->retrieve_entries( $data );
+    $registrations = $db->retrieve_entries( $data, false, 10 );
 
     // set post meta
     $meta = get_post_meta( $event->ID );
@@ -64,20 +99,35 @@ foreach ( $events as $event ) :
     $event_meta['start_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventStartDate'][0] ) );
     $event_meta['end_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventEndDate'][0] ) );
 	$default_disabled = isset( $rtec_options['disable_by_default'] ) ? $rtec_options['disable_by_default'] : false;
-	$event_meta['disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] : $default_disabled;
+	$event_meta['disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] === '1' : $default_disabled;
+	if ( rtec_should_show( $view, $event_meta['disabled'] ) ) :
+
+	$event_meta['num_registered'] = isset( $meta['_RTECnumRegistered'][0] ) ? $meta['_RTECnumRegistered'][0] : 0;
 
     // set venue meta
     $venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
 	$venue = rtec_get_venue( $event->ID );
 	$event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
+	$bg_color_style = rtec_get_attendance_bg_color( $event_meta['num_registered'] );
 ?>
     
     <div class="rtec-single-event">
     
         <div class="rtec-event-meta">
-            <a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=' . $event->ID ); ?>"><h3><?php echo esc_html( $event_meta['title'] ); ?></h3></a>
-            <p><?php echo esc_html( $event_meta['start_date'] ); ?> to <?php echo esc_html( $event_meta['end_date'] ); ?></p>
-            <p><?php echo esc_html( $event_meta['venue_title'] ); ?></p>
+	        <a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=' . $event->ID ); ?>"><h3><?php echo esc_html( $event_meta['title'] ); ?></h3></a>
+	        <p><?php echo esc_html( $event_meta['start_date'] ); ?> to <?php echo esc_html( $event_meta['end_date'] ); ?></p>
+	        <p><?php echo esc_html( $event_meta['venue_title'] ); ?></p>
+
+	        <div class="rtec-reg-info" style="<?php echo $bg_color_style; ?>">
+		        <?php
+		        $max_registrations_text = '';
+		        if ( isset( $rtec_options['limit_registrations'] ) && $rtec_options['limit_registrations'] == true ) {
+		        	$max_registrations_text = ' &#47; ' . $rtec_options['default_max_registrations'];;
+		        }
+		        ?>
+	            <p><?php echo $event_meta['num_registered'] . $max_registrations_text; ?></p>
+            </div>
+
         </div>
 	    <div class="rtec-event-options postbox closed">
 		    <button type="button" class="handlediv button-link" aria-expanded="false"><span class="screen-reader-text"><?php _e( 'Toggle panel: Information', 'registrations-for-the-events-calendar' ); ?></span><span class="toggle-indicator" aria-hidden="true"></span></button>
@@ -127,6 +177,9 @@ foreach ( $events as $event ) :
 	                <?php endforeach; ?>
                 </tr>
             <?php endforeach; ?>
+            <?php if ( isset( $event_meta['num_registered'] ) && $event_meta['num_registered'] > 10 ) : ?>
+	            <tr><td colspan="4"><a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=' . $event->ID ); ?>" class="rtec-green-bg rtec-view-all"><?php printf( __( 'View all %d', 'registrations-for-the-events-calendar' ), $event_meta['num_registered'] ); ?></a></td></tr>
+            <?php endif; ?>
     
             <?php else: ?>
     
@@ -142,15 +195,15 @@ foreach ( $events as $event ) :
 	        <a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=' . $event->ID ); ?>" class="rtec-admin-secondary-button button action"><?php _e( 'Detailed View', 'registrations-for-the-events-calendar' ); ?></a>
 	    </div>
     </div> <!-- rtec-single-event -->
-
+<?php endif; ?>
 <?php endforeach; // end loop ?>
 	<div class="rtec-clear">
 	<?php if ( $offset > 0 ) : ?>
-		<a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations&offset=' . ( $offset - $posts_per_page ) ); ?>" class="rtec-primary-button"><?php _e( 'Previous Events', 'registrations-for-the-events-calendar' ); ?></a>
+		<a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations&show_setting=' . $view . '&offset=' . ( $offset - $posts_per_page ) ); ?>" class="rtec-primary-button"><?php _e( 'Previous Events', 'registrations-for-the-events-calendar' ); ?></a>
 	<?php endif; ?>
 
 	<?php if ( ! empty( $events ) ) : ?>
-		<a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations&offset=' . ( $offset + $posts_per_page ) ); ?>" class="rtec-primary-button rtec-next"><?php _e( 'Next Events', 'registrations-for-the-events-calendar' ); ?></a>
+		<a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations&show_setting=' . $view . '&offset=' . ( $offset + $posts_per_page ) ); ?>" class="rtec-primary-button rtec-next"><?php _e( 'Next Events', 'registrations-for-the-events-calendar' ); ?></a>
 	<?php else : ?>
 		<p><?php _e( 'No more events to display', 'registrations-for-the-events-calendar' ); ?></p>
 	<?php endif; ?>

@@ -4,6 +4,10 @@
 .rtec-radio-label {
     margin-right: 20px;
 }
+.rtec-view-selector a{
+    display: inline-block;
+    margin-right: 15px;
+}
 /*
 9EE6DE
 46A99E
@@ -31,15 +35,18 @@
 }
 #rtec_csv_export_form {
     display: inline-block;
+    vertical-align: top;
 }
 .rtec-single-event .rtec-event-actions {
     border-radius: 0 0 3px 3px;
 }
 .rtec-event-meta {
-    padding: .5em 1em .5em 1em;
+    position: relative;
+    padding: .25em 1em;
+    border: 1px solid #23282d;
 }
 .rtec-event-meta h3 {
-    margin: .5em 0;
+    margin: .25em 60px .25em 0;
     color: #fff;
 }
 .rtec-event-meta a {
@@ -51,6 +58,24 @@
 .rtec-event-meta p {
     margin: 0 0 .25em;
     color: #fff;
+}
+.rtec-event-meta .rtec-reg-info {
+    position: absolute;
+    width: 70px;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    padding: .25em 5px 0 0;
+    text-align: center;
+    border-radius: 0 4px 0 5px;
+}
+.rtec-single .rtec-event-meta .rtec-reg-info {
+    position: relative;
+    color: #333;
+    border-radius: 5px;
+}
+.rtec-event-meta .rtec-reg-info p {
+    color: inherit;
 }
 .rtec-primary-button {
     background: #0085ba;
@@ -78,6 +103,13 @@
     box-sizing: border-box;
 }
 .rtec-next { float: right; }
+.rtec-view-all {
+    display: block;
+    text-align: center;
+    padding: 5px;
+    border: 1px solid;
+    border-radius: 3px;
+}
 
 .rtec-admin-wrap .rtec-add-field {
     width: 455px;

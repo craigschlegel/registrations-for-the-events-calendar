@@ -7,8 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Will return all relevant meta for an event
  *
- * @param string $id
- * @since 1.0
+ * @param   $id string
+ * @since   1.0
  * @return array
  */
 function rtec_get_event_meta( $id = '' ) {
@@ -73,8 +73,8 @@ function rtec_format_phone_number( $raw_number ) {
 /**
  * Retrieves venue title using TEC function. Checks to make sure it exists first
  *
- * @param mixed $event_id   id of the event
- * @since 1.1
+ * @param   $event_id   mixed  id of the event
+ * @since   1.1
  *
  * @return string           venue title
  */
@@ -92,10 +92,11 @@ function rtec_get_venue( $event_id = NULL ) {
  * Takes the custom data array and converts to serialized data for
  * adding to the db
  *
- * @param $submission_data
- * @param bool $from_form
+ * @param   $submission_data
+ * @param   $from_form          bool
+ * @since   1.3
  *
- * @return mixed
+ * @return  mixed
  */
 function rtec_serialize_custom_data( $submission_data, $from_form = true ) {
 	$options = get_option( 'rtec_options', array() );
@@ -122,6 +123,15 @@ function rtec_serialize_custom_data( $submission_data, $from_form = true ) {
 	return maybe_serialize( $custom_data );
 }
 
+/**
+ * Returns the appropriate translation/custom/default text
+ *
+ * @param   $custom         string  the custom translation of text
+ * @param   $translation    string  the translation or default of text
+ * @since   1.4
+ *
+ * @return  string                  the appropriate text
+ */
 function rtec_get_text( $custom, $translation ) {
 	global $rtec_options;
 	$text = $translation;

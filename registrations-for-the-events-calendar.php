@@ -2,7 +2,7 @@
 /*
 Plugin Name: Registrations for The Events Calendar
 Description: Collect and manage registrations for events posted using The Events Calendar by Modern Tribe.
-Version: 1.3.3
+Version: 1.4
 Author: Roundup WP
 Author URI: roundupwp.com
 License: GPLv2 or later
@@ -149,7 +149,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
         private function constants() {
             // Plugin version.
             if ( ! defined( 'RTEC_VERSION' ) ) {
-                define( 'RTEC_VERSION', '1.3.3' );
+                define( 'RTEC_VERSION', '1.4' );
             }
             // Plugin Folder Path.
             if ( ! defined( 'RTEC_PLUGIN_DIR' ) ) {
@@ -169,7 +169,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
             }
             // Db version.
             if ( ! defined( 'RTEC_DBVERSION' ) ) {
-                define( 'RTEC_DBVERSION' , '1.3' );
+                define( 'RTEC_DBVERSION' , '1.4' );
             }
             // Table Name.
             if ( ! defined( 'RTEC_TABLENAME' ) ) {
@@ -241,7 +241,18 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 				    'recaptcha_require' => false,
 				    'other_show' => false,
 				    'other_require' => false,
-				    'other_error' => 'There is an error with your entry'
+				    'other_error' => 'There is an error with your entry',
+				    'register_text' => 'Register',
+				    'success_message' => 'Success! Please check your email inbox for a confirmation message',
+				    'attendance_text_before_up' => 'Join',
+				    'attendance_text_after_up' => 'others!',
+				    'attendance_text_before_down' => 'Only',
+				    'attendance_text_after_down' => 'spots left',
+				    'attendance_text_one_up' => 'Join one other person',
+				    'attendance_text_one_down' => 'Only one spot left!',
+				    'attendance_text_none_yet' => 'Be the first!',
+				    'submit_text' => 'Submit',
+				    'message_source' => 'custom'
 			    );
 			    // get form options from the db
 			    update_option( 'rtec_options', $defaults );
@@ -265,6 +276,7 @@ function rtec_text_domain() {
 	load_plugin_textdomain( 'registrations-for-the-events-calendar', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
 }
 add_action( 'plugins_loaded', 'rtec_text_domain' );
+
 /**
  * The main function for Registrations_For_The_Events_Calendar
  *

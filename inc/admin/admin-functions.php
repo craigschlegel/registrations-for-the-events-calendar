@@ -178,6 +178,21 @@ function rtec_save_meta(){
 add_action( 'save_post', 'rtec_save_meta' );
 
 /**
+ * Due to bug in meta_query, this function manually removes events that have no meta set
+ * but events are disabled by default
+ *
+ * @since 1.4
+ */
+function rtec_should_show( $view, $disabled_status ) {
+
+	if ( $view === 'all' ) {
+		return true;
+	} else {
+		return ( $disabled_status === false );
+	}
+}
+
+/**
  * Used to remove registrations from the dashboard
  *
  * @since 1.0
@@ -494,6 +509,37 @@ function rtec_get_current_columns( $num_columns ) {
 	return $needed_column_names;
 }
 
+/**
+ * Color codes the registrations box according to percent filled
+ *
+ * @param   $num_registered int current number of registrants for the event
+ * @since 1.4
+ *
+ * @return  string              style attribute to produce colors
+ */
+function rtec_get_attendance_bg_color( $num_registered = 0 ) {
+	global $rtec_options;
+
+	if ( isset( $rtec_options['limit_registrations'] ) && $rtec_options['limit_registrations'] == true ) {
+		$ratio = $num_registered / $rtec_options['default_max_registrations'];
+
+		if ( $ratio >= .999 ) {
+			return 'background-color: #23282d; color: #fff;';
+		} elseif ( $ratio > .9 ) {
+			return 'background-color: #009900;';
+		} elseif ( $ratio > .7 ) {
+			return 'background-color: #4dff4d;';
+		} elseif ( $ratio > .5 ) {
+			return 'background-color: #99ff99;';
+		} else {
+			return 'background-color: #e5e5e5;';
+		}
+
+	} else {
+		return 'background-color: #23282d; color: #fff;';
+	}
+}
+
 function rtec_database_error_admin_notice() {
     global $wpdb;
     $table_name = esc_sql( $wpdb->prefix . RTEC_TABLENAME );
@@ -555,6 +601,7 @@ function rtec_get_parsed_custom_field_data( $raw_data ) {
  * @since 1.3   added check and add for index on event_id and add "custom" column,
  *              raise character limit for "other" column
  * @since 1.3.2 raise character limit for most fields to match "post" table
+ * @since 1.4   added check and add for indices
  */
 function rtec_db_update_check() {
 	$db_ver = get_option( 'rtec_db_version', 0 );
@@ -586,6 +633,14 @@ function rtec_db_update_check() {
 		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'last_name' );
 		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'email' );
 		$db->maybe_update_column( "VARCHAR(1000) NOT NULL", 'venue' );
+	}
+
+	if ( $db_ver < 1.4 ) {
+		update_option( 'rtec_db_version', RTEC_DBVERSION );
+
+		$db = new RTEC_Db_Admin();
+		$db->maybe_add_index( 'event_id', 'event_id' );
+		$db->maybe_add_index( 'status', 'status' );
 	}
 
 }

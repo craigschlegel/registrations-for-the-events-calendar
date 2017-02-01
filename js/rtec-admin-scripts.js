@@ -184,6 +184,7 @@ jQuery(document).ready(function($){
     // REGISTRATIONS overview tab
     $('.rtec-single-event:nth-child(2n)').css('float', 'right').after('<div class="clear"></div>');
     $('.rtec-hidden-options').hide();
+
     var $rtecOptionsHandle = $('.rtec-event-options .handlediv');
 
     $rtecOptionsHandle.click(function() {

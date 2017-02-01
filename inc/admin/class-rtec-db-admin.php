@@ -16,6 +16,7 @@ class RTEC_Db_Admin extends RTEC_Db
 	 * Used to create the registrations table on activation
 	 *
 	 * @since 1.0
+	 * @since 1.4   added indices for event_id and status
 	 */
     public static function create_table()
     {
@@ -44,6 +45,10 @@ class RTEC_Db_Admin extends RTEC_Db
             add_option( 'rtec_db_version', RTEC_DBVERSION );
 
         }
+
+	    $db = new RTEC_Db_Admin();
+	    $db->maybe_add_index( 'event_id', 'event_id' );
+	    $db->maybe_add_index( 'status', 'status' );
 
     }
 
@@ -103,12 +108,14 @@ class RTEC_Db_Admin extends RTEC_Db
      * 
      * @param $data array       parameters for what entries to retrieve
      * @param $full boolean     whether to return the full custom field
+     * @param $limit string     limit if any for registrations retrieved
      *
      * @return mixed bool/array false if no results, registrations if there are
      * @since 1.0
      * @since 1.3   expanded to work with custom fields and dynamic entries
+     * @since 1.4   added the ability to limit entries retrieved
      */
-    public function retrieve_entries( $data, $full = false )
+    public function retrieve_entries( $data, $full = false, $limit = 'none' )
     {
         global $wpdb;
 
@@ -120,6 +127,8 @@ class RTEC_Db_Admin extends RTEC_Db
 	    $standard_fields = array( 'id', 'event_id', 'registration_date', 'last_name', 'first_name', 'last', 'first', 'email', 'venue', 'other', 'custom', 'phone', 'status' );
 	    $request_fields = array();
 	    $custom_flag = 0;
+
+	    $limit_string = $limit === 'none' ? '' : ' LIMIT ' . (int)$limit;
 
 	    foreach ( $fields as $field ) {
 
@@ -149,23 +158,25 @@ class RTEC_Db_Admin extends RTEC_Db
                 SELECT %s
                 FROM %s
                 WHERE event_id = %d
-                ORDER BY %s DESC;
+                ORDER BY %s DESC%s;
                 ",
                 esc_sql( $fields ),
                 esc_sql( $this->table_name ),
                 esc_sql( $id ),
-                esc_sql( $order_by )
+                esc_sql( $order_by ),
+	            esc_sql( $limit_string )
             );
         } else {
             $sql = sprintf(
                 "
                 SELECT %s
                 FROM %s
-                ORDER BY %s DESC;
+                ORDER BY %s DESC%s;
                 ",
                 esc_sql( $fields ),
                 esc_sql( $this->table_name ),
-                esc_sql( $order_by )
+                esc_sql( $order_by ),
+	            esc_sql( $limit_string )
             );
         }
 
