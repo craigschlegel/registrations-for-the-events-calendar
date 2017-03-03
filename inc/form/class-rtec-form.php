@@ -572,6 +572,32 @@ class RTEC_Form
             // check to see if there was an error and fill in
             // previous data
             $value = '';
+
+	        // if the user is logged in, try to use their existing data to fill
+	        // these fields
+	        if ( in_array( $field['name'], array( 'first', 'last', 'email' ), true ) ) {
+
+		        if ( is_user_logged_in() ) {
+
+			        if ( $field['name'] === 'first' ) {
+				        $user_meta = get_user_meta( get_current_user_id(), '', true );
+				        $value = isset( $user_meta['first_name'] ) ? $user_meta['first_name'][0] : '';
+			        }
+
+			        if ( $field['name'] === 'last' ) {
+				        $user_meta = get_user_meta( get_current_user_id() );
+				        $value = isset( $user_meta['last_name'] ) ? $user_meta['last_name'][0] : '';
+			        }
+
+			        if ( $field['name'] === 'email' ) {
+				        $user = wp_get_current_user();
+				        $value = isset( $user->data->user_email ) ? esc_attr( $user->data->user_email ) : '';
+			        }
+
+		        }
+
+	        }
+
             $type = 'text';
             $label = $field['label'];
 
