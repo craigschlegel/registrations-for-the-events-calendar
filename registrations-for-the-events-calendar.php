@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @author Roundup WP
 * @version 1.0
  */
-
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
@@ -216,7 +215,11 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 	     */
 	    public static function install() {
 		    $rtec_options = get_option( 'rtec_options', false );
-		    $db = new RTEC_Db_Admin();
+
+		    require_once plugin_dir_path( __FILE__ ) . 'inc/class-rtec-db.php';
+		    require_once plugin_dir_path( __FILE__ ) . 'inc/admin/class-rtec-db-admin.php';
+
+		    $db           = new RTEC_Db_Admin();
 
 		    $db->create_table();
 
@@ -258,12 +261,6 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 			    update_option( 'rtec_options', $defaults );
 			    // add cues to find the plugin for three days
 			    set_transient( 'rtec_new_messages', 'yes', 60 * 60 * 24 * 3 );
-		    }
-
-		    $ids = $db->get_event_post_ids();
-		    foreach ( $ids as $id ) {
-			    $reg_count = $db->get_registration_count( $id );
-			    update_post_meta( $id, '_RTECnumRegistered', $reg_count );
 		    }
 
 	    }

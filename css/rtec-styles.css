@@ -30,6 +30,11 @@
 #rtec .rtec-screen-reader {
     display: none;
 }
+#rtec {
+    overflow: auto;
+    max-width: 700px;
+    min-width: 300px;
+}
 #rtec .rtec-spinner {
     display: none;
     position: absolute;

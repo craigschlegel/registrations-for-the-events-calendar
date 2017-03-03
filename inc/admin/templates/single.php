@@ -56,7 +56,7 @@ $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
                             $max_registrations_text = ' &#47; ' . $rtec_options['default_max_registrations'];;
                         }
                         ?>
-                        <p class="rtec-reg-info" style="<?php echo $bg_color_style; ?>"><?php echo $event_meta['num_registered'] . $max_registrations_text; ?></p>
+                        <p class="rtec-reg-info" style="<?php echo $bg_color_style; ?>"><?php echo '<span class="rtec-num-registered-text">' . $event_meta['num_registered'] . '</span>' . $max_registrations_text; ?></p>
 
                     </div>
 
