@@ -68,25 +68,47 @@ function rtec_update_event_options() {
 		die ( 'You did not do this the right way!' );
 	}
 
-	$event_id = (int)$_POST['event_options_data'][0]['value'];
-	$checkbox_fields = explode( ',' , $_POST['event_options_data']['1']['value'] );
-	$meta_fields = array();
-	foreach ( $checkbox_fields as $checkbox_field ) {
-		$meta_fields[$checkbox_field] = 0;
+	$cleaned_array = array();
+
+	foreach ( $_POST['event_options_data'] as $data ) {
+		$cleaned_array[ sanitize_text_field( $data['name'] ) ] = sanitize_text_field( $data['value'] );
 	}
 
-	foreach ( $_POST['event_options_data'] as $event_datum ) {
-		if ( $event_datum['name'] !== 'rtec_checkboxes' && $event_datum['name'] !== 'rtec_event_id' ) {
-			$meta_fields[$event_datum['name']] = $event_datum['value'];
-		}
+	$event_id = $cleaned_array['rtec_event_id'];
+	$registrations_disabled_status = 0;
+	$use_limit_status = 0;
+	$registrations_deadline_type = 'start';
+	$max_reg = 30;
+
+	if ( isset( $cleaned_array['_RTECregistrationsDisabled'] ) ){
+		$registrations_disabled_status = sanitize_text_field( $cleaned_array['_RTECregistrationsDisabled'] );
 	}
 
-	if ( isset( $event_id ) && is_array( $meta_fields ) ){
-		$db = new RTEC_Db();
-		$db->update_event_meta( $event_id, $meta_fields );
-		//echo '1';
+	if ( isset( $cleaned_array['_RTECdeadlineType'] ) ){
+		$registrations_deadline_type = sanitize_text_field( $cleaned_array['_RTECdeadlineType'] );
+	}
+
+	if ( isset( $cleaned_array['_RTEClimitRegistrations'] ) ){
+		$use_limit_status = sanitize_text_field( $cleaned_array['_RTEClimitRegistrations'] );
+	}
+
+	if ( isset( $cleaned_array['_RTECmaxRegistrations'] ) ){
+		$max_reg = sanitize_text_field( $cleaned_array['_RTECmaxRegistrations'] );
+	}
+
+	if ( isset( $event_id ) ) {
+		update_post_meta( $event_id, '_RTECregistrationsDisabled', $registrations_disabled_status );
+		update_post_meta( $event_id, '_RTECdeadlineType', $registrations_deadline_type );
+		update_post_meta( $event_id, '_RTEClimitRegistrations', $use_limit_status );
+		update_post_meta( $event_id, '_RTECmaxRegistrations', $max_reg );
+	}
+
+	$event_meta = rtec_get_event_meta( $event_id );
+
+	if ( $use_limit_status == 1 ) {
+		echo $event_meta['num_registered'] . ' / ' . $max_reg;
 	} else {
-		//var_dump( $meta_fields );
+		echo $event_meta['num_registered'];
 	}
 
 	die();
@@ -116,17 +138,27 @@ add_action( 'admin_init', 'rtec_meta_boxes_init' );
  */
 function rtec_meta_boxes_html(){
 	global $post;
-	global $rtec_options;
 
-	$meta = get_post_meta( $post->ID, '_RTECregistrationsDisabled' );
-	$default_disabled = isset( $rtec_options['disable_by_default'] ) ? $rtec_options['disable_by_default'] : false;
-	$event_meta['disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] : $default_disabled;
-	if ( $event_meta['disabled'] === true ) {
-		$event_meta['disabled'] = 1;
-	} else {
-		$event_meta['disabled'] = 0;
+	$event_meta = rtec_get_event_meta( $post->ID );
+	$limit_disabled_att = '';
+	$limit_disabled_class = '';
+	$max_disabled_att = '';
+	$max_disabled_class = '';
+	$deadline_disabled_att = '';
+	$deadline_disabled_class = '';
+
+	if ( $event_meta['registrations_disabled'] ) {
+		$limit_disabled_att = ' disabled="true"';
+		$limit_disabled_class = ' rtec-fade';
+		$deadline_disabled_att = ' disabled="true"';
+		$deadline_disabled_class = ' rtec-fade';
 	}
-	$meta_output = isset( $meta[0] ) ? $meta[0] : $default_disabled;
+
+	if ( $event_meta['registrations_disabled'] || ! $event_meta['limit_registrations'] ) {
+		$max_disabled_att = ' disabled="true"';
+		$max_disabled_class = ' rtec-fade';
+	}
+
 	?>
 	<div id="eventDetails" class="inside eventForm">
 		<table cellspacing="0" cellpadding="0" id="EventInfo">
@@ -134,7 +166,7 @@ function rtec_meta_boxes_html(){
 			<tr>
 				<td colspan="2" class="tribe_sectionheader">
 					<div class="tribe_sectionheader" style="">
-						<h4><?php _e( 'Event Registration Options', 'registrations-for-the-events-calendar' ); ?></h4>
+						<h4><?php _e( 'General', 'registrations-for-the-events-calendar' ); ?></h4>
 					</div>
 				</td>
 			</tr>
@@ -142,12 +174,63 @@ function rtec_meta_boxes_html(){
 				<td colspan="2">
 					<table class="eventtable">
 						<tbody>
-						<tr>
-							<td class="tribe-table-field-label"><?php _e( 'Disable Registrations:', 'registrations-for-the-events-calendar' ); ?></td>
-							<td>
-								<input type="checkbox" id="rtec-disable-checkbox" name="_RTECregistrationsDisabled" <?php if( $meta_output == '1' ) { echo 'checked'; } ?> value="1"/>
-							</td>
-						</tr>
+							<tr class="rtec-hidden-option-wrap">
+								<td class="tribe-table-field-label"><?php _e( 'Disable Registrations:', 'registrations-for-the-events-calendar' ); ?></td>
+								<td>
+									<input type="checkbox" id="rtec-disable-checkbox" name="_RTECregistrationsDisabled" <?php if ( $event_meta['registrations_disabled'] ) { echo 'checked'; } ?> value="1"/>
+								</td>
+							</tr>
+							<tr class="rtec-hidden-option-wrap<?php echo $limit_disabled_class; ?>">
+								<td class="tribe-table-field-label"><?php _e( 'Limit Registrations:', 'registrations-for-the-events-calendar' ); ?></td>
+								<td>
+									<input type="checkbox" id="rtec-limit-checkbox" class="" name="_RTEClimitRegistrations" <?php if( $event_meta['limit_registrations'] ) { echo 'checked'; } ?> value="1"<?php echo $limit_disabled_att; ?>/>
+								</td>
+							</tr>
+							<tr class="rtec-hidden-option-wrap<?php echo $max_disabled_class; ?>">
+								<td class="tribe-table-field-label"><?php _e( 'Maximum Registrations:', 'registrations-for-the-events-calendar' ); ?></td>
+								<td>
+									<input type="text" size="3" id="rtec-max-input" name="_RTECmaxRegistrations" value="<?php echo esc_attr( $event_meta['max_registrations'] ); ?>"<?php echo $max_disabled_att;?>/>
+								</td>
+							</tr>
+							<tr class="rtec-hidden-option-wrap<?php echo $deadline_disabled_class; ?>">
+								<td class="tribe-table-field-label"><?php _e( 'Deadline Type:', 'registrations-for-the-events-calendar' ); ?></td>
+								<td>
+									<div class="rtec-sameline">
+										<input type="radio" id="rtec-start-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECdeadlineType" <?php if( $event_meta['deadline_type'] === 'start' ) { echo 'checked'; } ?> value="start"<?php echo $deadline_disabled_att;?>/>
+										<label for="rtec-start-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Start Time', 'registrations-for-the-events-calendar' ); ?></label>
+									</div>
+									<div class="rtec-sameline">
+										<input type="radio" id="rtec-end-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECdeadlineType" <?php if( $event_meta['deadline_type'] === 'end' ) { echo 'checked'; } ?> value="end"<?php echo $deadline_disabled_att;?>/>
+										<label for="rtec-end-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'End Time', 'registrations-for-the-events-calendar' ); ?></label>
+									</div>
+									<div class="rtec-sameline">
+										<input type="radio" id="rtec-none-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECdeadlineType" <?php if( $event_meta['deadline_type'] === 'none' ) { echo 'checked'; } ?> value="none"<?php echo $deadline_disabled_att;?>/>
+										<label for="rtec-none-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'No deadline', 'registrations-for-the-events-calendar' ); ?></label>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2" class="tribe_sectionheader">
+									<div class="tribe_sectionheader" style="">
+										<h4><?php _e( 'Shortcodes', 'registrations-for-the-events-calendar' ); ?></h4>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td class="tribe-table-field-label"><?php _e( 'Display registration form on another page:', 'registrations-for-the-events-calendar' ); ?></td>
+								<td>
+									<?php _e( 'Use this shortcode: ', 'registrations-for-the-events-calendar' ); ?><br /><code>[rtec-registration-form event=<?php echo $post->ID; ?>]</code><br /><small><?php _e( 'Note that the registration form appears on the single event view automatically.', 'registrations-for-the-events-calendar' ); ?></small>
+								</td>
+							</tr>
+							<tr>
+								<td class="tribe-table-field-label"><?php _e( 'Shortcode Settings:', 'registrations-for-the-events-calendar' ); ?></td>
+								<td>
+									<span class="rtec-tooltip-table">
+							            <span class="rtec-col-1">event="123"</span><span class="rtec-col-2"><?php _e( 'Show registration form by event ID', 'registrations-for-the-events-calendar' ); ?></span>
+							            <span class="rtec-col-1">hidden="true"</span><span class="rtec-col-2"><?php _e( 'Use "false" to show the form initially', 'registrations-for-the-events-calendar' ); ?></span>
+							        </span>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</td>
@@ -165,15 +248,35 @@ function rtec_meta_boxes_html(){
  */
 function rtec_save_meta(){
 	global $post;
+
 	$registrations_disabled_status = 0;
+	$use_limit_status = 0;
+	$max_reg = 30;
+	$registrations_deadline_type = 'start';
 
 	if ( isset( $_POST['_RTECregistrationsDisabled'] ) ){
-		$registrations_disabled_status = $_POST['_RTECregistrationsDisabled'];
+		$registrations_disabled_status = sanitize_text_field( $_POST['_RTECregistrationsDisabled'] );
+	}
+
+	if ( isset( $_POST['_RTECdeadlineType'] ) ){
+		$registrations_deadline_type = sanitize_text_field( $_POST['_RTECdeadlineType'] );
+	}
+
+	if ( isset( $_POST['_RTEClimitRegistrations'] ) ){
+		$use_limit_status = sanitize_text_field( $_POST['_RTEClimitRegistrations'] );
+	}
+
+	if ( isset( $_POST['_RTECmaxRegistrations'] ) ){
+		$max_reg = sanitize_text_field( $_POST['_RTECmaxRegistrations'] );
 	}
 
 	if ( isset( $post->ID ) ) {
 		update_post_meta( $post->ID, '_RTECregistrationsDisabled', $registrations_disabled_status );
+		update_post_meta( $post->ID, '_RTECdeadlineType', $registrations_deadline_type );
+		update_post_meta( $post->ID, '_RTEClimitRegistrations', $use_limit_status );
+		update_post_meta( $post->ID, '_RTECmaxRegistrations', $max_reg );
 	}
+
 }
 add_action( 'save_post', 'rtec_save_meta' );
 
@@ -220,6 +323,8 @@ function rtec_delete_registrations()
 	$reg_count = $db->get_registration_count( $id );
 
 	update_post_meta( $id, '_RTECnumRegistered', $reg_count );
+
+	echo $reg_count;
 
 	die();
 }
@@ -517,11 +622,10 @@ function rtec_get_current_columns( $num_columns ) {
  *
  * @return  string              style attribute to produce colors
  */
-function rtec_get_attendance_bg_color( $num_registered = 0 ) {
-	global $rtec_options;
+function rtec_get_attendance_bg_color( $num_registered = 0, $event_meta ) {
 
-	if ( isset( $rtec_options['limit_registrations'] ) && $rtec_options['limit_registrations'] == true ) {
-		$ratio = $num_registered / $rtec_options['default_max_registrations'];
+	if ( isset( $event_meta['limit_registrations'] ) && $event_meta['limit_registrations'] == true ) {
+		$ratio = $num_registered / max( $event_meta['max_registrations'], 1 );
 
 		if ( $ratio >= .999 ) {
 			return 'background-color: #23282d; color: #fff;';

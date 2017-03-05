@@ -9,13 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0
  */
-function rtec_the_registration_form()
+function rtec_the_registration_form( $atts = array() )
 {
 	$rtec = RTEC();
 	$form = $rtec->form->instance();
+
+	$event_id = isset( $atts['event'] ) ? (int)$atts['event'] : '';
+	$doing_shortcode = isset( $atts['doing_shortcode'] ) ? $atts['doing_shortcode'] : false;
 	$form->set_inc_and_req_fields();
-	$form->set_event_meta();
+	$form->set_event_meta( $event_id );
 	$form->set_custom_fields();
+	$form->set_display_type( $atts );
 
 	if ( $rtec->submission != NULL ) {
 		$submission = $rtec->submission->instance();
@@ -26,17 +30,27 @@ function rtec_the_registration_form()
 			$form->set_submission_data( $submission->get_data() );
 			$form->set_event_meta();
 			$form->set_input_fields_data();
-			$form->set_max_registrations();
-			echo $form->get_form_html();
+
+			if ( $doing_shortcode === true ) {
+				return $form->get_form_html();
+			} else {
+				echo $form->get_form_html();
+			}
+
 		} else {
 			$submission->process_valid_submission();
 
 			$message = $form->get_success_message_html();
-			echo $message;
+
+			if ( $doing_shortcode === true ) {
+				return $message;
+			} else {
+				echo $message;
+			}
 		}
 
 	} elseif ( ! $form->registrations_are_disabled() ) {
-		$form->set_max_registrations();
+
 		if ( $form->registrations_available() && ! $form->registration_deadline_has_passed() ) {
 			$form->set_input_fields_data();
 
@@ -44,10 +58,21 @@ function rtec_the_registration_form()
 				$form->set_ical_url( esc_url( tribe_get_single_ical_link() ) );
 			}
 
-			echo $form->get_form_html();
+			if ( $doing_shortcode === true ) {
+				return $form->get_form_html();
+			} else {
+				echo $form->get_form_html();
+			}
+
 		} else {
-			echo $form->registrations_closed_message();
+
+			if ( $doing_shortcode === true ) {
+				return $form->registrations_closed_message();
+			} else {
+				echo $form->registrations_closed_message();
+			}
 		}
+
 	}
 }
 

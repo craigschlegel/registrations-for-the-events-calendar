@@ -6,8 +6,9 @@ $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
 
 ?>
 <h1><?php _e( 'Single Event Details', 'registrations-for-the-events-calendar' ); ?></h1>
-<a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations' ); ?>"><?php _e( 'Back to Overview', 'registrations-for-the-events-calendar' ); ?></a>
-
+<div class="rtec-view-selector">
+<a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations' ); ?>" class="rtec-button-link rtec-green-bg"><?php _e( 'Back to Overview', 'registrations-for-the-events-calendar' ); ?></a>
+</div>
 <input type="hidden" value="<?php echo esc_attr( $id ); ?>" name="event_id">
 
     <div class="rtec-wrapper rtec-single">
@@ -24,21 +25,8 @@ $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
                 $registrations = $db->retrieve_entries( $data, ( $show === 1 ), 300 );
 
                 // set post meta
-                $meta = get_post_meta( $id );
-
-                $event_meta['post_id'] = $id;
-                $event_meta['title'] = get_the_title( $id );
-                $event_meta['start_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventStartDate'][0] ) );
-                $event_meta['end_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventEndDate'][0] ) );
-                $default_disabled = isset( $rtec_options['disable_by_default'] ) ? $rtec_options['disable_by_default'] : false;
-                $event_meta['disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? $meta['_RTECregistrationsDisabled'][0] : $default_disabled;
-                $event_meta['num_registered'] = isset( $meta['_RTECnumRegistered'][0] ) ? $meta['_RTECnumRegistered'][0] : 0;
-
-                // set venue meta
-                $venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
-                $venue = rtec_get_venue( $id );
-                $event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
-                $bg_color_style = rtec_get_attendance_bg_color( $event_meta['num_registered'] );
+                $event_meta = rtec_get_event_meta( $id );
+                $bg_color_style = rtec_get_attendance_bg_color( $event_meta['num_registered'], $event_meta );
 
                 $labels = rtec_get_event_columns( ( $show === 1 ) );
                 ?>
@@ -47,13 +35,13 @@ $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
 
                     <div class="rtec-event-meta">
                         <h3><?php echo get_the_title( $id ); ?></h3>
-                        <p><?php echo esc_html( $event_meta['start_date'] ); ?> to <span class="rtec-end-time"><?php echo esc_html( $event_meta['end_date'] ); ?></span></p>
+                        <p><?php echo date_i18n( 'F jS, g:i a', strtotime( $event_meta['start_date'] ) ); ?> to <span class="rtec-end-time"><?php echo date_i18n( 'F jS, g:i a', strtotime( $event_meta['end_date'] ) ); ?></span></p>
                         <p class="rtec-venue-title"><?php echo esc_html( $event_meta['venue_title'] ); ?></p>
 
                         <?php
                         $max_registrations_text = '';
-                        if ( isset( $rtec_options['limit_registrations'] ) && $rtec_options['limit_registrations'] == true ) {
-                            $max_registrations_text = ' &#47; ' . $rtec_options['default_max_registrations'];;
+                        if ( $event_meta['limit_registrations'] ) {
+                            $max_registrations_text = ' &#47; ' . $event_meta['max_registrations'];
                         }
                         ?>
                         <p class="rtec-reg-info" style="<?php echo $bg_color_style; ?>"><?php echo '<span class="rtec-num-registered-text">' . $event_meta['num_registered'] . '</span>' . $max_registrations_text; ?></p>

@@ -6,7 +6,10 @@
 }
 .rtec-view-selector a{
     display: inline-block;
-    margin-right: 15px;
+    margin: 1em 15px 1em 0;
+}
+.rtec-fade {
+    opacity: .7;
 }
 /*
 9EE6DE
@@ -26,7 +29,7 @@
 .rtec-single-event {
     display: inline-block;
     width: 47.5%;
-    margin: 2em 2% 2em 0;
+    margin: 0 2% 3em 0;
 }
 .rtec-single-event .rtec-event-meta,
 .rtec-single-event .rtec-event-actions {
@@ -103,12 +106,14 @@
     box-sizing: border-box;
 }
 .rtec-next { float: right; }
-.rtec-view-all {
+.rtec-view-all,
+.rtec-button-link {
     display: block;
     text-align: center;
     padding: 5px;
     border: 1px solid;
     border-radius: 3px;
+    text-decoration: none;
 }
 
 .rtec-admin-wrap .rtec-add-field {
@@ -323,7 +328,7 @@
     padding: 8px 2px 8px 10px;
     background: #e5e5e5;
     border: 1px solid #bbb;
-    cursor: pointer;
+    cursor: auto;
 }
 .rtec-event-options.postbox .handlediv {
     width: 32px;
@@ -352,4 +357,22 @@
         width: 100%;
         margin: 2em 2% 2em 2%;
     }
+}
+
+/* hidden event options */
+.rtec-hidden-option-wrap {
+    margin-bottom: 10px;
+}
+.rtec-sameline {
+    display: inline-block;
+}
+.rtec-sameline label {
+    margin-right: 10px;
+}
+.rtec-hidden-option-wrap code,
+#rtec-event-details code{
+    line-height: 2.0;
+}
+.rtec-hidden-options h4 {
+    margin-bottom: .66em;
 }

@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/products/registrations-for-the-events-cal
 Tags: The Events Calendar, registration, event registration, event contact, events calendar, events, RSVP, seminar, conference, workshop, meetup, meetings, calendar, add-on, extension, class, tournament
 Requires at least: 3.0
 Tested up to: 4.7
-Stable tag: 1.4
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,9 +42,10 @@ Follow these steps:
 
 == Setting up Registrations for the Events Calendar ==
 
-1. Make sure you have the plugin "The Events Calendar" by Modern Tribe installed and activated.
+1. Make sure you have the plugin "The Events Calendar" by Modern Tribe installed and activated before activating "Registrations for The Events Calendar"
 2. If you haven't created an event. Create a new event by going to the WordPress dashboard and navigating to Events -> Add New.
-3. A registration form will now appear on you created event or any other published event.
+3. A registration form will now appear on your created event or any other published event.
+3. Add a registration form for a specific event to another page on your site using the shortcode [rtec-registration-form event=743] with the "event" setting being the post ID for that event.
 4. You can configure the form fields, messaging, registrations limits etc by navigating to Events -> Registrations and then selecting the "Form" tab.
 5. You can configure the email options on the "Email" tab.
 6. See a quick overview of your events and registrations on the "Registrations" tab.
@@ -89,6 +90,10 @@ You can configure an offset for how long registrations will be available relativ
 
 Yes. Click on the button "Detailed View" for the event in which you'd like to edit or export registrations for.
 
+= Can I display the registration form on another page or post? =
+
+Yes. You would need to use the post ID for that event in the shortcode. Example: [rtec-registration-form event=743]
+
 = The form is not hidden initially. Why is that? =
 
 It's likely that you have a javascript error somewhere on that page. Try disabling other plugins or switching themes to see if this corrects the issue.
@@ -97,6 +102,13 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 1.5 =
+* New: More options for individual events including options for registration limits and deadlines.
+* New: Ability to set the registration deadline to the end date or have no deadline for an event (helpful for recurring events)
+* New: Logged in user's information will now pre-populate first, last, and email fields if those fields are used.
+* New: Support added for shortcodes. To add a registration form to another page/post/widget use the shortcode [rtec-registration-form event=743 hidden=false]. "event" setting is the post id for the event, "hidden" setting represents whether or not to display the form initially or reveal it with a button click.
+* Tweak: Max width set for the form along with some other styling to help it display better on wide screens.
+
 = 1.4 =
 * New: More translation support added.
 * New: Option added to use translations or custom text.

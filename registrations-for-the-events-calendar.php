@@ -2,7 +2,7 @@
 /*
 Plugin Name: Registrations for The Events Calendar
 Description: Collect and manage registrations for events posted using The Events Calendar by Modern Tribe.
-Version: 1.4
+Version: 1.5
 Author: Roundup WP
 Author URI: roundupwp.com
 License: GPLv2 or later
@@ -215,12 +215,10 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 	     */
 	    public static function install() {
 		    $rtec_options = get_option( 'rtec_options', false );
-
 		    require_once plugin_dir_path( __FILE__ ) . 'inc/class-rtec-db.php';
 		    require_once plugin_dir_path( __FILE__ ) . 'inc/admin/class-rtec-db-admin.php';
 
 		    $db           = new RTEC_Db_Admin();
-
 		    $db->create_table();
 
 		    if ( ! $rtec_options ) {

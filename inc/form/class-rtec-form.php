@@ -19,6 +19,12 @@ class RTEC_Form
     private $event_meta;
 
 	/**
+	 * @var bool
+	 * @since 1.0
+	 */
+	private $hidden_initially;
+
+	/**
 	 * @var array
 	 * @since 1.0
 	 */
@@ -140,7 +146,7 @@ class RTEC_Form
     {
     	global $rtec_options;
 	    
-	    if ( isset( $rtec_options['custom_field_names'] ) ) {
+	    if ( isset( $rtec_options['custom_field_names'] ) && ! is_array( $rtec_options['custom_field_names'] ) ) {
 	    	$custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
 	    } else {
 		    $custom_field_names = array();
@@ -190,6 +196,17 @@ class RTEC_Form
 	}
 
 	/**
+	 * Hides or shows the registration form initially depending on shortcode settings
+	 *
+	 * @param array $atts   shortcode settings
+	 * @since 1.5
+	 */
+	public function set_display_type( $atts )
+	{
+		$this->hidden_initially = isset( $atts['hidden'] ) ? $atts['hidden'] === 'true' : true;
+	}
+
+	/**
 	 * @param string $id    optional manual input of post ID
 	 * @since 1.1
 	 *
@@ -222,26 +239,11 @@ class RTEC_Form
 	 */
 	public function registration_deadline_has_passed()
 	{
-		global $rtec_options;
-
-		$WP_offset = get_option( 'gmt_offset' );
-
-		if ( ! empty( $WP_offset ) ) {
-			$tz_offset = $WP_offset * HOUR_IN_SECONDS;
+		if ( $this->event_meta['registration_deadline'] !== 'none' ) {
+			return( $this->event_meta['registration_deadline'] < time() );
 		} else {
-			$timezone = isset( $rtec_options['timezone'] ) ? $rtec_options['timezone'] : 'America/New_York';
-			// use php DateTimeZone class to handle the date formatting and offsets
-			$date_obj = new DateTime( date( 'm/d g:i a' ), new DateTimeZone( "UTC" ) );
-			$date_obj->setTimeZone( new DateTimeZone( $timezone ) );
-			$utc_offset = $date_obj->getOffset();
-			$tz_offset = $utc_offset;
+			return false;
 		}
-
-		$deadline_multiplier = isset( $rtec_options['registration_deadline'] ) ? sanitize_text_field( $rtec_options['registration_deadline'] ) : 0;
-		$deadline_unit = isset( $rtec_options['registration_deadline_unit'] ) ? sanitize_text_field( $rtec_options['registration_deadline_unit'] ) : 0;
-		$deadline_time = strtotime( $this->event_meta['start_date'] ) - $deadline_multiplier * $deadline_unit;
-
-		return( $deadline_time < ( time() + $tz_offset ) );
 	}
 
 	/**
@@ -260,6 +262,7 @@ class RTEC_Form
         $standard_field_types = array( 'first', 'last', 'email', 'phone' );
         
         foreach ( $standard_field_types as $type ) {
+
             if ( in_array( $type, $show_fields ) ) {
                 $input_fields_data[$type]['name'] = $type;
                 $input_fields_data[$type]['require'] = in_array( $type, $required_fields );
@@ -280,7 +283,9 @@ class RTEC_Form
 		                $input_fields_data['phone']['label'] = rtec_get_text( $rtec_options['phone_label'], __( 'Phone', 'registrations-for-the-events-calendar' ) );
 		                break;
                 }
+
             }
+
         }
 
         // the "other" fields is handled slightly differently
@@ -296,29 +301,6 @@ class RTEC_Form
     }
 
 	/**
-	 * @since 1.0
-	 */
-    public function set_max_registrations()
-    {
-	    global $rtec_options;
-
-        $this->max_registrations = isset( $rtec_options['default_max_registrations'] ) ? $rtec_options['default_max_registrations'] : 30;
-    }
-
-	/**
-	 * @since 1.0
-	 * @return int  the maximum registrations
-	 */
-    public function get_max_registrations()
-    {
-    	if ( !isset( $this->max_registrations ) ) {
-    		$this->set_max_registrations();
-	    }
-
-        return $this->max_registrations;
-    }
-
-	/**
 	 * Are there still registration spots available?
 	 *
 	 * @since 1.0
@@ -326,14 +308,12 @@ class RTEC_Form
 	 */
     public function registrations_available()
     {
-    	global $rtec_options;
-
-    	$max_registrations = $this->get_max_registrations();
-	    if ( isset( $rtec_options['limit_registrations'] ) && ! $rtec_options['limit_registrations'] ) {
+	    if ( ! $this->event_meta['limit_registrations'] ) {
 	    	return true;
 	    }
 
-    	if ( ( $max_registrations - $this->event_meta['num_registered'] ) > 0 ) {
+	    $max_registrations = $this->event_meta['max_registrations'];
+	    if ( ( $max_registrations - $this->event_meta['num_registered'] ) > 0 ) {
     		return true;
 	    } else {
 	    	return false;
@@ -375,10 +355,19 @@ class RTEC_Form
         $width = isset( $rtec_options['width'] ) ? 'width: ' . esc_attr( $rtec_options['width'] ) . $width_unit . ';' : '';
         $data = ' data-rtec-success-message="' . rtec_get_text( esc_attr( $rtec_options['success_message'] ), __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) ) . '"';
 
-	    $html = '<div id="rtec" class="rtec"' . $data . '>';
-            $html .= '<button type="button" id="rtec-form-toggle-button" class="rtec-register-button rtec-js-show' . $button_classes . '" style="' . $button_styles . '">' . esc_html( $button_text ). '<span class="tribe-bar-toggle-arrow"></span></button>';
-            $html .= '<h3 class="rtec-js-hide">' . esc_html( $button_text ) . '</h3>';
-            $html .= '<div class="rtec-form-wrapper rtec-js-hide rtec-toggle-on-click"' . ' style="'. $width . $form_bg_color . '">';
+		    $html = '<div id="rtec" class="rtec"' . $data . '>';
+	    if ( $this->hidden_initially ) {
+		    $html .= '<button type="button" id="rtec-form-toggle-button" class="rtec-register-button rtec-form-toggle-button rtec-js-show' . $button_classes . '" style="' . $button_styles . '">' . esc_html( $button_text ). '<span class="tribe-bar-toggle-arrow"></span></button>';
+		    $html .= '<h3 class="rtec-js-hide">' . esc_html( $button_text ) . '</h3>';
+	    }
+
+	    if ( $this->hidden_initially ) {
+		    $js_hide_class = ' rtec-js-hide';
+	    } else {
+		    $js_hide_class = '';
+	    }
+
+            $html .= '<div class="rtec-form-wrapper rtec-toggle-on-click' . $js_hide_class . '"' . ' style="'. $width . $form_bg_color . '">';
 
             if ( ! empty( $this->errors ) ) {
                 $html .= '<div class="rtec-screen-reader" role="alert">';
@@ -407,7 +396,7 @@ class RTEC_Form
 	    $attendance_message_type = isset( $rtec_options['attendance_message_type'] ) ? $rtec_options['attendance_message_type'] : 'up';
 
 	    // a "count down" type of message won't work if there isn't a limit so we check to see if that's true here
-	    if ( isset( $rtec_options['limit_registrations'] ) && ! $rtec_options['limit_registrations'] ) {
+	    if ( ! $this->event_meta['limit_registrations'] ) {
 		    $attendance_message_type = 'up';
 	    }
 
@@ -418,7 +407,7 @@ class RTEC_Form
                 $text_before = rtec_get_text( $rtec_options['attendance_text_before_up'], __( 'Join', 'registrations-for-the-events-calendar' ) );
                 $text_after = rtec_get_text( $rtec_options['attendance_text_after_up'], __( 'others!', 'registrations-for-the-events-calendar' ) );
             } else {
-                $display_num = $this->get_max_registrations() - $this->event_meta['num_registered'];
+                $display_num = $this->event_meta['max_registrations'] - $this->event_meta['num_registered'];
 	            $text_before = rtec_get_text( $rtec_options['attendance_text_before_down'], __( 'Only', 'registrations-for-the-events-calendar' ) );
 	            $text_after = rtec_get_text( $rtec_options['attendance_text_after_down'], __( 'spots left', 'registrations-for-the-events-calendar' ) );
             }
@@ -562,6 +551,7 @@ class RTEC_Form
 	 * The html that creates the feed is broken into parts and pieced together
 	 *
 	 * @since 1.0
+	 * @since 1.5   will set first, last, and email fields if user is logged-in and data is available
 	 * @return string
 	 */
     public function get_regular_fields()

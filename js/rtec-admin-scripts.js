@@ -197,10 +197,39 @@ jQuery(document).ready(function($){
         }
     });
 
+    function rtecDisabledToggle($wrapEl) {
+        var $disableReg = $wrapEl.find('input[name="_RTECregistrationsDisabled"]'),
+            $limitReg = $wrapEl.find('input[name="_RTEClimitRegistrations"]'),
+            $maxReg = $wrapEl.find('input[name="_RTECmaxRegistrations"]'),
+            $deadlineType = $wrapEl.find('input[name="_RTECdeadlineType"]');
+
+        if ($disableReg.is(':checked')) {
+            $limitReg.attr('disabled','true');
+            $maxReg.attr('disabled','true');
+            $deadlineType.attr('disabled','true');
+        } else {
+            $limitReg.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
+            $deadlineType.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
+            if ($limitReg.is(':checked')) {
+                $maxReg.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
+            } else {
+                $maxReg.attr('disabled','true');
+            }
+        }
+    }
+
+    $('.rtec-event-details .rtec-hidden-option-wrap input').on('change', function() {
+        rtecDisabledToggle($(this).closest('.rtec-event-details'));
+    });
+    $('.rtec-hidden-options .rtec-hidden-option-wrap input').on('change', function() {
+        rtecDisabledToggle($(this).closest('.rtec-hidden-options'));
+    });
+
     $('.rtec-update-event-options').click(function(event) {
         event.preventDefault();
         $(this).after('<div class="rtec-table-changing spinner is-active"></div>')
             .attr('disabled', true);
+        $(this).closest('.rtec-hidden-options').addClass('rtec-fade');
 
         var $targetForm = $(this).closest('.rtec-event-options-form'),
             eventOptionsData = $targetForm.serializeArray(),
@@ -209,13 +238,16 @@ jQuery(document).ready(function($){
                 event_options_data: eventOptionsData,
                 rtec_nonce : rtecAdminScript.rtec_nonce
             },
-            successFunc = function () {
+            successFunc = function (data) {
                 // remove spinner
                 $targetForm.find('.rtec-table-changing').remove();
                 $targetForm.find('.rtec-update-event-options').removeAttr('disabled');
+                $targetForm.closest('.rtec-hidden-options').removeClass('rtec-fade');
+                $targetForm.closest('.rtec-single-event').find('.rtec-reg-info p').text(data);
             };
         rtecRegistrationAjax(submitData,successFunc);
     });
+
 
     // REGISTRATION single tab
     // set table width to a minimum in case of a lot of fields
@@ -253,7 +285,7 @@ jQuery(document).ready(function($){
                     rtec_event_id: $('.rtec-single-event').attr('data-rtec-event-id'),
                     rtec_nonce : rtecAdminScript.rtec_nonce
                 },
-                successFunc = function () {
+                successFunc = function (data) {
                     // remove deleted entries
                     $('.rtec-being-removed').each(function () {
                         $(this).remove();
@@ -262,6 +294,7 @@ jQuery(document).ready(function($){
                     $('.rtec-table-changing').remove();
                     $('.rtec-single table tbody').fadeTo("fast", 1);
                     idsToRemove = [];
+                    $('.rtec-num-registered-text').text(parseInt(data));
                 };
                 rtecRegistrationAjax(submitData,successFunc);
 

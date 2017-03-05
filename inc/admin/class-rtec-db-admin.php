@@ -216,10 +216,6 @@ class RTEC_Db_Admin extends RTEC_Db
 
         $where = 'id';
 
-        if ( ( is_array( $records ) && is_email( $records[0] ) ) || is_email( $records ) ) {
-            $where = 'email';
-        }
-
         if ( is_array( $records ) ) {
             $registrations_to_be_deleted = implode( ', ', $records);
         } else {

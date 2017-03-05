@@ -41,6 +41,18 @@
     top: 50%;
     left: 50%;
 }
+.rtec-yellow-message {
+    display: inline-block;
+    line-height: 19px;
+    padding: 11px 15px;
+    font-size: 14px;
+    text-align: left;
+    margin: 25px 20px 0 2px;
+    background-color: #fff;
+    border-left: 4px solid #ffba00;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
 #rtec .rtec-form-wrapper {
     box-sizing: border-box;
     position: relative;
@@ -117,7 +129,16 @@
 #rtec .rtec-success-message {
     text-align: center;
 }
-
+/* Backup styles */
+.tribe-events-notices {
+    background: #d9edf7;
+    border-radius: 4px;
+    border: 1px solid #bce8f1;
+    color: #3a87ad;
+    margin: 10px 0 18px;
+    padding: 8px 35px 8px 14px;
+    text-shadow: 0 1px 0 #fff;
+}
 /* On mobile make the min-width 100% */
 @media all and (max-width: 640px){
     #rtec .rtec-form-wrapper {

@@ -43,6 +43,12 @@ class RTEC_Submission
     public $validate_check = array();
 
 	/**
+	 * @var array
+	 * @since 1.0
+	 */
+	private $event_meta = array();
+
+	/**
 	 * Validates the initial data
 	 *
 	 * @param $post $_POST data
@@ -67,8 +73,8 @@ class RTEC_Submission
     {
 	    $options = get_option( 'rtec_options' );
 
-	    if ( isset( $options['limit_registrations'] ) && $options['limit_registrations'] ) {
-	    	$registrations_left = $options['default_max_registrations'] - (int)$num_registered;
+	    if ( $this->event_meta['limit_registrations'] ) {
+	    	$registrations_left = $this->event_meta['max_registrations'] - (int)$num_registered;
 
 		    if ( $registrations_left > 0 ) {
 		    	return true;
@@ -208,6 +214,8 @@ class RTEC_Submission
 		    }
 
 	    }
+
+	    $this->event_meta = rtec_get_event_meta( (int)$this->submission['rtec_event_id'] );
     }
 
 	/**
@@ -283,7 +291,8 @@ class RTEC_Submission
 	    $disable_notification = isset( $rtec_options['disable_notification'] ) ? $rtec_options['disable_notification'] : false;
 
 	    $this->sanitize_submission();
-	    
+
+	    $confirmation_success = true;
 	    if ( $this->email_given() && ! $disable_confirmation ) {
 		    $confirmation_success = $this->send_confirmation_email();
 	    }
