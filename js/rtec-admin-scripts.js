@@ -218,8 +218,8 @@ jQuery(document).ready(function($){
         }
     }
 
-    $('.rtec-event-details .rtec-hidden-option-wrap input').on('change', function() {
-        rtecDisabledToggle($(this).closest('.rtec-event-details'));
+    $('.rtec-eventtable .rtec-hidden-option-wrap input').on('change', function() {
+        rtecDisabledToggle($(this).closest('.rtec-eventtable'));
     });
     $('.rtec-hidden-options .rtec-hidden-option-wrap input').on('change', function() {
         rtecDisabledToggle($(this).closest('.rtec-hidden-options'));

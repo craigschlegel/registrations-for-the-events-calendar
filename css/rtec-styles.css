@@ -33,7 +33,6 @@
 #rtec {
     overflow: auto;
     max-width: 700px;
-    min-width: 300px;
 }
 #rtec .rtec-spinner {
     display: none;
@@ -85,16 +84,16 @@
 #rtec textarea {
     box-sizing: border-box;
     display: inline-block;
-    padding: 10px 15px;
+    padding: .3em .6em;
     margin: 0;
     width: 100%;
     border: 1px solid #ddd;
-    line-height: 20px;
+    line-height: 1.5em;
     background: #fff;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    font-size: 18px;
+    font-size: 1em;
 }
 #rtec input[type="number"] {
     max-width: 100px;
@@ -118,10 +117,10 @@
 }
 #rtec .rtec-error-message {
     position: absolute;
-    top: 42px;
+    top: 2.13em;
     margin: 0;
-    padding: 0 5px 2px;
-    font-size: 16px;
+    padding: 0 .2em 2px;
+    font-size: 1em;
     font-weight: bold;
     background: rgb(255, 92, 51);
     color: #fff;

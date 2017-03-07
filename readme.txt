@@ -108,6 +108,8 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 * New: Logged in user's information will now pre-populate first, last, and email fields if those fields are used.
 * New: Support added for shortcodes. To add a registration form to another page/post/widget use the shortcode [rtec-registration-form event=743 hidden=false]. "event" setting is the post id for the event, "hidden" setting represents whether or not to display the form initially or reveal it with a button click.
 * Tweak: Max width set for the form along with some other styling to help it display better on wide screens.
+* Tweak: Ems used in the CSS for field and message spacing in form.
+* Fix: Featured images for events were causing some display issues for the form.
 
 = 1.4 =
 * New: More translation support added.

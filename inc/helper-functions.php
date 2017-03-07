@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @param   $id string
  * @since   1.0
+ * @since   1.0 added limit registrations, deadline type, max registrations
  * @return array
  */
 function rtec_get_event_meta( $id = '' ) {
@@ -43,7 +44,7 @@ function rtec_get_event_meta( $id = '' ) {
 	$event_meta['venue_state'] = isset( $venue_meta['_VenueStateProvince'][0] ) ? $venue_meta['_VenueStateProvince'][0] : '';
 	$event_meta['venue_zip'] = isset( $venue_meta['_VenueZip'][0] ) ? $venue_meta['_VenueZip'][0] : '';
 
-	$default_disabled = isset( $rtec_options['disable_by_default'] ) ? $rtec_options['disable_by_default'] : 0;
+	$default_disabled = isset( $rtec_options['disable_by_default'] ) ? $rtec_options['disable_by_default'] : false;
 	$event_meta['registrations_disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? ( (int)$meta['_RTECregistrationsDisabled'][0] === 1 ) : $default_disabled;
 	$default_limit_registrations = isset( $rtec_options['limit_registrations'] ) ? $rtec_options['limit_registrations'] : false;
 	$event_meta['limit_registrations'] = isset( $meta['_RTEClimitRegistrations'][0] ) ? ( (int)$meta['_RTEClimitRegistrations'][0] === 1 ) : $default_limit_registrations;
@@ -210,7 +211,7 @@ function rtec_the_registration_form_shortcode( $atts ) {
 	$post_id = isset( $atts['event'] ) ? (int)$atts['event'] : false;
 	$atts['doing_shortcode'] = true;
 
-	if ( $post_id !== get_the_ID() ) {
+	if ( $post_id !== get_the_ID() || ! is_singular( 'tribe_events' ) ) {
 
 		if ( function_exists( 'rtec_the_registration_form' ) && $post_id !== false ) {
 			$html = rtec_the_registration_form( $atts );

@@ -180,7 +180,7 @@ jQuery(document).ready(function($) {
                     } else {
                         $rtecEl.prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">'+$('#rtec').attr('data-rtec-success-message')+'</p>');
                     }
-
+                    
                 }
             }); // ajax
         } else { // if not .rtec-error

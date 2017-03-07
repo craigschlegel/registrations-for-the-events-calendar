@@ -172,7 +172,7 @@ function rtec_meta_boxes_html(){
 			</tr>
 			<tr>
 				<td colspan="2">
-					<table class="eventtable">
+					<table class="eventtable rtec-eventtable">
 						<tbody>
 							<tr class="rtec-hidden-option-wrap">
 								<td class="tribe-table-field-label"><?php _e( 'Disable Registrations:', 'registrations-for-the-events-calendar' ); ?></td>
