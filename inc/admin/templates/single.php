@@ -26,6 +26,13 @@ $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
 
                 // set post meta
                 $event_meta = rtec_get_event_meta( $id );
+
+                // make sure meta count is accurate
+                if ( count( $registrations ) !== $event_meta['num_registered'] ) {
+                    update_post_meta( $id, '_RTECnumRegistered',  count( $registrations ) );
+                    $event_meta['num_registered'] = count( $registrations );
+                }
+
                 $bg_color_style = rtec_get_attendance_bg_color( $event_meta['num_registered'], $event_meta );
 
                 $labels = rtec_get_event_columns( ( $show === 1 ) );

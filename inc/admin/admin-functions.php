@@ -291,7 +291,8 @@ function rtec_should_show( $view, $disabled_status ) {
 	if ( $view === 'all' ) {
 		return true;
 	} else {
-		return ( $disabled_status === false );
+		$working_status = ( $disabled_status === false || $disabled_status === '0' );
+		return ( $working_status );
 	}
 }
 

@@ -724,7 +724,7 @@ class RTEC_Admin
                     <label><?php _e( 'Error Message:', 'registrations-for-the-events-calendar' ); ?></label>
                     <input type="text" name="<?php echo $args['option'].'['.$field[0].'_error]'; ?>" value="<?php echo $error; ?>" class="large-text rtec-other-input">
                 </p>
-                <?php if ( ! empty( $valid_count ) ) : ?>
+                <?php if ( $field[0] === 'phone' ) : ?>
                 <p>
                     <label><?php _e( 'Required length for validation:', 'registrations-for-the-events-calendar' ); ?></label>
                     <input type="text" name="<?php echo $args['option'].'['.$field[0].'_valid_count]'; ?>" value="<?php echo $valid_count; ?>" class="large-text rtec-valid-count-input">

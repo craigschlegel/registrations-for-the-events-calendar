@@ -94,6 +94,13 @@ foreach ( $events as $event ) :
     // set post meta
     $event_meta = rtec_get_event_meta( $event->ID );
 
+	$reg_count = $db->get_registration_count( $event->ID );
+
+	if ( $reg_count !== $event_meta['num_registered'] ) {
+		update_post_meta( $event->ID, '_RTECnumRegistered', $reg_count );
+		$event_meta['num_registered'] = $reg_count;
+	}
+
 	if ( rtec_should_show( $view, $event_meta['registrations_disabled'] ) ) :
 
 	$bg_color_style = rtec_get_attendance_bg_color( $event_meta['num_registered'], $event_meta );

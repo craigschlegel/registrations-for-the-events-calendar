@@ -175,13 +175,19 @@ class RTEC_Submission
                 
             } elseif ( $input_key === 'rtec_phone' && $options['phone_require'] ) {
 	            $stripped_input = preg_replace( '/[^0-9]/', '', $input_value );
-	            $valid_counts_arr = isset( $options['phone_valid_count'] ) ? explode( ',' , $options['phone_valid_count'] ) : array( 7, 10 );
-	            $valid_length_count = 0;
 
-	            foreach ( $valid_counts_arr as $valid_count ) {
+	            if ( isset( $options['phone_valid_count'] ) && $options['phone_valid_count'] === '' ) {
+		            $valid_length_count = strlen( $stripped_input );
+	            } else {
+		            $valid_counts_arr = isset( $options['phone_valid_count'] ) ? explode( ',' , $options['phone_valid_count'] ) : array( 7, 10 );
+		            $valid_length_count = 0;
 
-	            	if ( strlen( $stripped_input ) === (int)$valid_count ) {
-	            		$valid_length_count++;
+		            foreach ( $valid_counts_arr as $valid_count ) {
+
+			            if ( strlen( $stripped_input ) === (int)$valid_count ) {
+				            $valid_length_count++;
+			            }
+
 		            }
 
 	            }

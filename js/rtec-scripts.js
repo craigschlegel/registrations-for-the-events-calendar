@@ -79,6 +79,11 @@ jQuery(document).ready(function($) {
                 }),
                 countTest = validCountNumbers.indexOf(formElCount);
 
+            // if the valid counts is blank, allow any entry that contains at least one number
+            if (validCountArr[0] === '') {
+                countTest = formElCount - 1;
+            }
+
             if (countTest !== -1) {
                 if (formEl.hasClass(RtecForm.invalidClass)) {
                     formEl.removeClass(RtecForm.invalidClass);
