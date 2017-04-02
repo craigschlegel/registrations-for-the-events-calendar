@@ -514,11 +514,11 @@ class RTEC_Submission
 
         if ( ! empty ( $rtec_options['confirmation_subject'] ) && $rtec_options['message_source'] !== 'translate' ) {
         	$subject = $this->strip_malicious( $this->find_and_replace( $rtec_options['confirmation_subject'] ) );
-
-            return $subject;
+        } else {
+        	$subject = $this->find_and_replace( '{event-title}' );
         }
 
-        return __( 'Thank You', 'registrations-for-the-events-calendar' ) ;
+	    return $subject;
     }
 
 	/**

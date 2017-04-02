@@ -20,8 +20,10 @@ function rtec_the_registration_form( $atts = array() )
 	$form->set_event_meta( $event_id );
 	$form->set_custom_fields();
 	$form->set_display_type( $atts );
+	$event_meta = $form->get_event_meta();
 
-	if ( $rtec->submission != NULL ) {
+	if ( $rtec->submission != NULL && $event_meta['post_id'] === (int)$_POST['rtec_event_id'] ) {
+
 		$submission = $rtec->submission->instance();
 		$submission->validate_input( $_POST );
 

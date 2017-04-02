@@ -547,7 +547,7 @@ class RTEC_Admin
             'class' => 'regular-text',
             'page' => 'rtec_email_confirmation',
             'section' => 'rtec_email_confirmation',
-            'default' => 'Thank You'
+            'default' => get_bloginfo( 'name' )
         ));
 
         // confirmation from address
@@ -575,7 +575,7 @@ class RTEC_Admin
             'class' => 'regular-text',
             'page' => 'rtec_email_confirmation',
             'section' => 'rtec_email_confirmation',
-            'default' => 'Registration Confirmation'
+            'default' => '{event-title}'
         ));
 
         // confirmation message
@@ -605,7 +605,7 @@ class RTEC_Admin
             'option' => 'rtec_options', // matches the options name
             'class' => 'default-text', // class for the wrapper and input field
             'description' => 'If you would like a custom date format in your messages, enter it here using the examples as a guide',
-            'default' => 'F j, Y'
+            'default' => 'F jS, g:i a'
         ));
     }
 
