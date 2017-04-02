@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/products/registrations-for-the-events-cal
 Tags: The Events Calendar, registration, event registration, event contact, events calendar, events, RSVP, seminar, conference, workshop, meetup, meetings, calendar, add-on, extension, class, tournament
 Requires at least: 3.0
 Tested up to: 4.7
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,10 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 1.5.2 =
+* Tweak: Several email defaults were changed like the confirmation subject, confirmation from name, and date format
+* Fix: Multiple registrations would be submitted if there was more than one registration form on a page and ajax was disabled.
+
 = 1.5.1 =
 * Tweak: If the number of registrations saved in the event meta is inaccurate, this is updated with a count from the database when visiting the registrations tab and viewing that event.
 * Fix: Phone validation count causing issue if left blank. Saving an empty setting for this will now allow any submission containing numbers to be accepted.
