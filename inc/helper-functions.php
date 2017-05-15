@@ -238,5 +238,5 @@ function rtec_the_registration_form_shortcode( $atts ) {
 
 	}
 
-
 }
+

@@ -1,4 +1,5 @@
 <h1><?php _e( 'Overview', 'registrations-for-the-events-calendar' ); ?></h1>
+
 <?php if ( ! isset( $options['default_max_registrations'] ) ) : ?>
     <div class="notice notice-info is-dismissible">
         <p>

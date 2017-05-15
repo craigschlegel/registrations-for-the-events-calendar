@@ -405,8 +405,8 @@ add_action( 'wp_ajax_rtec_update_registration', 'rtec_update_registration' );
  * @since 1.0
  */
 function rtec_admin_scripts_and_styles() {
-	wp_enqueue_style( 'rtec_admin_styles', RTEC_PLUGIN_URL . 'css/rtec-admin-styles.css', array(), RTEC_VERSION );
-	wp_enqueue_script( 'rtec_admin_scripts', RTEC_PLUGIN_URL . '/js/rtec-admin-scripts.js', array( 'jquery' ), RTEC_VERSION, false );
+	wp_enqueue_style( 'rtec_admin_styles', trailingslashit( RTEC_PLUGIN_URL ) . 'css/rtec-admin-styles.css', array(), RTEC_VERSION );
+	wp_enqueue_script( 'rtec_admin_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-scripts.js', array( 'jquery' ), RTEC_VERSION, false );
 	wp_localize_script( 'rtec_admin_scripts', 'rtecAdminScript',
 		array(
 			'ajax_url' => admin_url( 'admin-ajax.php' ),

@@ -178,6 +178,19 @@ class RTEC_Admin
 
         $this->create_settings_field( array(
             'option' => 'rtec_options',
+            'name' => 'check_for_duplicates',
+            'title' => '<label for="rtec_check_for_duplicate">Check for Duplicate Emails</label>',
+            'example' => '',
+            'description' => 'Only allow one registration per event per submitted email',
+            'callback'  => 'default_checkbox',
+            'class' => '',
+            'page' => 'rtec_form_registration_availability',
+            'section' => 'rtec_form_registration_availability',
+            'default' => false
+        ));
+
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
             'name' => 'default_max_registrations',
             'title' => '<label for="rtec_default_max_registrations">Default Max Registrations</label>',
             'example' => '',
@@ -286,6 +299,20 @@ class RTEC_Admin
             'page' => 'rtec_form_custom_text',
             'section' => 'rtec_form_custom_text',
             'legend' => false
+        ));
+
+        // error duplicate
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'error_duplicate_message',
+            'title' => '<label>Duplicate Registration Error Message</label>',
+            'example' => '',
+            'default' => 'You have already registered for this event',
+            'description' => 'Enter the message you would like to display on your site after a successful form completion',
+            'callback'  => 'default_text',
+            'class' => 'regular-text',
+            'page' => 'rtec_form_custom_text',
+            'section' => 'rtec_form_custom_text',
         ));
 
         /* Form Styling */
@@ -1122,7 +1149,7 @@ class RTEC_Admin
         $checkbox_settings = array();
         $leave_spaces = array();
         if ( isset( $input['default_max_registrations'] ) ) {
-            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'disable_by_default', 'limit_registrations', 'include_attendance_message', 'preserve_db', 'preserve_registrations', 'preserve_settings' );
+            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'disable_by_default', 'limit_registrations', 'include_attendance_message', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
             $leave_spaces = array( 'custom_js', 'custom_css' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $checkbox_settings = array( 'disable_notification', 'disable_confirmation', 'use_custom_notification' );

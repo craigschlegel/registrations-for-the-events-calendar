@@ -600,9 +600,16 @@ class RTEC_Form
 
             $error_html = '';
 
-            if ( in_array( $field['name'], $this->errors ) ) {
+	        if ( in_array( $field['name'], $this->errors ) ) {
                 $required_data .= ' aria-invalid="true"';
                 $error_html = '<p class="rtec-error-message" role="alert">' . esc_html( $field['error_message'] ) . '</p>';
+            } elseif ( $field['name'] === 'email' && in_array( 'email_duplicate', $this->errors, true ) ) {
+	            $options = get_option( 'rtec_options' );
+
+	            $message = isset( $options['error_duplicate_message'] ) ? $options['error_duplicate_message'] : 'You have already registered for this event';
+	            $message_text = rtec_get_text( $message, __( 'You have already registered for this event', 'registrations-for-the-events-calendar' ) );
+
+	            $error_html = '<p class="rtec-error-message" id="rtec-error-duplicate" role="alert">' . esc_html( $message_text ) . '</p>';
             } else {
                 $required_data .= ' aria-invalid="false"';
             }

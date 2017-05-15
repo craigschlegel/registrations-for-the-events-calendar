@@ -40,6 +40,12 @@
     top: 50%;
     left: 50%;
 }
+#rtec .rtec-form-buttons .rtec-email-spinner {
+    top: 50%;
+    right: 50%;
+    margin-top: -12px;
+    margin-right: -12px;
+}
 .rtec-yellow-message {
     display: inline-block;
     line-height: 19px;
@@ -114,6 +120,11 @@
 
 #rtec .rtec-error {
     border: 1px solid rgb(255, 92, 51) !important;
+}
+#rtec .rtec-email-spinner {
+    position: absolute;
+    top: 11px;
+    right: 11px;
 }
 #rtec .rtec-error-message {
     position: absolute;

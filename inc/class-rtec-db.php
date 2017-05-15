@@ -100,5 +100,28 @@ class RTEC_Db
 			update_post_meta( $id, $key, $value );
 		}
 	}
+
+	/**
+	 * Generates the registration form with a shortcode
+	 *
+	 * @param   $email        string  registrants entered
+	 * @param   $event_id     int     post id of the event to compare
+	 *
+	 * @return  bool  true if email is a duplicate
+	 *
+	 * @since   1.6
+	 */
+	function check_for_duplicate_email( $email, $event_id ) {
+		global $wpdb;
+
+		$results = $wpdb->get_row( $wpdb->prepare( "SELECT email FROM $this->table_name 
+		WHERE event_id=%d AND email=%s;", $event_id, $email), ARRAY_A );
+
+		if ( isset( $results ) ) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 }
 RTEC_Db::instance();
