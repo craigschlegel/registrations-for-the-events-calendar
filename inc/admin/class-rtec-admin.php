@@ -144,6 +144,27 @@ class RTEC_Admin
 
         /* Registration Messages */
         add_settings_section(
+            'rtec_attendee_data',
+            'Attendee Display',
+            array( $this, 'blank' ),
+            'rtec_attendee_data'
+        );
+
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'show_registrants_data',
+            'title' => '<label for="rtec_show_registrants_data">Show Attendee List Above Form</label>',
+            'example' => '',
+            'description' => 'A list of registrations will appear above the registration form in the "Single Event" view. Note that only registrations that have been reviewed in the backend will be displayed (do not have the "new" bubble next to them)',
+            'callback'  => 'default_checkbox',
+            'class' => '',
+            'page' => 'rtec_attendee_data',
+            'section' => 'rtec_attendee_data',
+            'default' => false
+        ));
+
+        /* Registration Messages */
+        add_settings_section(
             'rtec_form_registration_availability',
             'Registration Availability',
             array( $this, 'blank' ),
@@ -1149,7 +1170,7 @@ class RTEC_Admin
         $checkbox_settings = array();
         $leave_spaces = array();
         if ( isset( $input['default_max_registrations'] ) ) {
-            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'disable_by_default', 'limit_registrations', 'include_attendance_message', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
+            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'disable_by_default', 'show_registrants_data', 'limit_registrations', 'include_attendance_message', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
             $leave_spaces = array( 'custom_js', 'custom_css' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $checkbox_settings = array( 'disable_notification', 'disable_confirmation', 'use_custom_notification' );
