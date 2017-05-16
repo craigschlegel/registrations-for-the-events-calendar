@@ -103,6 +103,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
                 self::$instance->constants();
                 self::$instance->includes();
 	            self::$instance->form = new RTEC_Form();
+	            self::$instance->db_frontend = new RTEC_Db();
 	            if ( isset( $_POST['rtec_email_submission'] ) && '1' === $_POST['rtec_email_submission'] ) {
 		            $sanitized_post = array();
 		            foreach ( $_POST as $post_key => $raw_post_value ) {

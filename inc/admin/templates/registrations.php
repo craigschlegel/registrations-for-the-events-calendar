@@ -84,10 +84,11 @@ $fields[] = 'status';
 foreach ( $events as $event ) :
 	// used to update new vs current registrations in db
 	$event_ids_on_page[] = $event->ID;
-
 	$data = array(
 		'fields' => $fields,
-		'id' => $event->ID,
+		'where' => array(
+			array( 'event_id', $event->ID, '=', 'int' ),
+		),
 		'order_by' => 'registration_date'
 	);
     $registrations = $db->retrieve_entries( $data, false, 10 );

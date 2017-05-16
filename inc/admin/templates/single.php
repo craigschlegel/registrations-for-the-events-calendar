@@ -18,7 +18,9 @@ $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
 
                 $data = array(
                     'fields' => 'registration_date, id, last_name, first_name, email, phone, other, custom',
-                    'id' => $id,
+                    'where' => array(
+                        array( 'event_id', $id, '=', 'int' ),
+                    ),
                     'order_by' => 'registration_date'
                 );
 

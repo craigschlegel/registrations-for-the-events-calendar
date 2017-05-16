@@ -13,9 +13,23 @@ function rtec_the_registration_form( $atts = array() )
 {
 	$rtec = RTEC();
 	$form = $rtec->form->instance();
+	$db = $rtec->db_frontend->instance();
 
 	$event_id = isset( $atts['event'] ) ? (int)$atts['event'] : '';
+	$event_meta = rtec_get_event_meta( $event_id );
 	$doing_shortcode = isset( $atts['doing_shortcode'] ) ? $atts['doing_shortcode'] : false;
+	$return_html = '';
+
+	if ( $doing_shortcode ) {
+		$return_html .= isset( $atts['showheader'] ) && $atts['showheader'] === 'true' ? $form->get_event_header_html() : '';
+	}
+
+	if ( $event_meta['show_registrants_data'] && ! $doing_shortcode ) {
+		$registrants_data = $db->get_registrants_data( $event_meta );
+
+		echo $form->get_registrants_data_html( $registrants_data );
+	}
+
 	$form->set_inc_and_req_fields();
 	$form->set_event_meta( $event_id );
 	$form->set_custom_fields();
@@ -31,21 +45,24 @@ function rtec_the_registration_form( $atts = array() )
 			$form->set_event_meta();
 			$form->set_input_fields_data();
 
+			$return_html .= $form->get_form_html();
+
 			if ( $doing_shortcode === true ) {
-				return $form->get_form_html();
+				return $return_html;
 			} else {
-				echo $form->get_form_html();
+				echo $return_html;
 			}
 
 		} else {
 			$submission->process_valid_submission();
 
 			$message = $form->get_success_message_html();
+			$return_html .= $message;
 
 			if ( $doing_shortcode === true ) {
-				return $message;
+				return $return_html;
 			} else {
-				echo $message;
+				echo $return_html;
 			}
 		}
 
@@ -58,18 +75,21 @@ function rtec_the_registration_form( $atts = array() )
 				$form->set_ical_url( esc_url( tribe_get_single_ical_link() ) );
 			}
 
+			$return_html .= $form->get_form_html();
+
 			if ( $doing_shortcode === true ) {
-				return $form->get_form_html();
+				return $return_html;
 			} else {
-				echo $form->get_form_html();
+				echo $return_html;
 			}
 
 		} else {
+			$return_html .= $form->registrations_closed_message();
 
 			if ( $doing_shortcode === true ) {
-				return $form->registrations_closed_message();
+				return $return_html;
 			} else {
-				echo $form->registrations_closed_message();
+				echo $return_html;
 			}
 		}
 
@@ -205,7 +225,7 @@ add_action( 'wp_head', 'rtec_custom_css' );
  */
 function rtec_scripts_and_styles() {
 	wp_enqueue_style( 'rtec_styles', trailingslashit( RTEC_PLUGIN_URL ) . 'css/rtec-styles.css', array(), RTEC_VERSION );
-	//wp_enqueue_script( 'rtec_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-scripts.js', array( 'jquery' ), RTEC_VERSION, true );
+	wp_enqueue_script( 'rtec_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-scripts.js', array( 'jquery' ), RTEC_VERSION, true );
 
 	$options = get_option( 'rtec_options' );
 	$check_for_duplicates = isset( $options['check_for_duplicates'] ) ? $options['check_for_duplicates'] : false;

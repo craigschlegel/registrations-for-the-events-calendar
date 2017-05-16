@@ -139,6 +139,44 @@
 #rtec .rtec-success-message {
     text-align: center;
 }
+/* Attendee list */
+.rtec-event-meta:after {
+    content: "";
+    visibility: hidden;
+    display: table;
+    clear: both;
+}
+.rtec-event-meta {
+    padding-bottom: 4%;
+}
+.rtec-event-meta .rtec-attendee-list {
+    box-sizing: border-box;
+    display: inline-block;
+    float: left;
+    padding: 0 4%;
+}
+.rtec-event-meta .rtec-list-column-2 {
+    width: 50%;
+}
+.rtec-event-meta .rtec-list-column-3 {
+    width: 33.33%;
+}
+.single-tribe_events .tribe-events-event-meta .rtec-section-title,
+.rtec-event-meta .rtec-section-title {
+    padding: 0 4%;
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 20px 0 10px;
+}
+.single-tribe_events .tribe-events-event-meta .rtec-section-subtitle,
+.rtec-event-meta .rtec-section-subtitle {
+    font-size: 1.2em;
+    font-weight: 700;
+    margin: 20px 0 10px;
+}
+.rtec-event-meta .rtec-attendee {
+    display: block;
+}
 /* Backup styles */
 .tribe-events-notices {
     background: #d9edf7;
