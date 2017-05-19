@@ -3,8 +3,6 @@ jQuery(document).ready(function($) {
     $('.rtec-js-show').show();
     $('.rtec-js-hide').hide();
 
-    console.log(rtec, rtec.checkForDuplicates);
-
     $('.rtec-form-toggle-button').on('click', function() {
         $rtecEl = $(this).closest('.rtec');
         $rtecEl.find('.rtec-toggle-on-click').toggle('slow');

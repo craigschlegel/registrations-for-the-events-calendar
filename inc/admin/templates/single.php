@@ -3,18 +3,7 @@
 // create a custom WP_Query object just for events
 $id = (int)$_GET['id'];
 $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
-$raw_recipients = rtec_get_notification_email_recipients( $id );
-$recipients = isset( $raw_recipients ) ? explode( ',', str_replace( ' ', '', $raw_recipients ) ) : array( get_option( 'admin_email' ) );
-$valid_recipients = array();
 
-$confirmation_from_address = rtec_get_confirmation_from_address( $id );
-$confirmation_from_address = is_email( $confirmation_from_address ) ? $confirmation_from_address : get_option( 'admin_email' );
-echo '<pre>';
-var_dump( $recipients );
-
-var_dump( $confirmation_from_address );
-
-echo '</pre>';
 ?>
 <h1><?php _e( 'Single Event Details', 'registrations-for-the-events-calendar' ); ?></h1>
 <div class="rtec-view-selector">
@@ -148,11 +137,7 @@ echo '</pre>';
                                 <input type="hidden" name="rtec_id" value="<?php echo esc_attr( $id ); ?>" />
                                 <input type="submit" name="rtec_event_csv" class="button action rtec-admin-secondary-button" value="<?php _e( 'Export (.csv)', 'registrations-for-the-events-calendar' ); ?>" />
                             </form>
-                            <?php if ( $show === 1 ) : ?>
-                            <a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=' . $id ); ?>" class="rtec-admin-secondary-button button action"><?php _e( 'View Current Custom Data', 'registrations-for-the-events-calendar' ); ?></a>
-                            <?php else : ?>
-                            <a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=' . $id . '&show=1' ); ?>" class="rtec-admin-secondary-button button action"><?php _e( 'View All Custom Data', 'registrations-for-the-events-calendar' ); ?></a>
-                            <?php endif; ?>
+	                        
                         </div>
                     </div>
                 </div> <!-- rtec-single-event -->

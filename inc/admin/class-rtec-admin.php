@@ -47,7 +47,7 @@ class RTEC_Admin
 	        'edit.php?post_type=' . RTEC_TRIBE_EVENTS_POST_TYPE,
             'Registrations',
             $menu_title,
-            'manage_options',
+            'edit_posts',
             RTEC_PLUGIN_DIR . '_settings',
             array( $this, 'create_options_page' )
         );
@@ -1258,6 +1258,7 @@ class RTEC_Admin
  * @since 1.0
  */
 function RTEC_ADMIN() {
-    $admin = new RTEC_Admin;
+
+    $admin = new RTEC_Admin();
 }
 RTEC_ADMIN();
