@@ -510,8 +510,10 @@ class RTEC_Submission
     {
 	    global $rtec_options;
 
-        if ( ! empty ( $rtec_options['confirmation_from'] ) && ! empty ( $rtec_options['confirmation_from_address'] ) ) {
-            $confirmation_from_address = is_email( $rtec_options['confirmation_from_address'] ) ? $rtec_options['confirmation_from_address'] : get_option( 'admin_email' );
+	    $confirmation_from_address = rtec_get_confirmation_from_address( $this->event_meta['post_id'] );
+	    $confirmation_from_address = is_email( $confirmation_from_address ) ? $confirmation_from_address : get_option( 'admin_email' );
+
+	    if ( ! empty ( $rtec_options['confirmation_from'] ) && ! empty ( $rtec_options['confirmation_from_address'] ) ) {
             $email_from = $this->strip_malicious( $rtec_options['confirmation_from'] ) . ' <' . $confirmation_from_address . '>';
             $headers = 'From: ' . $email_from;
         } else {
@@ -658,7 +660,8 @@ class RTEC_Submission
     {
 	    global $rtec_options;
 
-        $recipients = isset( $rtec_options['recipients'] ) ? explode( ',', str_replace( ' ', '', $rtec_options['recipients'] ) ) : array( get_option( 'admin_email' ) );
+	    $raw_recipients = rtec_get_notification_email_recipients( $this->event_meta['post_id'] );
+        $recipients = isset( $raw_recipients ) ? explode( ',', str_replace( ' ', '', $raw_recipients ) ) : array( get_option( 'admin_email' ) );
         $valid_recipients = array();
 
         foreach ( $recipients as $recipient ) {

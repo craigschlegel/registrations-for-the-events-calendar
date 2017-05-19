@@ -201,6 +201,37 @@ function rtec_get_text( $custom, $translation ) {
 
 }
 
+function rtec_get_notification_email_recipients( $event_id, $blank = false ) {
+	global $rtec_options;
+
+	$notification_recipients = get_post_meta( $event_id, '_RTECnotificationEmailRecipient' );
+
+	if ( !empty( $notification_recipients[0] ) ) {
+		return $notification_recipients[0];
+	} elseif( $blank ) {
+		return '';
+	} else {
+		$notification_recipients = isset( $rtec_options['recipients'] ) ? $rtec_options['recipients'] : get_option( 'admin_email' );
+		return $notification_recipients;
+	}
+
+}
+
+function rtec_get_confirmation_from_address( $event_id, $blank = false ) {
+	global $rtec_options;
+
+	$confirmation_address = get_post_meta( $event_id, '_RTECconfirmationEmailFrom' );
+
+	if ( !empty( $confirmation_address[0] ) ) {
+		return $confirmation_address[0];
+	} elseif( $blank ) {
+		return '';
+	} else {
+		$confirmation_address = isset( $rtec_options['recipients'] ) ? $rtec_options['recipients'] : get_option( 'admin_email' );
+		return $confirmation_address;
+	}
+
+}
 /**
  * Generates the registration form with a shortcode
  *

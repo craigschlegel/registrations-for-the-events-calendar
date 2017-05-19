@@ -96,6 +96,20 @@ function rtec_update_event_options() {
 		$max_reg = sanitize_text_field( $cleaned_array['_RTECmaxRegistrations'] );
 	}
 
+	if ( isset( $cleaned_array['_RTECnotificationEmailRecipient'] ) && !empty( $cleaned_array['_RTECnotificationEmailRecipient'] ) ){
+		$not_email = sanitize_text_field( $cleaned_array['_RTECnotificationEmailRecipient'] );
+		update_post_meta( $event_id, '_RTECnotificationEmailRecipient', $not_email );
+	} else {
+		delete_post_meta( $event_id, '_RTECnotificationEmailRecipient' );
+	}
+
+	if ( isset( $cleaned_array['_RTECconfirmationEmailFrom'] ) && !empty( $cleaned_array['_RTECconfirmationEmailFrom'] ) ){
+		$con_email = sanitize_text_field( $cleaned_array['_RTECconfirmationEmailFrom'] );
+		update_post_meta( $event_id, '_RTECconfirmationEmailFrom', $con_email );
+	} else {
+		delete_post_meta( $event_id, '_RTECconfirmationEmailFrom' );
+	}
+
 	if ( isset( $event_id ) ) {
 		update_post_meta( $event_id, '_RTECregistrationsDisabled', $registrations_disabled_status );
 		update_post_meta( $event_id, '_RTECdeadlineType', $registrations_deadline_type );
@@ -146,6 +160,8 @@ function rtec_meta_boxes_html(){
 	$max_disabled_class = '';
 	$deadline_disabled_att = '';
 	$deadline_disabled_class = '';
+	$notification_email = rtec_get_notification_email_recipients( $post->ID, true );
+	$confirmation_from = rtec_get_confirmation_from_address( $post->ID, true );
 
 	if ( $event_meta['registrations_disabled'] ) {
 		$limit_disabled_att = ' disabled="true"';
@@ -209,30 +225,66 @@ function rtec_meta_boxes_html(){
 									</div>
 								</td>
 							</tr>
-							<tr>
-								<td colspan="2" class="tribe_sectionheader">
-									<div class="tribe_sectionheader" style="">
-										<h4><?php _e( 'Shortcodes', 'registrations-for-the-events-calendar' ); ?></h4>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td class="tribe-table-field-label"><?php _e( 'Display registration form on another page:', 'registrations-for-the-events-calendar' ); ?></td>
-								<td>
-									<?php _e( 'Use this shortcode: ', 'registrations-for-the-events-calendar' ); ?><br /><code>[rtec-registration-form event=<?php echo $post->ID; ?>]</code><br /><small><?php _e( 'Note that the registration form appears on the single event view automatically.', 'registrations-for-the-events-calendar' ); ?></small>
-								</td>
-							</tr>
-							<tr>
-								<td class="tribe-table-field-label"><?php _e( 'Shortcode Settings:', 'registrations-for-the-events-calendar' ); ?></td>
-								<td>
+
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="tribe_sectionheader">
+					<div class="tribe_sectionheader" style="">
+						<h4><?php _e( 'Email', 'registrations-for-the-events-calendar' ); ?></h4>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<table class="eventtable rtec-eventtable">
+						<tbody>
+						<tr class="rtec-hidden-option-wrap">
+							<td class="tribe-table-field-label"><?php _e( 'Notification Email Recipients:', 'registrations-for-the-events-calendar' ); ?></td>
+							<td>
+								<input type="text" size="50" id="rtec-not-email" name="_RTECnotificationEmailRecipient" value="<?php echo esc_attr( $notification_email ); ?>" placeholder="leave blank for default"/>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<table class="eventtable rtec-eventtable">
+						<tbody>
+						<tr class="rtec-hidden-option-wrap">
+							<td class="tribe-table-field-label"><?php _e( 'Confirmation From Address:', 'registrations-for-the-events-calendar' ); ?></td>
+							<td>
+								<input type="text" size="30" id="rtec-conf-from" name="_RTECconfirmationEmailFrom" value="<?php echo esc_attr( $confirmation_from ); ?>" placeholder="leave blank for default"/>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="tribe_sectionheader">
+					<div class="tribe_sectionheader" style="">
+						<h4><?php _e( 'Shortcodes', 'registrations-for-the-events-calendar' ); ?></h4>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="tribe-table-field-label"><?php _e( 'Display registration form on another page:', 'registrations-for-the-events-calendar' ); ?></td>
+				<td>
+					<?php _e( 'Use this shortcode: ', 'registrations-for-the-events-calendar' ); ?><br /><code>[rtec-registration-form event=<?php echo $post->ID; ?>]</code><br /><small><?php _e( 'Note that the registration form appears on the single event view automatically.', 'registrations-for-the-events-calendar' ); ?></small>
+				</td>
+			</tr>
+			<tr>
+				<td class="tribe-table-field-label"><?php _e( 'Shortcode Settings:', 'registrations-for-the-events-calendar' ); ?></td>
+				<td>
 									<span class="rtec-tooltip-table">
 							            <span class="rtec-col-1">event="123"</span><span class="rtec-col-2"><?php _e( 'Show registration form by event ID', 'registrations-for-the-events-calendar' ); ?></span>
 							            <span class="rtec-col-1">hidden="true"</span><span class="rtec-col-2"><?php _e( 'Use "false" to show the form initially', 'registrations-for-the-events-calendar' ); ?></span>
 							        </span>
-								</td>
-							</tr>
-						</tbody>
-					</table>
 				</td>
 			</tr>
 			</tbody>
@@ -268,6 +320,20 @@ function rtec_save_meta(){
 
 	if ( isset( $_POST['_RTECmaxRegistrations'] ) ){
 		$max_reg = sanitize_text_field( $_POST['_RTECmaxRegistrations'] );
+	}
+
+	if ( isset( $_POST['_RTECnotificationEmailRecipient'] ) && !empty( $_POST['_RTECnotificationEmailRecipient'] ) ){
+		$not_email = sanitize_text_field( $_POST['_RTECnotificationEmailRecipient'] );
+		update_post_meta( $post->ID, '_RTECnotificationEmailRecipient', $not_email );
+	} else {
+		delete_post_meta( $post->ID, '_RTECnotificationEmailRecipient' );
+	}
+
+	if ( isset( $_POST['_RTECconfirmationEmailFrom'] ) && !empty( $_POST['_RTECconfirmationEmailFrom'] ) ){
+		$con_email = sanitize_text_field( $_POST['_RTECconfirmationEmailFrom'] );
+		update_post_meta( $post->ID, '_RTECconfirmationEmailFrom', $con_email );
+	} else {
+		delete_post_meta( $post->ID, '_RTECconfirmationEmailFrom' );
 	}
 
 	if ( isset( $post->ID ) ) {

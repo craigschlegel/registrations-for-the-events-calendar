@@ -3,7 +3,18 @@
 // create a custom WP_Query object just for events
 $id = (int)$_GET['id'];
 $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
+$raw_recipients = rtec_get_notification_email_recipients( $id );
+$recipients = isset( $raw_recipients ) ? explode( ',', str_replace( ' ', '', $raw_recipients ) ) : array( get_option( 'admin_email' ) );
+$valid_recipients = array();
 
+$confirmation_from_address = rtec_get_confirmation_from_address( $id );
+$confirmation_from_address = is_email( $confirmation_from_address ) ? $confirmation_from_address : get_option( 'admin_email' );
+echo '<pre>';
+var_dump( $recipients );
+
+var_dump( $confirmation_from_address );
+
+echo '</pre>';
 ?>
 <h1><?php _e( 'Single Event Details', 'registrations-for-the-events-calendar' ); ?></h1>
 <div class="rtec-view-selector">
