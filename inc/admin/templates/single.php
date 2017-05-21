@@ -18,7 +18,9 @@ $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
 
                 $data = array(
                     'fields' => 'registration_date, id, last_name, first_name, email, phone, other, custom',
-                    'id' => $id,
+                    'where' => array(
+                        array( 'event_id', $id, '=', 'int' ),
+                    ),
                     'order_by' => 'registration_date'
                 );
 
@@ -142,11 +144,7 @@ $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
                                 <input type="hidden" name="rtec_id" value="<?php echo esc_attr( $id ); ?>" />
                                 <input type="submit" name="rtec_event_csv" class="button action rtec-admin-secondary-button" value="<?php _e( 'Export (.csv)', 'registrations-for-the-events-calendar' ); ?>" />
                             </form>
-                            <?php if ( $show === 1 ) : ?>
-                            <a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=' . $id ); ?>" class="rtec-admin-secondary-button button action"><?php _e( 'View Current Custom Data', 'registrations-for-the-events-calendar' ); ?></a>
-                            <?php else : ?>
-                            <a href="<?php echo esc_url( 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=' . $id . '&show=1' ); ?>" class="rtec-admin-secondary-button button action"><?php _e( 'View All Custom Data', 'registrations-for-the-events-calendar' ); ?></a>
-                            <?php endif; ?>
+
                         </div>
                     </div>
                 </div> <!-- rtec-single-event -->

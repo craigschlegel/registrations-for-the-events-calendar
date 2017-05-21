@@ -52,10 +52,14 @@ jQuery(document).ready(function($) {
             }
         },
 
+        isValidEmail : function(val) {
+            var regEx = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
+
+            return regEx.test(val);
+        },
+
         validateEmail : function(formEl) {
-            var regEx = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/,
-                emailTest = regEx.test(formEl.val());
-            if (emailTest) {
+            if (RtecForm.isValidEmail(formEl.val()) && !formEl.closest('form').find('#rtec-error-duplicate').length) {
                 if (formEl.hasClass(RtecForm.invalidClass)) {
                     formEl.removeClass(RtecForm.invalidClass);
                 }
@@ -116,9 +120,89 @@ jQuery(document).ready(function($) {
                 formEl.addClass(RtecForm.invalidClass);
                 RtecForm.showErrorMessage(formEl);
             }
+        },
+
+        isDuplicateEmail : function(email,eventID,$context) {
+            var $emailEl = $context.find('input[name=rtec_email]'),
+                $spinner = '<span class="rtec-email-spinner"><img title="Tribe Loading Animation Image" alt="Tribe Loading Animation Image" class="tribe-events-spinner-medium" src="http://localhost/development/wp-content/plugins/the-events-calendar/src/resources/images/tribe-loading.gif"></span>';
+
+            $context.find('input[name=rtec_submit]').attr('disabled',true);
+            $context.find('.rtec-form-buttons').css('position','relative').append($spinner);
+            $emailEl.attr('disabled',true)
+                .css('opacity',.5)
+                .closest('div').append($spinner);
+
+            var submittedData = {
+                'action': 'rtec_registrant_check_for_duplicate_email',
+                'event_id': eventID,
+                'email': email
+            };
+
+            $.ajax({
+                url : rtec.ajaxUrl,
+                type : 'post',
+                data : submittedData,
+                success : function(data) {
+
+                    if (data.indexOf('<p class=') > -1) {
+                        RtecForm.removeErrorMessage($emailEl);
+                        if ($emailEl.hasClass(RtecForm.validClass)) {
+                            $emailEl.removeClass(RtecForm.validClass);
+                        }
+                        $emailEl.addClass(RtecForm.invalidClass);
+                        $emailEl.closest($('.rtec-input-wrapper')).append(data);
+                    } else if (data === 'not') {
+                        RtecForm.removeErrorMessage($emailEl);
+                        if ($emailEl.hasClass(RtecForm.validClass)) {
+                            $emailEl.removeClass(RtecForm.validClass);
+                        }
+                        $emailEl.addClass(RtecForm.invalidClass);
+                        var $formField = $emailEl.closest($('.rtec-input-wrapper'));
+                        if (!$formField.find('.rtec-error-message').length) {
+                            $formField.append('<p class="rtec-error-message" role="alert">'+$emailEl.closest($('.rtec-form-field')).attr('data-rtec-error-message')+'</p>');
+                        }
+                        $emailEl.attr('aria-invalid','true');
+                    } else {
+                        if ($emailEl.hasClass(RtecForm.invalidClass)) {
+                            $emailEl.removeClass(RtecForm.invalidClass);
+                        }
+                        $emailEl.addClass(RtecForm.validClass);
+                        RtecForm.removeErrorMessage($emailEl);
+                    }
+                    $context.find('input[name=rtec_submit]').removeAttr('disabled');
+                    $emailEl.removeAttr('disabled')
+                        .css('opacity',1);
+                    $context.find('.rtec-email-spinner').remove();
+
+                }
+            }); // ajax
+
         }
 
     };
+
+    if (typeof rtec.checkForDuplicates !== 'undefined' && rtec.checkForDuplicates === '1') {
+        var $rtecEmailField = $('input[name=rtec_email]'),
+            typingTimer,
+            doneTypingInterval = 1500;
+        $rtecEmailField.keyup(function(){
+            var $this = $(this);
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(function() {
+                var $context = $this.closest('.rtec'),
+                    $eventID = $context.find('input[name=rtec_event_id]').val();
+                RtecForm.isDuplicateEmail($this.val(),$eventID,$context);
+            }, doneTypingInterval);
+        });
+        $rtecEmailField.each(function() {
+            var $this = $(this),
+                $context = $this.closest('.rtec'),
+                $eventID = $context.find('input[name=rtec_event_id]').val();
+            if (RtecForm.isValidEmail($this.val())) {
+                RtecForm.isDuplicateEmail($this.val(),$eventID,$context);
+            }
+        });
+    }
     
     $('.rtec-form').submit(function(event) {
         event.preventDefault();
@@ -149,7 +233,7 @@ jQuery(document).ready(function($) {
             }
         });
 
-        if (!$rtecEl.find('.rtec-error').length) {
+        if (!$rtecEl.find('.rtec-error').length && !$rtecEl.find('#rtec-error-duplicate').length) {
             $rtecEl.find('.rtec-spinner').show();
             $rtecEl.find('.rtec-form-wrapper #rtec-form, .rtec-form-wrapper p').fadeTo(500,.1);
             $rtecEl.find('#rtec-form-toggle-button').css('visibility','hidden');

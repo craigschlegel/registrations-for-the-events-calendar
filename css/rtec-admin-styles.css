@@ -362,6 +362,10 @@
 /* hidden event options */
 .rtec-hidden-option-wrap {
     margin-bottom: 10px;
+    margin-left: 10px;
+}
+.rtec-event-options.postbox input {
+    max-width: 90%;
 }
 .rtec-sameline {
     display: inline-block;

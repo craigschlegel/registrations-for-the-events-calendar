@@ -40,6 +40,12 @@
     top: 50%;
     left: 50%;
 }
+#rtec .rtec-form-buttons .rtec-email-spinner {
+    top: 50%;
+    right: 50%;
+    margin-top: -12px;
+    margin-right: -12px;
+}
 .rtec-yellow-message {
     display: inline-block;
     line-height: 19px;
@@ -115,6 +121,11 @@
 #rtec .rtec-error {
     border: 1px solid rgb(255, 92, 51) !important;
 }
+#rtec .rtec-email-spinner {
+    position: absolute;
+    top: 11px;
+    right: 11px;
+}
 #rtec .rtec-error-message {
     position: absolute;
     top: 2.13em;
@@ -128,6 +139,48 @@
 #rtec .rtec-success-message {
     text-align: center;
 }
+/* Attendee list */
+.rtec-event-meta:after {
+    content: "";
+    visibility: hidden;
+    display: table;
+    clear: both;
+}
+.rtec-event-meta {
+    padding-bottom: 4%;
+}
+.rtec-event-meta .rtec-attendee-list {
+    box-sizing: border-box;
+    display: inline-block;
+    float: left;
+    padding: 0 4%;
+}
+.rtec-event-meta .rtec-list-column-2 {
+    width: 50%;
+}
+.rtec-event-meta .rtec-list-column-3 {
+    width: 33.33%;
+}
+.single-tribe_events .tribe-events-event-meta .rtec-section-title,
+.rtec-event-meta .rtec-section-title {
+    padding: 0 4%;
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 20px 0 10px;
+}
+.single-tribe_events .tribe-events-event-meta .rtec-section-subtitle,
+.rtec-event-meta .rtec-section-subtitle {
+    font-size: 1.2em;
+    font-weight: 700;
+    margin: 20px 0 10px;
+}
+.rtec-event-meta .rtec-attendee {
+    display: block;
+}
+/* Shortcode Forms */
+h2.rtec-header, .entry-content h2.rtec-header { margin: 0; }
+h3.rtec-header, .entry-content h3.rtec-header { margin: 1em 0 1.5em; }
+
 /* Backup styles */
 .tribe-events-notices {
     background: #d9edf7;

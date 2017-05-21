@@ -23,12 +23,14 @@
     ?>
 
 <!-- Display the tabs along with styling for the 'active' tab -->
-<h2 class="nav-tab-wrapper">
-    <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations" class="nav-tab <?php if ( $active_tab == 'registrations' || $active_tab == 'single' ) { echo 'nav-tab-active'; } ?>"><?php _e( 'Registrations', 'registrationsTEC' ); ?></a>
-    <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form" class="nav-tab <?php if ( $active_tab == 'form' ) { echo 'nav-tab-active'; } ?>"><?php _e( 'Form', 'registrationsTEC' ); ?></a>
-    <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=email" class="nav-tab <?php if( $active_tab == 'email' ){ echo 'nav-tab-active'; } ?>"><?php _e( 'Email', 'registrationsTEC' ); ?></a>
-    <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=support" class="nav-tab <?php if( $active_tab == 'support' ){ echo 'nav-tab-active'; } ?>"><?php _e( 'Support', 'registrationsTEC' ); ?></a>
-</h2>
+    <?php
+    if ( current_user_can( 'manage_options' ) ) { ?>
+        <h2 class="nav-tab-wrapper">
+            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations" class="nav-tab <?php if ( $active_tab == 'registrations' || $active_tab == 'single' ) { echo 'nav-tab-active'; } ?>"><?php _e( 'Registrations', 'registrationsTEC' ); ?></a>
+            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form" class="nav-tab <?php if ( $active_tab == 'form' ) { echo 'nav-tab-active'; } ?>"><?php _e( 'Form', 'registrationsTEC' ); ?></a>
+            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=email" class="nav-tab <?php if( $active_tab == 'email' ){ echo 'nav-tab-active'; } ?>"><?php _e( 'Email', 'registrationsTEC' ); ?></a>
+            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=support" class="nav-tab <?php if( $active_tab == 'support' ){ echo 'nav-tab-active'; } ?>"><?php _e( 'Support', 'registrationsTEC' ); ?></a>
+        </h2>
     <?php
         if ( $active_tab === 'email' ) {
             require_once RTEC_PLUGIN_DIR.'inc/admin/templates/email.php';
@@ -43,5 +45,17 @@
                 require_once RTEC_PLUGIN_DIR.'inc/admin/templates/registrations.php';
             }
         }
+    } else {
+        if ( $active_tab === 'single' ) {
+            require_once RTEC_PLUGIN_DIR.'inc/admin/templates/single.php';
+        } else {
+            require_once RTEC_PLUGIN_DIR.'inc/admin/templates/registrations.php';
+        }
+    }
+
     ?>
+    <hr />
+    <a href="https://roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank" style="display: block; margin: 20px 0 0 0; float: left; clear: both;">
+        <img src="<?php echo RTEC_PLUGIN_URL . 'img/rtec-pro-features.png'; ?>" alt="Registrations for the Events Calendar Pro">
+    </a>
 </div>

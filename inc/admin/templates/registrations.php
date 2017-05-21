@@ -1,4 +1,5 @@
 <h1><?php _e( 'Overview', 'registrations-for-the-events-calendar' ); ?></h1>
+
 <?php if ( ! isset( $options['default_max_registrations'] ) ) : ?>
     <div class="notice notice-info is-dismissible">
         <p>
@@ -83,10 +84,11 @@ $fields[] = 'status';
 foreach ( $events as $event ) :
 	// used to update new vs current registrations in db
 	$event_ids_on_page[] = $event->ID;
-
 	$data = array(
 		'fields' => $fields,
-		'id' => $event->ID,
+		'where' => array(
+			array( 'event_id', $event->ID, '=', 'int' ),
+		),
 		'order_by' => 'registration_date'
 	);
     $registrations = $db->retrieve_entries( $data, false, 10 );
@@ -136,6 +138,8 @@ foreach ( $events as $event ) :
 		    $max_disabled_class = '';
 		    $deadline_disabled_att = '';
 		    $deadline_disabled_class = '';
+		    $notification_email = rtec_get_notification_email_recipients( $event_meta['post_id'], true );
+		    $conf_email = rtec_get_confirmation_from_address( $event_meta['post_id'], true );
 
 		    if ( $event_meta['registrations_disabled'] ) {
 			    $limit_disabled_att = ' disabled="true"';
@@ -179,6 +183,15 @@ foreach ( $events as $event ) :
 					    <input type="radio" id="rtec-none-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECdeadlineType" <?php if( $event_meta['deadline_type'] === 'none' ) { echo 'checked'; } ?> value="none"<?php echo $deadline_disabled_att; ?>/>
 					    <label for="rtec-none-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'No deadline', 'registrations-for-the-events-calendar' ); ?></label>
 				    </div>
+			    </div>
+			    <h4><?php _e( 'Email', 'registrations-for-the-events-calendar' ); ?></h4>
+			    <div class="rtec-hidden-option-wrap">
+				    <label for="rtec-not-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Notification email recipients', 'registrations-for-the-events-calendar' ); ?></label><br />
+				    <input type="text" size="50" id="rtec-not-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECnotificationEmailRecipient" value="<?php echo esc_attr( $notification_email ); ?>" placeholder="leave blank for default"/>
+			    </div>
+			    <div class="rtec-hidden-option-wrap">
+				    <label for="rtec-conf-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Confirmation email from address', 'registrations-for-the-events-calendar' ); ?></label><br />
+				    <input type="text" size="50" id="rtec-conf-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECconfirmationEmailFrom" value="<?php echo esc_attr( $conf_email ); ?>" placeholder="leave blank for default"/>
 			    </div>
 			    <h4><?php _e( 'Shortcodes', 'registrations-for-the-events-calendar' ); ?></h4>
 			    <div class="rtec-hidden-option-wrap">

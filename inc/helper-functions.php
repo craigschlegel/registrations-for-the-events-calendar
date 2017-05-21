@@ -46,6 +46,7 @@ function rtec_get_event_meta( $id = '' ) {
 
 	$default_disabled = isset( $rtec_options['disable_by_default'] ) ? $rtec_options['disable_by_default'] : false;
 	$event_meta['registrations_disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? ( (int)$meta['_RTECregistrationsDisabled'][0] === 1 ) : $default_disabled;
+	$event_meta['show_registrants_data'] = isset( $rtec_options['show_registrants_data'] ) ? $rtec_options['show_registrants_data'] : false;
 	$default_limit_registrations = isset( $rtec_options['limit_registrations'] ) ? $rtec_options['limit_registrations'] : false;
 	$event_meta['limit_registrations'] = isset( $meta['_RTEClimitRegistrations'][0] ) ? ( (int)$meta['_RTEClimitRegistrations'][0] === 1 ) : $default_limit_registrations;
 	$default_max_registrations = isset( $rtec_options['default_max_registrations'] ) ? (int)$rtec_options['default_max_registrations'] : 30;
@@ -200,6 +201,37 @@ function rtec_get_text( $custom, $translation ) {
 
 }
 
+function rtec_get_notification_email_recipients( $event_id, $blank = false ) {
+	global $rtec_options;
+
+	$notification_recipients = get_post_meta( $event_id, '_RTECnotificationEmailRecipient' );
+
+	if ( !empty( $notification_recipients[0] ) ) {
+		return $notification_recipients[0];
+	} elseif( $blank ) {
+		return '';
+	} else {
+		$notification_recipients = isset( $rtec_options['recipients'] ) ? $rtec_options['recipients'] : get_option( 'admin_email' );
+		return $notification_recipients;
+	}
+
+}
+
+function rtec_get_confirmation_from_address( $event_id, $blank = false ) {
+	global $rtec_options;
+
+	$confirmation_address = get_post_meta( $event_id, '_RTECconfirmationEmailFrom' );
+
+	if ( !empty( $confirmation_address[0] ) ) {
+		return $confirmation_address[0];
+	} elseif( $blank ) {
+		return '';
+	} else {
+		$confirmation_address = isset( $rtec_options['recipients'] ) ? $rtec_options['recipients'] : get_option( 'admin_email' );
+		return $confirmation_address;
+	}
+
+}
 /**
  * Generates the registration form with a shortcode
  *
@@ -238,5 +270,5 @@ function rtec_the_registration_form_shortcode( $atts ) {
 
 	}
 
-
 }
+

@@ -13,14 +13,27 @@ function rtec_the_registration_form( $atts = array() )
 {
 	$rtec = RTEC();
 	$form = $rtec->form->instance();
+	$db = $rtec->db_frontend->instance();
 
 	$event_id = isset( $atts['event'] ) ? (int)$atts['event'] : '';
 	$doing_shortcode = isset( $atts['doing_shortcode'] ) ? $atts['doing_shortcode'] : false;
+	$return_html = '';
+
 	$form->set_inc_and_req_fields();
 	$form->set_event_meta( $event_id );
 	$form->set_custom_fields();
 	$form->set_display_type( $atts );
 	$event_meta = $form->get_event_meta();
+
+	if ( $doing_shortcode ) {
+		$return_html .= isset( $atts['showheader'] ) && $atts['showheader'] === 'true' ? $form->get_event_header_html() : '';
+	}
+
+	if ( $event_meta['show_registrants_data'] && ! $doing_shortcode ) {
+		$registrants_data = $db->get_registrants_data( $event_meta );
+
+		echo $form->get_registrants_data_html( $registrants_data );
+	}
 
 	if ( $rtec->submission != NULL && $event_meta['post_id'] === (int)$_POST['rtec_event_id'] ) {
 
@@ -33,21 +46,24 @@ function rtec_the_registration_form( $atts = array() )
 			$form->set_event_meta();
 			$form->set_input_fields_data();
 
+			$return_html .= $form->get_form_html();
+
 			if ( $doing_shortcode === true ) {
-				return $form->get_form_html();
+				return $return_html;
 			} else {
-				echo $form->get_form_html();
+				echo $return_html;
 			}
 
 		} else {
 			$submission->process_valid_submission();
 
 			$message = $form->get_success_message_html();
+			$return_html .= $message;
 
 			if ( $doing_shortcode === true ) {
-				return $message;
+				return $return_html;
 			} else {
-				echo $message;
+				echo $return_html;
 			}
 		}
 
@@ -60,18 +76,21 @@ function rtec_the_registration_form( $atts = array() )
 				$form->set_ical_url( esc_url( tribe_get_single_ical_link() ) );
 			}
 
+			$return_html .= $form->get_form_html();
+
 			if ( $doing_shortcode === true ) {
-				return $form->get_form_html();
+				return $return_html;
 			} else {
-				echo $form->get_form_html();
+				echo $return_html;
 			}
 
 		} else {
+			$return_html .= $form->registrations_closed_message();
 
 			if ( $doing_shortcode === true ) {
-				return $form->registrations_closed_message();
+				return $return_html;
 			} else {
-				echo $form->registrations_closed_message();
+				echo $return_html;
 			}
 		}
 
@@ -112,6 +131,39 @@ function rtec_process_form_submission()
 add_action( 'wp_ajax_nopriv_rtec_process_form_submission', 'rtec_process_form_submission' );
 add_action( 'wp_ajax_rtec_process_form_submission', 'rtec_process_form_submission' );
 
+/**
+ * Checks for duplicate emails if the option is enabled
+ *
+ * @since 1.6
+ */
+function rtec_registrant_check_for_duplicate_email() {
+	require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-db.php';
+
+	$email = is_email( $_POST['email'] ) ? sanitize_text_field( $_POST['email'] ) : false;
+	$event_id = (int)$_POST['event_id'];
+
+	$is_duplicate = 'not';
+
+	if ( false !== $email ) {
+		$db = New RTEC_Db();
+		$is_duplicate = $db->check_for_duplicate_email( $email, $event_id );
+	}
+
+	if ( $is_duplicate == '1' ) {
+		$options = get_option( 'rtec_options' );
+
+		$message = isset( $options['error_duplicate_message'] ) ? $options['error_duplicate_message'] : 'You have already registered for this event';
+		$message_text = rtec_get_text( $message, __( 'You have already registered for this event', 'registrations-for-the-events-calendar' ) );
+
+		echo '<p class="rtec-error-message" id="rtec-error-duplicate" role="alert">' . esc_html( $message_text ) . '</p>';
+	} else {
+		echo $is_duplicate;
+	}
+
+	die();
+}
+add_action( 'wp_ajax_nopriv_rtec_registrant_check_for_duplicate_email', 'rtec_registrant_check_for_duplicate_email' );
+add_action( 'wp_ajax_rtec_registrant_check_for_duplicate_email', 'rtec_registrant_check_for_duplicate_email' );
 /**
  * Set the form location right away
  *
@@ -173,10 +225,14 @@ add_action( 'wp_head', 'rtec_custom_css' );
  * @since 1.0
  */
 function rtec_scripts_and_styles() {
-	wp_enqueue_style( 'rtec_styles', RTEC_PLUGIN_URL . '/css/rtec-styles.css', array(), RTEC_VERSION );
-	wp_enqueue_script( 'rtec_scripts', RTEC_PLUGIN_URL . '/js/rtec-scripts.js', array( 'jquery' ), RTEC_VERSION, true );
+	wp_enqueue_style( 'rtec_styles', trailingslashit( RTEC_PLUGIN_URL ) . 'css/rtec-styles.css', array(), RTEC_VERSION );
+	wp_enqueue_script( 'rtec_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-scripts.js', array( 'jquery' ), RTEC_VERSION, true );
+
+	$options = get_option( 'rtec_options' );
+	$check_for_duplicates = isset( $options['check_for_duplicates'] ) ? $options['check_for_duplicates'] : false;
 	wp_localize_script( 'rtec_scripts', 'rtec', array(
-			'ajaxUrl' => admin_url( 'admin-ajax.php' )
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'checkForDuplicates' => $check_for_duplicates,
 		)
 	);
 }

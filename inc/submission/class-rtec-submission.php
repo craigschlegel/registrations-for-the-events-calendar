@@ -86,6 +86,30 @@ class RTEC_Submission
 	    	return true;
 	    }
     }
+
+	/**
+	 * Compares existing emails registered for this event with the submitted one
+	 *
+	 * @param string $email
+	 *
+	 * @since 1.6
+	 * @return bool
+	 */
+	public function registrant_check_for_duplicate_email( $email ) {
+		require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-db.php';
+
+		$email = is_email( $email ) ? $email : false;
+		$event_id = (int)$this->submission['rtec_event_id'];
+
+		$is_duplicate = 'not';
+
+		if ( false !== $email ) {
+			$db = New RTEC_Db();
+			$is_duplicate = $db->check_for_duplicate_email( $email, $event_id );
+		}
+
+		return $is_duplicate;
+	}
     
     /**
      * Get the one true instance of EDD_Register_Meta.
@@ -150,6 +174,14 @@ class RTEC_Submission
         	// check spam honeypot, error if not empty
         	if ( $input_key === 'rtec_user_address' && ! empty( $input_value ) ) {
         		$this->errors[] = 'user_address';
+	        }
+
+	        if ( $input_key === 'rtec_email' && isset( $options['check_for_duplicates'] ) && $options['check_for_duplicates'] === true ) {
+
+		        if ( $this->registrant_check_for_duplicate_email( $input_value ) ) {
+			        $this->errors[] = 'email_duplicate';
+		        }
+
 	        }
             // if the form field is a required first, last, email, or other
             if ( $input_key === 'rtec_first' && $options['first_require'] ) {
@@ -484,8 +516,10 @@ class RTEC_Submission
     {
 	    global $rtec_options;
 
-        if ( ! empty ( $rtec_options['confirmation_from'] ) && ! empty ( $rtec_options['confirmation_from_address'] ) ) {
-            $confirmation_from_address = is_email( $rtec_options['confirmation_from_address'] ) ? $rtec_options['confirmation_from_address'] : get_option( 'admin_email' );
+	    $confirmation_from_address = rtec_get_confirmation_from_address( $this->event_meta['post_id'] );
+	    $confirmation_from_address = is_email( $confirmation_from_address ) ? $confirmation_from_address : get_option( 'admin_email' );
+
+	    if ( ! empty ( $rtec_options['confirmation_from'] ) && ! empty ( $rtec_options['confirmation_from_address'] ) ) {
             $email_from = $this->strip_malicious( $rtec_options['confirmation_from'] ) . ' <' . $confirmation_from_address . '>';
             $headers = 'From: ' . $email_from;
         } else {
@@ -632,7 +666,8 @@ class RTEC_Submission
     {
 	    global $rtec_options;
 
-        $recipients = isset( $rtec_options['recipients'] ) ? explode( ',', str_replace( ' ', '', $rtec_options['recipients'] ) ) : array( get_option( 'admin_email' ) );
+	    $raw_recipients = rtec_get_notification_email_recipients( $this->event_meta['post_id'] );
+        $recipients = isset( $raw_recipients ) ? explode( ',', str_replace( ' ', '', $raw_recipients ) ) : array( get_option( 'admin_email' ) );
         $valid_recipients = array();
 
         foreach ( $recipients as $recipient ) {

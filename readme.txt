@@ -2,29 +2,24 @@
 
 Contributors: roundupwp
 Support Website: https://roundupwp.com/products/registrations-for-the-events-calendar/support/
-Tags: The Events Calendar, registration, event registration, event contact, events calendar, events, RSVP, seminar, conference, workshop, meetup, meetings, calendar, add-on, extension, class, tournament
+Tags: registrations, The Events Calendar, RSVP, manage classes, workshops, meetups, meetings, events, seminars, conferences, add-on, extension, tournament, event registration, event contact, events calendar
 Requires at least: 3.0
 Tested up to: 4.7
-Stable tag: 1.5.2
+Stable tag: 1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-The Registrations for The Events Calendar plugin is an extension for Modern Tribe's The Events Calendar (free edition).
+Manage registrations for your events and classes with ease. The Registrations for The Events Calendar plugin is an extension for Modern Tribe's The Events Calendar (free edition) though it may also work with paid extensions. Collect registration form submissions for your events, classes, meetings, meetups, workshops and more with the customizable contact form added to every single event page. Have your users submit their registrations without leaving the page using AJAX. Send customizable confirmation emails as well as receive custom notifications of when registrations are made.
 
-Create a custom contact form that is revealed on a click on the single event post in a location of your choosing.
+Manage your guest's registrations within the WordPress dashboard. You can view all registrations for an event, add/edit/delete them, and export registrations as a .csv file.
 
-The form is submitted without leaving the page using AJAX.
+Just about everything in the form is customizable including the text, required fields, registration limits, and the email messages. Add as many text input fields as needed for your form. Show a list of who has registered on the front-end of your site.
 
-Notification emails are sent to email addresses of your choosing as well as the form submitter. Details of the submission are saved in a custom table in the WordPress database.
+<strong>Check out [Registrations for the Events Calendar Pro](https://roundupwp.com/products/registrations-for-the-events-calendar-pro/) for premium features like a form builder, enforced email address confirmation, and more options for logged-in users.</strong>
 
-Just about everything in the form is customizable including the text, required fields, registration limits, and the email messages.
-
-Add as many text input fields as needed for your form.
-
-Export individual event registrations with the .csv export button.
-
+Also, consider donating to the "parent" plugin for this extension [The Events Calendar](https://wordpress.org/plugins/the-events-calendar/). It's a truly awesome plugin that's why we extended it!
 == Feedback or Support ==
 
 We would love to hear feedback and support the plugin so please visit the "Support" tab inside the plugin settings page for assistance.
@@ -59,14 +54,14 @@ Special thanks to Henrik (hjald) for fixing a bug in the .csv exporter!
 
 == Screenshots ==
 
-1. Default position and look of the "Register" button in an event page
+1. Default position and look of the Register button in an event page
 2. View of the registration form revealed on "click"
-3. The "Registrations" tab in at-a-glance view
+3. The Registrations tab in at-a-glance view
 4. Detailed view of a single event's registrations. Buttons to edit, delete, and add registrations
 5. View of the settings on the "Form" tab
 6. View of the settings on the "Email" tab
-7. Example "confirmation" email
-8. Example "notification" email
+7. Example confirmation email
+8. Example notification email
 
 == Frequently Asked Questions ==
 
@@ -90,6 +85,10 @@ You can configure an offset for how long registrations will be available relativ
 
 Yes. Click on the button "Detailed View" for the event in which you'd like to edit or export registrations for.
 
+= Can I display a list of event attendees on the front-end? =
+
+Yes. There is an option on the "Form" tab to display a list of attendees above the registration form. A guest's first and last name will only appear after you have had a chance to review it in the backend of the site.
+
 = Can I display the registration form on another page or post? =
 
 Yes. You would need to use the post ID for that event in the shortcode. Example: [rtec-registration-form event=743]
@@ -102,6 +101,14 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 1.6 =
+* New: Allow custom "from address" and notification recipients for individual events
+* New: Check for duplicate emails before allowing guest to register. This can be enabled on the "Form" tab. This adds a check to see if the input for the email field is a valid email and that it doesn't match an existing email for a registration for the event.
+* New: Users with the "edit posts" privilege can now manage registrations in the backend. Only administrators can change options still.
+* New: Attendee list can now be viewed above the form. Enable this through the option on the "Form" tab. Only first and last names of registrations that have been viewed in the backend (no longer have the "new" bubble by them) will appear in the list.
+* New: Optional header to show event title and start/end times above the form when generated from a shortcode.
+* Fix: There was an extra slash in certain file paths when css and javascript files were included on a page.
+
 = 1.5.2 =
 * Tweak: Several email defaults were changed like the confirmation subject, confirmation from name, and date format
 * Fix: Multiple registrations would be submitted if there was more than one registration form on a page and ajax was disabled.

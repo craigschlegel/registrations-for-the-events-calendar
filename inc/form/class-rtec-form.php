@@ -600,9 +600,16 @@ class RTEC_Form
 
             $error_html = '';
 
-            if ( in_array( $field['name'], $this->errors ) ) {
+	        if ( in_array( $field['name'], $this->errors ) ) {
                 $required_data .= ' aria-invalid="true"';
                 $error_html = '<p class="rtec-error-message" role="alert">' . esc_html( $field['error_message'] ) . '</p>';
+            } elseif ( $field['name'] === 'email' && in_array( 'email_duplicate', $this->errors, true ) ) {
+	            $options = get_option( 'rtec_options' );
+
+	            $message = isset( $options['error_duplicate_message'] ) ? $options['error_duplicate_message'] : 'You have already registered for this event';
+	            $message_text = rtec_get_text( $message, __( 'You have already registered for this event', 'registrations-for-the-events-calendar' ) );
+
+	            $error_html = '<p class="rtec-error-message" id="rtec-error-duplicate" role="alert">' . esc_html( $message_text ) . '</p>';
             } else {
                 $required_data .= ' aria-invalid="false"';
             }
@@ -702,6 +709,60 @@ class RTEC_Form
 		$html .= $this->get_hidden_fields_html();
 		$html .= $this->get_regular_fields();
 		$html .= $this->get_ending_html();
+
+		return $html;
+	}
+
+	public function get_registrants_data_html( $registrants_data )
+	{
+		global $rtec_options;
+
+		$title = isset( $rtec_options['attendee_list_title'] ) ? $rtec_options['attendee_list_title'] : __( 'Currently Registered', 'registrations-for-the-events-calendar-pro' );
+		$title = rtec_get_text( $title, __( 'Currently Registered', 'registrations-for-the-events-calendar-pro' ) );
+		$return_html = '<div class="tribe-events-event-meta rtec-event-meta"><h3 class="rtec-section-title">' . esc_html( $title ) . '</h3>';
+
+		// to prevent looping through the data twice, two columns are created by alternating appending of qualified registrations
+		$column_1_html = '<div class="rtec-attendee-list rtec-list-column-2">';
+		$column_2_html = '<div class="rtec-attendee-list rtec-list-column-2">';
+		$i = 1;
+
+		foreach ( $registrants_data as $registrant ) {
+
+			$single_html = '<span class="rtec-attendee">';
+
+			if ( isset( $registrant['first_name'] ) ) {
+				$single_html .= $registrant['first_name'] . ' ';
+			}
+			if ( isset( $registrant['last_name'] ) ) {
+				$single_html .= $registrant['last_name'] . ' ';
+			}
+
+			$single_html .= '</span>';
+
+			if ( $i % 2 === 0 ) {
+				$column_2_html .= stripslashes( $single_html );
+			} else {
+				$column_1_html .= stripslashes( $single_html );
+			}
+			$i++;
+
+		}
+
+		$column_1_html .= '</div>';
+		$column_2_html .= '</div>';
+		$return_html .= $column_1_html . $column_2_html;
+
+		$return_html .= '</div>'; // rtec-event-meta
+
+		return $return_html;
+	}
+
+	public function get_event_header_html()
+	{
+		$html = '<h2 class="rtec-header">'.$this->event_meta['title'].'</h2>';
+		if ( function_exists( 'tribe_events_event_schedule_details' ) ) {
+			$html .= tribe_events_event_schedule_details( $this->event_meta['post_id'], '<h3 class="rtec-header">', '</h3>' );
+		}
 
 		return $html;
 	}

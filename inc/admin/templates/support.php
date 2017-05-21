@@ -75,7 +75,7 @@ if ( is_array( $last_result ) ) {
 
 		foreach ( $column as $key => $value ) {
 
-			if ( $key != 'first_name' && $key != 'last_name' && $key != 'first_name' && $key != 'custom' && $key != 'phone' ) {
+			if ( $key != 'first_name' && $key != 'last_name' && $key != 'first_name' && $key != 'custom' && $key != 'phone' && $key != 'email' ) {
 				echo $key . ': ' . $value;
 			} else {
 				echo $key . ': ' . substr( $value, 0, 3 );
