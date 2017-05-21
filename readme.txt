@@ -2,7 +2,7 @@
 
 Contributors: roundupwp
 Support Website: https://roundupwp.com/products/registrations-for-the-events-calendar/support/
-Tags: The Events Calendar, registration, event registration, event contact, events calendar, events, RSVP, seminar, conference, workshop, meetup, meetings, calendar, add-on, extension, class, tournament
+Tags: registrations, The Events Calendar, RSVP, manage classes, workshops, meetups, meetings, events, seminars, conferences, add-on, extension, tournament, event registration, event contact, events calendar
 Requires at least: 3.0
 Tested up to: 4.7
 Stable tag: 1.6
@@ -11,20 +11,15 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-The Registrations for The Events Calendar plugin is an extension for Modern Tribe's The Events Calendar (free edition).
+Manage registrations for your events and classes with ease. The Registrations for The Events Calendar plugin is an extension for Modern Tribe's The Events Calendar (free edition) though it may also work with paid extensions. Collect registration form submissions for your events, classes, meetings, meetups, workshops and more with the customizable contact form added to every single event page. Have your users submit their registrations without leaving the page using AJAX. Send customizable confirmation emails as well as receive custom notifications of when registrations are made.
 
-Create a custom contact form that is revealed on a click on the single event post in a location of your choosing.
+Manage your guest's registrations within the WordPress dashboard. You can view all registrations for an event, add/edit/delete them, and export registrations as a .csv file.
 
-The form is submitted without leaving the page using AJAX.
+Just about everything in the form is customizable including the text, required fields, registration limits, and the email messages. Add as many text input fields as needed for your form. Show a list of who has registered on the front-end of your site.
 
-Notification emails are sent to email addresses of your choosing as well as the form submitter. Details of the submission are saved in a custom table in the WordPress database.
+<strong>Check out [Registrations for the Events Calendar Pro](https://roundupwp.com/products/registrations-for-the-events-calendar-pro/) for premium features like a form builder, enforced email address confirmation, and more options for logged-in users.</strong>
 
-Just about everything in the form is customizable including the text, required fields, registration limits, and the email messages.
-
-Add as many text input fields as needed for your form.
-
-Export individual event registrations with the .csv export button.
-
+Also, consider donating to the "parent" plugin for this extension [The Events Calendar](https://wordpress.org/plugins/the-events-calendar/). It's a truly awesome plugin that's why we extended it!
 == Feedback or Support ==
 
 We would love to hear feedback and support the plugin so please visit the "Support" tab inside the plugin settings page for assistance.
@@ -59,14 +54,14 @@ Special thanks to Henrik (hjald) for fixing a bug in the .csv exporter!
 
 == Screenshots ==
 
-1. Default position and look of the "Register" button in an event page
+1. Default position and look of the Register button in an event page
 2. View of the registration form revealed on "click"
-3. The "Registrations" tab in at-a-glance view
+3. The Registrations tab in at-a-glance view
 4. Detailed view of a single event's registrations. Buttons to edit, delete, and add registrations
 5. View of the settings on the "Form" tab
 6. View of the settings on the "Email" tab
-7. Example "confirmation" email
-8. Example "notification" email
+7. Example confirmation email
+8. Example notification email
 
 == Frequently Asked Questions ==
 
@@ -89,6 +84,10 @@ You can configure an offset for how long registrations will be available relativ
 = Can I edit registrations and export them for an event? =
 
 Yes. Click on the button "Detailed View" for the event in which you'd like to edit or export registrations for.
+
+= Can I display a list of event attendees on the front-end? =
+
+Yes. There is an option on the "Form" tab to display a list of attendees above the registration form. A guest's first and last name will only appear after you have had a chance to review it in the backend of the site.
 
 = Can I display the registration form on another page or post? =
 

@@ -137,7 +137,7 @@ $show = isset( $_GET['show'] ) ? (int)$_GET['show'] : 0;
                                 <input type="hidden" name="rtec_id" value="<?php echo esc_attr( $id ); ?>" />
                                 <input type="submit" name="rtec_event_csv" class="button action rtec-admin-secondary-button" value="<?php _e( 'Export (.csv)', 'registrations-for-the-events-calendar' ); ?>" />
                             </form>
-	                        
+
                         </div>
                     </div>
                 </div> <!-- rtec-single-event -->

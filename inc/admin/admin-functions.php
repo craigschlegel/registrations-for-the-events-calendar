@@ -281,10 +281,23 @@ function rtec_meta_boxes_html(){
 			<tr>
 				<td class="tribe-table-field-label"><?php _e( 'Shortcode Settings:', 'registrations-for-the-events-calendar' ); ?></td>
 				<td>
-									<span class="rtec-tooltip-table">
-							            <span class="rtec-col-1">event="123"</span><span class="rtec-col-2"><?php _e( 'Show registration form by event ID', 'registrations-for-the-events-calendar' ); ?></span>
-							            <span class="rtec-col-1">hidden="true"</span><span class="rtec-col-2"><?php _e( 'Use "false" to show the form initially', 'registrations-for-the-events-calendar' ); ?></span>
-							        </span>
+					<span class="rtec-tooltip-table">
+			            <span class="rtec-col-1">event="123"</span><span class="rtec-col-2"><?php _e( 'Show registration form by event ID', 'registrations-for-the-events-calendar' ); ?></span>
+			            <span class="rtec-col-1">hidden="true"</span><span class="rtec-col-2"><?php _e( 'Use "false" to show the form initially', 'registrations-for-the-events-calendar' ); ?></span>
+                        <span class="rtec-col-1">showheader="false"</span><span class="rtec-col-2"><?php _e( 'Use "true" to add the event title and start/end time information above the form', 'registrations-for-the-events-calendar' ); ?></span>
+					</span>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="tribe_sectionheader">
+					<div class="tribe_sectionheader" style="">
+						<h4><?php _e( 'More Single Event Options', 'registrations-for-the-events-calendar' ); ?></h4>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<p><?php _e( 'More single event options like custom confirmation email templates, multiple venues/tier registration, settings for logged-in users and others in', 'registrations-for-the-events-calendar' ); ?> <a href="https://www.roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank">Registrations for the Events Calendar Pro</a></p>
 				</td>
 			</tr>
 			</tbody>

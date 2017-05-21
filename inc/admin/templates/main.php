@@ -54,4 +54,8 @@
     }
 
     ?>
+    <hr />
+    <a href="https://roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank" style="display: block; margin: 20px 0 0 0; float: left; clear: both;">
+        <img src="<?php echo RTEC_PLUGIN_URL . 'img/rtec-pro-features.png'; ?>" alt="Registrations for the Events Calendar Pro">
+    </a>
 </div>

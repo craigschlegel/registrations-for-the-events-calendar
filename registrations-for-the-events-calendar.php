@@ -10,7 +10,7 @@ Text Domain: registrations-for-the-events-calendar
 */
 
 /*
-Copyright 2016 by Craig Schlegel
+Copyright 2017 by Roundup WP LLC
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -149,7 +149,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
         private function constants() {
             // Plugin version.
             if ( ! defined( 'RTEC_VERSION' ) ) {
-                define( 'RTEC_VERSION', '1.5.1' );
+                define( 'RTEC_VERSION', '1.6' );
             }
             // Plugin Folder Path.
             if ( ! defined( 'RTEC_PLUGIN_DIR' ) ) {
