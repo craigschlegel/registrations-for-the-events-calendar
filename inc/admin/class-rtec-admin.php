@@ -163,6 +163,22 @@ class RTEC_Admin
             'default' => false
         ));
 
+        // attendee text
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'attendee_list_title',
+            'title' => '<label for="rtec_attendee_list_title">Attendee List Title</label>',
+            'example' => '',
+            'description' => '',
+            'callback'  => 'default_text',
+            'class' => 'rtec-show-registrant-options',
+            'input_class' => 'default-text',
+            'page' => 'rtec_attendee_data',
+            'section' => 'rtec_attendee_data',
+            'type' => 'text',
+            'default' => 'Currently Registered'
+        ));
+
         /* Registration Messages */
         add_settings_section(
             'rtec_form_registration_availability',
