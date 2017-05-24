@@ -227,7 +227,7 @@ function rtec_get_confirmation_from_address( $event_id, $blank = false ) {
 	} elseif( $blank ) {
 		return '';
 	} else {
-		$confirmation_address = isset( $rtec_options['recipients'] ) ? $rtec_options['recipients'] : get_option( 'admin_email' );
+		$confirmation_address = isset( $rtec_options['confirmation_from_address'] ) ? $rtec_options['confirmation_from_address'] : get_option( 'admin_email' );
 		return $confirmation_address;
 	}
 
