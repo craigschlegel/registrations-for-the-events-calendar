@@ -547,7 +547,9 @@ function rtec_event_csv() {
 
 		$data = array(
 			'fields' => 'last_name, first_name, email, phone, other, custom',
-			'id' => $id,
+			'where' => array(
+				array( 'event_id', $id, '=', 'int' ),
+			),
 			'order_by' => 'registration_date'
 		);
 

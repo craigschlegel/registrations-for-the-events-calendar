@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/products/registrations-for-the-events-cal
 Tags: registrations, The Events Calendar, RSVP, manage classes, workshops, meetups, meetings, events, seminars, conferences, add-on, extension, tournament, event registration, event contact, events calendar
 Requires at least: 3.0
 Tested up to: 4.7
-Stable tag: 1.6
+Stable tag: 1.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,12 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 1.6.2 =
+* Fix: CSV export feature not working in certain circumstances
+
+= 1.6.1 =
+* Fix: Default confirmation from address not working in some circumstances.
+
 = 1.6 =
 * New: Allow custom "from address" and notification recipients for individual events
 * New: Check for duplicate emails before allowing guest to register. This can be enabled on the "Form" tab. This adds a check to see if the input for the email field is a valid email and that it doesn't match an existing email for a registration for the event.
