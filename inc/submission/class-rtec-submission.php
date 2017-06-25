@@ -647,10 +647,13 @@ class RTEC_Submission
     {
 		global $rtec_options;
 
+	    $notification_from_address = is_email( $rtec_options['confirmation_from_address'] ) ? $rtec_options['confirmation_from_address'] : get_option( 'admin_email' );
+	    $user_email = isset( $this->submission['rtec_email'] ) ? $this->submission['rtec_email'] : $notification_from_address;
+
         if ( ! empty ( $rtec_options['notification_from'] ) && ! empty ( $rtec_options['confirmation_from_address'] ) ) {
-            $notification_from_address = is_email( $rtec_options['confirmation_from_address'] ) ? $rtec_options['confirmation_from_address'] : get_option( 'admin_email' );
             $email_from = $this->strip_malicious( $rtec_options['notification_from'] ) . ' <' . $notification_from_address . '>';
-            $headers = 'From: ' . $email_from;
+            $headers = 'From: ' . $email_from . "\r\n";
+	        $headers .= "Reply-To: " . $user_email . "\r\n";
         } else {
             $headers = '';
         }

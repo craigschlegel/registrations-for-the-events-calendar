@@ -284,7 +284,7 @@ class RTEC_Admin
             'title' => '<label for="use_translations">Messaging</label>',
             'example' => '',
             'values' => $translation_options,
-            'description' => 'Select "Custom" for custom text. Select "Translations" to use available translations for the plugin',
+            'description' => 'Select "Custom" for custom text (best for most cases). Select "Translations" only if there is a language file for your specific translation. Otherwise English will be used.',
             'callback'  => 'default_radio',
             'class' => 'default-text',
             'page' => 'rtec_form_custom_text',

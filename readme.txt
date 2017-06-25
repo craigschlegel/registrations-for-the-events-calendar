@@ -2,20 +2,48 @@
 
 Contributors: roundupwp
 Support Website: https://roundupwp.com/products/registrations-for-the-events-calendar/support/
-Tags: registrations, The Events Calendar, RSVP, manage classes, workshops, meetups, meetings, events, seminars, conferences, add-on, extension, tournament, event registration, event contact, events calendar
+Tags: registration, The Events Calendar, RSVP, events, groups, workshops, meetups, meetings, seminars, conferences, registrations, add-on, extension, community, event registration, event contact, events calendar
 Requires at least: 3.0
-Tested up to: 4.7
+Tested up to: 4.8
 Stable tag: 1.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-Manage registrations for your events and classes with ease. The Registrations for The Events Calendar plugin is an extension for Modern Tribe's The Events Calendar (free edition) though it may also work with paid extensions. Collect registration form submissions for your events, classes, meetings, meetups, workshops and more with the customizable contact form added to every single event page. Have your users submit their registrations without leaving the page using AJAX. Send customizable confirmation emails as well as receive custom notifications of when registrations are made.
+Manage registrations for your events and classes with ease. The Registrations for The Events Calendar plugin is an extension for Modern Tribe's The Events Calendar (free edition) though it may also work with paid extensions. Collect registration form submissions for your events, classes, meetings, meetups, workshops and more.
 
-Manage your guest's registrations within the WordPress dashboard. You can view all registrations for an event, add/edit/delete them, and export registrations as a .csv file.
+= Highly Customizable =
 
-Just about everything in the form is customizable including the text, required fields, registration limits, and the email messages. Add as many text input fields as needed for your form. Show a list of who has registered on the front-end of your site.
+Create a simple, straight-forward registration form with the ability to add as many text form fields as you need. Automatically add the form to every single event page in one of four parts of the template. Change the labels, error messaging and whether or not the field is required. The form is submitted using AJAX so your guests never have to leave the single event page while submitting a registration. Optionally, you can set limits for the number of guests allowed to register per event along with displaying a list of current attendees above the form.
+
+= Quick to Set Up and Easy to Get Started =
+
+As soon as you install and activate the plugin you can begin collecting registrations. No need for shortcodes (although they are available), the registration form is added to every single event page by default. The form asks for a guest's first name, last name, and email address by default though you can change or add to these fields on the "Form" tab.
+
+= Powerful Backend Features for Easy Management =
+
+Registrations are saved in the WordPress database and can be manually added, edited, and deleted in the admin area. See notifications of when new registrations need to be reviewed. View a breakdown of registrations by events and browse them quickly in an overview. Export your registrations into a spreadsheet using a .csv export feature.
+
+= Features =
+
+* Visitors can register for your events
+* Registration form automatically appears on all single event pages, options to disable them for any specific event
+* Customizable form and messages. Easy to manually translate and tweak to your use case.
+* Set limits customized to each event for total registrations
+* Form submits without the visitor needing to leave the page or even refresh using AJAX.
+* Optional attendee list visible above the form
+* Validate emails, allow only one registration per email per event
+* Many options can be customized for each event including email recipients, email "from" addresses, and registration limits
+* Shortcodes to display registration forms in other areas of your website
+* Manage registrations in the backend with the ability to add, edit, and delete.
+* Export registrations to a spreadsheet in .csv form.
+
+= Benefits =
+* Simple workflow for setting up registrations for your events frees up time.
+* Give your events a personal touch with custom messages in emails
+* Build a community by allowing others to see who's attending
+* Straight-forward registration process provides a great user experience for your guests.
 
 <strong>Check out [Registrations for the Events Calendar Pro](https://roundupwp.com/products/registrations-for-the-events-calendar-pro/) for premium features like a form builder, enforced email address confirmation, and more options for logged-in users.</strong>
 
