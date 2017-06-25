@@ -2,6 +2,21 @@
     <h1><?php _e( 'Registrations for the Events Calendar', 'registrations-for-the-events-calendar' ); ?></h1>
 
     <?php
+    global $rtec_options;
+    if ( ! isset( $rtec_options['default_max_registrations'] ) ) : ?>
+        <div class="notice notice-info rtec-notice-all-admin is-dismissible">
+            <div class="rtec-img-wrap">
+                <img src="<?php echo RTEC_PLUGIN_URL . 'img/RTEC-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar">
+            </div>
+            <div class="rtec-msg-wrap">
+                <p>Hey! First time using the Registrations plugin?</p>
+                <p>A registration form is now added to all of your upcoming events.</p>
+                <p>Go to the <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form&goto=disable">"Form" tab</a> to change this or check out our <strong><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/#step4" target="_blank">Setup Instructions</a></strong> on our website for help setting your registrations up.</p>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php
     // this controls which view is included based on the selected tab
     $tab = isset( $_GET["tab"] ) ? $_GET["tab"] : 'registrations';
     $active_tab = RTEC_Admin::get_active_tab( $tab );

@@ -274,6 +274,9 @@ jQuery(document).ready(function($) {
             }); // ajax
         } else { // if not .rtec-error
             RtecForm.addScreenReaderError();
+            $('html, body').animate({
+                scrollTop: $('.rtec-error-message').first().closest('.rtec-input-wrapper').offset().top - 200
+            }, 750);
         } // if not .rtec-error
     }); // on rtec-form submit
 

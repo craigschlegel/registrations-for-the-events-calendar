@@ -432,8 +432,12 @@ class RTEC_Submission
 		    '{phone}' => $phone,
 		    '{other}' => $other,
 		    '{ical-url}' => $this->submission['ical_url'],
-		    '{nl}' =>"\n"
+		    '{nl}' => "<br />"
 	    );
+
+	    $sanitized_data = $this->submission;
+	    $sanitized_data['event_id'] = isset( $sanitized_data['event_id'] ) ? $sanitized_data['event_id'] : $sanitized_data['post_id'];
+	    $search_replace = apply_filters( 'rtec_email_templating', $search_replace, $sanitized_data );
 
 	    // add custom
 	    if ( isset( $rtec_options['custom_field_names'] ) ) {
@@ -519,12 +523,16 @@ class RTEC_Submission
 	    $confirmation_from_address = rtec_get_confirmation_from_address( $this->event_meta['post_id'] );
 	    $confirmation_from_address = is_email( $confirmation_from_address ) ? $confirmation_from_address : get_option( 'admin_email' );
 
-	    if ( ! empty ( $rtec_options['confirmation_from'] ) && ! empty ( $rtec_options['confirmation_from_address'] ) ) {
+	    if ( ! empty ( $rtec_options['confirmation_from'] ) ) {
             $email_from = $this->strip_malicious( $rtec_options['confirmation_from'] ) . ' <' . $confirmation_from_address . '>';
-            $headers = 'From: ' . $email_from;
-        } else {
-            $headers = '';
+	    } else {
+		    $blog_name = get_bloginfo( 'name' );
+		    $email_from = ! empty( $blog_name ) ? $blog_name . ' <' . $confirmation_from_address . '>' : 'WordPress <' . $confirmation_from_address . '>';
         }
+
+	    $headers  = "From: " . $email_from. "\r\n";
+	    $headers .= "Reply-To: " . $confirmation_from_address . "\r\n";
+	    $headers .= 'Content-Type: text/html; charset=utf-8' . "\r\n";
 
         return $headers;
     }
@@ -652,11 +660,14 @@ class RTEC_Submission
 
         if ( ! empty ( $rtec_options['notification_from'] ) && ! empty ( $rtec_options['confirmation_from_address'] ) ) {
             $email_from = $this->strip_malicious( $rtec_options['notification_from'] ) . ' <' . $notification_from_address . '>';
-            $headers = 'From: ' . $email_from . "\r\n";
-	        $headers .= "Reply-To: " . $user_email . "\r\n";
         } else {
-            $headers = '';
+	        $blog_name = get_bloginfo( 'name' );
+	        $email_from = ! empty( $blog_name ) ? $blog_name . ' <' . $notification_from_address . '>' : 'WordPress <' . $notification_from_address . '>';
         }
+
+	    $headers  = "From: " . $email_from. "\r\n";
+	    $headers .= "Reply-To: " . $user_email . "\r\n";
+	    $headers .= 'Content-Type: text/html; charset=utf-8' . "\r\n";
 
         return $headers;
     }

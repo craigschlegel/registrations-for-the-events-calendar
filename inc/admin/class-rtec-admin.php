@@ -182,7 +182,7 @@ class RTEC_Admin
         /* Registration Messages */
         add_settings_section(
             'rtec_form_registration_availability',
-            'Registration Availability',
+            'General Registration Options',
             array( $this, 'blank' ),
             'rtec_form_registration_availability'
         );
@@ -215,6 +215,20 @@ class RTEC_Admin
 
         $this->create_settings_field( array(
             'option' => 'rtec_options',
+            'name' => 'default_max_registrations',
+            'title' => '<label for="rtec_default_max_registrations">Default Max Registrations</label>',
+            'example' => '',
+            'description' => 'Maximum allowed registrants for every event (if any limit)',
+            'callback'  => 'default_text',
+            'class' => 'small-text',
+            'page' => 'rtec_form_registration_availability',
+            'section' => 'rtec_form_registration_availability',
+            'type' => 'number',
+            'default' => 30
+        ));
+
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
             'name' => 'check_for_duplicates',
             'title' => '<label for="rtec_check_for_duplicate">Check for Duplicate Emails</label>',
             'example' => '',
@@ -226,18 +240,18 @@ class RTEC_Admin
             'default' => false
         ));
 
+        // error duplicate
         $this->create_settings_field( array(
             'option' => 'rtec_options',
-            'name' => 'default_max_registrations',
-            'title' => '<label for="rtec_default_max_registrations">Default Max Registrations</label>',
+            'name' => 'error_duplicate_message',
+            'title' => '<label>Duplicate Email Error Message</label>',
             'example' => '',
-            'description' => 'Maximum allowed registrants for every event (if any limit)',
+            'default' => 'You have already registered for this event',
+            'description' => 'Enter an error message if the visitor has already registered',
             'callback'  => 'default_text',
-            'class' => 'small-text',
+            'class' => 'regular-text',
             'page' => 'rtec_form_registration_availability',
             'section' => 'rtec_form_registration_availability',
-            'type' => 'number',
-            'default' => 30
         ));
 
         // Registration Deadline
@@ -338,19 +352,6 @@ class RTEC_Admin
             'legend' => false
         ));
 
-        // error duplicate
-        $this->create_settings_field( array(
-            'option' => 'rtec_options',
-            'name' => 'error_duplicate_message',
-            'title' => '<label>Duplicate Registration Error Message</label>',
-            'example' => '',
-            'default' => 'You have already registered for this event',
-            'description' => 'Enter the message you would like to display on your site after a successful form completion',
-            'callback'  => 'default_text',
-            'class' => 'regular-text',
-            'page' => 'rtec_form_custom_text',
-            'section' => 'rtec_form_custom_text',
-        ));
 
         /* Form Styling */
 
@@ -567,15 +568,24 @@ class RTEC_Admin
             'name' => 'notification_message',
             'title' => '<label>Notification Message</label>',
             'example' => '',
-            'default' => 'The following submission was made for: {event-title} at {venue} on {event-date}{nl}First: {first}{nl}Last: {last}{nl}Email: {email}',
-            'description' => 'Enter the message you would like your selected recipients to receive when a submission is made',
-            'callback'  => 'message_text_area',
-            'class' => 'rtec-confirmation-message-tr rtec-notification-message-tr',
+            'default' => 'The following submission was made for: {event-title} at {venue} on {event-date}<br />First: {first}<br />Last: {last}<br />Email: {email}',
+            'description' => '',
+            'callback'  => 'rich_editor',
+            'settings' => array(
+                'quicktags' => array( 'buttons' => 'strong,em,del,ul,ol,li,close,link,img' ),
+                'tinymce' => array(
+                    'toolbar1' => 'formatselect,bold,italic,underline,blockquote,bullist,numlist,link,unlink,forecolor,undo,redo,spellchecker',
+                    'toolbar2' => ''),
+                'textarea_rows' => '15',
+                'media_buttons' => FALSE,
+                'wpautop' => true
+            ),
+            'class' => '',
             'page' => 'rtec_email_notification',
             'section' => 'rtec_email_notification',
             'columns' => '60',
             'preview' => true,
-            'legend' => true
+            'legend' => true,
         ));
 
         /* Confirmation Email Settings Section */
@@ -648,15 +658,24 @@ class RTEC_Admin
             'name' => 'confirmation_message',
             'title' => '<label>Confirmation Message</label>',
             'example' => '',
-            'default' => 'You are registered!{nl}{nl}Here are the details of your registration.{nl}{nl}Event: {event-title} at {venue} on {event-date}{nl}Registered Name: {first} {last}{nl}Phone: {phone}{nl}Other: {other}{nl}{nl}The event will be held at this location:{nl}{nl}{venue-address}{nl}{venue-city}, {venue-state} {venue-zip}{nl}{nl}See you there!',
-            'description' => 'Enter the message you would like customers to receive along with details of the event',
-            'callback'  => 'message_text_area',
-            'class' => 'rtec-confirmation-message-tr',
+            'default' => 'Hey {first},<br />You are registered for {event-title} at {venue} on {event-date}. We are looking forward to having you there. The event will be held at this location:<br /><br />{venue-address}<br />{venue-city}, {venue-state} {venue-zip}<br /><br />See you there!',
+            'description' => '',
+            'callback'  => 'rich_editor',
+            'settings' => array(
+                'quicktags' => array( 'buttons' => 'strong,em,del,ul,ol,li,close,link,img' ),
+                'tinymce' => array(
+                    'toolbar1' => 'formatselect,bold,italic,underline,blockquote,bullist,numlist,link,unlink,forecolor,undo,redo,spellchecker',
+                    'toolbar2' => ''),
+                'textarea_rows' => '15',
+                'media_buttons' => FALSE,
+                'wpautop' => true
+            ),
+            'class' => '',
             'page' => 'rtec_email_confirmation',
             'section' => 'rtec_email_confirmation',
-	        'columns' => '60',
-	        'preview' => true,
-            'legend' => true
+            'columns' => '60',
+            'preview' => true,
+            'legend' => true,
         ));
 
         // date format
@@ -976,6 +995,68 @@ class RTEC_Admin
         <?php
     }
 
+    public function rich_editor( $args )
+    {
+        // get option 'text_string' value from the database
+        $options = get_option( $args['option'] );
+        //$option_string = delete_option( 'rtecconfirmation' );
+        $default = isset( $args['default'] ) ? $args['default'] : false;
+        $option_string = isset( $options[ $args['name'] ] ) ? str_replace( '{nl}', '<br />', $options[ $args['name'] ] ) : $default;
+
+        //$string = 'You are registered!{nl}{nl}Here are the details of your registration.{nl}{nl}Event: {event-title} at {venue} on {event-date}{nl}Registered Name: {first} {last}{nl}Phone: {phone}{nl}Other: {other}{nl}{nl}The event will be held at this location:{nl}{nl}{venue-address}{nl}{venue-city}, {venue-state} {venue-zip}{nl}{nl}See you there!';
+        //$option_string = str_replace( '{nl}', '<br />', $string);
+
+
+        $settings = $args['settings'];
+        $settings['textarea_name'] = $args['option'] . '[' . $args['name'] . ']';
+        wp_editor( $option_string, $args['name'], $settings );
+
+        if ( $args['legend'] ) : ?>
+            <br />
+            <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'Legend' ); ?></a>
+            <span class="rtec-tooltip-table rtec-tooltip rtec-availability-options-wrapper">
+            <span class="rtec-col-1">{venue}</span><span class="rtec-col-2">Event venue/location</span>
+            <span class="rtec-col-1">{venue-address}</span><span class="rtec-col-2">Venue street address</span>
+            <span class="rtec-col-1">{venue-city}</span><span class="rtec-col-2">Venue city</span>
+            <span class="rtec-col-1">{venue-state}</span><span class="rtec-col-2">Venue state/province</span>
+            <span class="rtec-col-1">{venue-zip}</span><span class="rtec-col-2">Venue zip code</span>
+            <span class="rtec-col-1">{event-title}</span><span class="rtec-col-2">Title of event</span>
+            <span class="rtec-col-1">{event-date}</span><span class="rtec-col-2">Event start date</span>
+                <?php if ( ! isset( $args['legend_type'] ) || $args['legend_type'] !== 'partial' ) : ?>
+                    <span class="rtec-col-1">{first}</span><span class="rtec-col-2">First name of registrant</span>
+                    <span class="rtec-col-1">{last}</span><span class="rtec-col-2">Last name of registrant</span>
+                    <span class="rtec-col-1">{email}</span><span class="rtec-col-2">Email of registrant</span>
+                    <span class="rtec-col-1">{phone}</span><span class="rtec-col-2">Phone number of registrant</span>
+                    <span class="rtec-col-1">{other}</span><span class="rtec-col-2">Information submitted in the "other" field</span>
+                    <span class="rtec-col-1">{ical-url}</span><span class="rtec-col-2">Plain text web address to download ical file for event</span>
+                    <?php
+                    if ( isset( $options['custom_field_names'] ) ) {
+
+                        if ( is_array( $options['custom_field_names'] ) ) {
+                            $custom_field_names = $options['custom_field_names'];
+                        } else {
+                            $custom_field_names = explode( ',', $options['custom_field_names'] );
+                        }
+
+                    } else {
+                        $custom_field_names = array();
+                    }
+
+                    foreach ( $custom_field_names as $field ) {
+                        if ( isset( $options[ $field . '_label' ] ) && ! empty( $options[ $field . '_label' ] ) ) {
+                            echo '<span class="rtec-col-1">{' . $options[ $field . '_label' ] . '}</span><span class="rtec-col-2">Value entered in the '.$options[ $field . '_label' ].' field</span>';
+                        }
+                    }
+                    ?>
+                <?php endif;
+                ?>
+        </span>
+        <?php endif; ?>
+
+        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+        <?php
+    }
+
     public function message_text_area( $args )
     {
         // get option 'text_string' value from the database
@@ -988,7 +1069,7 @@ class RTEC_Admin
         <textarea id="confirmation_message_textarea" class="<?php echo $args['class']; ?> confirmation_message_textarea" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" cols="<?php echo $columns; ?>" rows="<?php echo $rows; ?>"><?php echo $option_string; ?></textarea>
 
         <?php if ( $args['legend'] ) : ?>
-        <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'Legend' ); ?></a>
+        <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'Template Text (find and replace)', 'registrations-for-the-events-calendar' ); ?></a>
         <span class="rtec-tooltip-table rtec-tooltip rtec-availability-options-wrapper">
             <span class="rtec-col-1">{venue}</span><span class="rtec-col-2">Event venue/location</span>
             <span class="rtec-col-1">{venue-address}</span><span class="rtec-col-2">Venue street address</span>
@@ -1003,7 +1084,6 @@ class RTEC_Admin
             <span class="rtec-col-1">{phone}</span><span class="rtec-col-2">Phone number of registrant</span>
             <span class="rtec-col-1">{other}</span><span class="rtec-col-2">Information submitted in the "other" field</span>
             <span class="rtec-col-1">{ical-url}</span><span class="rtec-col-2">Plain text web address to download ical file for event</span>
-            <span class="rtec-col-1">{nl}</span><span class="rtec-col-2">Creates a new line/line break</span>
             <?php
             // add custom
             if ( isset( $options['custom_field_names'] ) ) {
@@ -1169,6 +1249,81 @@ class RTEC_Admin
         );
     }
 
+    private function get_allowed_tags() {
+        $allowed_tags = array(
+            'a' => array(
+                'class' => array(),
+                'href'  => array(),
+                'rel'   => array(),
+                'title' => array(),
+            ),
+            'abbr' => array(
+                'title' => array(),
+            ),
+            'b' => array(),
+            'blockquote' => array(
+                'cite'  => array(),
+            ),
+            'br' => array(),
+            'cite' => array(
+                'title' => array(),
+            ),
+            'code' => array(),
+            'del' => array(
+                'datetime' => array(),
+                'title' => array(),
+            ),
+            'dd' => array(),
+            'div' => array(
+                'class' => array(),
+                'title' => array(),
+                'style' => array(),
+            ),
+            'dl' => array(),
+            'dt' => array(),
+            'em' => array(),
+            'h1' => array(),
+            'h2' => array(),
+            'h3' => array(),
+            'h4' => array(),
+            'h5' => array(),
+            'h6' => array(),
+            'i' => array(),
+            'img' => array(
+                'alt'    => array(),
+                'class'  => array(),
+                'height' => array(),
+                'src'    => array(),
+                'width'  => array(),
+            ),
+            'li' => array(
+                'class' => array(),
+            ),
+            'ol' => array(
+                'class' => array(),
+            ),
+            'p' => array(
+                'class' => array(),
+            ),
+            'q' => array(
+                'cite' => array(),
+                'title' => array(),
+            ),
+            'span' => array(
+                'class' => array(),
+                'title' => array(),
+                'style' => array(),
+            ),
+            'strike' => array(),
+            'strong' => array(),
+            'ul' => array(
+                'class' => array(),
+            ),
+        );
+
+        return $allowed_tags;
+    }
+
     /**
      * Validate and sanitize form entries
      *
@@ -1185,10 +1340,14 @@ class RTEC_Admin
         $updated_options = get_option( 'rtec_options', false );
         $checkbox_settings = array();
         $leave_spaces = array();
+        $allowed_tags = $this->get_allowed_tags();
+        $rich_editor_settings = array();
+
         if ( isset( $input['default_max_registrations'] ) ) {
             $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'recaptcha_require', 'disable_by_default', 'show_registrants_data', 'limit_registrations', 'include_attendance_message', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
-            $leave_spaces = array( 'custom_js', 'custom_css' );
+            $leave_spaces = array( 'custom_js', 'custom_css', 'notification_message' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
+            $rich_editor_settings = array( 'confirmation_message', 'notification_message' );
             $checkbox_settings = array( 'disable_notification', 'disable_confirmation', 'use_custom_notification' );
         }
 
@@ -1207,6 +1366,10 @@ class RTEC_Admin
                 if ( $val == 'on' ) {
                     $updated_options[$key] = true;
                 }
+            } elseif ( in_array( $key, $rich_editor_settings, true ) ) {
+
+                $working_text = wp_kses( str_replace( '{nl}', '<br />', $val ), $allowed_tags );
+                $updated_options[$key] = $working_text;
             } else {
                 if ( in_array( $key, $leave_spaces ) ) {
                     $updated_options[$key] = $val;
@@ -1263,7 +1426,7 @@ class RTEC_Admin
             }
         }
 
-        $value = str_replace( array( '\r', '\n', '%0a', '%0d' ), ' ' , $value );
+        $value = str_replace( array( '%0a', '%0d' ), ' ' , $value );
         return trim( $value );
     }
 }

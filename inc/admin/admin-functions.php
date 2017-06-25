@@ -726,24 +726,6 @@ function rtec_get_attendance_bg_color( $num_registered = 0, $event_meta ) {
 	}
 }
 
-function rtec_database_error_admin_notice() {
-    global $wpdb;
-    $table_name = esc_sql( $wpdb->prefix . RTEC_TABLENAME );
-
-    $column_descriptions = $wpdb->get_results( "DESCRIBE $table_name" );
-
-    foreach ( $column_descriptions as $column ) {
-	    if ( $column->Field === 'id' && $column->Extra !== 'auto_increment' ) : ?>
-		    <div class="notice notice-warning is-dismissible">
-			    <p>
-				    <?php _e( 'It looks like Registrations for the Events Calendar may not be able to save new registrations in the database. Please  <a href="https://www.roundupwp.com/resetting-the-database/" target="_blank">visit this page</a> for help' , 'registrations-for-the-events-calendar' ); ?>
-			    </p>
-		    </div>
-	    <?php endif;
-    }
-}
-add_action( 'admin_notices', 'rtec_database_error_admin_notice' );
-
 /**
  * Takes raw custom field data and returns an associative array with labels as
  * keys

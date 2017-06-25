@@ -37,18 +37,20 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 // Check for The Events Calendar to be active
 function rtec_TEC_check() {
 	if ( ! class_exists( 'Tribe__Events__Main' ) ) {
-		if ( current_user_can( 'activate_plugins' ) ) {
-			add_action( 'admin_init', 'rtec_deactivate' );
-			add_action( 'admin_notices', 'rtec_deactivation_notice' );
-			function rtec_deactivate() {
-				deactivate_plugins( plugin_basename( __FILE__ ) );
-			}
-			function rtec_deactivation_notice() {
-				echo '<div class="updated"><p><strong>Registrations for The Events Calendar has been deactivated</strong>. The Events Calendar plugin must be active for this extension to work</strong>.</p></div>';
-				if ( isset( $_GET['activate'] ) ) {
-					unset( $_GET['activate'] );
-				}
-			}
+		add_action( 'admin_notices', 'rtec_no_tec_notice' );
+		function rtec_no_tec_notice() {
+			?>
+			<div class="rtec-notice-all-admin rtec-all-admin-error">
+				<div class="rtec-img-wrap">
+					<img src="<?php echo plugin_dir_url( __FILE__ ) . 'img/RTEC-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar">
+				</div>
+				<div class="rtec-msg-wrap">
+					<p>It looks like The Events Calendar plugin is not currently active.</p>
+					<p class="rtec-instructions">Please install The Events Calendar by Modern Tribe to get started with your registrations.</p>
+					<p><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/">Setup Instructions</a></p>
+				</div>
+			</div>
+		<?php
 		}
 	}
 }

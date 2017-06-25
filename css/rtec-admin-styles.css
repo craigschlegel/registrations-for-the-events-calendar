@@ -1,3 +1,42 @@
+/* Notices */
+.rtec-notice-all-admin {
+    display: block;
+    margin-top:30px;
+    background: #fff;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+.rtec-all-admin-error {
+    border-left: 4px solid #dc3232;
+}
+.rtec-notice-all-admin:after {
+    display: table;
+    clear: both;
+    content: "";
+}
+.rtec-img-wrap {
+    display: inline-block;
+    float: left;
+    width: 100px;
+    padding: 10px;
+}
+.rtec-img-wrap img {
+    width: 100%;
+}
+.rtec-msg-wrap {
+    display: inline;
+    float: left;
+    max-width: 500px;
+    padding: 10px;
+}
+.rtec-msg-wrap p:first-child {
+    margin-top: 0px;
+}
+.rtec-instructions {
+    font-weight: bold;
+    color: #a00;
+}
+
 .rtec-wrapper {
     box-sizing: border-box;
 }

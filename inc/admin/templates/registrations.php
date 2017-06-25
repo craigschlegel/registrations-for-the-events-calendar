@@ -1,15 +1,4 @@
 <h1><?php _e( 'Overview', 'registrations-for-the-events-calendar' ); ?></h1>
-
-<?php if ( ! isset( $options['default_max_registrations'] ) ) : ?>
-    <div class="notice notice-info is-dismissible">
-        <p>
-            <?php esc_attr_e( 'Hey! First time using the plugin? You can start configuring on the' , 'registrations-for-the-events-calendar' ); ?>
-            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form">"Form" tab</a><br />
-            <?php esc_attr_e( 'Or check out our setup directions' , 'registrations-for-the-events-calendar' ); ?>
-            <a href="http://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank">on our website</a>
-        </p>
-    </div>
-<?php endif; ?>
 <?php
 $view = isset( $_GET['show_setting'] ) ? $_GET['show_setting'] : 'upcoming';
 ?>
