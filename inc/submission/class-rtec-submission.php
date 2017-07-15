@@ -483,30 +483,30 @@ class RTEC_Submission
         if ( isset( $rtec_options['confirmation_message'] ) && $rtec_options['message_source'] !== 'translate' ) {
             $body = $this->find_and_replace( $rtec_options['confirmation_message'] );
         } else {
-            $body = __( 'You are registered!', 'registrations-for-the-events-calendar' ) . "\n\n";
-            $body .= sprintf( __( 'Event', 'registrations-for-the-events-calendar' ) .': %1$s at %2$s on %3$s'. "\n",
+            $body = __( 'You are registered!', 'registrations-for-the-events-calendar' ) . "<br /><br />";
+            $body .= sprintf( __( 'Event', 'registrations-for-the-events-calendar' ) .': %1$s at %2$s on %3$s'. "<br />",
                 esc_html( $this->submission['rtec_title'] ) , esc_html( $this->submission['rtec_venue_title'] ) , $date_str );
             $first = ! empty( $this->submission['rtec_first'] ) ? esc_html( $this->submission['rtec_first'] ) : '';
             $last = ! empty( $this->submission['rtec_last'] ) ? esc_html( $this->submission['rtec_last'] ) : '';
-            $body .= sprintf ( __( 'Name', 'registrations-for-the-events-calendar' ) .': %1$s %2$s', $first, $last ) . "\n";
+            $body .= sprintf ( __( 'Name', 'registrations-for-the-events-calendar' ) .': %1$s %2$s', $first, $last ) . "<br />";
 
 	        if ( ! empty( $this->submission['rtec_phone'] ) ) {
 		        $phone = esc_html( $this->submission['rtec_phone'] );
-		        $body .= sprintf (  __( 'Phone', 'registrations-for-the-events-calendar' ) .': %1$s', $phone ) . "\n";
+		        $body .= sprintf (  __( 'Phone', 'registrations-for-the-events-calendar' ) .': %1$s', $phone ) . "<br />";
 	        }
 	        
             if ( ! empty( $this->submission['rtec_other'] ) ) {
                 $other = esc_html( $this->submission['rtec_other'] );
-                $body .= sprintf ( __( 'Other', 'registrations-for-the-events-calendar' ) .': %1$s', $other ) . "\n\n";
+                $body .= sprintf ( __( 'Other', 'registrations-for-the-events-calendar' ) .': %1$s', $other ) . "<br /><br />";
             }
 
 	        if ( ! empty( $this->submission['rtec_venue_address'] ) ) {
-		        $body .= __( 'The event will be held at this location', 'registrations-for-the-events-calendar' ) . ':' . "\n\n";
-		        $body .= sprintf( '%1$s'. "\n", esc_html( $this->submission['rtec_venue_address'] ) );
+		        $body .= __( 'The event will be held at this location', 'registrations-for-the-events-calendar' ) . ':' . "<br /><br />";
+		        $body .= sprintf( '%1$s'. "<br />", esc_html( $this->submission['rtec_venue_address'] ) );
 		        $body .= sprintf( '%1$s, %2$s %3$s', esc_html( $this->submission['rtec_venue_city'] ), esc_html( $this->submission['rtec_venue_state'] ), esc_html( $this->submission['rtec_venue_zip'] ) );
 	        }
 
-	        $body .=  "\n\n" . __( 'Thank You!', 'registrations-for-the-events-calendar' );
+	        $body .=  "<br /><br />" . __( 'Thank You!', 'registrations-for-the-events-calendar' );
         }
 
         return $body;
@@ -597,34 +597,43 @@ class RTEC_Submission
 		    $last_label = rtec_get_text( $rtec_options['last_label'], __( 'Last', 'registrations-for-the-events-calendar' ) );
 		    $email_label = rtec_get_text( $rtec_options['email_label'], __( 'Email', 'registrations-for-the-events-calendar' ) );
 
-		    $body .= sprintf( 'The following submission was made for: %1$s at %2$s on %3$s'. "\n",
+		    $body .= sprintf( '<p>The following submission was made for: %1$s at %2$s on %3$s</p>',
 			    esc_html( $this->submission['rtec_title'] ) , esc_html( $this->submission['rtec_venue_title'] ) , $date_str );
 		    $first = ! empty( $this->submission['rtec_first'] ) ? esc_html( $this->submission['rtec_first'] ) . ' ' : ' ';
 		    $last = ! empty( $this->submission['rtec_last'] ) ? esc_html( $this->submission['rtec_last'] ) : '';
 
+		    $body .= '<table><tbody>';
 		    if ( ! empty( $this->submission['rtec_first'] ) ) {
-			    $body .= sprintf( '%s: %s', esc_html( $first_label ), esc_html( $first ) ) . "\n";
+		    	$body .= '<tr>';
+			    $body .= sprintf( '<td>%s&#58;</td><td>%s</td>', esc_html( $first_label ), esc_html( $first ) );
+			    $body .= '</tr>';
 		    }
 
 		    if ( ! empty( $this->submission['rtec_last'] ) ) {
-			    $body .= sprintf( '%s: %s', esc_html( $last_label ), esc_html( $last ) ) . "\n";
+			    $body .= sprintf( '<td>%s&#58;</td><td>%s</td>', esc_html( $last_label ), esc_html( $last ) );
 		    }
 
 		    if ( ! empty( $this->submission['rtec_email'] ) ) {
 			    $email = esc_html( $this->submission['rtec_email'] );
-			    $body .= sprintf( '%s: %s', esc_html( $email_label ), esc_html( $email ) ) . "\n";
+			    $body .= '<tr>';
+			    $body .= sprintf( '<td>%s&#58;</td><td>%s</td>', esc_html( $email_label ), esc_html( $email ) );
+			    $body .= '</tr>';
 		    }
 
 		    if ( ! empty( $this->submission['rtec_phone'] ) ) {
 			    $phone_label = rtec_get_text( $rtec_options['phone_label'], __( 'Phone', 'registrations-for-the-events-calendar' ) );
 			    $phone = rtec_format_phone_number( esc_html( $this->submission['rtec_phone'] ) );
-			    $body .= sprintf( '%s: %s', esc_html( $phone_label ), esc_html( $phone ) ) . "\n";
+			    $body .= '<tr>';
+			    $body .= sprintf( '<td>%s&#58;</td><td>%s</td>', esc_html( $phone_label ), esc_html( $phone ) );
+			    $body .= '</tr>';
 		    }
 
 		    if ( ! empty( $this->submission['rtec_other'] ) ) {
 			    $other_label = rtec_get_text( $rtec_options['other_label'], __( 'Other', 'registrations-for-the-events-calendar' ) );
 			    $other = esc_html( $this->submission['rtec_other'] );
-			    $body .= sprintf( '%s: %s', esc_html( $other_label ), esc_html( $other ) ) . "\n";
+			    $body .= '<tr>';
+			    $body .= sprintf( '<td>%s&#58;</td><td>%s</td>', esc_html( $other_label ), esc_html( $other ) );
+			    $body .= '</tr>';
 		    }
 
 		    if ( isset( $rtec_options['custom_field_names'] ) ) {
@@ -637,11 +646,15 @@ class RTEC_Submission
 
 				    if ( ! empty( $this->submission[ 'rtec_' . $field ] ) ) {
 					    $custom = esc_html( $this->submission[ 'rtec_' . $field ] );
-					    $body .= sprintf( '%s: %s', esc_html( $rtec_options[ $field . '_label' ] ), esc_html( $custom ) ) . "\n";
+					    $body .= '<tr>';
+					    $body .= sprintf( '<td>%s&#58;</td><td>%s</td>', esc_html( $rtec_options[ $field . '_label' ] ), esc_html( $custom ) );
+					    $body .= '</tr>';
 				    }
 
 			    }
 		    }
+		    $body .= '</tbody></table>';
+
 	    }
 
         return $body;

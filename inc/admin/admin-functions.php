@@ -47,7 +47,7 @@ function rtec_registrations_bubble() {
 
 		foreach ( $menu as $key => $value ) {
 			if ( $menu[$key][2] === RTEC_TRIBE_MENU_PAGE ) {
-				$menu[$key][0] .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>New Plugin!</span></span>';
+				$menu[$key][0] .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>Registrations</span></span>';
 				return;
 			}
 		}
@@ -162,6 +162,7 @@ function rtec_meta_boxes_html(){
 	$deadline_disabled_class = '';
 	$notification_email = rtec_get_notification_email_recipients( $post->ID, true );
 	$confirmation_from = rtec_get_confirmation_from_address( $post->ID, true );
+	$deadline_time = isset( $event_meta['deadline_time'] ) ? $event_meta['deadline_time'] : strtotime( $event_meta['start_date'] );
 
 	if ( $event_meta['registrations_disabled'] ) {
 		$limit_disabled_att = ' disabled="true"';
@@ -223,6 +224,11 @@ function rtec_meta_boxes_html(){
 										<input type="radio" id="rtec-none-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECdeadlineType" <?php if( $event_meta['deadline_type'] === 'none' ) { echo 'checked'; } ?> value="none"<?php echo $deadline_disabled_att;?>/>
 										<label for="rtec-none-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'No deadline', 'registrations-for-the-events-calendar' ); ?></label>
 									</div>
+									<br />
+									<input type="radio" id="rtec-other-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECdeadlineType" <?php if( $event_meta['deadline_type'] === 'other' ) { echo 'checked'; } ?> value="other"<?php echo $deadline_disabled_att;?>/>
+									<label for="rtec-other-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Other:', 'registrations-for-the-events-calendar' ); ?></label>
+									<input type="text" id="rtec-date-picker" name="_RTECdeadlineDate" value="<?php echo date( "m/d/Y", $deadline_time ); ?>" class="rtec-date-picker" style="width: 100px;"/>
+									<input autocomplete="off" tabindex="2001" type="text" class="rtec-time-picker ui-timepicker-input" name="_RTECdeadlineTime" id="rtec-time-picker" data-step="30" data-round="" value="<?php echo date( "H:i:s", $deadline_time ); ?>" style="width: 80px;">
 								</td>
 							</tr>
 
@@ -303,6 +309,7 @@ function rtec_meta_boxes_html(){
 			</tbody>
 		</table>
 	</div>
+
 	<?php
 }
 
@@ -325,6 +332,16 @@ function rtec_save_meta(){
 
 	if ( isset( $_POST['_RTECdeadlineType'] ) ){
 		$registrations_deadline_type = sanitize_text_field( $_POST['_RTECdeadlineType'] );
+
+		if ( $registrations_deadline_type === 'other' ) {
+			$deadline_date = isset( $_POST['_RTECdeadlineDate'] ) ? sanitize_text_field( $_POST['_RTECdeadlineDate'] ) : date( "m/d/Y" );
+			$deadline_time = isset( $_POST['_RTECdeadlineTime'] ) ? sanitize_text_field( $_POST['_RTECdeadlineTime'] ) : '8:00:00';
+			$parsed_date = date_parse( $deadline_time );
+
+			$deadline_time_stamp = ( (int)$parsed_date['hour'] * 60 * 60 ) + ( (int)$parsed_date['minute'] * 60 ) + strtotime( $deadline_date );
+
+			update_post_meta( $post->ID, '_RTECdeadlineTimeStamp', $deadline_time_stamp );
+		}
 	}
 
 	if ( isset( $_POST['_RTEClimitRegistrations'] ) ){
@@ -485,8 +502,16 @@ add_action( 'wp_ajax_rtec_update_registration', 'rtec_update_registration' );
  * @since 1.0
  */
 function rtec_admin_scripts_and_styles() {
+
 	wp_enqueue_style( 'rtec_admin_styles', trailingslashit( RTEC_PLUGIN_URL ) . 'css/rtec-admin-styles.css', array(), RTEC_VERSION );
-	wp_enqueue_script( 'rtec_admin_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-scripts.js', array( 'jquery' ), RTEC_VERSION, false );
+	wp_enqueue_script( 'jquery-ui-core ');
+	wp_enqueue_script( 'jquery-ui-datepicker' );
+	wp_enqueue_style( 'jquery-ui-datepicker' );
+	wp_enqueue_script( 'tribe-jquery-timepicker' );
+	wp_enqueue_style( 'tribe-jquery-timepicker-css' );
+	$dependencies = array( 'jquery', 'jquery-ui-datepicker', 'tribe-jquery-timepicker' );
+
+	wp_enqueue_script( 'rtec_admin_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-scripts.js', $dependencies, RTEC_VERSION, false );
 	wp_localize_script( 'rtec_admin_scripts', 'rtecAdminScript',
 		array(
 			'ajax_url' => admin_url( 'admin-ajax.php' ),

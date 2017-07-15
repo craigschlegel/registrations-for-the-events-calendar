@@ -15,35 +15,6 @@ jQuery(document).ready(function($){
         }
     });
 
-    var $rtecLimitRegistrations = $('#rtec_limit_registrations');
-
-    function rtecCheckLimitOptions() {
-        $('.rtec_attendance_message_type').each(function(){
-            if ($(this).is(':checked')) {
-                rtecToggleLimitOptions($(this).val());
-            }
-        });
-    }
-    rtecCheckLimitOptions();
-    $rtecLimitRegistrations.change(function(){
-        rtecCheckLimitOptions();
-    });
-
-
-    function rtecToggleLimitOptions(val) {
-        if (val === 'down' && !$rtecLimitRegistrations.is(':checked')) {
-            $rtecLimitRegistrations.closest('tr').find('td')
-                .css('border','1px solid #ff3300')
-                .css('background', '#ffebe6')
-                .append('<p class="rtec-attendance-limit-error" style="color: #ff3300;">This option must be checked to have the "spots remaining" message work properly</p>');
-        } else {
-            $rtecLimitRegistrations.closest('tr').find('td')
-                .css('border','none')
-                .css('background', 'none')
-                .find('.rtec-attendance-limit-error').remove();
-        }
-    }
-
     var $rtecAttendanceMessageType = $('.rtec_attendance_message_type');
     function rtecToggleMessageTypeOptions(val) {
         if ( val === 'down' ) {
@@ -56,7 +27,6 @@ jQuery(document).ready(function($){
     }
     $rtecAttendanceMessageType.change(function(){
         rtecToggleMessageTypeOptions($(this).val());
-        rtecCheckLimitOptions();
     });
     $rtecAttendanceMessageType.each(function(){
         if ($(this).is(':checked')) {
@@ -116,6 +86,14 @@ jQuery(document).ready(function($){
 
     if ($rtecColorpicker.length > 0){
         $rtecColorpicker.wpColorPicker();
+    }
+
+    // date picker
+    $('#rtec-date-picker').datepicker();
+
+    // time picker
+    if (typeof $().timepicker !== 'undefined') {
+        $('#rtec-time-picker').timepicker();
     }
 
     // EMAIL Tab

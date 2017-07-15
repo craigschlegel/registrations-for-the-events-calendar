@@ -26,7 +26,14 @@ global $rtec_options;
 
 $offset = isset( $_GET['offset'] ) ? (int)$_GET['offset'] : 0;
 $posts_per_page = 20;
+$date = date( "m/d/Y", 1501581600 );
+$parsed_date = date_parse( $date );
 
+$deadline_time_stamp = ( (int)$parsed_date['hour'] * 60 * 60 ) + ( (int)$parsed_date['minute'] * 60 ) + strtotime( $date );
+echo '<pre>';
+echo date('F jS Y, g:i a', $deadline_time_stamp);
+var_dump(date_parse('13:45:21'));
+echo '</pre>';
 $events = array();
 if ( $view === 'all' ) {
 	$args = array(

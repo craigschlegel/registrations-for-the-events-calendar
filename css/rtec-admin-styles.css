@@ -36,6 +36,14 @@
     font-weight: bold;
     color: #a00;
 }
+.rtec-admin-wrap .rtec-em-alert {
+    display: inline-block;
+    margin: 5px 0 15px;
+    padding: 1px 12px;
+    border-radius: 5px;
+    background: #CFF7F3;
+    border: 1px solid #9EE6DE;
+}
 
 .rtec-wrapper {
     box-sizing: border-box;
@@ -49,6 +57,10 @@
 }
 .rtec-fade {
     opacity: .7;
+}
+.rtec-individual-available {
+    font-size: 16px;
+    color: #d54e21;
 }
 /*
 9EE6DE
@@ -64,6 +76,12 @@
 .rtec-admin-2-columns {
     width: 45.5%;
     display: inline-block;
+}
+.rtec-admin-wrap form {
+    margin-top: 50px;
+}
+.rtec-admin-wrap hr {
+    margin: 40px 0;
 }
 .rtec-single-event {
     display: inline-block;

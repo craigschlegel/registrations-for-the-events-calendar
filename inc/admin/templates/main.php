@@ -3,7 +3,7 @@
 
     <?php
     global $rtec_options;
-    if ( ! isset( $rtec_options['default_max_registrations'] ) ) : ?>
+    if ( isset( $rtec_options['default_max_registrations'] ) ) : ?>
         <div class="notice notice-info rtec-notice-all-admin is-dismissible">
             <div class="rtec-img-wrap">
                 <img src="<?php echo RTEC_PLUGIN_URL . 'img/RTEC-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar">

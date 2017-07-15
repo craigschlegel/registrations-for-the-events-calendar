@@ -347,7 +347,11 @@ class RTEC_Form
 
         $button_text = rtec_get_text( $rtec_options['register_text'], __( 'Register', 'registrations-for-the-events-calendar' ) );
 	    $button_bg_color = isset( $rtec_options['button_bg_color'] ) ? esc_attr( $rtec_options['button_bg_color'] ) : '';
+	    $button_text_color = isset( $rtec_options['button_text_color'] ) ? esc_attr( $rtec_options['button_text_color'] ) : '';
 	    $button_styles = isset( $button_bg_color ) && ! empty( $button_bg_color ) ? 'background-color: ' . $button_bg_color . ';' : '';
+	    if ( !empty( $button_text_color ) ) {
+	    	$button_styles .= ' color: ' . $button_text_color . ';';
+	    }
 	    $button_hover_class = ! empty( $button_bg_color ) ? ' rtec-custom-hover' : '';
 	    $button_classes = ! empty( $button_hover_class ) ? $button_hover_class : '';
 	    $form_bg_color = isset( $rtec_options['form_bg_color'] ) && ! empty( $rtec_options['form_bg_color'] ) ? 'background-color: ' . esc_attr( $rtec_options['form_bg_color'] ) . ';' : '';
@@ -672,7 +676,13 @@ class RTEC_Form
 
         $button_text = rtec_get_text( $rtec_options['submit_text'], __( 'Submit', 'registrations-for-the-events-calendar' ) );
 	    $button_bg_color = isset( $rtec_options['button_bg_color'] ) ? esc_attr( $rtec_options['button_bg_color'] ) : '';
+	    $button_text_color = isset( $rtec_options['button_text_color'] ) ? esc_attr( $rtec_options['button_text_color'] ) : '';
 	    $button_styles = isset( $button_bg_color ) && ! empty( $button_bg_color ) ? 'background-color: ' . $button_bg_color . ';' : '';
+
+	    if ( !empty( $button_text_color ) ) {
+		    $button_styles .= ' color: ' . $button_text_color . ';';
+	    }
+
 	    $button_hover_class = ! empty( $button_bg_color ) ? ' rtec-custom-hover' : '';
 	    $button_classes = ! empty( $button_hover_class ) ? $button_hover_class : '';
 	    $html = '';

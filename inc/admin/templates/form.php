@@ -1,6 +1,7 @@
 <?php
 settings_errors(); ?>
 <h1><?php _e( 'Form Settings', 'rtec' ); ?></h1>
+<p><strong><span class="rtec-individual-available">&#42;</span>Can also be set for each event separately on the Events->Edit page</strong></p>
 <form method="post" action="options.php">
     <?php settings_fields( 'rtec_options' ); ?>
     <?php //echo'<pre>';var_dump(get_option('rtec_options'));echo'</pre>'; ?>

@@ -190,7 +190,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'disable_by_default',
-            'title' => '<label for="rtec_disable_by_default">Disable Registrations by Default</label>',
+            'title' => '<label for="rtec_disable_by_default">Disable Registrations by Default<span class="rtec-individual-available">&#42;</span></label>',
             'example' => '',
             'description' => 'New events and existing events will not allow registrations until enabled manually',
             'callback'  => 'default_checkbox',
@@ -203,7 +203,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'limit_registrations',
-            'title' => '<label for="rtec_limit_registrations">Limit Registrations for Events</label>',
+            'title' => '<label for="rtec_limit_registrations">Limit Registrations by Default<span class="rtec-individual-available">&#42;</span></label>',
             'example' => '',
             'description' => 'Only allow a certain amount of registrations for each event',
             'callback'  => 'default_checkbox',
@@ -216,7 +216,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'default_max_registrations',
-            'title' => '<label for="rtec_default_max_registrations">Default Max Registrations</label>',
+            'title' => '<label for="rtec_default_max_registrations">Default Max Registrations<span class="rtec-individual-available">&#42;</span></label>',
             'example' => '',
             'description' => 'Maximum allowed registrants for every event (if any limit)',
             'callback'  => 'default_text',
@@ -257,26 +257,13 @@ class RTEC_Admin
         // Registration Deadline
         $this->create_settings_field( array(
             'name' => 'registration_deadline',
-            'title' => '<label for="rtec_registration_deadline">Registration Deadline</label>', // label for the input field
+            'title' => '<label for="rtec_registration_deadline">Registration Deadline Offset<span class="rtec-individual-available">&#42;</span></label>', // label for the input field
             'callback'  => 'deadline_offset', // name of the function that outputs the html
             'page' => 'rtec_form_registration_availability', // matches the section name
             'section' => 'rtec_form_registration_availability', // matches the section name
             'option' => 'rtec_options', // matches the options name
             'class' => 'short-text', // class for the wrapper and input field
         ) );
-
-        $this->create_settings_field( array(
-            'option' => 'rtec_options',
-            'name' => 'num_registrations_messages',
-            'title' => '<label>Event Attendance Messages</label>',
-            'example' => '',
-            'default' => '',
-            'description' => '',
-            'callback'  => 'num_registrations_messages',
-            'class' => '',
-            'page' => 'rtec_form_registration_availability',
-            'section' => 'rtec_form_registration_availability'
-        ));
         
         /* Form Custom Text */
 
@@ -319,6 +306,19 @@ class RTEC_Admin
             'section' => 'rtec_form_custom_text',
             'type' => 'text',
             'default' => 'Register'
+        ));
+
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'num_registrations_messages',
+            'title' => '<label>Event Attendance Messages</label>',
+            'example' => '',
+            'default' => '',
+            'description' => '',
+            'callback'  => 'num_registrations_messages',
+            'class' => '',
+            'page' => 'rtec_form_custom_text',
+            'section' => 'rtec_form_custom_text'
         ));
         
         // submit text
@@ -420,6 +420,18 @@ class RTEC_Admin
             'section' => 'rtec_form_styles'
         ));
 
+        // button text color
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'button_text_color',
+            'title' => '<label for="rtec_button_text_color">Button Text Color</label>',
+            'example' => '',
+            'callback'  => 'default_color',
+            'class' => 'small-text',
+            'page' => 'rtec_form_styles',
+            'section' => 'rtec_form_styles'
+        ));
+
         // Custom CSS
         $this->create_settings_field( array(
             'name' => 'custom_css',
@@ -435,7 +447,7 @@ class RTEC_Admin
         // Custom JS
         $this->create_settings_field( array(
             'name' => 'custom_js',
-            'title' => '<label for="rtec_custom_js">Custom Javascript*</label>', // label for the input field
+            'title' => '<label for="rtec_custom_js">Custom Javascript</label>', // label for the input field
             'callback'  => 'custom_code', // name of the function that outputs the html
             'page' => 'rtec_form_styles', // matches the section name
             'section' => 'rtec_form_styles', // matches the section name
@@ -485,6 +497,42 @@ class RTEC_Admin
          * Email Settings
          */
 
+        /* General Email Options */
+
+        add_settings_section(
+            'rtec_email_all',
+            'General Email Options',
+            array( $this, 'blank' ),
+            'rtec_email_all'
+        );
+
+        // confirmation from address
+        $this->create_settings_field( array(
+            'option' => 'rtec_options',
+            'name' => 'confirmation_from_address',
+            'title' => '<label>Confirmation/Notification From Address<span class="rtec-individual-available">&#42;</span></label>',
+            'example' => 'example: registrations@yoursite.com',
+            'description' => 'Enter an email address that you would like emails to be sent from',
+            'callback'  => 'default_text',
+            'class' => 'regular-text',
+            'page' => 'rtec_email_all',
+            'section' => 'rtec_email_all',
+            'default' => get_option( 'admin_email' )
+        ));
+
+        // date format
+        $this->create_settings_field( array(
+            'name' => 'custom_date_format',
+            'title' => '<label for="rtec_custom_date_format">Custom Date Format</label>', // label for the input field
+            'callback'  => 'customize_custom_date_format', // name of the function that outputs the html
+            'page' => 'rtec_email_all', // matches the section name
+            'section' => 'rtec_email_all', // matches the section name
+            'option' => 'rtec_options', // matches the options name
+            'class' => 'default-text', // class for the wrapper and input field
+            'description' => 'If you would like a custom date format in your messages, enter it here using the examples as a guide',
+            'default' => 'F jS, g:i a'
+        ));
+
         /* Notification Email Settings Section */
 
         add_settings_section(
@@ -511,7 +559,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'recipients',
-            'title' => '<label>Recipient(s) Email</label>',
+            'title' => '<label>Notification Recipient(s) Email<span class="rtec-individual-available">&#42;</span></label>',
             'example' => 'example: one@yoursite.com, two@yoursite.com',
             'description' => 'Enter the email addresses you would like notification emails to go to separated by commas',
             'callback'  => 'default_text',
@@ -568,7 +616,7 @@ class RTEC_Admin
             'name' => 'notification_message',
             'title' => '<label>Notification Message</label>',
             'example' => '',
-            'default' => 'The following submission was made for: {event-title} at {venue} on {event-date}<br />First: {first}<br />Last: {last}<br />Email: {email}',
+            'default' => '<p>The following submission was made for: {event-title} at {venue} on {event-date}</p><table><tbody><tr><td>First&#58;</td><td>{first}</td></tr><tr><td>Last&#58;</td><td>{last}</td></tr><tr><td>Email&#58;</td><td>{email}</td></tr><tr><td>Phone&#58;</td><td>{phone}</td></tr><tr><td>Other&#58;</td><td>{other}</td></tr></tbody></table>',
             'description' => '',
             'callback'  => 'rich_editor',
             'settings' => array(
@@ -577,10 +625,10 @@ class RTEC_Admin
                     'toolbar1' => 'formatselect,bold,italic,underline,blockquote,bullist,numlist,link,unlink,forecolor,undo,redo,spellchecker',
                     'toolbar2' => ''),
                 'textarea_rows' => '15',
-                'media_buttons' => FALSE,
+                'media_buttons' => false,
                 'wpautop' => true
             ),
-            'class' => '',
+            'class' => 'rtec-notification-message-tr',
             'page' => 'rtec_email_notification',
             'section' => 'rtec_email_notification',
             'columns' => '60',
@@ -624,20 +672,6 @@ class RTEC_Admin
             'default' => get_bloginfo( 'name' )
         ));
 
-        // confirmation from address
-        $this->create_settings_field( array(
-            'option' => 'rtec_options',
-            'name' => 'confirmation_from_address',
-            'title' => '<label>Confirmation From Address</label>',
-            'example' => 'example: registrations@yoursite.com',
-            'description' => 'Enter an email address you would like visitors to receive the confirmation email from',
-            'callback'  => 'default_text',
-            'class' => 'regular-text',
-            'page' => 'rtec_email_confirmation',
-            'section' => 'rtec_email_confirmation',
-            'default' => get_option( 'admin_email' )
-        ));
-
         // confirmation subject
         $this->create_settings_field( array(
             'option' => 'rtec_options',
@@ -678,18 +712,6 @@ class RTEC_Admin
             'legend' => true,
         ));
 
-        // date format
-        $this->create_settings_field( array(
-            'name' => 'custom_date_format',
-            'title' => '<label for="rtec_custom_date_format">Custom Date Format</label>', // label for the input field
-            'callback'  => 'customize_custom_date_format', // name of the function that outputs the html
-            'page' => 'rtec_email_confirmation', // matches the section name
-            'section' => 'rtec_email_confirmation', // matches the section name
-            'option' => 'rtec_options', // matches the options name
-            'class' => 'default-text', // class for the wrapper and input field
-            'description' => 'If you would like a custom date format in your messages, enter it here using the examples as a guide',
-            'default' => 'F jS, g:i a'
-        ));
     }
 
     public function default_text( $args )
@@ -951,7 +973,7 @@ class RTEC_Admin
                 <input class="rtec_attendance_message_type" id="rtec_guests_attending_type" name="<?php echo $args['option'].'[attendance_message_type]'; ?>" type="radio" value="up" <?php if ( $option_selected == 'up' ) echo "checked"; ?> />
                 <label for="rtec_guests_attending_type"><?php _e( 'guests attending (count up)', 'registrations-for-the-events-calendar' ); ?></label>
                 <input class="rtec_attendance_message_type" id="rtec_spots_remaining_type" name="<?php echo $args['option'].'[attendance_message_type]'; ?>" type="radio" value="down" <?php if ( $option_selected == 'down' ) echo "checked"; ?>/>
-                <label for="rtec_spots_remaining_type"><?php _e( 'spots remaining (count down)', 'registrations-for-the-events-calendar' ); ?></label>
+                <label for="rtec_spots_remaining_type"><?php _e( 'spots remaining (count down, <strong>only for events with limits</strong>)', 'registrations-for-the-events-calendar' ); ?></label>
             </div>
         </div>
         
@@ -971,7 +993,6 @@ class RTEC_Admin
         <div class="rtec-availability-options-wrapper rtec-admin-2-columns" id="rtec-message-text-wrapper-down">
 
             <h4><?php _e( 'Spots Remaining Message Text', 'registrations-for-the-events-calendar' ); ?></h4>
-
             <label for="rtec_text_before_down"><?php _e( 'Text Before: ', 'registrations-for-the-events-calendar' ); ?></label><input id="rtec_text_before_down" type="text" name="<?php echo $args['option'].'[attendance_text_before_down]'; ?>" value="<?php echo $text_before_down; ?>"/></br>
             <label for="rtec_text_after_down"><?php _e( 'Text After: ', 'registrations-for-the-events-calendar' ); ?></label><input id="rtec_text_after_down" type="text" name="<?php echo $args['option'].'[attendance_text_after_down]'; ?>" value="<?php echo $text_after_down; ?>"/>
             <p class="description">Example: "<strong>Only</strong> 5 <strong>spots left.</strong>"</p>
@@ -1013,7 +1034,7 @@ class RTEC_Admin
 
         if ( $args['legend'] ) : ?>
             <br />
-            <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'Legend' ); ?></a>
+            <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'Template Text (find and replace)' ); ?></a>
             <span class="rtec-tooltip-table rtec-tooltip rtec-availability-options-wrapper">
             <span class="rtec-col-1">{venue}</span><span class="rtec-col-2">Event venue/location</span>
             <span class="rtec-col-1">{venue-address}</span><span class="rtec-col-2">Venue street address</span>
