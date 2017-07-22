@@ -232,6 +232,36 @@ function rtec_get_confirmation_from_address( $event_id, $blank = false ) {
 	}
 
 }
+
+function rtec_get_standard_form_fields() {
+	$standard_fields = array(
+		'first',
+		'last',
+		'email',
+		'phone',
+		'guests',
+		'other'
+	);
+
+	return $standard_fields;
+}
+
+function rtec_get_no_template_fields() {
+	$no_template_fields = array(
+		'recaptcha'
+	);
+
+	return $no_template_fields;
+}
+
+function rtec_get_no_backend_column_fields() {
+	$no_backend_column_fields = array(
+		'recaptcha'
+	);
+
+	return $no_backend_column_fields;
+}
+
 /**
  * Generates the registration form with a shortcode
  *

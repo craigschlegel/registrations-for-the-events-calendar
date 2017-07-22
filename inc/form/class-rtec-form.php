@@ -16,55 +16,47 @@ class RTEC_Form
 	 * @var array
 	 * @since 1.0
 	 */
-    private $event_meta;
+	private $event_meta;
 
-	/**
-	 * @var bool
-	 * @since 1.0
-	 */
+	private $user_obj;
+
+	private $event_form = 1;
+
+	private $form_field_attributes = array();
+
+	private $event_form_field_names = array();
+
+	private $event_form_required_field_names = array();
+
+	private $custom_fields_label_name_pairs = array();
+
+	private $custom_column_keys = array();
+
+	private $column_keys = array();
+
+	private $field_labels = array();
+
 	private $hidden_initially;
 
-	/**
-	 * @var array
-	 * @since 1.0
-	 */
-    private $show_fields = array();
+	private $mvt_data;
 
 	/**
 	 * @var array
 	 * @since 1.0
 	 */
-    private $required_fields = array();
-
-	/**
-	 * @var array
-	 * @since 1.3
-	 */
-	private $custom_fields = array();
+	private $submission_data = array();
 
 	/**
 	 * @var array
 	 * @since 1.0
 	 */
-    private $input_fields_data = array();
-
-	/**
-	 * @var array
-	 * @since 1.0
-	 */
-    private $submission_data = array();
-
-	/**
-	 * @var array
-	 * @since 1.0
-	 */
-    private $errors = array();
+	private $errors = array();
 
 	/**
 	 * @var int
 	 * @since 1.0
 	 */
-    private $max_registrations;
+	private $max_registrations;
 
 	/**
 	 * @var array
@@ -72,11 +64,13 @@ class RTEC_Form
 	 */
 	private $ical_url;
 
-	/**
-	 * @var array
-	 * @since 1.1
-	 */
-	private $recaptcha = array();
+	public function build_form()
+	{
+		$fields_results = $this->get_form_field_data_from_db();
+		$manually_added_fields = array();
+		$manually_added_fields = apply_filters( 'rtec_add_new_field', $manually_added_fields );
+		$this->set_form_field_attributes( $fields_results, $manually_added_fields );
+	}
     
     /**
      * Get the one true instance of RTEC_Form.
@@ -92,70 +86,166 @@ class RTEC_Form
         return self::$instance;
     }
 
-	/**
-	 * Set included and required fields for this form
-	 *
-	 */
-	public function set_inc_and_req_fields() {
+	protected function set_form_field_attributes( $fields_results, $manually_added_fields )
+	{
 		global $rtec_options;
+		$show_fields = $fields_results;
+		$field_attributes = array();
+		$show_field_names = array();
+		$required_field_names = array();
 
-		$fields = array( 'first', 'last', 'email', 'phone', 'other' );
-		// phone should be false by default
-		if ( ! isset( $rtec_options['phone_show'] ) ) {
-			$rtec_options['phone_show'] = false;
-			$rtec_options['phone_require'] = false;
+		foreach ( $show_fields as $field ) {
+
+			$field_attributes[ $field['field_name'] ]['name']    = 'rtec_' . $field['field_name'];
+			$show_field_names[] = $field['field_name'];
+			$field_attributes[ $field['field_name'] ]['type']    = isset( $field['field_type'] ) ? $field['field_type'] : 'text';
+			$field_attributes[ $field['field_name'] ]['label']   = isset( $field['label'] ) ? $field['label'] : '';
+			$field_attributes[ $field['field_name'] ]['default'] = isset( $field['default_value'] ) ? $field['default_value'] : '';
+			$field_attributes[ $field['field_name'] ]['error_message'] = isset( $field['error_text'] ) ? $field['error_text'] : 'This is required';
+			$field_attributes[ $field['field_name'] ]['placeholder']   = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
+			$field_attributes[ $field['field_name'] ]['meta']   = isset( $field['meta'] ) ? maybe_unserialize( $field['meta'] ) : array();
+			$field_attributes[ $field['field_name'] ]['html']  = isset( $field['meta']['html'] ) ? $field['meta']['html'] : '';
+
+			if ( $field_attributes[ $field['field_name'] ]['type'] === 'checkbox' || $field_attributes[ $field['field_name'] ]['type'] === 'radio' || $field_attributes[ $field['field_name'] ]['type'] === 'select') {
+				$field_attributes[ $field['field_name'] ]['meta']['options'] = isset( $field_attributes[ $field['field_name'] ]['meta']['options'] ) ? $field_attributes[ $field['field_name'] ]['meta']['options'] : array();
+			}
+
+			if ( $field['is_required'] == 1 ) {
+				$required_field_names[] = $field['field_name'];
+				$field_attributes[ $field['field_name'] ]['required'] = true;
+				$field_attributes[ $field['field_name'] ]['label'] .= '&#42;';
+				$field_attributes[ $field['field_name'] ]['data_atts'] = array(
+					'aria-required' => 'true',
+					'aria-invalid'  => 'false'
+				);
+
+			} else {
+				$field_attributes[ $field['field_name'] ]['required'] = false;
+				$field_attributes[ $field['field_name'] ]['data_atts'] = array(
+					'aria-required' => 'false',
+					'aria-invalid'  => 'false'
+				);
+				$field_attributes[ $field['field_name'] ]['valid_type']   = 'none';
+				$field_attributes[ $field['field_name'] ]['valid_params'] = array();
+
+			}
+
+			if ( in_array( $field_attributes[ $field['field_name'] ]['type'], array( 'checkbox', 'radio', 'select' ), true ) ) {
+				$field_attributes[ $field['field_name'] ]['valid_type'] = 'none';
+			} else {
+				$field_attributes[ $field['field_name'] ]['valid_type']   = isset( $field['valid_type'] ) ? $field['valid_type'] : 'length';
+			}
+
+			switch ( $field_attributes[ $field['field_name'] ]['valid_type'] ) {
+				case 'count' :
+					$field_attributes[ $field['field_name'] ]['valid_params'] = isset( $field['valid_params'] ) && ! empty( $field['valid_params'] ) ? $field['valid_params'] : array( 'count' => '7,10', 'count_what' => 'numbers' );
+					break;
+				case 'email' :
+					$field_attributes[ $field['field_name'] ]['valid_params'] = array( 'email' => 'true' );
+					break;
+				default :
+					$field_attributes[ $field['field_name'] ]['valid_params'] = isset( $field['valid_params'] ) && ! empty( $field['valid_params'] ) ? $field['valid_params'] : array( 'min' => 1, 'max' => 'no-max' );
+			}
+
+			// recaptcha stuff to be changed
+			if ( $field_attributes[ $field['field_name'] ]['valid_type'] === 'recaptcha' ) {
+				$field_attributes[ $field['field_name'] ]['required'] = true;
+				$value1 = rand(2,5);
+				$value2 = rand(2,5);
+				$field_attributes[ $field['field_name'] ]['valid_params'] = array(
+					'value_1' => $value1,
+					'value_2' => $value2
+				);
+				$field_attributes[ $field['field_name'] ]['valid_params']['sum'] = (int)$field_attributes[$field['field_name']]['valid_params']['value_1'] + (int)$field_attributes[ $field['field_name'] ]['valid_params']['value_2'];
+				$field_attributes[ $field['field_name'] ]['label'] = str_replace( '&#42;', ' ' . $field_attributes['recaptcha']['valid_params']['value_1'] . ' &#43; ' . $field_attributes['recaptcha']['valid_params']['value_2'] .'&#42;', $field_attributes['recaptcha']['label'] );
+			}
+
+			$standard_fields = rtec_get_standard_form_fields();
+			$no_template_fields = rtec_get_no_template_fields();
+			$no_backend_label_fields = rtec_get_no_backend_column_fields();
+
+			if ( ! in_array( $field['field_name'], $standard_fields, true ) &&  ! in_array( $field['field_name'], $no_template_fields, true ) ) {
+				$this->add_custom_label_name_pair( $field['label'], $field['field_name'] );
+			}
+
+			if ( ! in_array( $field['field_name'], $standard_fields, true ) && ! in_array( $field['field_name'], $no_backend_label_fields, true ) ) {
+				$this->add_custom_column_key( $field['field_name'] );
+			}
+
+			if ( ! in_array( $field['field_name'], $no_backend_label_fields, true ) ) {
+				$field_name = $field['field_name'] === 'first' || $field['field_name'] === 'last' ? $field['field_name'] . '_name' : $field['field_name'];
+				$this->add_column_key( $field_name );
+			}
+
+			if ( ! in_array( $field['field_name'], $no_backend_label_fields, true ) ) {
+				$this->add_field_label( $field['label'] );
+			}
+
+
 		}
 
-		foreach ( $fields as $field ) {
+		$manual_to_merge = ! empty( $manually_added_fields ) ? $manually_added_fields : array();
+		$field_attributes = array_merge( $field_attributes, $manual_to_merge );
 
-			// prevent errors from popping up by defaulting all settings to true
-			if ( ! isset( $rtec_options[$field . '_show'] ) ) {
-				$rtec_options[$field . '_show'] = true;
+		if ( $rtec_options['message_source'] === 'translate' ) {
+			if ( isset( $field_attributes['first'] ) ) {
+				$field_attributes['first']['label'] = __( 'First', 'registrations-for-the-events-calendar-pro' );
+				$field_attributes['first']['label'] .= in_array( 'first', $required_field_names ) ? '&#42;' : '';
+				$field_attributes['first']['error_message'] = __( 'Error', 'registrations-for-the-events-calendar-pro' );
 			}
-			// create an array of all to be shown
-			if ( $rtec_options[$field . '_show'] == true ) {
-				$this->show_fields[] = $field;
+			if ( isset( $field_attributes['last'] ) ) {
+				$field_attributes['last']['label'] = __( 'Last', 'registrations-for-the-events-calendar-pro' );
+				$field_attributes['last']['label'] .= in_array( 'last', $required_field_names ) ? '&#42;' : '';
+				$field_attributes['last']['error_message'] = __( 'Error', 'registrations-for-the-events-calendar-pro' );
 			}
-
-			// prevent errors from popping up by defaulting all settings to true
-			if ( ! isset( $rtec_options[$field . '_require'] ) ) {
-				$rtec_options[$field . '_require'] = true;
+			if ( isset( $field_attributes['email'] ) ) {
+				$field_attributes['email']['label'] = __( 'Email', 'registrations-for-the-events-calendar-pro' );
+				$field_attributes['email']['label'] .= in_array( 'email', $required_field_names ) ? '&#42;' : '';
+				$field_attributes['email']['error_message'] = __( 'Error', 'registrations-for-the-events-calendar-pro' );
 			}
-			// create an array of all to be required
-			if ( $rtec_options[$field . '_require'] == true ) {
-				$this->required_fields[] = $field;
+			if ( isset( $field_attributes['other'] ) ) {
+				$field_attributes['other']['label'] = __( 'Other', 'registrations-for-the-events-calendar-pro' );
+				$field_attributes['other']['label'] .= in_array( 'other', $required_field_names ) ? '&#42;' : '';
+				$field_attributes['other']['error_message'] = __( 'Error', 'registrations-for-the-events-calendar-pro' );
+			}
+			if ( isset( $field_attributes['phone'] ) ) {
+				$field_attributes['phone']['label'] = __( 'Phone', 'registrations-for-the-events-calendar-pro' );
+				$field_attributes['phone']['label'] .= in_array( 'phone', $required_field_names ) ? '&#42;' : '';
+				$field_attributes['phone']['error_message'] = __( 'Error', 'registrations-for-the-events-calendar-pro' );
+			}
+			if ( isset( $field_attributes['guests'] ) ) {
+				$field_attributes['guests']['label'] = __( 'Guests', 'registrations-for-the-events-calendar-pro' );
+				$field_attributes['guests']['label'] .= in_array( 'guests', $required_field_names ) ? '&#42;' : '';
+				$field_attributes['guests']['error_message'] = __( 'Error', 'registrations-for-the-events-calendar-pro' );
 			}
 		}
 
-		// recaptcha field calculations for spam check
-		if ( isset( $rtec_options['recaptcha_require'] ) && $rtec_options['recaptcha_require'] )  {
-			$this->recaptcha = array(
-				'value_1' => rand(2,5),
-				'value_2' => rand(2,5)
-			);
-			$this->recaptcha['sum'] = (int)$this->recaptcha['value_1'] + (int)$this->recaptcha['value_2'];
-		}
+		$field_attributes = apply_filters( 'rtec_fields_attributes', $field_attributes );
+		$this->event_form_field_names = $show_field_names;
+		$this->event_form_required_field_names = $required_field_names;
+
+		$this->form_field_attributes = $field_attributes;
 	}
 
-	/**
-	 * Set any custom field data set up by user
-	 *
-	 * @since 1.3
-	 */
-    public function set_custom_fields() 
-    {
-    	global $rtec_options;
-	    
-	    if ( isset( $rtec_options['custom_field_names'] ) && ! is_array( $rtec_options['custom_field_names'] ) ) {
-	    	$custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
-	    } else {
-		    $custom_field_names = array();
-	    }
+	private function add_custom_label_name_pair( $label, $name )
+	{
+		$this->custom_fields_label_name_pairs[$label] = $name;
+	}
 
-	    $rtec_options['custom_field_names'] = $custom_field_names;
+	private function add_custom_column_key( $field_name )
+	{
+		$this->custom_column_keys[] = $field_name;
+	}
 
-	    $this->custom_fields = $rtec_options;
-    }
+	private function add_column_key( $field_name )
+	{
+		$this->column_keys[] = $field_name;
+	}
+
+	private function add_field_label( $label )
+	{
+		$this->field_labels[] = $label;
+	}
 
 	/**
 	 * Set user input errors for the form
@@ -184,6 +274,168 @@ class RTEC_Form
 	public function set_event_meta( $id = '' )
 	{
 		$this->event_meta = rtec_get_event_meta( $id );
+	}
+
+	/**
+	 * Get final data array of all fields that are going to be used in the
+	 * registration form
+	 *
+	 * @since   1.0
+	 */
+	public function get_field_attributes()
+	{
+		return $this->form_field_attributes;
+	}
+
+	public function get_custom_column_keys()
+	{
+		return $this->custom_column_keys;
+	}
+
+	public function get_column_keys()
+	{
+		return $this->column_keys;
+	}
+
+	public function get_field_labels()
+	{
+		return $this->field_labels;
+	}
+
+	public function get_custom_fields_label_name_pairs()
+	{
+		return $this->custom_fields_label_name_pairs;
+	}
+
+	public function get_form_field_data_from_db()
+	{
+		global $rtec_options;
+
+		if ( isset( $rtec_options[ 'first_show' ] ) ) {
+			$field_types = rtec_get_standard_form_fields();
+
+			if ( isset( $rtec_options['custom_field_names'] ) && ! is_array( $rtec_options['custom_field_names'] ) ) {
+				$custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+			} else {
+				$custom_field_names = array();
+			}
+
+			foreach ( $custom_field_names as $custom_field_name ) {
+				$field_types[] = $custom_field_name;
+			}
+
+			$i = 0;
+			$fields_data = array();
+
+			foreach ( $field_types as $type ) {
+
+				if ( $rtec_options[ $type . '_show' ] ) {
+					$fields_data[ $i ] = array();
+
+					$fields_data[ $i ]['field_name'] = $type;
+					$fields_data[ $i ]['field_type'] = 'text';
+
+					if ( $type === 'phone' ) {
+						$fields_data[ $i ]['valid_type'] = 'count';
+						$fields_data[ $i ]['valid_params'] = isset( $rtec_options['phone_valid_count'] ) ? array( 'count' => $rtec_options['phone_valid_count'], 'count_what' => 'numbers' ) :  array( 'count' => '7,10', 'count_what' => 'numbers' );
+					} elseif ( $type === 'email' ) {
+						$fields_data[ $i ]['valid_type'] = 'email';
+						$fields_data[ $i ]['valid_params'] = array();
+					} else {
+						$fields_data[ $i ]['valid_type'] = 'length';
+						$fields_data[ $i ]['valid_params'] = array();
+					}
+
+					$fields_data[ $i ]['placeholder'] = '';
+					$fields_data[ $i ]['meta'] = '';
+					$fields_data[ $i ]['default_value'] = '';
+					$fields_data[ $i ]['is_required'] = $rtec_options[ $type . '_require' ];
+
+					$fields_data[ $i ]['error_message'] = rtec_get_text( $rtec_options[ $type . '_error' ], __( 'Error', 'registrations-for-the-events-calendar' ) );
+
+					switch( $type ) {
+						case 'first':
+							$fields_data[ $i ]['label'] = rtec_get_text( $rtec_options['first_label'], __( 'First', 'registrations-for-the-events-calendar' ) );
+							break;
+						case 'last':
+							$fields_data[ $i ]['label'] = rtec_get_text( $rtec_options['last_label'], __( 'Last', 'registrations-for-the-events-calendar' ) );
+							break;
+						case 'email':
+							$fields_data[ $i ]['label'] = rtec_get_text( $rtec_options['email_label'], __( 'Email', 'registrations-for-the-events-calendar' ) );
+							break;
+						case 'phone':
+							$fields_data[ $i ]['label'] = rtec_get_text( $rtec_options['phone_label'], __( 'Phone', 'registrations-for-the-events-calendar' ) );
+							break;
+						default:
+							$fields_data[ $i ]['label'] = isset( $rtec_options[ $type . '_label' ] ) ? $rtec_options[ $type . '_label' ] : '';
+					}
+
+					$i++;
+				}
+
+			}
+
+			// recaptcha field calculations for spam check
+			if ( isset( $rtec_options['recaptcha_require'] ) && $rtec_options['recaptcha_require'] )  {
+				$i++;
+				$fields_data[ $i  ]['field_name'] = 'recaptcha';
+				$fields_data[ $i ]['field_type'] = 'text';
+				$fields_data[ $i ]['valid_type'] = 'recaptcha';
+				$fields_data[ $i ]['valid_params'] = array();
+				$fields_data[ $i ]['placeholder'] = '';
+				$fields_data[ $i ]['meta'] = '';
+				$fields_data[ $i ]['default_value'] = '';
+				$fields_data[ $i ]['is_required'] = true;
+				$fields_data[ $i ]['error_message'] = rtec_get_text( $rtec_options[ $type . '_error' ], __( 'Error', 'registrations-for-the-events-calendar' ) );
+			}
+
+		} else {
+			$default = array(
+				0 => array(
+					'field_id' => 1,
+					'field_name' => 'first',
+					'label' => 'First',
+					'field_type' => 'text',
+					'valid_type' => 'length',
+					'valid_params' => '',
+					'placeholder' => '',
+					'meta' => '',
+					'default_value' => '',
+					'error_text' => 'Please enter your first name',
+					'is_required' => 1
+				),
+				1 => array(
+					'field_id' => 2,
+					'field_name' => 'last',
+					'label' => 'Last',
+					'field_type' => 'text',
+					'valid_type' => 'length',
+					'valid_params' => '',
+					'placeholder' => '',
+					'meta' => '',
+					'default_value' => '',
+					'error_text' => 'Please enter your last name',
+					'is_required' => 1
+				),
+				2 => array(
+					'field_id' => 3,
+					'field_name' => 'email',
+					'label' => 'Email',
+					'field_type' => 'text',
+					'valid_type' => 'email',
+					'valid_params' => '',
+					'placeholder' => '',
+					'meta' => '',
+					'default_value' => '',
+					'error_text' => 'Please enter your email',
+					'is_required' => 1
+				)
+			);
+
+			return $default;
+		}
+
+		return $fields_data;
 	}
 
 	/**

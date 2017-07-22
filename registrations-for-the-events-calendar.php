@@ -47,7 +47,7 @@ function rtec_TEC_check() {
 				<div class="rtec-msg-wrap">
 					<p>It looks like The Events Calendar plugin is not currently active.</p>
 					<p class="rtec-instructions">Please install The Events Calendar by Modern Tribe to get started with your registrations.</p>
-					<p><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/">Setup Instructions</a></p>
+					<p><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank">Setup Instructions</a></p>
 				</div>
 			</div>
 		<?php
@@ -206,6 +206,8 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/class-rtec-db-admin.php';
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/admin-functions.php';
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/class-rtec-admin.php';
+			    require_once RTEC_PLUGIN_DIR . 'inc/admin/class-rtec-admin-registrations.php';
+			    require_once RTEC_PLUGIN_DIR . 'inc/admin/class-rtec-admin-event.php';
 		    }
 	    }
 

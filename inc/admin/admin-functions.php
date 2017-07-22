@@ -56,6 +56,21 @@ function rtec_registrations_bubble() {
 }
 add_action( 'admin_menu', 'rtec_registrations_bubble' );
 
+function rtec_the_admin_notices() {
+	global $rtec_options;
+
+	if ( ! isset( $rtec_options['default_max_registrations'] ) ) : ?>
+		<div class="notice notice-info is-dismissible">
+			<p>
+				<?php esc_attr_e( 'Hey! First time using the plugin? You can start configuring on the' , 'registrations-for-the-events-calendar' ); ?>
+				<a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar-pro%2F_settings&tab=form">"Form" tab</a><br />
+				<?php esc_attr_e( 'Or check out our setup directions' , 'registrations-for-the-events-calendar' ); ?>
+				<a href="https://www.roundupwp.com/docs/getting-started/" target="_blank">on our website</a>
+			</p>
+		</div>
+	<?php endif;
+}
+
 /**
  *  Updates the individual event options with ajax
  *
