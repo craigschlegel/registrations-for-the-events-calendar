@@ -46,7 +46,7 @@ function rtec_get_event_meta( $id = '' ) {
 
 	$default_disabled = isset( $rtec_options['disable_by_default'] ) ? $rtec_options['disable_by_default'] : false;
 	$event_meta['registrations_disabled'] = isset( $meta['_RTECregistrationsDisabled'][0] ) ? ( (int)$meta['_RTECregistrationsDisabled'][0] === 1 ) : $default_disabled;
-	$event_meta['show_registrants_data'] = isset( $rtec_options['show_registrants_data'] ) ? $rtec_options['show_registrants_data'] : false;
+	$event_meta['show_registrants_data'] = isset( $rtec_options['show_registrants_data'] ) && ! $event_meta['registrations_disabled'] ? $rtec_options['show_registrants_data'] : false;
 	$default_limit_registrations = isset( $rtec_options['limit_registrations'] ) ? $rtec_options['limit_registrations'] : false;
 	$event_meta['limit_registrations'] = isset( $meta['_RTEClimitRegistrations'][0] ) ? ( (int)$meta['_RTEClimitRegistrations'][0] === 1 ) : $default_limit_registrations;
 	$default_max_registrations = isset( $rtec_options['default_max_registrations'] ) ? (int)$rtec_options['default_max_registrations'] : 30;
@@ -144,40 +144,94 @@ function rtec_get_venue( $event_id = NULL ) {
 		return '';
 	}
 }
+function rtec_get_parsed_custom_field_data( $raw_data ) {
+	global $rtec_options;
 
-/**
- * Takes the custom data array and converts to serialized data for
- * adding to the db
- *
- * @param   $submission_data
- * @param   $from_form          bool
- * @since   1.3
- *
- * @return  mixed
- */
-function rtec_serialize_custom_data( $submission_data, $from_form = true ) {
-	$options = get_option( 'rtec_options', array() );
+	$custom_data = maybe_unserialize( $raw_data );
 
-	if ( isset( $options['custom_field_names'] ) ) {
-		$custom_field_names = explode( ',', $options['custom_field_names'] );
+	if ( isset( $rtec_options['custom_field_names'] ) ) {
+		$custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
 	} else {
 		$custom_field_names = array();
 	}
 
+	$parsed_data = array();
+	foreach ( $custom_field_names as $field ) {
+
+		if ( isset( $rtec_options[$field . '_label'] ) && isset( $custom_data[$rtec_options[$field . '_label']] ) ) {
+			$parsed_data[$rtec_options[$field . '_label']] = $custom_data[$rtec_options[$field . '_label']];
+		} elseif ( isset( $rtec_options[$field . '_label'] ) ) {
+			$parsed_data[$rtec_options[$field . '_label']] = '';
+		} else {
+			$parsed_data = '';
+		}
+
+	}
+
+	return $parsed_data;
+}
+
+function rtec_get_parsed_custom_field_data_full_structure( $raw_data ) {
+	return maybe_unserialize( $raw_data );
+}
+/**
+ * Takes the custom data array and converts to serialized data for
+ * adding to the db
+ *
+ * @param $submission_data
+ * @param bool $from_form
+ *
+ * @return mixed
+ */
+function rtec_serialize_custom_data( $submission_data, $field_attributes, $from_form = true ) {
+	$standard_fields = array(
+		'first',
+		'last',
+		'email',
+		'phone',
+		'other',
+		'guests',
+		'recaptcha'
+	);
 	$custom_data = array();
 	if ( $from_form ) {
-		foreach ( $custom_field_names as $field ) {
-
-			if ( isset( $submission_data['rtec_' . $field] ) ) {
-				$custom_data[$options[$field . '_label']] = $submission_data['rtec_' . $field];
+		foreach ( $field_attributes as $field_name => $atts ) {
+			if ( ! in_array( $field_name, $standard_fields, true ) ) {
+				$custom_data[ $field_name ] = array(
+					'label' => $atts['label'],
+					'value' => $submission_data[ $field_name ]
+				);
 			}
-
 		}
 	} else {
-		$custom_data = $submission_data['rtec_custom'];
+		foreach ( $submission_data['custom'] as $key => $value ) {
+			if ( isset( $field_attributes[ $key ] ) ) {
+				$custom_data[ $key ] = array(
+					'label' => $field_attributes[ $key ]['label'],
+					'value' => $value
+				);
+			}
+		}
+
 	}
 
 	return maybe_serialize( $custom_data );
+}
+
+function rtec_has_deprecated_data_structure( $custom ) {
+
+	if ( is_array($custom) ) {
+		foreach( $custom as $key ) {
+			if ( ! isset( $key['value'] ) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	} else {
+		return false;
+	}
+
 }
 
 /**

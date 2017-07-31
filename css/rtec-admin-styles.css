@@ -36,7 +36,8 @@
     font-weight: bold;
     color: #a00;
 }
-.rtec-admin-wrap .rtec-em-alert {
+.rtec-admin-wrap .rtec-notice,
+.rtec-notice{
     display: inline-block;
     margin: 5px 0 15px;
     padding: 1px 12px;
@@ -44,6 +45,7 @@
     background: #CFF7F3;
     border: 1px solid #9EE6DE;
 }
+
 
 .rtec-wrapper {
     box-sizing: border-box;
@@ -53,10 +55,18 @@
 }
 .rtec-view-selector a{
     display: inline-block;
-    margin: 1em 15px 1em 0;
+    margin-right: 15px;
 }
 .rtec-fade {
     opacity: .7;
+}
+.rtec-single-event + .rtec-single-event.rtec-single-mvt {
+    float: right;
+}
+/* remove notice */
+.rtec-conf-alert {
+    margin: 10px 0;
+    box-shadow: 2px 2px 3px #ddd;
 }
 .rtec-individual-available {
     font-size: 16px;
@@ -67,75 +77,116 @@
 46A99E
 
 */
+div.rtec-green-bg,
+div.rtec-a-button {
+    display: inline-block;
+    text-align: center;
+}
 .rtec-clear:after {
     display: table;
     clear: both;
     content: " ";
     visibility: hidden;
 }
-.rtec-admin-2-columns {
-    width: 45.5%;
-    display: inline-block;
-}
-.rtec-admin-wrap form {
-    margin-top: 50px;
+.rtec-individual-available-notice {
+    margin-bottom: 50px;
 }
 .rtec-admin-wrap hr {
     margin: 40px 0;
 }
+.rtec-admin-2-columns {
+    width: 45.5%;
+    display: inline-block;
+}
 .rtec-single-event {
     display: inline-block;
     width: 47.5%;
-    margin: 0 2% 3em 0;
+    margin: 0 2% 2em 0;
+    border-radius: 5px;
+}
+.rtec-single-event:nth-child(2n) {
+    margin-right: 0;
+    margin-left: 2%;
+}
+#rtec-back-overview {
+    margin-bottom: 20px;
+    display: block;
+}
+.rtec-event-actions,
+.rtec-outline {
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+.rtec-event-actions {
+    border-bottom: 1px solid #ccc;
 }
 .rtec-single-event .rtec-event-meta,
-.rtec-single-event .rtec-event-actions {
-    background: #23282d;
-    border-radius: 3px 3px 0 0;
+.rtec-single-event .rtec-event-actions,
+.rtec-email-creator {
+    background: #e5e5e5;
+}
+.rtec-single-event .rtec-mvt-list-item .rtec-event-actions {
+    background: #FFEECD;
 }
 #rtec_csv_export_form {
     display: inline-block;
     vertical-align: top;
 }
-.rtec-single-event .rtec-event-actions {
-    border-radius: 0 0 3px 3px;
-}
 .rtec-event-meta {
     position: relative;
-    padding: .25em 1em;
-    border: 1px solid #23282d;
 }
-.rtec-event-meta h3 {
+.rtec-single-event h3{
     margin: .25em 60px .25em 0;
-    color: #fff;
+    padding: .5em 10px 0;
 }
-.rtec-event-meta a {
+.rtec-event-meta a,
+.rtec-mvt-list-item a {
     text-decoration: none;
 }
-.rtec-event-meta a h3:hover {
+.rtec-event-meta a h3:hover,
+.rtec-mvt-list-item a h3:hover {
     color: #00a0d2;
 }
-.rtec-event-meta p {
-    margin: 0 0 .25em;
-    color: #fff;
+.rtec-event-meta p,
+.rtec-mvt-list-item p {
+    margin: 0;
+    padding: .25em 10px;
+}
+.rtec-single .rtec-event-meta .rtec-reg-info p {
+    padding-left: 0;
+}
+.rtec-venue-highlight,
+.widefat  td.rtec-venue-highlight{
+    color: #333;
+    background-color: #ccc;
+}
+.rtec-single-mvt-event .rtec-venue-highlight,
+.widefat .rtec-single-mvt-event td.rtec-venue-highlight {
+    background-color: #FFEECD;
+}
+.rtec-single-mvt-event p.rtec-venue-highlight {
+    border: 1px solid #D7B46F;
+}
+.rtec-admin-wrap .rtec-input-notice {
+    background-color: #FFEECD;
+    border: 1px solid #D7B46F;
+}
+.rtec-single .rtec-border-sides {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
 }
 .rtec-event-meta .rtec-reg-info {
     position: absolute;
-    width: 70px;
     top: 0;
     right: 0;
-    z-index: 10;
-    padding: .25em 5px 0 0;
+    z-index: 1;
+    padding: .5em 5px 0 0;
     text-align: center;
-    border-radius: 0 4px 0 5px;
 }
 .rtec-single .rtec-event-meta .rtec-reg-info {
     position: relative;
-    color: #333;
-    border-radius: 5px;
-}
-.rtec-event-meta .rtec-reg-info p {
-    color: inherit;
+    border-radius: 0;
 }
 .rtec-primary-button {
     background: #0085ba;
@@ -163,19 +214,19 @@
     box-sizing: border-box;
 }
 .rtec-next { float: right; }
-.rtec-view-all,
-.rtec-button-link {
+.rtec-view-all {
     display: block;
     text-align: center;
     padding: 5px;
-    border: 1px solid;
-    border-radius: 3px;
-    text-decoration: none;
+}
+a.rtec-wide {
+    display: inline-block;
+    width: 100%;
 }
 
-.rtec-admin-wrap .rtec-add-field {
-    width: 455px;
-    margin-bottom: 8px;
+.rtec-admin-wrap .rtec-add-field,
+.rtec-admin-wrap .rtec-add-mvt {
+    width: 435px;
 }
 .rtec-single-event table td {
     word-wrap: break-word;
@@ -192,15 +243,21 @@
 }
 .rtec-admin-wrap .rtec-green-bg {
     font-weight: 700;
-    background-color: #9EE6DE;
-    border-color: #46A99E;
-    color: #009688;
+    background-color: #009688;
+    border: none;
+    border-radius: 2px;
+}
+.rtec-admin-wrap .rtec-green-bg a,
+.rtec-admin-wrap .rtec-green-bg span {
+    display: block;
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
 }
 .rtec-admin-wrap .rtec-green-bg:hover,
 .rtec-admin-wrap .rtec-green-bg:active,
 .rtec-admin-wrap .rtec-green-bg:focus {
-    background-color: #CFF7F3;
-    color: #009688;
+    opacity: .8;
 }
 
 .rtec-admin-wrap .rtec-green-bg:focus {
@@ -208,10 +265,35 @@
     -webkit-box-shadow: 0 0 3px #46A99E;
     box-shadow: 0 0 3px #46A99E;
 }
+.rtec-admin-wrap .wp-editor-wrap,
+#wp-rtecSingleCustomConfirmation-wrap{
+    max-width: 620px;
+}
+/* hidden event options */
+.rtec-hidden-option-wrap {
+    margin-bottom: 10px;
+}
+.rtec-sameline {
+    display: inline-block;
+}
+.rtec-sameline label {
+    margin-right: 10px;
+}
+.rtec-hidden-option-wrap code,
+#rtec-event-details code{
+    line-height: 2.0;
+}
+.rtec-hidden-options h4 {
+    margin-bottom: .66em;
+}
 
 /* Single */
 .rtec-single .rtec-single-event {
     width: 100%;
+}
+.rtec-single .rtec-reg-info {
+    text-align: left;
+    padding: .25em 10px;
 }
 .rtec-single table {
     position: relative;
@@ -240,14 +322,15 @@
     right: 50%;
     left: 50%;
 }
-.rtec-first-data {
+.rtec-first-data,
+.rtec-checkbox {
     position: relative;
 }
 .rtec-notice-new {
     position: absolute;
     left: -15px;
     top: -2px;
-    padding: 3px 4px 5px;
+    padding: 4px 5px 5px;
     line-height: 1;
     border-radius:50%;
     background: #ff6600;
@@ -263,12 +346,15 @@
     padding: 1em;
     margin-bottom: .5em;
     border: 1px solid #ddd;
-    border-radius: 5px;
     background: #fbfbfb;
 }
 .rtec-field-options-wrapper h4,
 .rtec-availability-options-wrapper h4 {
     margin: .5rem 0;
+    font-size: 1.2em;
+}
+.rtec-field-options-wrapper .fa-trash{
+    font-size: 1.2em;
 }
 #rtec-message-text-wrapper-up,
 #rtec-message-text-wrapper-down,
@@ -288,7 +374,9 @@
 .rtec-availability-options-wrapper input[type=text] {
     margin-right: 1em;
 }
-.rtec-custom-field-remove {
+.rtec-custom-field-remove,
+.rtec-mvt-field-remove,
+.rtec-mvt-field-hide{
     position: absolute;
     top: 20px;
     right: 20px;
@@ -316,6 +404,9 @@
 .rtec-admin-wrap .form-table th {
     min-width: 200px;
 }
+.rtec-mvt-field-remove i {
+    font-size: 16px;
+}
 
 /* Tooltip table */
 .rtec-tooltip-table{
@@ -335,6 +426,32 @@
 .rtec-tooltip-table .rtec-col-2{
     display: inline-block;
     width: 70%;
+}
+.rtec-preview-image {
+    width: 300px;
+}
+.rtec-preview-image img {
+    max-width: 290px;
+}
+.wp-core-ui .rtec-media-button {
+    padding-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 4px;
+    padding-right: 7px;
+}
+.rtec-media-button span.wp-media-buttons-icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    vertical-align: text-top;
+    margin: 0 2px;
+}
+.rtec-media-button span.wp-media-buttons-icon:before {
+    font: 400 18px/1 dashicons;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: "\f104";
 }
 
 .rtec-support-button {
@@ -361,7 +478,8 @@
 
 /** Styles added that can be removed once sortable elements introduced **/
 
-.rtec-wrapper .rtec-event-options.postbox.open .toggle-indicator:before {
+.rtec-wrapper .rtec-event-options.postbox.open .toggle-indicator:before,
+.rtec-mvt-list-item .rtecbox.open .toggle-indicator:before {
     content: "\f142";
     display: inline-block;
     font: 400 20px/1 dashicons;
@@ -370,7 +488,8 @@
     -moz-osx-font-smoothing: grayscale;
     text-decoration: none!important;
 }
-.rtec-wrapper .rtec-event-options.postbox.closed .toggle-indicator:before {
+.rtec-wrapper .rtec-event-options.postbox.closed .toggle-indicator:before,
+.rtec-mvt-list-item .rtecbox.closed .toggle-indicator:before {
     content: "\f140";
     display: inline-block;
     font: 400 20px/1 dashicons;
@@ -383,11 +502,14 @@
 .rtec-event-options.postbox {
     margin-bottom: 0;
     padding: 8px 2px 8px 10px;
+    border: 1px solid #ddd;
     background: #e5e5e5;
-    border: 1px solid #bbb;
-    cursor: auto;
 }
-.rtec-event-options.postbox .handlediv {
+.rtec-hidden-options.postbox {
+    background-color: #eee;
+}
+.rtec-event-options.postbox .handlediv,
+.rtec-mvt-list-item .handlediv{
     width: 32px;
     height: 32px;
     margin-top: -8px;
@@ -416,24 +538,102 @@
     }
 }
 
-/* hidden event options */
-.rtec-hidden-option-wrap {
-    margin-bottom: 10px;
-    margin-left: 10px;
+/* List View */
+.rtec-registrations-data td {
+    max-width: 150px;
 }
-.rtec-event-options.postbox input {
-    max-width: 90%;
-}
-.rtec-sameline {
+
+.rtec-toolbar-secondary {
+    max-width: 66%;
     display: inline-block;
 }
-.rtec-sameline label {
-    margin-right: 10px;
+.wp-core-ui .rtec-toolbar-button {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 8px 0 0;
 }
-.rtec-hidden-option-wrap code,
-#rtec-event-details code{
-    line-height: 2.0;
+.rtec-highlight {
+    background: #ddd;
+    font-weight: bold;
 }
-.rtec-hidden-options h4 {
-    margin-bottom: .66em;
+.rtec-wrapper .striped tbody .rtec-unconfirmed {
+    background: #efefef;
 }
+span.rtec-unconfirmed,
+span.rtec-is-user{
+    padding: 4px 5px;
+}
+.rtec-wrapper .striped tbody .rtec-is-user {
+    background: #9EE6DE;
+}
+.rtec-wrapper .striped tbody .rtec-unconfirmed.rtec-notice-new,
+.rtec-legend.rtec-unconfirmed i {
+    background: #333;
+    color: #fff;
+}
+.rtec-admin-wrap .rtec-in-use .rtec-create-field.rtec-create-format {
+    background: #d0aa27;
+    color: #fff;
+    font-weight: bold;
+}
+.rtec-wrapper .striped tbody .rtec-is-user.rtec-notice-new,
+.rtec-legend.rtec-is-user i {
+    background: #009688;
+    color: #fff;
+}
+.rtec-legend.rtec-is-user i {
+    padding: 4px 5px;
+}
+.rtec-legend i {
+    padding: 4px;
+    border-radius: 50%;
+    font-size: 10px
+}
+.rtec-event-meta {
+    margin-top: 10px
+}
+.rtec-unverified {
+    background: #FDACB2;
+}
+.rtec-block {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    vertical-align: middle;
+    border: 1px solid #333;
+}
+
+.rtec-list-attendance {
+    text-align: center;
+}
+.rtec-alert {
+    display: inline-block;
+    line-height: 19px;
+    padding: 11px 15px;
+    font-size: 14px;
+    text-align: left;
+    margin: 25px 20px 0 2px;
+    background-color: #fff;
+    border-left: 4px solid #ffba00;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+.rtec-overview-nav a {
+    display: inline-block;
+    font-size: 20px;
+    text-decoration: none;
+    padding: 10px;
+}
+#rtec-date-picker {
+    background-color: #9EE6DE;
+    border-color: #46A99E;
+}
+
+/* hidden event options */
+.rtec-hidden-options .rtec-field-options-wrapper {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+/* Support tab */
+.rtec-support-title { font-size: 16px; font-weight: bold; }

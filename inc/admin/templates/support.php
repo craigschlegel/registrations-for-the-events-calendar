@@ -1,19 +1,18 @@
-<h1><?php _e( 'Support', 'registrations-for-the-events-calendar' ); ?></h1>
+<h1><?php _e( 'Need Help?', 'registrations-for-the-events-calendar-pro' ); ?></h1>
 
-<p><?php _e( 'Need help setting things up? Check out our set up directions', 'registrations-for-the-events-calendar' ); ?>.</p>
-<div class="rtec-button-wrapper">
-	<a href="http://roundupwp.com/products/registrations-for-the-events-calendar/setup" class="rtec-support-button" target="_blank"><?php _e( 'Get directions', 'registrations-for-the-events-calendar' ); ?></a>
-</div>
+<p>
+	<span class="rtec-support-title"><i class="fa fa-life-ring" aria-hidden="true"></i>&nbsp; <a href="http://roundupwp.com/products/registrations-for-the-events-calendar/setup" target="_blank"><?php _e( 'Setup Directions', 'registrations-for-the-events-calendar' ); ?></a></span>
+	<br />A step-by-step guide on how to setup and use the plugin.
+</p>
+<p>
+	<span class="rtec-support-title"><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp; <a href="https://.roundupwp.com/docs/faqs/" target="_blank"><?php _e( 'FAQs and Documentation', 'registrations-for-the-events-calendar' ); ?></a></span>
+	<br /><?php _e( 'You might find some help with our FAQs and troubleshooting guides.', 'registrations-for-the-events-calendar-pro' ); ?>
+</p>
+<p>
+	<span class="rtec-support-title"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp; <a href="https://www.roundupwp.com/support/" target="_blank"><?php _e( 'Request Support', 'registrations-for-the-events-calendar' ); ?></a></span>
+	<br /><?php _e( 'Have a problem? Submit a support ticket on our website. Please include your <strong>System Info</strong> below with support requests.', 'registrations-for-the-events-calendar' ); ?>
+</p>
 
-<p><?php _e( 'Have a problem? Submit a support ticket on our website. Please include your <strong>System Info</strong> below with support requests.', 'registrations-for-the-events-calendar' ); ?></p>
-<div class="rtec-button-wrapper">
-	<a href="http://roundupwp.com/products/registrations-for-the-events-calendar/support" class="rtec-support-button" target="_blank"><?php _e( 'Submit a Ticket', 'registrations-for-the-events-calendar' ); ?></a>
-</div>
-
-<p><?php _e( 'Have a suggestion or a request for a feature? Great! We are looking to expand the plugin and offer a "Pro" version', 'registrations-for-the-events-calendar' ); ?></p>
-<div class="rtec-button-wrapper">
-	<a href="http://roundupwp.com/products/registrations-for-the-events-calendar/support" class="rtec-support-button" target="_blank"><?php _e( 'Request a Feature', 'registrations-for-the-events-calendar' ); ?></a>
-</div>
 <br />
 <h2><?php _e( 'System Info', 'registrations-for-the-events-calendar' ); ?></h2>
 <p><?php _e( 'Click the text below to select all', 'registrations-for-the-events-calendar' ); ?></p>

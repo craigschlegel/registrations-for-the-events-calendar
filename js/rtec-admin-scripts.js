@@ -53,9 +53,9 @@ jQuery(document).ready(function($){
         }
         var customFieldID = rtecFieldIndex;
 
-        $(this).before(
+        $(this).closest('div').before(
             '<div id="rtec-custom-field-'+customFieldID+'" class="rtec-field-options-wrapper rtec-custom-field" data-name="custom'+customFieldID+'">' +
-                '<a href="JavaScript:void(0);" class="rtec-custom-field-remove">Remove X</a>' +
+                '<a href="JavaScript:void(0);" class="rtec-custom-field-remove"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                 '<h4>Custom Field '+customFieldID+'</h4> ' +
                 '<p>' +
                     '<label>Label:</label><input type="text" name="rtec_options[custom'+customFieldID+'_label]" value="Custom '+customFieldID+'" class="large-text">' +
@@ -86,14 +86,6 @@ jQuery(document).ready(function($){
 
     if ($rtecColorpicker.length > 0){
         $rtecColorpicker.wpColorPicker();
-    }
-
-    // date picker
-    $('#rtec-date-picker').datepicker();
-
-    // time picker
-    if (typeof $().timepicker !== 'undefined') {
-        $('#rtec-time-picker').timepicker();
     }
 
     // EMAIL Tab
@@ -160,7 +152,78 @@ jQuery(document).ready(function($){
     });
 
     // REGISTRATIONS overview tab
-    $('.rtec-single-event:nth-child(2n)').css('float', 'right').after('<div class="clear"></div>');
+    // View selector tool
+    $('#rtec-filter-go').click(function() {
+        $('#rtec-toolbar-form').submit();
+    });
+
+    // add nav to the top of the page as well
+    /*if ($('.rtec-next').length) {
+     $('.rtec-toolbar').after($('.rtec-overview-nav').clone());
+     }*/
+
+    $('#rtec-registrations-date').on('change', function() {
+        var selected = $(this).find(':selected').val();
+        if (selected === 'start') {
+            $('#rtec-date-picker').show();
+        } else {
+            $('#rtec-date-picker').hide();
+        }
+    });
+
+    // date picker
+    function rtecDiffInDays( a, b ) {
+        return Math.ceil( (a - b) / (1000 * 60 * 60 * 24) );
+    }
+
+    var deadlineDate = parseInt( $('.rtec-date-picker').attr('data-rtec-deadline') ) * 1000,
+        nowTime = Date.now();
+
+    $('.rtec-date-picker').each(function() {
+        $(this).datepicker({
+            defaultDate: rtecDiffInDays(deadlineDate, nowTime),
+            dateFormat: 'yy-mm-dd'
+        });
+    });
+
+    // time picker
+    if (typeof $().timepicker !== 'undefined') {
+        $('.rtec-time-picker').each(function() {
+            $(this).timepicker();
+        });
+    }
+    // search registrants
+    var $rtecSearchInput = $('#rtec-search-input');
+
+    function rtecGetSearchResults() {
+        if($rtecSearchInput.val() !== ''){
+            $rtecSearchInput.attr('disabled', true);
+            var submitData = {
+                    action: 'rtec_get_search_results',
+                    term: $rtecSearchInput.val(),
+                    rtec_nonce : rtecAdminScript.rtec_nonce
+                },
+                successFunc = function (data) {
+                    $('.rtec-overview').html(data);
+                    $rtecSearchInput.removeAttr('disabled');
+                    // remove spinner
+                    //$targetForm.find('.rtec-table-changing').remove();
+                    //$targetForm.find('.rtec-update-event-options').removeAttr('disabled');
+                };
+            rtecRegistrationAjax(submitData,successFunc);
+        }
+
+    }
+
+    $rtecSearchInput.keyup(function(){
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(rtecGetSearchResults, doneTypingInterval);
+    });
+
+    $rtecSearchInput.keydown(function() {
+        clearTimeout(typingTimer);
+    });
+
     $('.rtec-hidden-options').hide();
 
     var $rtecOptionsHandle = $('.rtec-event-options .handlediv');
@@ -229,232 +292,206 @@ jQuery(document).ready(function($){
 
     // REGISTRATION single tab
     // set table width to a minimum in case of a lot of fields
-    $('.rtec-single').css('min-width', $('.rtec-single table th').length*125);
+    var $rtecSingle = $('.rtec-single'),
+        onSingle = $rtecSingle.length;
 
-    function rtecRegistrationAjax(submitData,successFunc) {
-        $.ajax({
-            url: rtecAdminScript.ajax_url,
-            type: 'post',
-            data: submitData,
-            success: successFunc
-        });
-    }
+    if (onSingle) {
+        $rtecSingle.css('min-width', $('.rtec-single table th').length*125);
 
-    $('.rtec-delete-registration').on('click', function() {
-        var idsToRemove = [];
-        $('.rtec-registration-select').each(function() {
-            if ($(this).is(':checked')) {
-                idsToRemove.push($(this).val());
-                $(this).closest('.rtec-reg-row').addClass('rtec-being-removed');
-            }
-        });
-        // if registrations_to_be_deleted is not empty
-        if (idsToRemove.length) {
-            // give a warning to the user that this cannot be undone
-            if (confirm(idsToRemove.length + ' registrations to be deleted. This cannot be undone.')) {
+        var RtecRecordsEditor = {
+            $table : $rtecSingle.find('.rtec-single-event').find('table'),
+            $nav : $rtecSingle.find('.rtec-single-event').find('table').next(),
+            eventID : $rtecSingle.find('.rtec-single-event').attr('data-rtec-event-id'),
+            fieldAtts : JSON.parse($rtecSingle.find('.rtec-single-event').attr('data-rtec-field-atts')),
+            checked : [],
+
+            getChecked : function() {
+                var idsChecked = [];
+                $('.rtec-registration-select').each(function() {
+                    if ($(this).is(':checked')) {
+                        idsChecked.push($(this).val());
+                    }
+                });
+                return idsChecked;
+            },
+            undoAll : function() {
+                RtecRecordsEditor.$table.find('.rtec-new-registration').remove();
+                var $rtecEditing = RtecRecordsEditor.$table.find('.rtec-editing');
+
+                $rtecEditing.find('td').each(function() {
+                    $(this).text($(this).attr('data-rtec-value'));
+
+                });
+
+                $('.rtec-action').each(function() {
+                    if ($(this).attr('data-rtec-action') === 'add') {
+                        $(this).html('<i class="fa fa-plus" aria-hidden="true"></i> Add New');
+                    }
+                    if ($(this).attr('data-rtec-action') === 'edit') {
+                        $(this).html('<i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Selected');
+                    }
+                });
+                $rtecEditing.removeClass('rtec-editing');
+            },
+            submitEntry : function($row, action) {
+                RtecRecordsEditor.$table.find('tbody')
+                    .after('<div class="rtec-table-changing spinner is-active"></div>')
+                    .fadeTo("slow", .2);
+
+                var custom = {};
+                $row.find('.rtec-custom-input').each(function() {
+                    custom[$(this).attr('name')] = $(this).val();
+                });
+                var standard = {};
+                $row.find('.rtec-standard-input').each(function() {
+                    standard[$(this).attr('name')] = $(this).val();
+                });
+                var submitData = {
+                        action : 'rtec_records_edit',
+                        edit_action : action,
+                        event_id : RtecRecordsEditor.eventID,
+                        entry_id : $row.find('.rtec-registration-select').val(),
+                        standard: JSON.stringify(standard),
+                        custom: JSON.stringify(custom),
+                        rtec_nonce : rtecAdminScript.rtec_nonce
+                    },
+                    successFunc = function () {
+                        //reload the page on success to show the added registration
+                        location.reload();
+                    };
+                rtecRegistrationAjax(submitData,successFunc);
+            },
+            removeEntries : function(idsToRemove) {
+                $.each(idsToRemove,function() {
+                    $('#rtec-select-'+this).closest('tr').addClass('rtec-being-removed');
+                });
                 // start spinner to show user that request is processing
                 $('.rtec-single table tbody')
                     .after('<div class="rtec-table-changing spinner is-active"></div>')
                     .fadeTo("slow", .2);
 
                 var submitData = {
-                    action: 'rtec_delete_registrations',
-                    registrations_to_be_deleted: idsToRemove,
-                    rtec_event_id: $('.rtec-single-event').attr('data-rtec-event-id'),
-                    rtec_nonce : rtecAdminScript.rtec_nonce
-                },
-                successFunc = function (data) {
-                    // remove deleted entries
-                    $('.rtec-being-removed').each(function () {
-                        $(this).remove();
-                    });
-                    // remove spinner
-                    $('.rtec-table-changing').remove();
-                    $('.rtec-single table tbody').fadeTo("fast", 1);
-                    idsToRemove = [];
-                    $('.rtec-num-registered-text').text(parseInt(data));
-                };
+                        action : 'rtec_records_edit',
+                        edit_action : 'delete',
+                        registrations_to_be_deleted : idsToRemove,
+                        event_id : this.eventID,
+                        venue: this.mvtID,
+                        rtec_nonce : rtecAdminScript.rtec_nonce
+                    },
+                    successFunc = function (data) {
+                        // remove deleted entries
+                        $('.rtec-being-removed').each(function () {
+                            $(this).remove();
+                        });
+                        // remove spinner
+                        $('.rtec-table-changing').remove();
+                        $('.rtec-single table tbody').fadeTo("fast", 1);
+                        idsToRemove = [];
+                        $('.rtec-num-registered-text').text(parseInt(data));
+                        location.reload();
+
+                    };
                 rtecRegistrationAjax(submitData,successFunc);
-
-            } else {
-                idsToRemove = [];
-                $('.rtec-being-removed').each(function() {
-                    $(this).removeClass('rtec-being-removed');
-                });
-            } // if user confirms delete registrations
-        } // if registrations to be deleted is not empty
-    }); // delete submit click
-
-    $('.rtec-edit-registration').click( function() {
-        var editCount = 0;
-
-        if (! $('.rtec-submit-edit').length) {
-            $('.rtec-registration-select').each(function() {
-                if ($(this).is(':checked') && editCount < 1) {
-                    var $closestRegRow = $(this).closest('.rtec-reg-row'),
-                        dateStr = $closestRegRow.find('.rtec-reg-date').text(),
-                        date = $closestRegRow.find('.rtec-reg-date').attr('data-rtec-submit'),
-                        lastName = $closestRegRow.find('.rtec-reg-last').text().replace("'", '`').replace(/\\/g, ""),
-                        firstName = $closestRegRow.find('.rtec-reg-first').text().replace("'", '`').replace(/\\/g, ""),
-                        email = $closestRegRow.find('.rtec-reg-email').text(),
-                        phone = $closestRegRow.find('.rtec-reg-phone').text(),
-                        other = $closestRegRow.find('.rtec-reg-other').text().replace("'", '`').replace(/\\/g, ""),
-                        custom = [];
-
-                    editCount = 1;
-
-                    if (! $('.rtec-submit-edit').length) {
-                        $closestRegRow.find('.rtec-reg-date').html('<button data-rtec-val="'+dateStr+'" data-rtec-submit="'+date+'" class="button-primary rtec-submit-edit">Submit Edit</button>');
-                    }
-
-                    $closestRegRow.find('.rtec-reg-last').html('<input type="text" name="last" id="rtec-last" data-rtec-val="'+lastName+'" value="'+lastName+'" />');
-                    $closestRegRow.find('.rtec-reg-first').html('<input type="text" name="first" id="rtec-first" data-rtec-val="'+firstName+'" value="'+firstName+'" />');
-                    $closestRegRow.find('.rtec-reg-email').html('<input type="text" name="email" id="rtec-email" data-rtec-val="'+email+'" value="'+email+'" />');
-                    $closestRegRow.find('.rtec-reg-phone').html('<input type="text" name="phone" id="rtec-phone" data-rtec-val="'+phone+'" value="'+phone+'" />');
-                    $closestRegRow.find('.rtec-reg-other').html('<input type="text" name="other" id="rtec-other" data-rtec-val="'+other+'" value="'+other+'" />');
-                    $closestRegRow.find('td').each(function() {
-                        if ($(this).hasClass('rtec-reg-custom')) {
-                            var val = $(this).text().replace("'", '`').replace(/\\/g, "");
-                            $(this).addClass('rtec-custom-editing').html('<input type="text" name="'+jQuery(this).attr('data-rtec-key')+'" class="rtec-edit-input" id="'+jQuery(this).attr('data-rtec-key')+'" data-rtec-val="'+val+'" value="'+val+'" />');
+            },
+            addEntryHtml : function() {
+                var newRow = RtecRecordsEditor.$table.find('tbody tr').html();
+                RtecRecordsEditor.$table.find('tbody').append('<tr class="rtec-reg-row rtec-new-registration">'+newRow+'</tr>');
+                setTimeout(function() {
+                    $('.rtec-new-registration').find('i').closest('span').hide();
+                    $('.rtec-new-registration').find('td').each(function() {
+                        if ($(this).hasClass('rtec-reg-registration_date')) {
+                            $(this).html('<button class="button-primary rtec-submit-new">Submit Entry</button>');
+                        } else if ($(this).hasClass('rtec-data-cell')) {
+                            var fieldKey = $(this).attr('data-rtec-key');
+                            if (fieldKey === 'venue') {
+                                var selectHTML = '<select class="rtec-mvt-select" name="venue">';
+                                $.each(RtecRecordsEditor.mvtFields, function() {
+                                    selectHTML += '<option value="'+this.id+'">' + this.label + '</option>';
+                                });
+                                selectHTML += '</select>';
+                                $(this).html(selectHTML);
+                            } else if (typeof fieldKey !== 'undefined') {
+                                $(this).html('<input class="rtec-standard-input" type="text" name="'+fieldKey+'" placeholder="'+fieldKey+'">');
+                            } else {
+                                fieldKey = $(this).attr('data-rtec-custom-key');
+                                $(this).html('<input class="rtec-custom-input" type="text" name="'+fieldKey+'" placeholder="'+fieldKey+'">');
+                            }
                         }
                     });
+                }, 1);
+            },
+            editEntry : function(entry) {
 
-                    $(this).addClass('rtec-editing');
+                var $checkbox = $('#rtec-select-'+entry),
+                    $row = $checkbox.closest('.rtec-reg-row');
+                $row.addClass('rtec-editing');
+                $row.find('td').each(function() {
+                    if ($(this).hasClass('rtec-reg-registration_date')) {
+                        $(this).html('<button class="button-primary rtec-submit-edit">Submit Edit</button>');
+                    } else if ($(this).hasClass('rtec-data-cell')) {
+                        var fieldKey = $(this).attr('data-rtec-key');
+                        if (typeof fieldKey !== 'undefined') {
+                            var currentVal = $(this).text();
 
-                    $('.rtec-edit-registration').text('Undo');
-                }
-            });
-        } else {
-            var $rtecEditing = $('.rtec-editing'),
-                $editingClosestRegRow = $rtecEditing.closest('.rtec-reg-row');
-
-            function addBackRowData($row,findEl,inputEl) {
-                var html = $editingClosestRegRow.find(inputEl).attr('data-rtec-val');
-                $row.find(findEl).html(html);
+                            $(this).html('<input class="rtec-standard-input" type="text" name="'+fieldKey+'" value="'+currentVal+'">');
+                        } else {
+                            var currentVal = $(this).text();
+                            fieldKey = $(this).attr('data-rtec-custom-key');
+                            $(this).html('<input class="rtec-custom-input" type="text" name="'+fieldKey+'" data-original="'+currentVal+'" value="'+currentVal+'">');
+                        }
+                    }
+                });
             }
-
-            addBackRowData($editingClosestRegRow,'.rtec-reg-date','.rtec-reg-date button');
-            addBackRowData($editingClosestRegRow,'.rtec-reg-last','.rtec-reg-last input');
-            addBackRowData($editingClosestRegRow,'.rtec-reg-first','.rtec-reg-first input');
-            addBackRowData($editingClosestRegRow,'.rtec-reg-email','.rtec-reg-email input');
-            addBackRowData($editingClosestRegRow,'.rtec-reg-phone','.rtec-reg-phone input');
-            addBackRowData($editingClosestRegRow,'.rtec-reg-other','.rtec-reg-other input');
-            $editingClosestRegRow.find('td').each(function() {
-                if ($(this).hasClass('rtec-reg-custom')) {
-                    var html = $(this).find('input').attr('data-rtec-val');
-                    $(this).removeClass('rtec-custom-editing').html(html);
-                }
-            });
-            $rtecEditing.removeClass('rtec-editing');
-
-            $('.rtec-edit-registration').text('Edit Selected');
-
-        }
-
-    }); // edit registration click
-
-    $body.on('click', '.rtec-submit-edit', function () {
-        var $table = $(this).closest('table');
-
-        var custom = {};
-        $('.rtec-custom-editing').each(function() {
-            custom[$(this).attr('data-rtec-key')] = $(this).find('input').val();
-        });
-
-        // start spinner to show user that request is processing
-        $('.rtec-single table tbody')
-            .after('<div class="rtec-table-changing spinner is-active"></div>')
-            .fadeTo("slow", .2);
-
-        var submitData = {
-            action : 'rtec_update_registration',
-            rtec_id: $table.find('.rtec-editing').val(),
-            rtec_registration_date: $table.find('.rtec-reg-date').attr('data-rtec-val'),
-            rtec_other: $table.find('input[name=other]').val().replace("'", '`').replace(/\\/g, ""),
-            rtec_custom: JSON.stringify(custom),
-            rtec_first: $table.find('input[name=first]').val().replace("'", '`').replace(/\\/g, ""),
-            rtec_email: $table.find('input[name=email]').val().replace("'", '`').replace(/\\/g, ""),
-            rtec_phone: $table.find('input[name=phone]').val().replace("'", '`').replace(/\\/g, ""),
-            rtec_last: $table.find('input[name=last]').val().replace("'", '`').replace(/\\/g, ""),
-            rtec_nonce : rtecAdminScript.rtec_nonce
-        },
-        successFunc = function () {
-            //reload the page on success to show the added registration
-            location.reload();
         };
+    }
 
-        rtecRegistrationAjax(submitData,successFunc);
-    }); // registration submit
 
-    $('.rtec-add-registration').click( function() {
-        var $table = $(this).closest('.rtec-single-event').find('table'),
-            $nav = $table.next();
-        // remove if input fields already displayed
-        if ($table.find('.rtec-new-registration').length) {
-            $nav.find('.rtec-add-registration').text('+ Add New Registration');
-            $table.find('.rtec-new-registration').remove();
-            // otherwise show the input fields
-        } else {
-            $nav.find('.rtec-add-registration').text('- Remove Add New Registration');
-            var customNamesHtml = '';
-            $table.find('thead').find('th:gt(5)').each(function() {
-                customNamesHtml += '<td><input type="text" name="'+$(this).text()+'" id="'+$(this).text()+'" class="rtec-custom-add-new" placeholder="'+$(this).text()+'" /></td>';
-            });
-            $table.find('tbody')
-                .append(
-                    '<tr class="format-standard rtec-new-registration">' +
-                        '<td></td>' +
-                        '<td><button class="button-primary rtec-submit-new">Submit Entry</button></td>' +
-                        '<td><input type="text" name="last" id="last" placeholder="Last" /></td>' +
-                        '<td><input type="text" name="first" id="first" placeholder="First" /></td>' +
-                        '<td><input type="email" name="email" id="email" placeholder="you@example.com" /></td>' +
-                        '<td><input type="tel" name="phone" id="phone" placeholder="4445556666" /></td>' +
-                        '<td><input type="text" name="other" id="other" placeholder="Other" /></td>' +
-                        customNamesHtml +
-                    '</tr>'
-                );
+    function rtecRegistrationAjax(submitData,successFunc) {
+        successFunc = function(data) { console.log(data)};
+        $.ajax({
+            url: rtecAdminScript.ajax_url,
+            type: 'post',
+            data: submitData,
+            success: successFunc
+        });
+        console.log(submitData);
+
+    }
+
+    $('.rtec-action').click(function() {
+
+        if ($(this).attr('data-rtec-action') === 'delete') {
+            var idsToRemove = RtecRecordsEditor.getChecked();
+
+            // if registrations_to_be_deleted is not empty
+            if (idsToRemove.length) {
+                // give a warning to the user that this cannot be undone
+                if (confirm(idsToRemove.length + ' registrations to be deleted. This cannot be undone.')) {
+                    RtecRecordsEditor.removeEntries(idsToRemove);
+                }
+
+            } // if registrations to be deleted is not empty
+        } else if ($(this).hasClass('rtec-undo')) {
+            $(this).removeClass('rtec-undo');
+            RtecRecordsEditor.undoAll();
+        } else if ($(this).attr('data-rtec-action') === 'add') {
+            $(this).addClass('rtec-undo').text('Undo '+$(this).attr('data-rtec-action'));
+            RtecRecordsEditor.addEntryHtml();
+        } else if ($(this).attr('data-rtec-action') === 'edit') {
+            var ids = RtecRecordsEditor.getChecked();
+
+            $(this).addClass('rtec-undo').text('Undo '+$(this).attr('data-rtec-action'));
+            RtecRecordsEditor.editEntry(ids[0]);
         }
-    });
+
+
+    }); // action click
 
     $body.on('click', '.rtec-submit-new', function () {
-        var $table = $(this).closest('table');
-        // start spinner to show user that request is processing
-        $('.rtec-single table tbody')
-            .after('<div class="rtec-table-changing spinner is-active"></div>')
-            .fadeTo("slow", .2);
-
-        var custom = {};
-        $('.rtec-custom-add-new').each(function() {
-            custom[$(this).attr('name')] = $(this).val().replace("'", '`').replace(/\\/g, "");
-        });
-
-        var submitData = {
-                action : 'rtec_add_registration',
-                rtec_event_id: $('.rtec-single-event').attr('data-rtec-event-id'),
-                rtec_other: $table.find('input[name=other]').val().replace("'", '`').replace(/\\/g, ""),
-                rtec_custom: JSON.stringify(custom),
-                rtec_first: $table.find('input[name=first]').val().replace("'", '`').replace(/\\/g, ""),
-                rtec_email: $table.find('input[name=email]').val(),
-                rtec_phone: $table.find('input[name=phone]').val().replace(/\D/g,''),
-                rtec_last: $table.find('input[name=last]').val().replace("'", '`').replace(/\\/g, ""),
-                rtec_venue_title: $table.closest('.rtec-single-event').find('.rtec-venue-title').text().replace("'", '`').replace(/\\/g, ""),
-                rtec_end_time: $table.closest('.rtec-single-event').find('.rtec-end-time').text(),
-                rtec_nonce : rtecAdminScript.rtec_nonce
-            },
-            successFunc = function () {
-                //reload the page on success to show the added registration
-                location.reload();
-            };
-        rtecRegistrationAjax(submitData,successFunc);
+        RtecRecordsEditor.submitEntry($('.rtec-new-registration'), 'add');
     }); // registration submit
-
-    $('.rtec_download_csv').click( function() {
-        var submitData = {
-                action : 'rtec_download_csv'
-            },
-            successFunc = function () {
-                console.log('done');
-            };
-        rtecRegistrationAjax(submitData,successFunc);
+    $body.on('click', '.rtec-submit-edit', function () {
+        RtecRecordsEditor.submitEntry($('.rtec-editing'), 'edit');
     });
+
 });

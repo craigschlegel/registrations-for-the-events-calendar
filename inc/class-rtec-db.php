@@ -54,24 +54,59 @@ class RTEC_Db
 	 * @since 1.0
 	 * @param $data
 	 */
-	public function insert_entry( $data, $from_form = true )
+	public function insert_entry( $data, $field_attributes, $from_form = true )
 	{
 		global $wpdb;
 
 		$now = date( "Y-m-d H:i:s" );
-		$event_id = isset( $data['rtec_event_id'] ) ? $data['rtec_event_id'] : '';
-		$registration_date = isset( $data['rtec_entry_date'] ) ? $data['rtec_entry_date'] : $now;
-		$last = isset( $data['rtec_last'] ) ? str_replace( "'", '`', $data['rtec_last'] ) : '';
-		$first = isset( $data['rtec_first'] ) ? str_replace( "'", '`', $data['rtec_first'] ) : '';
-		$email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
-		$venue = isset( $data['rtec_venue_title'] ) ? $data['rtec_venue_title'] : '';
-		$phone = isset( $data['rtec_phone'] ) ? preg_replace( '/[^0-9]/', '', $data['rtec_phone'] ) : '';
-		$other = isset( $data['rtec_other'] ) ? str_replace( "'", '`', $data['rtec_other'] ) : '';
-		$custom = rtec_serialize_custom_data( $data, $from_form );
-		$status = isset( $data['rtec_status'] ) ? $data['rtec_status'] : 'n';
+		$event_id = isset( $data['event_id'] ) ? $data['event_id'] : '';
+		$registration_date = isset( $data['entry_date'] ) ? $data['entry_date'] : $now;
+
+		if ( isset( $data['last'] ) ) {
+			$last = str_replace( "'", '`', $data['last'] );
+		} else {
+			$last = isset( $data['last_name'] ) ? str_replace( "'", '`', $data['last_name'] ) : '';
+		}
+
+		if ( isset( $data['first'] ) ) {
+			$first = str_replace( "'", '`', $data['first'] );
+		} else {
+			$first = isset( $data['first_name'] ) ? str_replace( "'", '`', $data['first_name'] ) : '';
+		}
+
+		$email = isset( $data['email'] ) ? $data['email'] : '';
+		$venue = isset( $data['venue'] ) ? $data['venue'] : '';
+		$phone = isset( $data['phone'] ) ? preg_replace( '/[^0-9]/', '', $data['phone'] ) : '';
+		$other = isset( $data['other'] ) ? str_replace( "'", '`', $data['other'] ) : '';
+		$custom = rtec_serialize_custom_data( $data, $field_attributes, $from_form );
+		$status = isset( $data['status'] ) ? $data['status'] : 'n';
 		$wpdb->query( $wpdb->prepare( "INSERT INTO $this->table_name
           ( event_id, registration_date, last_name, first_name, email, venue, phone, other, custom, status ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %s, %s, %s )",
 			$event_id, $registration_date, $last, $first, $email, $venue, $phone, $other, $custom, $status ) );
+
+	}
+
+	/**
+	 * Get a hard count of the number of registrations currently
+	 * in the database for the give id
+	 *
+	 * @param $event_id int   post ID for the event
+	 *
+	 * @return int      number registered
+	 * @since 1.0
+	 */
+	public function get_registration_count( $event_id, $form_id = 1 )
+	{
+		global $wpdb;
+
+		$num_registered = $wpdb->get_results( $wpdb->prepare( "SELECT event_id, COUNT(*) AS num_registered
+            FROM $this->table_name WHERE event_id = %d", $event_id ), ARRAY_A );
+
+		$count = isset( $num_registered[0] ) ? $num_registered[0]['num_registered'] : 0;
+
+		$count = ! is_null( $count ) ? $count : 0;
+
+		return $count;
 	}
 
 	/**
@@ -85,6 +120,14 @@ class RTEC_Db
 	{
 		$new = (int)$current + (int)$num;
 		update_post_meta( $id, '_RTECnumRegistered', $new );
+	}
+
+	public function update_num_registered_meta_for_event( $event_id )
+	{
+		$event_meta = rtec_get_event_meta( $event_id );
+		$num_registered_event = $this->get_registration_count( $event_id, $event_meta['form_id'] );
+
+		update_post_meta( $event_id, '_RTECnumRegistered', $num_registered_event );
 	}
 
 	/**
@@ -136,7 +179,8 @@ class RTEC_Db
 	 * @since 1.4   added the ability to limit entries retrieved
 	 * @since 1.6   moved to RTEC_Db class for use in the front-end registration display
 	 */
-	public function retrieve_entries( $data, $full = false, $limit = 'none' )
+
+	public function retrieve_entries( $data, $full = false, $limit = 'none', $arrange = 'DESC' )
 	{
 		global $wpdb;
 
@@ -144,7 +188,6 @@ class RTEC_Db
 		if ( ! is_array( $fields ) ) {
 			$fields = explode( ',', str_replace( ' ', '', $fields ) );
 		}
-
 		$standard_fields = array( 'id', 'event_id', 'registration_date', 'last_name', 'first_name', 'last', 'first', 'email', 'venue', 'other', 'custom', 'phone', 'status' );
 		$request_fields = array();
 		$custom_flag = 0;
@@ -153,10 +196,11 @@ class RTEC_Db
 
 		foreach ( $fields as $field ) {
 
-			if ( in_array( $field, $standard_fields ) ) {
+			if ( in_array( $field, $standard_fields, true ) ) {
 				if ( $field === 'first' || $field === 'last' ) {
 					$field .= '_name';
 				}
+				//if ( isset( $args['join']))
 				$request_fields[] = $field;
 			} else {
 				$custom_flag++;
@@ -169,35 +213,62 @@ class RTEC_Db
 		}
 
 		$fields = implode( ',' , $request_fields );
+
 		$where_clause = $this->build_escaped_where_clause( $data['where'] );
 		$order_by = isset( $data['order_by'] ) ? $data['order_by'] : 'last_name';
 		$type = ARRAY_A;
 
-		$sql = sprintf(
-			"
-            SELECT %s
-            FROM %s
-            WHERE $where_clause
-            ORDER BY %s DESC%s;
-            ",
-			esc_sql( $fields ),
-			esc_sql( $this->table_name ),
-			esc_sql( $order_by ),
-			esc_sql( $limit_string )
-		);
+		if ( ! isset( $data['join'] ) ) {
+			$sql = sprintf(
+				"
+                SELECT %s
+                FROM %s
+				WHERE $where_clause
+                ORDER BY %s DESC%s;
+                ",
+				esc_sql( $fields ),
+				esc_sql( $this->table_name ),
+				esc_sql( $order_by ),
+				esc_sql( $limit_string )
+			);
+		} else {
+
+			$join_table = esc_sql( $wpdb->prefix . $data['join'][1] );
+			$join_type = esc_sql( $data['join'][0] );
+			$join_on = "$join_table.".esc_sql( $data['join'][2] ). " = $this->table_name.".esc_sql( $data['join'][2] );
+			$sql = sprintf(
+				"
+                SELECT %s
+                FROM %s
+                $join_type JOIN $join_table ON $join_on
+                ORDER BY %s DESC%s;
+                ",
+				esc_sql( $fields ),
+				esc_sql( $this->table_name ),
+				esc_sql( $order_by ),
+				esc_sql( $limit_string )
+			);
+		}
 
 		$results = $wpdb->get_results( $sql, $type );
 
-		if ( $custom_flag > 0 ) {
+		if ( $custom_flag > 0 && isset( $results[0] ) ) {
 			$i = 0;
+
+			$form = new RTEC_Form();
+
+			$event_id = isset( $results[0]['event_id'] ) ? (int)$results[0]['event_id'] : (int)$_GET['id'];
+
+			$form->build_form( $event_id );
+			$fields_atts = $form->get_field_attributes();
 
 			foreach ( $results as $result ) {
 
 				if ( isset( $result['custom'] ) ) {
-					if ( ! $full ) {
-						$results[$i]['custom'] = rtec_get_parsed_custom_field_data( $result['custom'] );
+					if ( rtec_has_deprecated_data_structure( maybe_unserialize( $result['custom'] ) ) ) {
+						$results[$i]['custom'] = rtec_get_parsed_custom_field_data( $result['custom'], $fields_atts );
 					} else {
-						$results[$i]['custom'] = $result['custom'];
+						$results[$i]['custom'] = rtec_get_parsed_custom_field_data_full_structure( $result['custom'] );
 					}
 				}
 

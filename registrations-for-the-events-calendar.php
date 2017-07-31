@@ -185,6 +185,9 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
             if ( ! defined( 'RTEC_TRIBE_MENU_PAGE' ) ) {
                 define( 'RTEC_TRIBE_MENU_PAGE', 'edit.php?post_type=tribe_events' );
             }
+	        if ( ! defined( 'RTEC_ADMIN_URL' ) ) {
+		        define( 'RTEC_ADMIN_URL', 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings' );
+	        }
         }
 
 	    /**

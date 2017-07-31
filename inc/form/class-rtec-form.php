@@ -64,8 +64,12 @@ class RTEC_Form
 	 */
 	private $ical_url;
 
-	public function build_form()
+	public function build_form( $event_id = '' )
 	{
+		if ( $event_id !== '' ) {
+			$this->set_event_meta( $event_id );
+		}
+
 		$fields_results = $this->get_form_field_data_from_db();
 		$manually_added_fields = array();
 		$manually_added_fields = apply_filters( 'rtec_add_new_field', $manually_added_fields );
@@ -378,7 +382,7 @@ class RTEC_Form
 			// recaptcha field calculations for spam check
 			if ( isset( $rtec_options['recaptcha_require'] ) && $rtec_options['recaptcha_require'] )  {
 				$i++;
-				$fields_data[ $i  ]['field_name'] = 'recaptcha';
+				$fields_data[ $i ]['field_name'] = 'recaptcha';
 				$fields_data[ $i ]['field_type'] = 'text';
 				$fields_data[ $i ]['valid_type'] = 'recaptcha';
 				$fields_data[ $i ]['valid_params'] = array();

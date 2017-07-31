@@ -34,7 +34,7 @@ $admin_registrations->the_registrations_overview();
 rtec_the_admin_notices();
 
 ?>
-	<h1><?php _e( 'Overview', 'registrations-for-the-events-calendar-pro' ); ?></h1>
+	<h1><?php _e( 'Overview', 'registrations-for-the-events-calendar' ); ?></h1>
 
 <?php do_action( 'rtec_registrations_tab_after_the_title' ); ?>
 

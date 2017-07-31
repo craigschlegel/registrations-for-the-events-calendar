@@ -59,28 +59,46 @@ class RTEC_Db_Admin extends RTEC_Db
      * @param $custom_data array    custom data to be updated
      * @since 1.0
      */
-    public function update_entry( $data, $custom_data = '' )
-    {
-        global $wpdb;
+	public function update_entry( $data, $entry_id = '', $field_atts )
+	{
+		global $wpdb;
 
-        $id = isset( $data['rtec_id'] ) ? $data['rtec_id'] : '';
-	    $last = isset( $data['rtec_last'] ) ? str_replace( "'", '`', $data['rtec_last'] ) : '';
-	    $first = isset( $data['rtec_first'] ) ? str_replace( "'", '`', $data['rtec_first'] ) : '';
-        $email = isset( $data['rtec_email'] ) ? $data['rtec_email'] : '';
-	    $phone = isset( $data['rtec_phone'] ) ? $data['rtec_phone'] : '';
-	    $other = isset( $data['rtec_other'] ) ? str_replace( "'", '`', $data['rtec_other'] ) : '';
+		$set_string = '';
+		var_dump( $data);
 
-	    $custom = $this->get_custom_data( $id );
-	    $custom = $this->update_custom_data_for_db( $custom, $custom_data );
+		foreach ( $data as $key => $value ) {
 
-        if ( ! empty( $id ) ) {
-            $wpdb->query( $wpdb->prepare( "UPDATE $this->table_name
-                SET last_name=%s, first_name=%s, email=%s, phone=%s, other=%s, custom=%s
-                WHERE id=%d",
-                $last, $first, $email, $phone, $other, $custom, $id ) );
-        }
+			if ( $key !== 'event_id' || $key !== 'id' ) {
 
-    }
+				if ( $key !== 'custom' ) {
+					$set_string .= esc_sql( $key ) . "='" . esc_sql( str_replace( "'", '`', $value ) ). "', ";
+				} else {
+					$custom = $this->get_custom_data( $entry_id );
+
+					$custom = $this->update_custom_data_for_db( $custom, $data['custom'], $field_atts );
+					var_dump( $custom);
+
+					$set_string .= "custom='" . esc_sql( $custom ) . "', ";
+				}
+
+			}
+
+		}
+
+		$set_string = substr( $set_string, 0, -2 );
+		$esc_table_name = esc_sql( $this->table_name );
+
+		$int_entry_id = (int)$entry_id;
+
+		if ( ! empty( $entry_id ) ) {
+			$sql = "UPDATE $esc_table_name
+            SET $set_string
+            WHERE id=$int_entry_id";
+			$wpdb->query( "UPDATE $esc_table_name
+            SET $set_string
+            WHERE id=$int_entry_id" );
+		}
+	}
 
     public function get_custom_data( $id )
     {
@@ -92,16 +110,19 @@ class RTEC_Db_Admin extends RTEC_Db
 	    return maybe_unserialize( $results[0]['custom'] );
     }
 
-    public function update_custom_data_for_db( $db_custom, $new_custom )
-    {
+	public function update_custom_data_for_db( $db_custom, $new_custom, $field_atts )
+	{
 		if ( ! empty( $new_custom ) ) {
 			foreach ( $new_custom as $key => $value ) {
-				$db_custom[$key] = $value;
+				$db_custom[$key] = array(
+					'value' => $value,
+					'label' => $field_atts[$key]['label']
+				);
 			}
 		}
 
 		return maybe_serialize( $db_custom );
-    }
+	}
 
     /**
      * Removes a set of records from the dashboard
@@ -183,7 +204,7 @@ class RTEC_Db_Admin extends RTEC_Db
      * @return int      number registered
      * @since 1.0
      */
-    public function get_registration_count( $id )
+    public function get_registration_count( $id, $form_id = 1 )
     {
         global $wpdb;
 
@@ -220,6 +241,37 @@ class RTEC_Db_Admin extends RTEC_Db
 
         return $event_ids;
     }
+
+	public function get_matches( $term, $columns )
+	{
+		global $wpdb;
+
+		$where_clause = '';
+		if ( is_array( $columns ) ) {
+			$i = 1;
+			$size = count( $columns );
+
+			foreach ( $columns as $column ) {
+				$where_clause .= esc_sql( $column ) . ' LIKE "%' . esc_sql( $term ) . '%"';
+
+				if ( $size > $i ) {
+					$where_clause .= ' OR ';
+				}
+
+				$i++;
+			}
+
+		} else {
+			$where_clause .= $columns . 'LIKE %' . $term . '%';
+		}
+
+		$table_name = esc_sql( $this->table_name );
+
+		$matches = $wpdb->get_results( "SELECT *
+        FROM $table_name WHERE $where_clause ORDER BY id DESC LIMIT 200", ARRAY_A );
+
+		return $matches;
+	}
 
 	/**
 	 * Used to update the database to accommodate new columns added since release

@@ -408,108 +408,312 @@ function rtec_should_show( $view, $disabled_status ) {
 }
 
 /**
- * Used to remove registrations from the dashboard
+ * Used to edit, add, and delete registrations from the dashboard
  *
- * @since 1.0
- * @since 1.3 changed so only the current event's count is recalculated
+ * @since 2.0
  */
-function rtec_delete_registrations()
+function rtec_records_edit()
 {
 	$nonce = $_POST['rtec_nonce'];
-	$id = $_POST['rtec_event_id'];
+	$action = sanitize_text_field( $_POST['edit_action'] );
 
 	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
 		die ( 'You did not do this the right way!' );
 	}
 
-	$registrations_to_be_deleted = array();
+	$event_id = (int)$_POST['event_id'];
+	$venue = (string)$_POST['venue'];
+	$entry_id = isset( $_POST['entry_id'] ) ? (int)$_POST['entry_id'] : false;
+	$event_meta = rtec_get_event_meta( $event_id );
 
-	foreach ( $_POST['registrations_to_be_deleted'] as $registration ) {
-		$registrations_to_be_deleted[] = sanitize_text_field( $registration );
+	require_once RTEC_PLUGIN_DIR . 'inc/form/class-rtec-form.php';
+
+	$form = new RTEC_Form();
+
+	$form->build_form( $event_id );
+	$fields_atts = $form->get_field_attributes();
+
+	require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-db.php';
+	require_once RTEC_PLUGIN_DIR . 'inc/admin/class-rtec-db-admin.php';
+	$db = new RTEC_Db_Admin();
+
+	switch ( $action ) {
+		case 'delete' :
+			$registrations_to_be_deleted = array();
+
+			foreach ( $_POST['registrations_to_be_deleted'] as $registration ) {
+				$registrations_to_be_deleted[] = sanitize_text_field( $registration );
+			}
+
+			$db->remove_records( $registrations_to_be_deleted );
+			break;
+		case 'add' :
+			$data = array();
+
+			foreach( $_POST as $key => $value ) {
+				if ( $key === 'custom' ) {
+					$data['custom'] = json_decode( stripslashes( $_POST['custom'] ), true );
+				} elseif ( $key === 'standard' ) {
+					$standard = json_decode( stripslashes( $_POST['standard'] ), true );
+					foreach ( $standard as $key_2 => $value_2 ) {
+						$data[ $key_2 ] = sanitize_text_field( $value_2 );
+					}
+				}
+			}
+
+			$data['status'] = 'c';
+			$data['event_id'] = $event_id;
+
+			if ( !isset( $data['venue'] ) ) {
+				$data['venue'] = $venue;
+			}
+
+			$db->insert_entry( $data, $fields_atts, false );
+			break;
+		case 'edit' :
+			$data = array();
+
+			foreach( $_POST as $key => $value ) {
+				if ( $key === 'custom' ) {
+					$data['custom'] = json_decode( stripslashes( $_POST['custom'] ), true );
+				} elseif ( $key === 'standard' ) {
+					$standard = json_decode( stripslashes( $_POST['standard'] ), true );
+					foreach ( $standard as $key_2 => $value_2 ) {
+						$data[ $key_2 ] = sanitize_text_field( $value_2 );
+					}
+				}
+			}
+
+			$data['event_id'] = $event_id;
+
+			if ( !isset( $data['venue'] ) ) {
+				$data['venue'] = $venue;
+			}
+			$db->update_entry( $data, $entry_id, $fields_atts );
+
+			break;
+		default :
+			die( 'incorrect action' );
+	}
+
+	$db->update_num_registered_meta_for_event( $event_id );
+	$new_count = $db->get_registration_count( $event_id, 0 );
+
+	echo $new_count;
+
+	die();
+}
+add_action( 'wp_ajax_rtec_records_edit', 'rtec_records_edit' );
+
+function rtec_update_status() {
+	$nonce = $_POST['rtec_nonce'];
+
+	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
+		die ( 'You did not do this the right way!' );
+	}
+
+	$db = new RTEC_Db();
+
+	$entry_ids = $_POST['entry_ids'];
+
+	$db->update_statuses( $entry_ids, $current = 'p', $updated = 'c', $column = 'id' );
+
+	die();
+}
+add_action( 'wp_ajax_rtec_update_status', 'rtec_update_status' );
+
+/**
+ * Export registrations for a single event
+ *
+ * @since 2.0
+ */
+function rtec_event_csv() {
+	if ( isset( $_POST['rtec_event_csv'] ) && current_user_can( 'edit_posts' ) ) {
+
+		$nonce = $_POST['rtec_csv_export_nonce'];
+
+		if ( ! wp_verify_nonce( $nonce, 'rtec_csv_export' ) ) {
+			die ( 'You did not do this the right way!' );
+		}
+
+		require_once RTEC_PLUGIN_DIR . 'vendor/ForceUTF8/Encoding.php';
+		$rtec = RTEC();
+		$form = $rtec->form->instance();
+
+		$encoding = new RTEC_Encoding();
+		$event_obj = new RTEC_Admin_Event();
+		$form->build_form( (int)$_GET['id'] );
+
+		$event_obj->build_admin_event( (int)$_GET['id'], 'csv', $_GET['mvt'], $form );
+		$event_meta = $event_obj->event_meta;
+		$venue_title = $event_meta['venue_title'];
+
+		if ( $event_obj->mvt_label !== '' ) {
+			$venue_title .= ' - ' . $event_obj->mvt_label;
+		}
+
+		$event_meta_string = array(
+			array( $event_meta['title'] ) ,
+			array( date_i18n( 'F jS, g:i a', strtotime( $event_meta['start_date'] ) ) ),
+			array( date_i18n( 'F jS, g:i a', strtotime( $event_meta['end_date'] ) ) ),
+			array( $venue_title ),
+			$event_obj->labels
+		);
+
+		$file_name = str_replace( ' ', '-', substr( $event_meta['title'], 0, 10 ) ) . '_' . str_replace( ' ', '-', substr( $event_meta['venue_title'], 0, 10 ) ) . '_'  . date_i18n( 'm.d', strtotime( $event_meta['start_date'] ) );
+
+		// output headers so that the file is downloaded rather than displayed
+		header( 'Content-Encoding: UTF-8' );
+		header( 'Content-type: text/csv; charset=UTF-8' );
+		header( 'Content-Disposition: attachment; filename=' . $file_name . '.csv' );
+		echo "\xEF\xBB\xBF"; // UTF-8 BOM
+
+		// create a file pointer connected to the output stream
+		$output = fopen( 'php://output', 'w' );
+		foreach ( $event_meta_string as $meta ) {
+			fputcsv( $output, $meta );
+		}
+		foreach ( $event_obj->registrants_data as $registration ) {
+
+			$formatted_registration = array( 'registration_date' => $registration['registration_date'] );
+
+			if ( $event_obj->event_meta['mvt_enabled'] && isset( $registration['venue'] ) && isset( $event_meta['mvt_fields'][ $registration['venue'] ]['label'] ) ) {
+				$formatted_registration['venue'] = $event_meta['mvt_fields'][ $registration['venue'] ]['label'];
+			} elseif ( $event_obj->event_meta['mvt_enabled'] &&  $event_obj->mvt === '' || $event_obj->mvt === '_unassigned' ) {
+				$formatted_registration['venue']  = $event_meta['venue_title'];
+			}
+
+			foreach ( $event_obj->column_label as $column => $label ) {
+
+				if ( $column === 'venue' ) {
+					if ( isset( $event_meta['mvt_fields'][ $registration[ $column ] ]['label'] ) ) {
+						$formatted_registration[$column] = $encoding->fixUTF8( $event_meta['mvt_fields'][ $registration[ $column ] ]['label'] );
+					} else {
+						$formatted_registration[$column] = stripslashes( $registration[ $column ] );
+					}
+				} elseif ( isset( $registration[$column] ) ) {
+					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration[$column] ) );
+				} else if ( isset( $registration[$column.'_name'] ) ) {
+					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration[$column.'_name'] ) );
+				} else if ( isset( $registration['custom'][$label] ) ) {
+					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration['custom'][$label] ) );
+				} else if ( isset( $registration['custom'][$column] ) ) {
+					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration['custom'][$column]['value'] ) );
+				}
+
+			}
+
+			fputcsv( $output, $formatted_registration );
+
+		}
+
+		fclose( $output );
+
+		die();
+	}
+}
+add_action( 'admin_init', 'rtec_event_csv' );
+
+function rtec_get_search_results() {
+	global $rtec_options;
+
+	$nonce = $_POST['rtec_nonce'];
+
+	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
+		die ( 'You did not do this the right way!' );
 	}
 
 	$db = new RTEC_Db_Admin();
+	$term = sanitize_text_field( $_POST['term'] );
 
-	$db->remove_records( $registrations_to_be_deleted );
-
-	$reg_count = $db->get_registration_count( $id );
-
-	update_post_meta( $id, '_RTECnumRegistered', $reg_count );
-
-	echo $reg_count;
-
-	die();
-}
-add_action( 'wp_ajax_rtec_delete_registrations', 'rtec_delete_registrations' );
-
-/**
- * Used to manually add a registration from the dashboard
- *
- * @since 1.0
- * @since 1.3 changed so only the current event's count is recalculated
- */
-function rtec_add_registration()
-{
-	$nonce = $_POST['rtec_nonce'];
-	$id = $_POST['rtec_event_id'];
-
-	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
-		die ( 'You did not do this the right way!' );
+	$search_array = array( 'last_name', 'first_name' );
+	if ( preg_match( '/\.|@/', $term ) === 1 ) {
+		$search_array = array( 'email' );
+	}
+	if ( preg_match( '/\d/', $term ) === 1 ) {
+		$search_array[] = 'phone';
 	}
 
-	$data = array();
+	$matches = $db->get_matches( $term, $search_array );
 
-	foreach( $_POST as $key => $value ) {
-		if ( $key === 'rtec_custom' ) {
-			$data[$key] = json_decode( str_replace( '\"', '"', sanitize_text_field( $_POST['rtec_custom'] ) ), true );
-		} else {
-			$data[$key] = sanitize_text_field( $value );
-		}
+	$table_columns = array( 'first_name', 'last_name', 'email', 'phone' ); //, 'event_id', 'venue'
+	$labels = array();
+	foreach ( $table_columns as $table_column ) {
+		$labels[] = isset( $rtec_options[ str_replace( '_name', '', $table_column ) . '_label' ] ) ? $rtec_options[ str_replace( '_name', '', $table_column )  . '_label' ] : '';
 	}
 
-	if ( ( time() - strtotime( $data['rtec_end_time'] ) ) > 0 ) {
-		$data['rtec_status'] = 'p';
+	$WP_offset = get_option( 'gmt_offset' );
+
+	if ( ! empty( $WP_offset ) ) {
+		$tz_offset = $WP_offset * HOUR_IN_SECONDS;
 	} else {
-		$data['rtec_status'] = 'c';
+		$timezone = isset( $options['timezone'] ) ? $options['timezone'] : 'America/New_York';
+		// use php DateTimeZone class to handle the date formatting and offsets
+		$date_obj = new DateTime( date( 'm/d g:i a' ), new DateTimeZone( "UTC" ) );
+		$date_obj->setTimeZone( new DateTimeZone( $timezone ) );
+		$utc_offset = $date_obj->getOffset();
+		$tz_offset = $utc_offset;
 	}
 
-	$new_reg = new RTEC_Db_Admin();
-	$new_reg->insert_entry( $data, false );
+	?>
+	<table class="widefat rtec-registrations-data">
+		<thead>
+		<tr>
+			<th>Registration Date</th>
+			<?php foreach ( $labels as $label ) : ?>
+				<th><?php echo esc_html( $label ); ?></th>
+			<?php endforeach; ?>
+			<th>Event</th>
+			<th>Start Date</th>
+			<th>Venue/Tier</th>
+		</tr>
+		</thead>
+		<tbody>
+		<?php
 
-	$reg_count = $new_reg->get_registration_count( $id );
-	update_post_meta( $id, '_RTECnumRegistered', $reg_count );
+		if ( ! empty( $matches ) ) : foreach( $matches as $registration ) :
+			$event_meta = rtec_get_event_meta( $registration['event_id'] );
 
+			?>
+
+			<tr>
+				<td class="rtec-first-data">
+					<?php if ( $registration['status'] == 'n' ) {
+						echo '<span class="rtec-notice-new">' . _( 'new' ) . '</span>';
+					}
+					echo esc_html( date_i18n( 'm/d g:i a', strtotime( $registration['registration_date'] ) + $tz_offset ) ); ?>
+				</td>
+				<?php foreach ( $table_columns as $column ) : ?>
+					<td><?php
+						if ( isset( $registration[$column] ) ) {
+
+							if ( $column === 'phone' ) {
+								echo esc_html( rtec_format_phone_number( str_replace( '\\', '', $registration[$column] ) ) );
+							} else {
+								echo esc_html( str_replace( '\\', '', $registration[$column] ) );
+							}
+
+						}
+						?></td>
+				<?php endforeach; ?>
+				<td><a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo esc_attr( $event_meta['post_id'] ); ?>&record=<?php echo esc_attr( $registration['id'] ) ?>mvt=<?php echo esc_attr( '' ); ?>"><?php echo  esc_html( $event_meta['title'] ); ?></a></td>
+				<td><?php echo date_i18n( 'F jS, g:i a', strtotime( $event_meta['start_date'] ) ); ?></td>
+			</tr>
+		<?php endforeach; // registration ?>
+
+		<?php else: ?>
+
+			<tr>
+				<td colspan="4" align="center"><?php _e( 'No Registrations Yet', 'registrations-for-the-events-calendar-pro' ); ?></td>
+			</tr>
+
+		<?php endif; // registrations not empty ?>
+		</tbody>
+	</table>
+	<?php
 	die();
 }
-add_action( 'wp_ajax_rtec_add_registration', 'rtec_add_registration' );
-
-/**
- * Makes alterations to existing registrations in the dashboard
- *
- * @since 1.0
- */
-function rtec_update_registration()
-{
-	$nonce = $_POST['rtec_nonce'];
-
-	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
-		die ( 'You did not do this the right way!' );
-	}
-
-	$custom_data = json_decode( str_replace( '\"', '"', sanitize_text_field( $_POST['rtec_custom'] ) ), true );
-	$data = array();
-
-	foreach( $_POST as $key => $value ) {
-		$data[$key] = esc_sql( $value );
-	}
-
-	$edit_reg = new RTEC_Db_Admin();
-	$edit_reg->update_entry( $data, $custom_data );
-
-	die();
-}
-add_action( 'wp_ajax_rtec_update_registration', 'rtec_update_registration' );
-
+add_action( 'wp_ajax_rtec_get_search_results', 'rtec_get_search_results' );
 
 /**
  * Some CSS and JS needed in the admin area as well
@@ -517,24 +721,33 @@ add_action( 'wp_ajax_rtec_update_registration', 'rtec_update_registration' );
  * @since 1.0
  */
 function rtec_admin_scripts_and_styles() {
-
 	wp_enqueue_style( 'rtec_admin_styles', trailingslashit( RTEC_PLUGIN_URL ) . 'css/rtec-admin-styles.css', array(), RTEC_VERSION );
-	wp_enqueue_script( 'jquery-ui-core ');
-	wp_enqueue_script( 'jquery-ui-datepicker' );
-	wp_enqueue_style( 'jquery-ui-datepicker' );
-	wp_enqueue_script( 'tribe-jquery-timepicker' );
-	wp_enqueue_style( 'tribe-jquery-timepicker-css' );
-	$dependencies = array( 'jquery', 'jquery-ui-datepicker', 'tribe-jquery-timepicker' );
 
-	wp_enqueue_script( 'rtec_admin_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-scripts.js', $dependencies, RTEC_VERSION, false );
-	wp_localize_script( 'rtec_admin_scripts', 'rtecAdminScript',
-		array(
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'rtec_nonce' => wp_create_nonce( 'rtec_nonce' )
-		)
-	);
-	wp_enqueue_style( 'wp-color-picker' );
-	wp_enqueue_script( array( 'wp-color-picker' ) );
+	if ( isset( $_GET['page'] ) && $_GET['page'] === 'registrations-for-the-events-calendar/_settings' ) {
+
+		wp_enqueue_script( 'rtec_admin_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-scripts.js', array( 'jquery', 'jquery-ui-datepicker','tribe-jquery-timepicker' ), RTEC_VERSION, false );
+		wp_localize_script( 'rtec_admin_scripts', 'rtecAdminScript',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'rtec_nonce' => wp_create_nonce( 'rtec_nonce' )
+			)
+		);
+		wp_enqueue_style( 'rtec_font_awesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), '4.6.3' );
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script( 'wp-color-picker' );
+		wp_enqueue_script( 'jquery-ui-core ');
+		wp_enqueue_script( 'jquery-ui-datepicker' );
+		wp_enqueue_style( 'jquery-ui-datepicker' );
+		wp_enqueue_script( 'tribe-jquery-timepicker' );
+		wp_enqueue_style( 'tribe-jquery-timepicker-css' );
+
+	} else {
+		wp_enqueue_script( 'rtec_admin_edit_event_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-edit-event-scripts.js', array( 'jquery' ), RTEC_VERSION, false );
+		wp_enqueue_script( 'jquery-ui-datepicker' );
+		wp_enqueue_style( 'jquery-ui-datepicker' );
+		wp_enqueue_script( 'tribe-jquery-timepicker' );
+		wp_enqueue_style( 'tribe-jquery-timepicker-css' );
+	}
 }
 add_action( 'admin_enqueue_scripts', 'rtec_admin_scripts_and_styles' );
 
@@ -566,97 +779,6 @@ function rtec_plugin_meta_links( $links, $file ) {
 	return $links;
 }
 add_filter( 'plugin_row_meta', 'rtec_plugin_meta_links', 10, 2 );
-
-/**
- * Export registrations for a single event
- *
- * @since 1.3
- */
-function rtec_event_csv() {
-	if ( isset( $_POST['rtec_event_csv'] ) && current_user_can( 'edit_posts' ) ) {
-
-		$nonce = $_POST['rtec_csv_export_nonce'];
-
-		if ( ! wp_verify_nonce( $nonce, 'rtec_csv_export' ) ) {
-			die ( 'You did not do this the right way!' );
-		}
-		global $rtec_options;
-
-		$db = new RTEC_Db_Admin();
-		$id = (int)$_POST['rtec_id'];
-
-		$data = array(
-			'fields' => 'last_name, first_name, email, phone, other, custom',
-			'where' => array(
-				array( 'event_id', $id, '=', 'int' ),
-			),
-			'order_by' => 'registration_date'
-		);
-
-		$registrations = $db->retrieve_entries( $data, false );
-
-		$meta = get_post_meta( $id );
-
-		$event_meta['post_id'] = $id;
-		$event_meta['title'] = get_the_title( $id );
-		$event_meta['start_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventStartDate'][0] ) );
-		$event_meta['end_date'] = date_i18n( 'F jS, g:i a', strtotime( $meta['_EventEndDate'][0] ) );
-		$venue = rtec_get_venue( $id );
-
-		$labels = rtec_get_event_columns( false );
-
-		$event_meta_string = array(
-			array( $event_meta['title'] ) ,
-			array( $event_meta['start_date'] ) ,
-			array( $event_meta['end_date'] ) ,
-			array( $venue ),
-			$labels
-		);
-
-		$file_name = str_replace( ' ', '-', substr( $event_meta['title'], 0, 10 ) ) . '_' . str_replace( ' ', '-', substr( $venue, 0, 10 ) ) . '_'  . date_i18n( 'm.d', strtotime( $meta['_EventStartDate'][0] ) );
-
-		// output headers so that the file is downloaded rather than displayed
-		header( 'Content-Encoding: UTF-8' );
-		header( 'Content-type: text/csv; charset=UTF-8' );
-		header( 'Content-Disposition: attachment; filename=' . $file_name . '.csv' );
-		echo "\xEF\xBB\xBF"; // UTF-8 BOM
-
-		// create a file pointer connected to the output stream
-		$output = fopen( 'php://output', 'w' );
-		foreach ( $event_meta_string as $meta ) {
-
-			if ( function_exists( 'mb_convert_variables' ) ) {
-				mb_convert_variables( 'UTF-8', 'UTF-8', $meta );
-			}
-
-			fputcsv( $output, $meta );
-		}
-
-		foreach ( $registrations as $col => $val ) {
-
-			if ( function_exists( 'mb_convert_variables' ) ) {
-				mb_convert_variables( 'UTF-8', 'UTF-8', $col );
-			}
-
-			if ( isset( $val['custom'] ) ) {
-				$custom_arr = maybe_unserialize( $val['custom'] );
-				if ( is_array( $custom_arr ) ) {
-					foreach ( $custom_arr as $key => $value ) {
-						$val[$key] = $value;
-					}
-				}
-				unset( $val['custom'] );
-			}
-
-			fputcsv( $output, $val );
-		}
-
-		fclose( $output );
-
-		die();
-	}
-}
-add_action( 'admin_init', 'rtec_event_csv' );
 
 /**
  * Returns the columns for the particular event
@@ -764,42 +886,6 @@ function rtec_get_attendance_bg_color( $num_registered = 0, $event_meta ) {
 	} else {
 		return 'background-color: #23282d; color: #fff;';
 	}
-}
-
-/**
- * Takes raw custom field data and returns an associative array with labels as
- * keys
- *
- * @param $raw_data string   serialized raw custom field data
- *
- * @since 1.3
- * @return array
- */
-function rtec_get_parsed_custom_field_data( $raw_data ) {
-	global $rtec_options;
-
-	$custom_data = maybe_unserialize( $raw_data );
-
-	if ( isset( $rtec_options['custom_field_names'] ) ) {
-		$custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
-	} else {
-		$custom_field_names = array();
-	}
-
-	$parsed_data = array();
-	foreach ( $custom_field_names as $field ) {
-
-		if ( isset( $rtec_options[$field . '_label'] ) && isset( $custom_data[$rtec_options[$field . '_label']] ) ) {
-			$parsed_data[$rtec_options[$field . '_label']] = $custom_data[$rtec_options[$field . '_label']];
-		} elseif ( isset( $rtec_options[$field . '_label'] ) ) {
-			$parsed_data[$rtec_options[$field . '_label']] = '';
-		} else {
-			$parsed_data = '';
-		}
-
-	}
-
-	return $parsed_data;
 }
 
 /**

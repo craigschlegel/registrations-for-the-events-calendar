@@ -878,7 +878,7 @@ class RTEC_Admin
             $require = isset( $options[$custom_field . '_require'] ) ? $options[$custom_field . '_require'] : false;
             ?>
             <div id="rtec-custom-field-<?php echo $custom_field_id; ?>" class="rtec-field-options-wrapper rtec-custom-field"  data-name="<?php echo $custom_field; ?>">
-                <a href="JavaScript:void(0);" class="rtec-custom-field-remove">Remove X</a>
+                <a href="JavaScript:void(0);" class="rtec-custom-field-remove"><i class="fa fa-trash" aria-hidden="true"></i></a>
                 <h4>Custom Field <?php echo $custom_field_id; ?></h4>
                 <p>
                     <label>Label:</label><input type="text" name="rtec_options[<?php echo $custom_field; ?>_label]" value="<?php echo $label; ?>" class="large-text">
@@ -897,7 +897,7 @@ class RTEC_Admin
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
-        <button class="button action rtec-add-field rtec-green-bg">+ <?php _e( 'Add Field', 'registrations-for-the-events-calendar'  ); ?></button>
+        <div class="rtec-green-bg"><a href="JavaScript:void(0);" class="rtec-add-field"><i class="fa fa-plus" aria-hidden="true"></i> <?php _e( 'Add Field', 'registrations-for-the-events-calendar-pro'  ); ?></a></div>
         <input type="hidden" id="rtec_custom_field_names" name="rtec_options[custom_field_names]" value="<?php echo $custom_field_string; ?>"/>
         <?php
         // the other field is treated specially
@@ -905,7 +905,7 @@ class RTEC_Admin
         $require = isset( $options[ 'recaptcha_require' ] ) ? esc_attr( $options[ 'recaptcha_require' ] ) : false;
         $error = isset( $options[ 'recaptcha_error' ] ) ? esc_attr( $options[ 'recaptcha_error' ] ) : 'Please try again';
         ?>
-        <div class="rtec-field-options-wrapper">
+        <div class="rtec-field-options-wrapper" style="margin-top: 0.5em;">
             <h4><?php _e( 'Recaptcha', 'registrations-for-the-events-calendar' ); ?> <span>(<?php _e( 'Simple math question to avoid spam entries. Spam "honey pot" field is in the form by default', 'registrations-for-the-events-calendar' ); ?>)</span></h4>
             <p>
                 <label><?php _e( 'Custom Label: ', 'registrations-for-the-events-calendar' ); ?></label><input type="text" name="<?php echo $args['option'].'[recaptcha_label]'; ?>" value="<?php echo $label; ?>" />
