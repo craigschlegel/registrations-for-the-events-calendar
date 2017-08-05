@@ -145,6 +145,36 @@ class RTEC_Db
 	}
 
 	/**
+	 * One a registration has been seen, status changes from (n)ew to (c)urrent
+	 *
+	 * @param array $ids    event ids to be updated
+	 *
+	 * @return bool
+	 * @since 1.0
+	 * @since 1.1 new parameter allows for specific ids
+	 */
+	public function update_statuses( $ids = NULL )
+	{
+		global $wpdb;
+
+		$current = 'c';
+		$new = 'n';
+
+		if ( $ids != NULL ) {
+			$id_string = implode( ', ', $ids );
+			$query = $wpdb->prepare( "UPDATE $this->table_name SET status=%s WHERE status=%s", $current, $new );
+			$query .=  "AND event_id IN ( " . $id_string . " )";
+			$wpdb->query( $query );
+		} else {
+			$wpdb->query( $wpdb->prepare( "UPDATE $this->table_name SET status=%s WHERE status=%s", $current, $new ) );
+		}
+
+		delete_transient( 'rtec_new_registrations' );
+
+		return true;
+	}
+
+	/**
 	 * Generates the registration form with a shortcode
 	 *
 	 * @param   $email        string  registrants entered
@@ -257,7 +287,11 @@ class RTEC_Db
 
 			$form = new RTEC_Form();
 
-			$event_id = isset( $results[0]['event_id'] ) ? (int)$results[0]['event_id'] : (int)$_GET['id'];
+			$event_id = isset( $results[0]['event_id'] ) ? (int)$results[0]['event_id'] : '';
+
+			if ( $event_id === '' && isset ( $_GET['id'] ) ) {
+				$event_id = (int)$_GET['id'];
+			}
 
 			$form->build_form( $event_id );
 			$fields_atts = $form->get_field_attributes();
@@ -289,11 +323,14 @@ class RTEC_Db
 	 *
 	 * @since   1.6
 	 */
-	public function get_registrants_data( $event_meta )
+	public function get_registrants_data( $event_meta, $attendee_list_fields = array() )
 	{
-		$retrieve_fields = array( 'first_name', 'last_name' );
+		if ( empty( $attendee_list_fields ) ) {
+			$attendee_list_fields =  array( 'first_name', 'last_name' );
+		}
+
 		$args = array(
-			'fields' => $retrieve_fields,
+			'fields' => $attendee_list_fields,
 			'where' => array(
 				array( 'event_id', $event_meta['post_id'], '=', 'int' ),
 				array( 'status', '"n"', '!=', 'string' )
@@ -301,12 +338,80 @@ class RTEC_Db
 			'order_by' => 'registration_date'
 		);
 
+		$rtec = RTEC();
+		$form = $rtec->form->instance();
+		//var_dump($rtec->form->instance());
+
 		$registrants = $this->retrieve_entries( $args, false, 300, $arrange = 'DESC' );
 
 		if ( isset( $registrants[0] ) ) {
+
+			if ( isset( $registrants[0]['custom'] ) ) {
+				$i = 0;
+				$custom_label_names = $form->get_custom_fields_label_name_pairs();
+				$custom_field_name_label_pairs = array_flip( $custom_label_names );
+
+				foreach ( $registrants as $registrant ) {
+
+					foreach ( $attendee_list_fields as $retrieve_field ) {
+
+						if ( isset( $registrant['custom'][ $retrieve_field ] ) ) {
+
+							if ( isset( $registrant['custom'][ $retrieve_field ]['value'] ) ) {
+								$registrants[ $i ][ $retrieve_field ] = $registrant['custom'][ $retrieve_field ]['value'];
+							} elseif ( isset( $registrant['custom'][ $custom_field_name_label_pairs[ $retrieve_field ] ] ) ) {
+								$registrants[ $i ][ $custom_label_names[ $retrieve_field ] ] = $registrant['custom'][ $custom_field_name_label_pairs[ $retrieve_field ] ];
+							}
+
+						} elseif ( isset( $custom_field_name_label_pairs[ $retrieve_field ] ) && isset( $registrant['custom'][ $custom_field_name_label_pairs[ $retrieve_field ] ] ) ) {
+							$registrants[ $i ][ $retrieve_field ] = $registrant['custom'][ $custom_field_name_label_pairs[ $retrieve_field ] ];
+						}
+
+					}
+
+					unset( $registrants[ $i ]['custom'] );
+					$i++;
+				}
+
+			}
+
 			return $registrants;
 		} else {
 			return array();
+		}
+	}
+
+
+	public function get_custom_field_label_array( $custom_columns ) {
+		global $wpdb;
+
+		$table_name = esc_sql( $wpdb->prefix . RTEC_TABLENAME_FORM_FIELDS );
+		$size = count( $custom_columns );
+		$i = 1;
+
+		$return_results = array();
+		$in_clause = '';
+
+		foreach ( $custom_columns as $column ) {
+			$return_results[$column] = array( 'label' => '' );
+			$in_clause .= "'" . esc_sql( $column ) . "'";
+			if ( $i < $size ) {
+				$in_clause .= ',';
+			}
+			$i++;
+		}
+
+		$results = $in_clause !== '' ? $wpdb->get_results( "SELECT label, field_name FROM $table_name WHERE field_name IN ( $in_clause );", ARRAY_A ) : '';
+
+		if ( isset( $results[0] ) ) {
+
+			foreach ( $results as $result ) {
+				$return_results[ $result['field_name'] ]['label'] = str_replace( '&#42;', '', $result['label'] );
+			}
+
+			return $return_results;
+		} else {
+			return false;
 		}
 	}
 

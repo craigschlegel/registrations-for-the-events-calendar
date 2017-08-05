@@ -40,6 +40,15 @@
     top: 50%;
     left: 50%;
 }
+#rtec .rtec-spinner img{
+    border-radius: 0;
+    box-shadow: none !important;
+    margin: 0;
+    padding: 0;
+    border: none;
+    width: 24px;
+    height: 24px;
+}
 #rtec .rtec-form-buttons .rtec-email-spinner {
     top: 50%;
     right: 50%;
@@ -73,6 +82,10 @@
     padding: 12px 40px 12px 16px;
     font-size: 16px;
 }
+#rtec .rtec-submit-button {
+    padding: 12px 16px;
+    font-size: 16px;
+}
 #rtec .rtec-attendance p {
     text-align: center;
     margin: 0;
@@ -93,6 +106,7 @@
     padding: .3em .6em;
     margin: 0;
     width: 100%;
+    height: auto;
     border: 1px solid #ddd;
     line-height: 1.5em;
     background: #fff;
@@ -103,6 +117,9 @@
 }
 #rtec input[type="number"] {
     max-width: 100px;
+}
+#rtec label {
+    display: inline-block;
 }
 #rtec .rtec-form-buttons {
     text-align: center;
@@ -123,8 +140,17 @@
 }
 #rtec .rtec-email-spinner {
     position: absolute;
-    top: 11px;
-    right: 11px;
+    top: .25em;
+    right: .25em;
+}
+#rtec .rtec-email-spinner img{
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    width: 24px;
+    height: 24px;
 }
 #rtec .rtec-error-message {
     position: absolute;

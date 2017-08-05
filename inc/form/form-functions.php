@@ -15,73 +15,83 @@ function rtec_the_registration_form( $atts = array() )
 	$form = $rtec->form->instance();
 	$db = $rtec->db_frontend->instance();
 
-	$event_id = isset( $atts['event'] ) ? (int)$atts['event'] : '';
 	$doing_shortcode = isset( $atts['doing_shortcode'] ) ? $atts['doing_shortcode'] : false;
 	$return_html = '';
 
-	$form->set_inc_and_req_fields();
-	$form->set_event_meta( $event_id );
-	$form->set_custom_fields();
-	$form->set_display_type( $atts );
+	if ( $doing_shortcode ) {
+		$event_id = isset( $atts['event'] ) ? (int)$atts['event'] : '';
+		$return_html = '';
+	} else {
+		$event_id = get_the_ID();
+	}
+
+	$form->build_form( $event_id );
+	$fields_atts = $form->get_field_attributes();
 	$event_meta = $form->get_event_meta();
+
+	$args = array(
+		'event_meta' => $event_meta,
+		'user' => array()
+	);
+	do_action( 'rtec_before_display_form', $args );
 
 	if ( $doing_shortcode ) {
 		$return_html .= isset( $atts['showheader'] ) && $atts['showheader'] === 'true' ? $form->get_event_header_html() : '';
 	}
 
-	if ( $event_meta['show_registrants_data'] && ! $doing_shortcode ) {
-		$registrants_data = $db->get_registrants_data( $event_meta );
+	$form->set_display_type( $atts );
 
-		echo $form->get_registrants_data_html( $registrants_data );
+	if ( $event_meta['show_registrants_data'] && ! $doing_shortcode && ! $form->registrations_are_disabled() ) {
+
+		$attendee_list_fields = array();
+		$attendee_list_fields = apply_filters( 'rtec_attendee_list_fields', $attendee_list_fields );
+
+		$registrants_data = $db->get_registrants_data( $event_meta, $attendee_list_fields );
+
+		do_action( 'rtec_the_attendee_list', $registrants_data );
 	}
 
 	if ( $rtec->submission != NULL && $event_meta['post_id'] === (int)$_POST['rtec_event_id'] ) {
 
 		$submission = $rtec->submission->instance();
-		$submission->validate_input( $_POST );
+		$submission->set_field_attributes( $fields_atts );
+		$submission->custom_columns = $form->get_custom_column_keys();
+
+		$raw_data = $submission->validate_input( $_POST );
 
 		if ( $submission->has_errors() ) {
 			$form->set_errors( $submission->get_errors() );
-			$form->set_submission_data( $submission->get_data() );
-			$form->set_event_meta();
-			$form->set_input_fields_data();
+			$form->set_submission_data( $raw_data );
+			$form->set_max_registrations();
 
-			$return_html .= $form->get_form_html();
-
-			if ( $doing_shortcode === true ) {
-				return $return_html;
+			if ( $doing_shortcode ) {
+				$return_html .= $form->get_form_html( $fields_atts );
 			} else {
-				echo $return_html;
+				echo $form->get_form_html( $fields_atts );
 			}
-
 		} else {
-			$submission->process_valid_submission();
+			$submission->custom_fields_label_name_pairs = $form->get_custom_fields_label_name_pairs();
+			$submission->process_valid_submission( $raw_data );
 
 			$message = $form->get_success_message_html();
-			$return_html .= $message;
-
-			if ( $doing_shortcode === true ) {
-				return $return_html;
+			if ( $doing_shortcode ) {
+				$return_html .= $message;
 			} else {
-				echo $return_html;
+				echo $message;
 			}
 		}
 
 	} elseif ( ! $form->registrations_are_disabled() ) {
 
 		if ( $form->registrations_available() && ! $form->registration_deadline_has_passed() ) {
-			$form->set_input_fields_data();
+			$form->set_max_registrations();
 
-			if ( function_exists( 'tribe_get_single_ical_link' ) ) {
-				$form->set_ical_url( esc_url( tribe_get_single_ical_link() ) );
-			}
+			if ( $doing_shortcode ) {
+				$return_html .= $form->get_form_html( $fields_atts );
 
-			$return_html .= $form->get_form_html();
-
-			if ( $doing_shortcode === true ) {
 				return $return_html;
 			} else {
-				echo $return_html;
+				echo $form->get_form_html( $fields_atts );
 			}
 
 		} else {
@@ -92,6 +102,7 @@ function rtec_the_registration_form( $atts = array() )
 			} else {
 				echo $return_html;
 			}
+
 		}
 
 	}
@@ -106,25 +117,34 @@ function rtec_the_registration_form( $atts = array() )
  */
 function rtec_process_form_submission()
 {
-	require_once RTEC_PLUGIN_DIR . 'inc/submission/class-rtec-submission.php';
+	require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-submission.php';
+	require_once RTEC_PLUGIN_DIR . 'inc/form/class-rtec-form.php';
 
 	$submission = new RTEC_Submission();
-	$submission->validate_input( $_POST );
+	$form = new RTEC_Form();
 
-	$event_meta = rtec_get_event_meta( sanitize_text_field( $_POST['rtec_event_id'] ) );
+	$event_id = (int)$_POST['rtec_event_id'];
 
-	if ( $submission->attendance_limit_not_reached( $event_meta['num_registered'] ) ) {
-		$submission->validate_data();
+	$form->build_form( $event_id );
+	$fields_atts = $form->get_field_attributes();
 
-		if ( $submission->has_errors() ) {
-			echo 'form';
+	$event_meta = $form->get_event_meta();
+
+		if ( $submission->attendance_limit_not_reached( $event_meta ) ) {
+			$submission->set_field_attributes( $fields_atts );
+			$raw_data = $submission->validate_input( $_POST );
+
+			if ( $submission->has_errors() ) {
+				echo 'form';
+			} else {
+				$status = $submission->process_valid_submission( $raw_data );
+
+				echo $status;
+			}
+
 		} else {
-			$errors = $submission->process_valid_submission();
-			echo $errors;
+			echo 'full';
 		}
-	} else {
-		echo 'full';
-	}
 
 	die();
 }
@@ -164,6 +184,7 @@ function rtec_registrant_check_for_duplicate_email() {
 }
 add_action( 'wp_ajax_nopriv_rtec_registrant_check_for_duplicate_email', 'rtec_registrant_check_for_duplicate_email' );
 add_action( 'wp_ajax_rtec_registrant_check_for_duplicate_email', 'rtec_registrant_check_for_duplicate_email' );
+
 /**
  * Set the form location right away
  *
@@ -176,6 +197,15 @@ function rtec_form_location_init()
 	add_action( $location, 'rtec_the_registration_form' );
 }
 add_action( 'plugins_loaded', 'rtec_form_location_init', 1 );
+
+function rtec_the_default_attendee_list( $registrants_data )
+{
+	$rtec = RTEC();
+	$form = $rtec->form->instance();
+
+	$form::get_registrants_data_html( $registrants_data );
+}
+add_action( 'rtec_the_attendee_list', 'rtec_the_default_attendee_list', 10, 1 );
 
 /**
 * outputs the custom js from the "Customize" tab on the Settings page

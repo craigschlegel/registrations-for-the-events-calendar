@@ -257,6 +257,12 @@ jQuery(document).ready(function($){
                 $maxReg.attr('disabled','true');
             }
         }
+
+        if ($wrapEl.find('input[name=_RTECdeadlineType]:checked').val() === 'other') {
+            $wrapEl.find('.rtec-time-picker, .rtec-date-picker').removeClass('rtec-fade');
+        } else {
+            $wrapEl.find('.rtec-time-picker, .rtec-date-picker').addClass('rtec-fade');
+        }
     }
 
     $('.rtec-eventtable .rtec-hidden-option-wrap input').on('change', function() {
@@ -270,7 +276,6 @@ jQuery(document).ready(function($){
         event.preventDefault();
         $(this).after('<div class="rtec-table-changing spinner is-active"></div>')
             .attr('disabled', true);
-        $(this).closest('.rtec-hidden-options').addClass('rtec-fade');
 
         var $targetForm = $(this).closest('.rtec-event-options-form'),
             eventOptionsData = $targetForm.serializeArray(),
@@ -279,12 +284,11 @@ jQuery(document).ready(function($){
                 event_options_data: eventOptionsData,
                 rtec_nonce : rtecAdminScript.rtec_nonce
             },
-            successFunc = function (data) {
+            successFunc = function () {
                 // remove spinner
                 $targetForm.find('.rtec-table-changing').remove();
                 $targetForm.find('.rtec-update-event-options').removeAttr('disabled');
-                $targetForm.closest('.rtec-hidden-options').removeClass('rtec-fade');
-                $targetForm.closest('.rtec-single-event').find('.rtec-reg-info p').text(data);
+                location.reload();
             };
         rtecRegistrationAjax(submitData,successFunc);
     });
@@ -447,15 +451,12 @@ jQuery(document).ready(function($){
 
 
     function rtecRegistrationAjax(submitData,successFunc) {
-        successFunc = function(data) { console.log(data)};
         $.ajax({
             url: rtecAdminScript.ajax_url,
             type: 'post',
             data: submitData,
             success: successFunc
         });
-        console.log(submitData);
-
     }
 
     $('.rtec-action').click(function() {

@@ -5,11 +5,11 @@
 	<br />A step-by-step guide on how to setup and use the plugin.
 </p>
 <p>
-	<span class="rtec-support-title"><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp; <a href="https://.roundupwp.com/docs/faqs/" target="_blank"><?php _e( 'FAQs and Documentation', 'registrations-for-the-events-calendar' ); ?></a></span>
+	<span class="rtec-support-title"><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp; <a href="https://roundupwp.com/docs/faqs/" target="_blank"><?php _e( 'FAQs and Documentation', 'registrations-for-the-events-calendar' ); ?></a></span>
 	<br /><?php _e( 'You might find some help with our FAQs and troubleshooting guides.', 'registrations-for-the-events-calendar-pro' ); ?>
 </p>
 <p>
-	<span class="rtec-support-title"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp; <a href="https://www.roundupwp.com/support/" target="_blank"><?php _e( 'Request Support', 'registrations-for-the-events-calendar' ); ?></a></span>
+	<span class="rtec-support-title"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp; <a href="https://roundupwp.com/support/" target="_blank"><?php _e( 'Request Support', 'registrations-for-the-events-calendar' ); ?></a></span>
 	<br /><?php _e( 'Have a problem? Submit a support ticket on our website. Please include your <strong>System Info</strong> below with support requests.', 'registrations-for-the-events-calendar' ); ?>
 </p>
 
@@ -26,6 +26,7 @@ WordPress Version:        <?php echo get_bloginfo( 'version' ) . "\n"; ?>
 PHP Version:              <?php echo PHP_VERSION . "\n"; ?>
 Web Server Info:          <?php echo $_SERVER['SERVER_SOFTWARE'] . "\n"; ?>
 JSON:                     <?php echo function_exists( "json_decode" ) ? "Yes" . "\n" : "No" . "\n" ?>
+WPDB prefix:              <?php global $wpdb; echo $wpdb->prefix . "\n"; ?>
 
 ## ACTIVE PLUGINS: ##
 <?php
@@ -53,7 +54,7 @@ foreach ( $options as $key => $val ) {
 }
 
 // DB troubleshooting
-global $wpdb;
+
 $table_name = esc_sql( $wpdb->prefix . RTEC_TABLENAME );
 
 $column_descriptions = $wpdb->get_results( "DESCRIBE $table_name" );
@@ -84,25 +85,35 @@ if ( is_array( $last_result ) ) {
 		}
 	}
 
+} else {
+	echo 'no submissions currently';
 }
-$event = tribe_get_events( array(
-	'posts_per_page' => 1,
-	'start_date' => date( '2000-1-1 0:0:0' ),
-	'orderby' => 'date',
-	'order' => 'DESC'
-) );
 
-$meta = rtec_get_event_meta( $event[0]->ID );
-echo "\n";
+if ( function_exists( 'tribe_get_events' ) ) {
+	$event = tribe_get_events( array(
+		'posts_per_page' => 1,
+		'start_date' => date( '2000-1-1 0:0:0' ),
+		'orderby' => 'date',
+		'order' => 'DESC'
+	) );
 
-if ( is_array( $meta ) ) {
+	$meta = rtec_get_event_meta( $event[0]->ID );
+	echo "\n";
 
-	foreach ( $meta as $key => $value ) {
-		echo $key.': ' . $value;
-		echo "\n";
+	if ( is_array( $meta ) ) {
+
+		foreach ( $meta as $key => $value ) {
+			echo $key.': ' . $value;
+			echo "\n";
+		}
+
+	} else {
+		echo 'no meta found';
 	}
-
+} else {
+	echo 'tribe_get_events does not exist';
 }
+
 
 ?>
 

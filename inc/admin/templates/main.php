@@ -41,22 +41,16 @@
                 <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=<?php echo urlencode( $value ); ?>" class="nav-tab <?php if( $active_tab == $value ){ echo 'nav-tab-active'; } ?>"><?php echo $label; ?></a>
             <?php endforeach; ?>
             <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=support" class="nav-tab <?php if( $active_tab == 'support' ){ echo 'nav-tab-active'; } ?>"><?php _e( 'Support', 'registrations-for-the-events-calendar' ); ?></a>
-            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=license" class="nav-tab <?php if( $active_tab == 'license' ){ echo 'nav-tab-active'; } ?>"><?php _e( 'License', 'registrations-for-the-events-calendar' ); ?></a>
-
         </h2>
         <?php
         if ( $active_tab === 'email' ) {
             require_once RTEC_PLUGIN_DIR.'inc/admin/templates/email.php';
         } elseif ( $active_tab === 'form' ){
             require_once RTEC_PLUGIN_DIR.'inc/admin/templates/form.php';
-        } elseif ( $active_tab === 'create' ){
-            require_once RTEC_PLUGIN_DIR.'inc/admin/templates/create.php';
         } elseif ( $active_tab === 'support' ){
             require_once RTEC_PLUGIN_DIR.'inc/admin/templates/support.php';
         } elseif ( $active_tab === 'single' ) {
             require_once RTEC_PLUGIN_DIR.'inc/admin/templates/single.php';
-        } elseif ( $active_tab === 'license' ) {
-            require_once RTEC_PLUGIN_DIR.'inc/admin/templates/license.php';
         } else {
             $default = true;
             foreach ( $additional_tabs as $additional_tab ) {

@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class RTEC_Db_Admin
  * 
- * Contains special methods that just apply to the admin area
+ * Contains methods that just apply to the admin area
  * @since 1.0
  */
 class RTEC_Db_Admin extends RTEC_Db
@@ -110,6 +110,16 @@ class RTEC_Db_Admin extends RTEC_Db
 	    return maybe_unserialize( $results[0]['custom'] );
     }
 
+	/**
+	 * Updates a custom field in the database with serialization
+	 *
+	 * @param $db_custom
+	 * @param $new_custom
+	 * @param $field_atts
+	 *
+	 * @return mixed
+	 * @since 2.0
+	 */
 	public function update_custom_data_for_db( $db_custom, $new_custom, $field_atts )
 	{
 		if ( ! empty( $new_custom ) ) {
@@ -147,34 +157,6 @@ class RTEC_Db_Admin extends RTEC_Db
 	    $registrations_to_be_deleted_string = esc_sql( $registrations_to_be_deleted );
 
         $wpdb->query( "DELETE FROM $table_name WHERE $where IN( $registrations_to_be_deleted_string )" );
-
-        return true;
-    }
-
-    /**
-     * One a registration has been seen, status changes from (n)ew to (c)urrent
-     *
-     * @param array $ids    event ids to be updated
-     * 
-     * @return bool
-     * @since 1.0
-     * @since 1.1 new parameter allows for specific ids
-     */
-    public function update_statuses( $ids = NULL )
-    {
-        global $wpdb;
-
-        $current = 'c';
-        $new = 'n';
-	    if ( $ids != NULL ) {
-	    	$id_string = implode( ', ', $ids );
-		    $query = $wpdb->prepare( "UPDATE $this->table_name SET status=%s WHERE status=%s", $current, $new );
-		    $query .=  "AND event_id IN ( " . $id_string . " )";
-		    $wpdb->query( $query );
-	    } else {
-		    $wpdb->query( $wpdb->prepare( "UPDATE $this->table_name SET status=%s WHERE status=%s", $current, $new ) );
-	    }
-        delete_transient( 'rtec_new_registrations' );
 
         return true;
     }
@@ -242,6 +224,15 @@ class RTEC_Db_Admin extends RTEC_Db
         return $event_ids;
     }
 
+	/**
+	 * Get search results from registrations table
+	 *
+	 * @param $term     string
+	 * @param $columns  string
+	 *
+	 * @return array|mixed|null|object
+	 * @since 2.0
+	 */
 	public function get_matches( $term, $columns )
 	{
 		global $wpdb;

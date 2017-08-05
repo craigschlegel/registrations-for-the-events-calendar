@@ -51,12 +51,31 @@ function rtec_get_event_meta( $id = '' ) {
 	$event_meta['limit_registrations'] = isset( $meta['_RTEClimitRegistrations'][0] ) ? ( (int)$meta['_RTEClimitRegistrations'][0] === 1 ) : $default_limit_registrations;
 	$default_max_registrations = isset( $rtec_options['default_max_registrations'] ) ? (int)$rtec_options['default_max_registrations'] : 30;
 	$event_meta['max_registrations'] = isset( $meta['_RTECmaxRegistrations'][0] ) ? (int)$meta['_RTECmaxRegistrations'][0] : $default_max_registrations;
+	$event_meta['num_registered'] = isset( $meta['_RTECnumRegistered'][0] ) ? (int)$meta['_RTECnumRegistered'][0] : 0;
+	$event_meta['form_id'] = isset( $meta['_RTECformID'][0] ) ? (int)$meta['_RTECformID'][0] : 1;
+
+	if ( $event_meta['limit_registrations'] ) {
+		$registrations_left = max( $event_meta['max_registrations'] - $event_meta['num_registered'], 0 );
+		$event_meta['registrations_left'] = $registrations_left;
+	} else {
+		$event_meta['registrations_left'] = '';
+	}
+
 	$default_deadline_type = isset( $rtec_options['default_deadline_type'] ) ? $rtec_options['default_deadline_type'] : 'start';
 	$event_meta['deadline_type'] = isset( $meta['_RTECdeadlineType'][0] ) ? $meta['_RTECdeadlineType'][0] : $default_deadline_type;
-
-	$event_meta['num_registered'] = isset( $meta['_RTECnumRegistered'][0] ) ? (int)$meta['_RTECnumRegistered'][0] : 0;
-
+	$event_meta['deadline_other_timestamp'] = isset( $meta['_RTECdeadlineTimeStamp'][0] ) ? $meta['_RTECdeadlineTimeStamp'][0] : strtotime( $event_meta['start_date'] );
 	$event_meta['registration_deadline'] = rtec_get_event_deadline_utc( $event_meta );
+
+	$db = new RTEC_Db();
+	$db_num_registered = $db->get_registration_count( $event_meta['post_id'], $event_meta['form_id'] );
+
+	if ( (int)$db_num_registered !== (int)$event_meta['num_registered'] ) {
+		$event_meta['num_registered'] = $db_num_registered;
+
+		update_post_meta( $event_meta['post_id'], '_RTECnumRegistered', $db_num_registered );
+	}
+
+	$event_meta = apply_filters( 'rtec_event_meta', $event_meta );
 
 	return $event_meta;
 }
@@ -66,6 +85,7 @@ function rtec_get_event_meta( $id = '' ) {
  *
  * @param   $event_meta array
  * @since   1.5
+ * @since   2.0 added specific deadline
  * @return  mixed   int if deadline, 'none' if no deadline
  */
 function rtec_get_event_deadline_utc( $event_meta ) {
@@ -96,10 +116,10 @@ function rtec_get_event_deadline_utc( $event_meta ) {
 			$deadline_time = $offset_start_time - ($deadline_multiplier * $deadline_unit);
 		}
 
-	}
-
-	if ( $event_meta['deadline_type'] === 'end' ) {
+	} elseif ( $event_meta['deadline_type'] === 'end' ) {
 		$deadline_time = strtotime( $event_meta['end_date'] ) - $tz_offset;
+	} elseif ( $event_meta['deadline_type'] === 'other' ) {
+		$deadline_time = $event_meta['deadline_other_timestamp'] - $tz_offset;
 	}
 
 	return $deadline_time;
@@ -218,6 +238,52 @@ function rtec_serialize_custom_data( $submission_data, $field_attributes, $from_
 	return maybe_serialize( $custom_data );
 }
 
+
+function rtec_get_event_meta_confirmation_email( $event_meta, $user_data) {
+
+	$return_data['title'] = $event_meta['title'];
+
+	if ( $event_meta['mvt_enabled'] && isset( $user_data['venue'] ) ) {
+		$return_data['venue'] = sanitize_text_field( $user_data['venue'] );
+		$return_data['venue_mvt'] = sanitize_text_field( $user_data['venue'] );
+
+		if ( $event_meta['mvt_fields'][ $return_data['venue'] ]['type'] === 'venue' ) {
+			$venue_meta = rtec_get_venue_meta( $return_data['venue'] );
+			$return_data['venue_title'] = $venue_meta['venue_title'];
+			$return_data['venue_address'] = $venue_meta['venue_address'];
+			$return_data['venue_city'] = $venue_meta['venue_city'];
+			$return_data['venue_state'] = $venue_meta['venue_state'];
+			$return_data['venue_zip'] = $venue_meta['venue_zip'];
+		} else {
+			$return_data['venue_title'] = $event_meta['venue_title'];
+			$return_data['venue_address'] = $event_meta['venue_address'];
+			$return_data['venue_city'] = $event_meta['venue_city'];
+			$return_data['venue_state'] = $event_meta['venue_state'];
+			$return_data['venue_zip'] = $event_meta['venue_zip'];
+		}
+		$return_data['mvt_label'] = $event_meta['mvt_fields'][ $user_data['venue'] ]['label'];
+
+	} else {
+		$return_data['venue'] = $event_meta['venue_id'];
+		$return_data['venue_title'] = $event_meta['venue_title'];
+		$return_data['venue_address'] = $event_meta['venue_address'];
+		$return_data['venue_city'] = $event_meta['venue_city'];
+		$return_data['venue_state'] = $event_meta['venue_state'];
+		$return_data['venue_zip'] = $event_meta['venue_zip'];
+	}
+
+	$return_data['ical_url'] = isset( $event_meta['ical_url'] ) ? $event_meta['ical_url']: '';
+	$return_data['date'] = $event_meta['start_date'];
+	$return_data['event_id'] = $user_data['event_id'];
+
+	$return_data = array_merge( $return_data, $user_data );
+
+	$return_data['first'] = $return_data['first_name'];
+	$return_data['last'] = $return_data['last_name'];
+
+	return $return_data;
+}
+
 function rtec_has_deprecated_data_structure( $custom ) {
 
 	if ( is_array($custom) ) {
@@ -253,6 +319,82 @@ function rtec_get_text( $custom, $translation ) {
 
 	return $text;
 
+}
+
+
+function rtec_sanitize_outputted_html( $input ) {
+	$allowed_tags = array(
+		'a' => array(
+			'class' => array(),
+			'href'  => array(),
+			'rel'   => array(),
+			'title' => array(),
+		),
+		'abbr' => array(
+			'title' => array(),
+		),
+		'b' => array(),
+		'blockquote' => array(
+			'cite'  => array(),
+		),
+		'br' => array(),
+		'cite' => array(
+			'title' => array(),
+		),
+		'code' => array(),
+		'del' => array(
+			'datetime' => array(),
+			'title' => array(),
+		),
+		'dd' => array(),
+		'div' => array(
+			'class' => array(),
+			'title' => array(),
+			'style' => array(),
+		),
+		'dl' => array(),
+		'dt' => array(),
+		'em' => array(),
+		'h1' => array(),
+		'h2' => array(),
+		'h3' => array(),
+		'h4' => array(),
+		'h5' => array(),
+		'h6' => array(),
+		'i' => array(),
+		'img' => array(
+			'alt'    => array(),
+			'class'  => array(),
+			'height' => array(),
+			'src'    => array(),
+			'width'  => array(),
+		),
+		'li' => array(
+			'class' => array(),
+		),
+		'ol' => array(
+			'class' => array(),
+		),
+		'p' => array(
+			'class' => array(),
+		),
+		'q' => array(
+			'cite' => array(),
+			'title' => array(),
+		),
+		'span' => array(
+			'class' => array(),
+			'title' => array(),
+			'style' => array(),
+		),
+		'strike' => array(),
+		'strong' => array(),
+		'ul' => array(
+			'class' => array(),
+		),
+	);
+
+	return wp_kses( $input, $allowed_tags );
 }
 
 function rtec_get_notification_email_recipients( $event_id, $blank = false ) {
@@ -293,11 +435,27 @@ function rtec_get_standard_form_fields() {
 		'last',
 		'email',
 		'phone',
-		'guests',
 		'other'
 	);
 
 	return $standard_fields;
+}
+
+function rtec_get_custom_name_label_pairs() {
+	global $rtec_options;
+	$custom_name_label_pairs = array();
+
+	if ( isset( $rtec_options['custom_field_names'] ) && ! is_array( $rtec_options['custom_field_names'] ) ) {
+		$custom_field_names = explode( ',', $rtec_options['custom_field_names'] );
+	} else {
+		$custom_field_names = array();
+	}
+
+	foreach ( $custom_field_names as $custom_field_name ) {
+		$custom_name_label_pairs[ $custom_field_name ]['label'] = $rtec_options[ $custom_field_name . '_label' ];
+	}
+
+	return $custom_name_label_pairs;
 }
 
 function rtec_get_no_template_fields() {
@@ -325,6 +483,15 @@ function rtec_get_no_backend_column_fields() {
 add_shortcode( 'rtec-registration-form', 'rtec_the_registration_form_shortcode' );
 function rtec_the_registration_form_shortcode( $atts ) {
 	$post_id = isset( $atts['event'] ) ? (int)$atts['event'] : false;
+
+	if ( ! $post_id ) {
+		$post_id = isset( $_GET['event_id'] ) ? sanitize_text_field( (int)$_GET['event_id'] ) : false;
+
+		if ( $post_id ) {
+			$atts['event'] = $post_id;
+		}
+	}
+
 	$atts['doing_shortcode'] = true;
 
 	if ( $post_id !== get_the_ID() || ! is_singular( 'tribe_events' ) ) {

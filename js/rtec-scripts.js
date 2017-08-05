@@ -215,20 +215,19 @@ jQuery(document).ready(function($) {
 
         var required = [];
 
-        $rtecEl.find('#rtec-form :input').each(function() {
-            if ($(this).attr('aria-required') == 'true') {
-                if ($(this).attr('name') == 'rtec_email') {
-                    RtecForm.validateEmail($(this));
-                } else if ($(this).attr('name') == 'rtec_phone') {
-                    RtecForm.validateCount($(this), $(this).closest('.rtec-form-field').attr('data-rtec-valid-count').replace(' ', '').split(','));
-                } else if ($(this).attr('name') == 'rtec_recaptcha_input') {
-                    RtecForm.validateSum($(this), $(this).val(), $(this).closest('.rtec-form').find('.rtec-recaptcha-sum').val());
-                } else if ($(this).attr('name') == 'rtec_last') {
-                    RtecForm.validateLength($(this), 1, 100);
-                } else if ($(this).attr('name') == 'rtec_first') {
-                    RtecForm.validateLength($(this), 1, 100);
+        $rtecEl.find('#rtec-form .rtec-form-field').each(function() {
+            var $input = $(this).find('.rtec-field-input');
+            if ($input.attr('aria-required') == 'true') {
+                if ($input.attr('data-rtec-valid-email') == 'true') {
+                    RtecForm.validateEmail($input);
+                } else if (typeof $input.attr('data-rtec-valid-count') == 'string') {
+                    RtecForm.validateCount($input, $input.attr('data-rtec-valid-count').replace(' ', '').split(','), $input.attr('data-rtec-count-what'));
+                } else if (typeof $input.attr('data-rtec-recaptcha') == 'string') {
+                    RtecForm.validateSum($input, $input.val(), $input.closest('.rtec-form').find('input[name='+$input.attr('name')+'_sum]').val());
+                } else if ($input.attr('data-rtec-valid-options') == 'true') {
+                    RtecForm.validateOption($input);
                 } else {
-                    RtecForm.validateLength($(this), 1, 1000);
+                    RtecForm.validateLength($input, 1, 10000);
                 }
             }
         });

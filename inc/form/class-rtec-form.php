@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
 
+/**
+ * Class RTEC_Form
+ */
 class RTEC_Form
 {
 	/**
@@ -18,27 +21,50 @@ class RTEC_Form
 	 */
 	private $event_meta;
 
-	private $user_obj;
-
+	/**
+	 * @var int
+	 */
 	private $event_form = 1;
 
+	/**
+	 * @var array
+	 */
 	private $form_field_attributes = array();
 
+	/**
+	 * @var array
+	 */
 	private $event_form_field_names = array();
 
+	/**
+	 * @var array
+	 */
 	private $event_form_required_field_names = array();
 
+	/**
+	 * @var array
+	 */
 	private $custom_fields_label_name_pairs = array();
 
+	/**
+	 * @var array
+	 */
 	private $custom_column_keys = array();
 
+	/**
+	 * @var array
+	 */
 	private $column_keys = array();
 
+	/**
+	 * @var array
+	 */
 	private $field_labels = array();
 
+	/**
+	 * @var
+	 */
 	private $hidden_initially;
-
-	private $mvt_data;
 
 	/**
 	 * @var array
@@ -64,6 +90,25 @@ class RTEC_Form
 	 */
 	private $ical_url;
 
+	/**
+	 * Get the one true instance of RTEC_Form.
+	 *
+	 * @since  1.0
+	 * @return object $instance
+	 */
+	static public function instance()
+	{
+		if ( !self::$instance ) {
+			self::$instance = new RTEC_Form();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Creates the basic form object based on the event id
+	 *
+	 * @param string $event_id
+	 */
 	public function build_form( $event_id = '' )
 	{
 		if ( $event_id !== '' ) {
@@ -75,21 +120,13 @@ class RTEC_Form
 		$manually_added_fields = apply_filters( 'rtec_add_new_field', $manually_added_fields );
 		$this->set_form_field_attributes( $fields_results, $manually_added_fields );
 	}
-    
-    /**
-     * Get the one true instance of RTEC_Form.
-     *
-     * @since  1.0
-     * @return object $instance
-     */
-    static public function instance() 
-    {
-        if ( !self::$instance ) {
-            self::$instance = new RTEC_Form();
-        }
-        return self::$instance;
-    }
 
+	/**
+	 * Simulates the raw results if they were retrieved from the database in "Pro"
+	 *
+	 * @param $fields_results
+	 * @param $manually_added_fields
+	 */
 	protected function set_form_field_attributes( $fields_results, $manually_added_fields )
 	{
 		global $rtec_options;
@@ -231,21 +268,44 @@ class RTEC_Form
 		$this->form_field_attributes = $field_attributes;
 	}
 
+	/**
+	 * Used to display custom fields in the admin area and process form submissions
+	 *
+	 * @param $label
+	 * @param $name
+	 *
+	 * @since 2.0
+	 */
 	private function add_custom_label_name_pair( $label, $name )
 	{
 		$this->custom_fields_label_name_pairs[$label] = $name;
 	}
 
+	/**
+	 * @param $field_name
+	 *
+	 * @since 2.0
+	 */
 	private function add_custom_column_key( $field_name )
 	{
 		$this->custom_column_keys[] = $field_name;
 	}
 
+	/**
+	 * @param $field_name
+	 *
+	 * @since 2.0
+	 */
 	private function add_column_key( $field_name )
 	{
 		$this->column_keys[] = $field_name;
 	}
 
+	/**
+	 * @param $label
+	 *
+	 * @since 2.0
+	 */
 	private function add_field_label( $label )
 	{
 		$this->field_labels[] = $label;
@@ -291,26 +351,41 @@ class RTEC_Form
 		return $this->form_field_attributes;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_custom_column_keys()
 	{
 		return $this->custom_column_keys;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_column_keys()
 	{
 		return $this->column_keys;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_field_labels()
 	{
 		return $this->field_labels;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_custom_fields_label_name_pairs()
 	{
 		return $this->custom_fields_label_name_pairs;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_form_field_data_from_db()
 	{
 		global $rtec_options;
@@ -355,7 +430,7 @@ class RTEC_Form
 					$fields_data[ $i ]['default_value'] = '';
 					$fields_data[ $i ]['is_required'] = $rtec_options[ $type . '_require' ];
 
-					$fields_data[ $i ]['error_message'] = rtec_get_text( $rtec_options[ $type . '_error' ], __( 'Error', 'registrations-for-the-events-calendar' ) );
+					$fields_data[ $i ]['error_text'] = rtec_get_text( $rtec_options[ $type . '_error' ], __( 'Error', 'registrations-for-the-events-calendar' ) );
 
 					switch( $type ) {
 						case 'first':
@@ -390,7 +465,7 @@ class RTEC_Form
 				$fields_data[ $i ]['meta'] = '';
 				$fields_data[ $i ]['default_value'] = '';
 				$fields_data[ $i ]['is_required'] = true;
-				$fields_data[ $i ]['error_message'] = rtec_get_text( $rtec_options[ $type . '_error' ], __( 'Error', 'registrations-for-the-events-calendar' ) );
+				$fields_data[ $i ]['error_text'] = rtec_get_text( $rtec_options[ $type . '_error' ], __( 'Error', 'registrations-for-the-events-calendar' ) );
 			}
 
 		} else {
@@ -483,8 +558,11 @@ class RTEC_Form
 	 *
 	 * @return bool
 	 */
-	public function registrations_are_disabled()
+	public function registrations_are_disabled( $filter_disable = false )
 	{
+		if ( $filter_disable === true ) {
+			return true;
+		}
 		return ( $this->event_meta['registrations_disabled'] === '1' || $this->event_meta['registrations_disabled'] === true );
 	}
 
@@ -500,6 +578,16 @@ class RTEC_Form
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * @since 1.0
+	 */
+	public function set_max_registrations()
+	{
+		global $rtec_options;
+
+		$this->max_registrations = isset( $rtec_options['default_max_registrations'] ) ? $rtec_options['default_max_registrations'] : 30;
 	}
 
 	/**
@@ -613,9 +701,12 @@ class RTEC_Form
 	    $form_bg_color = isset( $rtec_options['form_bg_color'] ) && ! empty( $rtec_options['form_bg_color'] ) ? 'background-color: ' . esc_attr( $rtec_options['form_bg_color'] ) . ';' : '';
 	    $width_unit = isset( $rtec_options['width_unit'] ) ? esc_attr( $rtec_options['width_unit'] ) : '%';
         $width = isset( $rtec_options['width'] ) ? 'width: ' . esc_attr( $rtec_options['width'] ) . $width_unit . ';' : '';
-        $data = ' data-rtec-success-message="' . rtec_get_text( esc_attr( $rtec_options['success_message'] ), __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) ) . '"';
+	    $classes = '';
 
-		    $html = '<div id="rtec" class="rtec"' . $data . '>';
+	    $data = ' data-rtec-success-message="' . rtec_get_text( esc_attr( $rtec_options['success_message'] ), __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) ) . '"';
+	    $data .= ' data-event="' . esc_attr( $this->event_meta['post_id'] ) . '"';
+
+		    $html = '<div id="rtec" class="rtec rtec-form-' . $this->event_meta['form_id'] . $classes .  '"' . $data . '>';
 	    if ( $this->hidden_initially ) {
 		    $html .= '<button type="button" id="rtec-form-toggle-button" class="rtec-register-button rtec-form-toggle-button rtec-js-show' . $button_classes . '" style="' . $button_styles . '">' . esc_html( $button_text ). '<span class="tribe-bar-toggle-arrow"></span></button>';
 		    $html .= '<h3 class="rtec-js-hide">' . esc_html( $button_text ) . '</h3>';
@@ -704,107 +795,218 @@ class RTEC_Form
 
         $html .= wp_nonce_field( 'rtec_form_nonce', '_wpnonce', true, false );
         $html .= '<input type="hidden" name="rtec_email_submission" value="1" />';
-        $html .= '<input type="hidden" name="rtec_title" value="'. $event_meta['title'] . '" />';
-        $html .= '<input type="hidden" name="rtec_venue_title" value="'. $event_meta['venue_title'] . '" />';
-	    $html .= '<input type="hidden" name="rtec_venue_address" value="'. $event_meta['venue_address'] . '" />';
-	    $html .= '<input type="hidden" name="rtec_venue_city" value="'. $event_meta['venue_city'] . '" />';
-	    $html .= '<input type="hidden" name="rtec_venue_state" value="'. $event_meta['venue_state'] . '" />';
-	    $html .= '<input type="hidden" name="rtec_venue_zip" value="'. $event_meta['venue_zip'] . '" />';
 	    $html .= '<input type="hidden" name="ical_url" value="'. $this->ical_url . '" />';
-	    $html .= '<input type="hidden" name="rtec_date" value="'. $event_meta['start_date'] . '" />';
         $html .= '<input type="hidden" name="rtec_event_id" value="' . $event_meta['post_id'] . '" />';
-	    $html .= '<input type="hidden" name="rtec_num_registered" value="' . $event_meta['num_registered'] . '" />';
 
         return $html;
     }
 
 	/**
-	 * Return html for custom text fields
+	 * @param $field_name
+	 * @param $field_attributes
+	 * @param $errors
+	 * @param $submission_data
+	 * @param $registrations_left
 	 *
-	 * @since 1.3
 	 * @return string
 	 */
-	private function get_custom_fields_html() {
-		$html = '';
-		$custom_fields = $this->custom_fields;
-		$custom_field_names = $this->custom_fields['custom_field_names'];
+	public function get_field_html( $field_name, $field_attributes, $errors, $submission_data, $registrations_left )
+	{
+		global $rtec_options;
 
-		foreach ( $custom_field_names as $field ) {
+		$field_settings = array();
 
-			if ( $custom_fields[$field . '_show'] ) {
-				// check to see if there was an error and fill in
-				// previous data
-				$value = '';
-				$label = $custom_fields[$field . '_label'];
-				$type = 'text';
+		$field_settings['type'] = $field_attributes['type'];
+		$field_settings['label'] = $field_attributes['label'];
+		$field_settings['field_name'] = $field_attributes['name'];
+		$type_atts = $this->get_field_types();
 
-				if ( $custom_fields[$field . '_require'] ) {
-					$required_data = ' aria-required="true"';
-					$label .= '&#42;';
-				} else {
-					$required_data = ' aria-required="false"';
+		$label_classes = '';
+		if ( isset( $type_atts[ $field_settings['type'] ]['special']['hide-label'] ) && $type_atts[ $field_settings['type'] ]['special']['hide-label'] === 'true' ) {
+			$label_classes .= ' rtec-screen-reader';
+		}
+
+		if ( isset( $submission_data[ $field_name ] ) && $submission_data[ $field_name ] !== '' ) {
+			$field_settings['value'] = $submission_data[ $field_name ];
+		} elseif( is_user_logged_in() && in_array( $field_settings['field_name'], array( 'rtec_first', 'rtec_last', 'rtec_email' ), true ) ) {
+
+			if ( $field_settings['field_name'] === 'rtec_first' ) {
+				$user_meta = get_user_meta( get_current_user_id(), '', true );
+				$field_settings['value'] = isset( $user_meta['first_name'] ) ? $user_meta['first_name'][0] : '';
+			} elseif ( $field_settings['field_name'] === 'rtec_last' ) {
+				$user_meta = get_user_meta( get_current_user_id() );
+				$field_settings['value'] = isset( $user_meta['last_name'] ) ? $user_meta['last_name'][0] : '';
+			} elseif ( $field_settings['field_name'] === 'rtec_email' ) {
+				$user = wp_get_current_user();
+				$field_settings['value'] = isset( $user->data->user_email ) ? $user->data->user_email : '';
+			}
+
+		} else {
+			if ( isset( $user_data[ $field_name ] ) ) {
+				$field_settings['value'] = $user_data[ $field_name ];
+			} elseif ( isset( $user_data['custom'][ $field_name ]['value'] ) ) {
+				$field_settings['value'] = $user_data['custom'][ $field_name ]['value'];
+			} else {
+				$field_settings['value'] = $field_attributes['default'];
+			}
+		}
+
+		$field_settings['placeholder'] = isset( $field_attributes['placeholder'] ) && $field_attributes['placeholder'] !== '' ? ' placeholder="'.esc_attr( $field_attributes['placeholder'] ). '"' : '';
+
+		$field_settings['error'] =  in_array( $field_name, $errors, true ) ?  true : false;
+
+		if ( $field_settings['error'] ) {
+			$field_attributes['data_atts']['aria-invalid'] = 'true';
+		}
+
+		$field_settings['error_message'] = isset( $field_attributes['error_message'] ) ? $field_attributes['error_message'] : '';
+
+		if ( $field_name === 'email' && in_array( 'email_duplicate', $errors, true ) && !in_array( 'email', $errors, true ) ) {
+			$field_settings['error'] = true;
+			$field_attributes['data_atts']['aria-invalid'] = 'true';
+
+			$message = isset( $rtec_options['error_duplicate_message'] ) ? $rtec_options['error_duplicate_message'] : __( 'You have already registered for this event', 'registrations-for-the-events-calendar-pro' );
+			$field_settings['error_message'] = rtec_get_text( $message, __( 'You have already registered for this event', 'registrations-for-the-events-calendar-pro' ) );
+		}
+
+		$field_settings['data_atts_string'] = '';
+		$field_settings['data_atts_string'] = $this->get_data_atts_string_for_type( $field_attributes['valid_type'], $field_attributes['valid_params'] );
+
+		foreach ( $field_attributes['data_atts'] as $att_key => $att_value ) {
+			$field_settings['data_atts_string'] .= ' ' . $att_key . '="' . $att_value . '"';
+		}
+
+		if ( isset( $field_attributes['meta'] ) ) {
+			$field_settings['meta'] = $field_attributes['meta'];
+		} else {
+			$field_settings['meta'] = array();
+		}
+
+		if ( isset( $field_settings['meta']['options'] ) && ( isset( $user_data['custom'][ $field_name ] ) || isset( $user_data[ $field_name ] ) ) ) {
+			$this_data = isset( $user_data[ $field_name ] ) ? $user_data[ $field_name ] : $user_data['custom'][ $field_name ]['value'];
+			$field_settings['values'] = explode( ',', str_replace( ' ', '', $this_data ) );
+
+			$i = 0;
+			foreach ( $field_settings['meta']['options'] as $option ) {
+				if ( in_array( $option[1], $field_settings['values'], true ) ) {
+					$field_settings['meta']['options'][$i][2] = true;
 				}
+				$i++;
+			}
+		}
 
-				$error_html = '';
+		$field_settings['html'] = isset( $field_settings['meta']['html'] ) ? $field_settings['meta']['html'] : '';
+		if ( isset( $field_attributes['valid_type'] ) && $field_attributes['valid_type'] === 'recaptcha'  ) {
+			$field_settings['html'] .= '<input type="hidden" name="' . esc_attr( $field_settings['field_name'] ) . '_sum" value="' . esc_attr( $field_attributes['valid_params']['sum'] ) . '" />';
+			$field_settings['type'] = 'text';
+		}
+		ob_start();
 
-				if ( in_array( $field, $this->errors ) ) {
-					$required_data .= ' aria-invalid="true"';
-					$error_html = '<p class="rtec-error-message" role="alert">' . esc_html( $custom_fields[$field . '_error'] ) . '</p>';
-				} else {
-					$required_data .= ' aria-invalid="false"';
-				}
+		include RTEC_PLUGIN_DIR . 'templates/form/field.php';
 
-				if ( isset( $this->submission_data['rtec_' . $field] ) ) {
-					$value = $this->submission_data['rtec_' . $field];
-				}
-
-				$html .= '<div class="rtec-form-field rtec-'. esc_attr( $field ). '" data-rtec-error-message="'.$custom_fields[$field . '_error'].'">';
-				$html .= '<label for="rtec_' . esc_attr( $field ) . '" class="rtec_text_label">' . esc_html( $label ) . '</label>';
-				$html .= '<div class="rtec-input-wrapper">';
-				$html .= '<input type="' . esc_attr( $type ) . '" name="rtec_' . esc_attr( $field ) . '" value="'. esc_attr( $value ) . '" id="rtec_' . esc_attr( $field ) . '"' . $required_data . ' />';
-				$html .= $error_html;
-				$html .= '</div>';
-				$html .= '</div>';
-			} // if show
-
-		} // foreach
+		$html = ob_get_contents();
+		ob_get_clean();
 
 		return $html;
 	}
 
 	/**
-	 * Return html for a recaptcha robot detection field
+	 * @param $type
+	 * @param $params
 	 *
-	 * @since 1.1
 	 * @return string
 	 */
-	private function get_recaptcha_html() {
-		global $rtec_options;
-
-		$recaptcha_error_message = rtec_get_text( $rtec_options['recaptcha_error'], __( 'Please try again', 'registrations-for-the-events-calendar' ) );
-		$recaptcha_label = rtec_get_text( $rtec_options['recaptcha_label'], __( 'What is', 'registrations-for-the-events-calendar' ) );
-
-		$required_data = ' aria-required="true"';
-
-		$error_html = '';
-
-		if ( in_array( 'recaptcha', $this->errors ) ) {
-			$required_data .= ' aria-invalid="true"';
-			$error_html = '<p class="rtec-error-message" role="alert">' . esc_html( $recaptcha_error_message ) . '</p>';
-		} else {
-			$required_data .= ' aria-invalid="false"';
+	protected function get_data_atts_string_for_type( $type, $params )
+	{
+		switch ( $type ) {
+			case 'numval' :
+				$min = isset( $params['min'] ) ? ' min="' . $params['min'] . '"' : ' min="0"';
+				$max = isset( $params['max'] ) ? ' max="' . $params['max'] . '"' : '';
+				$step = isset( $params['step'] ) ? ' step="' . $params['step'] . '"' : ' step="1"';
+				$data_atts_string = $min . $max . $step;
+				break;
+			case 'count' :
+				$data_atts_string = ' data-rtec-valid-count="' . esc_attr( str_replace( ' ' , '', $params['count'] ) ) . '"  data-rtec-count-what="' . esc_attr( str_replace( ' ' , '', $params['count_what'] ) ) . '"';
+				break;
+			case 'email' :
+				$data_atts_string = ' data-rtec-valid-email="true"';
+				break;
+			case 'recaptcha' :
+				$data_atts_string = ' data-rtec-recaptcha="true"';
+				break;
+			case 'none' :
+				$data_atts_string = ' data-rtec-valid-options="true"';
+				break;
+			default :
+				$data_atts_string = ' data-rtec-min="' . $params['min'] . '" data-rtec-max="' . $params['max'] . '"';
 		}
 
-		$html = '<input type="hidden" name="rtec_recaptcha_sum" value="'.( $this->recaptcha['value_1'] + $this->recaptcha['value_2'] ).'" class="rtec-recaptcha-sum" />';
-		$html .= '<div class="rtec-form-field rtec-recaptcha" data-rtec-error-message="'. esc_attr( $recaptcha_error_message ) . '">';
-			$html .= '<label for="rtec_recaptcha" class="rtec_text_label">'. esc_html( $recaptcha_label ).' '.$this->recaptcha['value_1'].' &#43; '.$this->recaptcha['value_2'].'&#42;</label>';
-			$html .= '<div class="rtec-input-wrapper">';
-				$html .= '<input type="text" name="rtec_recaptcha_input" id="rtec_recaptcha"' . $required_data . ' />';
-				$html .= esc_html( $error_html );
-			$html .= '</div>';
-		$html .= '</div>';
+		return $data_atts_string;
+	}
 
-		return $html;
+	/**
+	 * @param $field_settings
+	 */
+	protected function get_input_html_for_field_type( $field_settings )
+	{
+		?>
+	<?php if ( in_array( $field_settings['type'], array( 'text', 'number', 'tel', 'email' ), true ) ) : ?>
+		<input type="<?php echo esc_attr( $field_settings['type'] ); ?>" name="<?php echo esc_attr( $field_settings['field_name'] ); ?>" value="<?php echo esc_attr( stripslashes( $field_settings['value'] ) ); ?>"<?php echo $field_settings['placeholder']; ?> class="rtec-field-input" id="<?php echo esc_attr( $field_settings['field_name'] ); ?>"<?php echo $field_settings['data_atts_string']; ?> />
+	<?php elseif ( $field_settings['type'] === 'select' ) : ?>
+		<select type="select" name="<?php echo esc_attr( $field_settings['field_name'] ); ?>" class="rtec-field-input" id="<?php echo esc_attr( $field_settings['field_name'] ); ?>"<?php echo $field_settings['data_atts_string']; ?>>
+			<?php foreach ( $field_settings['meta']['options'] as $option ) : ?>
+				<option id="<?php echo esc_attr( $field_settings['field_name'] ) . $option[1]; ?>"<?php echo $field_settings['data_atts_string']; ?> value="<?php echo $option[1]; ?>"<?php if ( $option[2] ) { echo ' selected="selected"'; } ?> ><?php echo esc_html( $option[0] ); ?></option>
+			<?php endforeach; ?>
+		</select>
+	<?php else : ?>
+		<?php do_action( 'rtec_field_html_' . $field_settings['type'], $field_settings ); ?>
+	<?php endif;
+	}
+
+	/**
+	 * @return array|mixed|void
+	 */
+	public function get_field_types()
+	{
+		$types = array(
+			'text' => array(
+				'label' => 'Text',
+				'icon' => 'fa-text-width',
+				'default_valid_type' => 'length',
+				'default_valid_params' => array(
+					'min' => 1,
+					'max' => 'no-max'
+				),
+				'uses' => array( 'all' ),
+				'special' => array()
+			),
+			'number' => array(
+				'label' => 'Number (quantity)',
+				'icon' => 'fa-hashtag',
+				'default_valid_type' => 'numval',
+				'default_valid_params' => array(
+					'min' => 1,
+					'max' => 'no-max'
+				),
+				'uses' => array( 'all' ),
+				'special' => array()
+			),
+			'select' => array(
+				'label' => 'Select',
+				'icon' => 'fa-caret-down',
+				'default_valid_type' => 'length',
+				'default_valid_params' => array(
+					'min' => 1,
+					'max' => 'no-max'
+				),
+				'uses' => array( 'all' ),
+				'special' => array()
+			)
+		);
+
+		$types = apply_filters( 'rtec_field_types', $types );
+
+		return $types;
 	}
 
 	/**
@@ -812,97 +1014,23 @@ class RTEC_Form
 	 *
 	 * @since 1.0
 	 * @since 1.5   will set first, last, and email fields if user is logged-in and data is available
+	 * @since 2.0   added fields_atts, uses template
 	 * @return string
 	 */
-    public function get_regular_fields()
-    {
-        $html = '<div class="rtec-form-fields-wrapper">';
 
-        foreach ( $this->input_fields_data as $field ) {
-            // check to see if there was an error and fill in
-            // previous data
-            $value = '';
+	public function get_regular_fields_html( $fields_atts )
+	{
 
-	        // if the user is logged in, try to use their existing data to fill
-	        // these fields
-	        if ( in_array( $field['name'], array( 'first', 'last', 'email' ), true ) ) {
+		$html = '<div class="rtec-form-fields-wrapper">';
 
-		        if ( is_user_logged_in() ) {
+		foreach ( $fields_atts as $field_name => $field_attributes ) {
+			$html .= $this->get_field_html( $field_name, $field_attributes, $this->errors, $this->submission_data, $this->event_meta['registrations_left'] );
+		}
 
-			        if ( $field['name'] === 'first' ) {
-				        $user_meta = get_user_meta( get_current_user_id(), '', true );
-				        $value = isset( $user_meta['first_name'] ) ? $user_meta['first_name'][0] : '';
-			        }
+		$html .= '</div>'; // rtec-form-fields-wrapper
 
-			        if ( $field['name'] === 'last' ) {
-				        $user_meta = get_user_meta( get_current_user_id() );
-				        $value = isset( $user_meta['last_name'] ) ? $user_meta['last_name'][0] : '';
-			        }
-
-			        if ( $field['name'] === 'email' ) {
-				        $user = wp_get_current_user();
-				        $value = isset( $user->data->user_email ) ? esc_attr( $user->data->user_email ) : '';
-			        }
-
-		        }
-
-	        }
-
-            $type = 'text';
-            $label = $field['label'];
-
-            if ( in_array( $field['name'], $this->required_fields ) ) {
-                $required_data = ' aria-required="true"';
-                $label .= '&#42;';
-            } else {
-                $required_data = ' aria-required="false"';
-            }
-
-            $error_html = '';
-
-	        if ( in_array( $field['name'], $this->errors ) ) {
-                $required_data .= ' aria-invalid="true"';
-                $error_html = '<p class="rtec-error-message" role="alert">' . esc_html( $field['error_message'] ) . '</p>';
-            } elseif ( $field['name'] === 'email' && in_array( 'email_duplicate', $this->errors, true ) ) {
-	            $options = get_option( 'rtec_options' );
-
-	            $message = isset( $options['error_duplicate_message'] ) ? $options['error_duplicate_message'] : 'You have already registered for this event';
-	            $message_text = rtec_get_text( $message, __( 'You have already registered for this event', 'registrations-for-the-events-calendar' ) );
-
-	            $error_html = '<p class="rtec-error-message" id="rtec-error-duplicate" role="alert">' . esc_html( $message_text ) . '</p>';
-            } else {
-                $required_data .= ' aria-invalid="false"';
-            }
-
-            if ( $field['name'] === 'email' ) {
-                $type = 'email';
-            } elseif ( $field['name'] === 'phone' ) {
-	            $type = 'tel';
-            }
-
-            if ( isset( $this->submission_data['rtec_' . $field['name']] ) ) {
-                $value = $this->submission_data['rtec_' . $field['name']];
-            }
-
-            $html .= '<div class="rtec-form-field rtec-'. esc_attr( $field['name'] ) . '" data-rtec-error-message="'. esc_attr( $field['error_message'] ).'"'.$field['valid_count'].'>';
-                $html .= '<label for="rtec_' . esc_attr( $field['name'] ) . '" class="rtec_text_label">' . esc_html( $label ) . '</label>';
-	            $html .= '<div class="rtec-input-wrapper">';
-	                $html .= '<input type="' . esc_attr( $type ) . '" name="rtec_' . esc_attr( $field['name'] ) . '" value="'. esc_attr( $value ) . '" id="rtec_' . esc_attr( $field['name'] ) . '"' . $required_data . ' />';
-                    $html .= $error_html;
-	            $html .= '</div>';
-            $html .= '</div>';
-        }
-
-        $html .= $this->get_custom_fields_html();
-
-        if ( ! empty( $this->recaptcha ) ) {
-	        $html .= $this->get_recaptcha_html();
-        }
-
-        $html .= '</div>'; // rtec-form-fields-wrapper
-
-	    return $html;
-    }
+		return $html;
+	}
 
 	/**
 	 * Backup in case javascript is unavailable
@@ -965,21 +1093,28 @@ class RTEC_Form
 	/**
 	 * Assembles the html in the proper order and returns it
 	 *
-	 * @since 1.0
 	 * @return string   complete html for the form
+	 *
+	 * @since 1.0
+	 * @since 2.0       added $fields_atts
 	 */
-	public function get_form_html()
+	public function get_form_html( $fields_atts )
 	{
 		$html = '';
 		$html .= $this->get_beginning_html();
 		$html .= $this->get_hidden_fields_html();
-		$html .= $this->get_regular_fields();
+		$html .= $this->get_regular_fields_html( $fields_atts );
 		$html .= $this->get_ending_html();
 
 		return $html;
 	}
 
-	public function get_registrants_data_html( $registrants_data )
+	/**
+	 * @param $registrants_data
+	 *
+	 * @return string
+	 */
+	public static function get_registrants_data_html( $registrants_data )
 	{
 		global $rtec_options;
 
@@ -1020,9 +1155,12 @@ class RTEC_Form
 
 		$return_html .= '</div>'; // rtec-event-meta
 
-		return $return_html;
+		echo $return_html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_event_header_html()
 	{
 		$html = '<h2 class="rtec-header">'.$this->event_meta['title'].'</h2>';

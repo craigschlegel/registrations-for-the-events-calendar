@@ -151,7 +151,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
         private function constants() {
             // Plugin version.
             if ( ! defined( 'RTEC_VERSION' ) ) {
-                define( 'RTEC_VERSION', '1.6.2' );
+                define( 'RTEC_VERSION', '1.7' );
             }
             // Plugin Folder Path.
             if ( ! defined( 'RTEC_PLUGIN_DIR' ) ) {
@@ -204,7 +204,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 		    require_once RTEC_PLUGIN_DIR . 'inc/helper-functions.php';
 		    require_once RTEC_PLUGIN_DIR . 'inc/form/class-rtec-form.php';
 		    require_once RTEC_PLUGIN_DIR . 'inc/form/form-functions.php';
-		    require_once RTEC_PLUGIN_DIR . 'inc/submission/class-rtec-submission.php';
+		    require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-submission.php';
 		    if ( is_admin() ) {
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/class-rtec-db-admin.php';
 			    require_once RTEC_PLUGIN_DIR . 'inc/admin/admin-functions.php';

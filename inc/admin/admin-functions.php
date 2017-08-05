@@ -72,7 +72,7 @@ function rtec_the_admin_notices() {
 }
 
 /**
- *  Updates the individual event options with ajax
+ * Updates the individual event options with ajax
  *
  * @since 1.2
  */
@@ -96,30 +96,42 @@ function rtec_update_event_options() {
 	$max_reg = 30;
 
 	if ( isset( $cleaned_array['_RTECregistrationsDisabled'] ) ){
-		$registrations_disabled_status = sanitize_text_field( $cleaned_array['_RTECregistrationsDisabled'] );
+		$registrations_disabled_status = $cleaned_array['_RTECregistrationsDisabled'];
 	}
 
 	if ( isset( $cleaned_array['_RTECdeadlineType'] ) ){
-		$registrations_deadline_type = sanitize_text_field( $cleaned_array['_RTECdeadlineType'] );
+		$registrations_deadline_type = $cleaned_array['_RTECdeadlineType'];
+
+		if ( $registrations_deadline_type === 'other' ) {
+			$deadline_date = isset( $cleaned_array['_RTECdeadlineDate'] ) ? $cleaned_array['_RTECdeadlineDate'] : date( "m/d/Y" );
+			$deadline_time = isset( $cleaned_array['_RTECdeadlineTime'] ) ? $cleaned_array['_RTECdeadlineTime'] : '8:00:00';
+			$parsed_date = date_parse( $deadline_time );
+
+			$deadline_time_stamp = ( (int)$parsed_date['hour'] * 60 * 60 ) + ( (int)$parsed_date['minute'] * 60 ) + strtotime( $deadline_date );
+
+			if ( isset( $event_id ) ) {
+				update_post_meta( $event_id, '_RTECdeadlineTimeStamp', $deadline_time_stamp );
+			}
+		}
 	}
 
 	if ( isset( $cleaned_array['_RTEClimitRegistrations'] ) ){
-		$use_limit_status = sanitize_text_field( $cleaned_array['_RTEClimitRegistrations'] );
+		$use_limit_status = $cleaned_array['_RTEClimitRegistrations'];
 	}
 
 	if ( isset( $cleaned_array['_RTECmaxRegistrations'] ) ){
-		$max_reg = sanitize_text_field( $cleaned_array['_RTECmaxRegistrations'] );
+		$max_reg = $cleaned_array['_RTECmaxRegistrations'];
 	}
 
 	if ( isset( $cleaned_array['_RTECnotificationEmailRecipient'] ) && !empty( $cleaned_array['_RTECnotificationEmailRecipient'] ) ){
-		$not_email = sanitize_text_field( $cleaned_array['_RTECnotificationEmailRecipient'] );
+		$not_email = $cleaned_array['_RTECnotificationEmailRecipient'];
 		update_post_meta( $event_id, '_RTECnotificationEmailRecipient', $not_email );
 	} else {
 		delete_post_meta( $event_id, '_RTECnotificationEmailRecipient' );
 	}
 
 	if ( isset( $cleaned_array['_RTECconfirmationEmailFrom'] ) && !empty( $cleaned_array['_RTECconfirmationEmailFrom'] ) ){
-		$con_email = sanitize_text_field( $cleaned_array['_RTECconfirmationEmailFrom'] );
+		$con_email = $cleaned_array['_RTECconfirmationEmailFrom'];
 		update_post_meta( $event_id, '_RTECconfirmationEmailFrom', $con_email );
 	} else {
 		delete_post_meta( $event_id, '_RTECconfirmationEmailFrom' );
@@ -175,15 +187,24 @@ function rtec_meta_boxes_html(){
 	$max_disabled_class = '';
 	$deadline_disabled_att = '';
 	$deadline_disabled_class = '';
+	$deadline_other_disabled_class = '';
+
 	$notification_email = rtec_get_notification_email_recipients( $post->ID, true );
 	$confirmation_from = rtec_get_confirmation_from_address( $post->ID, true );
 	$deadline_time = isset( $event_meta['deadline_time'] ) ? $event_meta['deadline_time'] : strtotime( $event_meta['start_date'] );
+	if ( $deadline_time == 0 ) {
+		$deadline_time = strtotime( date( 'Y/m/d' ) ) + 28800;
+	}
 
 	if ( $event_meta['registrations_disabled'] ) {
 		$limit_disabled_att = ' disabled="true"';
 		$limit_disabled_class = ' rtec-fade';
 		$deadline_disabled_att = ' disabled="true"';
 		$deadline_disabled_class = ' rtec-fade';
+	}
+
+	if ( $event_meta['deadline_type'] !== 'other' ) {
+		$deadline_other_disabled_class = ' rtec-fade';
 	}
 
 	if ( $event_meta['registrations_disabled'] || ! $event_meta['limit_registrations'] ) {
@@ -242,8 +263,8 @@ function rtec_meta_boxes_html(){
 									<br />
 									<input type="radio" id="rtec-other-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECdeadlineType" <?php if( $event_meta['deadline_type'] === 'other' ) { echo 'checked'; } ?> value="other"<?php echo $deadline_disabled_att;?>/>
 									<label for="rtec-other-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Other:', 'registrations-for-the-events-calendar' ); ?></label>
-									<input type="text" id="rtec-date-picker" name="_RTECdeadlineDate" value="<?php echo date( "m/d/Y", $deadline_time ); ?>" class="rtec-date-picker" style="width: 100px;"/>
-									<input autocomplete="off" tabindex="2001" type="text" class="rtec-time-picker ui-timepicker-input" name="_RTECdeadlineTime" id="rtec-time-picker" data-step="30" data-round="" value="<?php echo date( "H:i:s", $deadline_time ); ?>" style="width: 80px;">
+									<input type="text" id="rtec-date-picker-deadline" name="_RTECdeadlineDate" value="<?php echo date( 'Y-m-d', $deadline_time ); ?>" data-rtec-deadline="<?php echo $deadline_time; ?>"class="rtec-date-picker<?php echo $deadline_other_disabled_class; ?>" style="width: 100px;"/>
+									<input autocomplete="off" tabindex="2001" type="text" class="rtec-time-picker ui-timepicker-input<?php echo $deadline_other_disabled_class; ?>" name="_RTECdeadlineTime" id="rtec-time-picker" data-step="30" data-round="" value="<?php echo date( "H:i:s", $deadline_time ); ?>" style="width: 80px;">
 								</td>
 							</tr>
 
@@ -355,7 +376,9 @@ function rtec_save_meta(){
 
 			$deadline_time_stamp = ( (int)$parsed_date['hour'] * 60 * 60 ) + ( (int)$parsed_date['minute'] * 60 ) + strtotime( $deadline_date );
 
-			update_post_meta( $post->ID, '_RTECdeadlineTimeStamp', $deadline_time_stamp );
+			if ( isset( $post->ID ) ) {
+				update_post_meta( $post->ID, '_RTECdeadlineTimeStamp', $deadline_time_stamp );
+			}
 		}
 	}
 
@@ -367,17 +390,17 @@ function rtec_save_meta(){
 		$max_reg = sanitize_text_field( $_POST['_RTECmaxRegistrations'] );
 	}
 
-	if ( isset( $_POST['_RTECnotificationEmailRecipient'] ) && !empty( $_POST['_RTECnotificationEmailRecipient'] ) ){
+	if ( isset( $_POST['_RTECnotificationEmailRecipient'] ) && !empty( $_POST['_RTECnotificationEmailRecipient'] ) && isset( $post->ID ) ){
 		$not_email = sanitize_text_field( $_POST['_RTECnotificationEmailRecipient'] );
 		update_post_meta( $post->ID, '_RTECnotificationEmailRecipient', $not_email );
-	} else {
+	} elseif ( isset( $post->ID ) ) {
 		delete_post_meta( $post->ID, '_RTECnotificationEmailRecipient' );
 	}
 
-	if ( isset( $_POST['_RTECconfirmationEmailFrom'] ) && !empty( $_POST['_RTECconfirmationEmailFrom'] ) ){
+	if ( isset( $_POST['_RTECconfirmationEmailFrom'] ) && !empty( $_POST['_RTECconfirmationEmailFrom'] ) && isset( $post->ID ) ){
 		$con_email = sanitize_text_field( $_POST['_RTECconfirmationEmailFrom'] );
 		update_post_meta( $post->ID, '_RTECconfirmationEmailFrom', $con_email );
-	} else {
+	} elseif ( isset( $post->ID ) ) {
 		delete_post_meta( $post->ID, '_RTECconfirmationEmailFrom' );
 	}
 
@@ -396,14 +419,14 @@ add_action( 'save_post', 'rtec_save_meta' );
  * but events are disabled by default
  *
  * @since 1.4
+ * @since 2.0 now works with added filtering
  */
-function rtec_should_show( $view, $disabled_status ) {
+function rtec_should_show( $with, $disabled_status ) {
 
-	if ( $view === 'all' ) {
+	if ( $with === 'either' ) {
 		return true;
 	} else {
-		$working_status = ( $disabled_status === false || $disabled_status === '0' );
-		return ( $working_status );
+		return ( $disabled_status === false );
 	}
 }
 
@@ -544,13 +567,9 @@ function rtec_event_csv() {
 		$event_obj = new RTEC_Admin_Event();
 		$form->build_form( (int)$_GET['id'] );
 
-		$event_obj->build_admin_event( (int)$_GET['id'], 'csv', $_GET['mvt'], $form );
+		$event_obj->build_admin_event( (int)$_GET['id'], 'csv', '', $form );
 		$event_meta = $event_obj->event_meta;
 		$venue_title = $event_meta['venue_title'];
-
-		if ( $event_obj->mvt_label !== '' ) {
-			$venue_title .= ' - ' . $event_obj->mvt_label;
-		}
 
 		$event_meta_string = array(
 			array( $event_meta['title'] ) ,
@@ -577,21 +596,9 @@ function rtec_event_csv() {
 
 			$formatted_registration = array( 'registration_date' => $registration['registration_date'] );
 
-			if ( $event_obj->event_meta['mvt_enabled'] && isset( $registration['venue'] ) && isset( $event_meta['mvt_fields'][ $registration['venue'] ]['label'] ) ) {
-				$formatted_registration['venue'] = $event_meta['mvt_fields'][ $registration['venue'] ]['label'];
-			} elseif ( $event_obj->event_meta['mvt_enabled'] &&  $event_obj->mvt === '' || $event_obj->mvt === '_unassigned' ) {
-				$formatted_registration['venue']  = $event_meta['venue_title'];
-			}
-
 			foreach ( $event_obj->column_label as $column => $label ) {
 
-				if ( $column === 'venue' ) {
-					if ( isset( $event_meta['mvt_fields'][ $registration[ $column ] ]['label'] ) ) {
-						$formatted_registration[$column] = $encoding->fixUTF8( $event_meta['mvt_fields'][ $registration[ $column ] ]['label'] );
-					} else {
-						$formatted_registration[$column] = stripslashes( $registration[ $column ] );
-					}
-				} elseif ( isset( $registration[$column] ) ) {
+				if ( isset( $registration[$column] ) ) {
 					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration[$column] ) );
 				} else if ( isset( $registration[$column.'_name'] ) ) {
 					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration[$column.'_name'] ) );
@@ -614,6 +621,12 @@ function rtec_event_csv() {
 }
 add_action( 'admin_init', 'rtec_event_csv' );
 
+/**
+ * Accessed with AJAX from admin pages to show search results for matching
+ * first, last, email, and phone fields
+ *
+ * @since 2.0
+ */
 function rtec_get_search_results() {
 	global $rtec_options;
 
@@ -818,74 +831,6 @@ function rtec_get_event_columns( $full = false ) {
 
 
 	return $labels;
-}
-
-/**
- * Gets the currently active form field columns
- *
- * @param $num_columns  int     columns in display
- *
- * @since 1.3
- * @return array
- */
-function rtec_get_current_columns( $num_columns ) {
-	global $rtec_options;
-
-	$standard_columns = array( 'last', 'last_name', 'first', 'first_name', 'email', 'phone', 'other' );
-
-	// add custom labels
-	if ( isset( $rtec_options['custom_field_names'] ) ) {
-		$custom_columns = explode( ',', $rtec_options['custom_field_names'] );
-	} else {
-		$custom_columns = array();
-	}
-
-	$columns = array_merge( $standard_columns, $custom_columns );
-
-	$needed_column_names = array();
-	$i = 0;
-	while( isset( $columns[$i] ) && ( count( $needed_column_names ) < $num_columns ) ) {
-		if ( isset( $rtec_options[$columns[$i].'_show'] ) && ( $rtec_options[$columns[$i].'_show'] !== false ) ) {
-			if ( $columns[$i] === 'first' || $columns[$i] === 'last' ){
-				$needed_column_names[$columns[$i].'_name'] = $rtec_options[$columns[$i].'_label'];
-			} else {
-				$needed_column_names[$columns[$i]] = $rtec_options[$columns[$i].'_label'];
-			}
-		}
-		$i++;
-	}
-
-	return $needed_column_names;
-}
-
-/**
- * Color codes the registrations box according to percent filled
- *
- * @param   $num_registered int current number of registrants for the event
- * @since 1.4
- *
- * @return  string              style attribute to produce colors
- */
-function rtec_get_attendance_bg_color( $num_registered = 0, $event_meta ) {
-
-	if ( isset( $event_meta['limit_registrations'] ) && $event_meta['limit_registrations'] == true ) {
-		$ratio = $num_registered / max( $event_meta['max_registrations'], 1 );
-
-		if ( $ratio >= .999 ) {
-			return 'background-color: #23282d; color: #fff;';
-		} elseif ( $ratio > .9 ) {
-			return 'background-color: #009900;';
-		} elseif ( $ratio > .7 ) {
-			return 'background-color: #4dff4d;';
-		} elseif ( $ratio > .5 ) {
-			return 'background-color: #99ff99;';
-		} else {
-			return 'background-color: #e5e5e5;';
-		}
-
-	} else {
-		return 'background-color: #23282d; color: #fff;';
-	}
 }
 
 /**
