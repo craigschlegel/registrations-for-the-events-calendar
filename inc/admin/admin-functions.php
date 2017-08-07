@@ -60,13 +60,14 @@ function rtec_the_admin_notices() {
 	global $rtec_options;
 
 	if ( ! isset( $rtec_options['default_max_registrations'] ) ) : ?>
-		<div class="notice notice-info is-dismissible">
-			<p>
-				<?php esc_attr_e( 'Hey! First time using the plugin? You can start configuring on the' , 'registrations-for-the-events-calendar' ); ?>
-				<a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar-pro%2F_settings&tab=form">"Form" tab</a><br />
-				<?php esc_attr_e( 'Or check out our setup directions' , 'registrations-for-the-events-calendar' ); ?>
-				<a href="https://www.roundupwp.com/docs/getting-started/" target="_blank">on our website</a>
-			</p>
+		<div class="rtec-notice-all-admin notice notice-info is-dismissible">
+			<div class="rtec-img-wrap">
+				<img src="<?php echo RTEC_PLUGIN_URL . 'img/RTEC-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar">
+			</div>
+			<div class="rtec-msg-wrap">
+				<p><?php esc_attr_e( 'Registration forms are not added to all of your single event pages. Check out the ' , 'registrations-for-the-events-calendar' ); ?><a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form">"Form" tab</a> to configure options</p>
+				<p><?php esc_attr_e( 'You can also view setup directions ' , 'registrations-for-the-events-calendar' ); ?><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank">on our website</a></p>
+			</div>
 		</div>
 	<?php endif;
 }
@@ -339,7 +340,7 @@ function rtec_meta_boxes_html(){
 			</tr>
 			<tr>
 				<td colspan="2">
-					<p><?php _e( 'More single event options like custom confirmation email templates, multiple venues/tier registration, settings for logged-in users and others in', 'registrations-for-the-events-calendar' ); ?> <a href="https://www.roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank">Registrations for the Events Calendar Pro</a></p>
+					<p><?php _e( 'More single event options like custom confirmation email templates, multiple venues/tier registration, settings for logged-in users and others in', 'registrations-for-the-events-calendar' ); ?> <a href="https://roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank">Registrations for the Events Calendar Pro</a></p>
 				</td>
 			</tr>
 			</tbody>
@@ -602,10 +603,10 @@ function rtec_event_csv() {
 					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration[$column] ) );
 				} else if ( isset( $registration[$column.'_name'] ) ) {
 					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration[$column.'_name'] ) );
-				} else if ( isset( $registration['custom'][$label] ) ) {
-					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration['custom'][$label] ) );
 				} else if ( isset( $registration['custom'][$column] ) ) {
 					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration['custom'][$column]['value'] ) );
+				} else if ( isset( $registration['custom'][$label] ) ) {
+					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration['custom'][$label] ) );
 				}
 
 			}
@@ -678,7 +679,6 @@ function rtec_get_search_results() {
 			<?php endforeach; ?>
 			<th>Event</th>
 			<th>Start Date</th>
-			<th>Venue/Tier</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -701,9 +701,9 @@ function rtec_get_search_results() {
 						if ( isset( $registration[$column] ) ) {
 
 							if ( $column === 'phone' ) {
-								echo esc_html( rtec_format_phone_number( str_replace( '\\', '', $registration[$column] ) ) );
+								echo esc_html( rtec_format_phone_number( str_replace( '\\', '', $registration[ $column ] ) ) );
 							} else {
-								echo esc_html( str_replace( '\\', '', $registration[$column] ) );
+								echo esc_html( str_replace( '\\', '', $registration[ $column ] ) );
 							}
 
 						}
@@ -717,7 +717,7 @@ function rtec_get_search_results() {
 		<?php else: ?>
 
 			<tr>
-				<td colspan="4" align="center"><?php _e( 'No Registrations Yet', 'registrations-for-the-events-calendar-pro' ); ?></td>
+				<td colspan="4"><?php _e( 'No Registrations Found', 'registrations-for-the-events-calendar-pro' ); ?></td>
 			</tr>
 
 		<?php endif; // registrations not empty ?>

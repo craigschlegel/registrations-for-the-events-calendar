@@ -126,8 +126,7 @@ jQuery(document).ready(function($) {
             var $emailEl = $context.find('input[name=rtec_email]'),
                 $spinner = '<span class="rtec-email-spinner"><img title="Tribe Loading Animation Image" alt="Tribe Loading Animation Image" class="tribe-events-spinner-medium" src="http://localhost/development/wp-content/plugins/the-events-calendar/src/resources/images/tribe-loading.gif"></span>';
 
-            $context.find('input[name=rtec_submit]').attr('disabled',true);
-            $context.find('.rtec-form-buttons').css('position','relative').append($spinner);
+            $context.find('input[name=rtec_submit]').attr('disabled',true).css('opacity','.5');
             $emailEl.attr('disabled',true)
                 .css('opacity',.5)
                 .closest('div').append($spinner);
@@ -169,7 +168,7 @@ jQuery(document).ready(function($) {
                         $emailEl.addClass(RtecForm.validClass);
                         RtecForm.removeErrorMessage($emailEl);
                     }
-                    $context.find('input[name=rtec_submit]').removeAttr('disabled');
+                    $context.find('input[name=rtec_submit]').removeAttr('disabled').css('opacity',1);;
                     $emailEl.removeAttr('disabled')
                         .css('opacity',1);
                     $context.find('.rtec-email-spinner').remove();

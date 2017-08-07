@@ -1,11 +1,11 @@
 === Registrations for The Events Calendar ===
 
 Contributors: roundupwp
-Support Website: https://roundupwp.com/products/registrations-for-the-events-calendar/support/
-Tags: registration, The Events Calendar, RSVP, events, groups, workshops, meetups, meetings, seminars, conferences, registrations, add-on, extension, community, event registration, event contact, events calendar
+Support Website: https://roundupwp.com/support
+Tags: registration, The Events Calendar, RSVP, events, workshops, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event registration, event contact, events calendar
 Requires at least: 3.0
 Tested up to: 4.8
-Stable tag: 1.6.2
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ Manage registrations for your events and classes with ease. The Registrations fo
 
 = Highly Customizable =
 
-Create a simple, straight-forward registration form with the ability to add as many text form fields as you need. Automatically add the form to every single event page in one of four parts of the template. Change the labels, error messaging and whether or not the field is required. The form is submitted using AJAX so your guests never have to leave the single event page while submitting a registration. Optionally, you can set limits for the number of guests allowed to register per event along with displaying a list of current attendees above the form.
+Create a simple, straight-forward registration form with the ability to add as many text form fields as you need. Automatically add the form to every single event page in one of four areas (parts of the template). Change the labels, error messaging and whether or not the field is required. The form is submitted using AJAX so your guests never have to leave the single event page while submitting a registration. Optionally, you can set limits for the number of guests allowed to register per event along with displaying a list of current attendees above the form.
 
 = Quick to Set Up and Easy to Get Started =
 
@@ -23,7 +23,7 @@ As soon as you install and activate the plugin you can begin collecting registra
 
 = Powerful Backend Features for Easy Management =
 
-Registrations are saved in the WordPress database and can be manually added, edited, and deleted in the admin area. See notifications of when new registrations need to be reviewed. View a breakdown of registrations by events and browse them quickly in an overview. Export your registrations into a spreadsheet using a .csv export feature.
+Registrations are saved in the WordPress database and can be manually added, edited, and deleted in the admin area. See notifications of when new registrations need to be reviewed. View a breakdown of registrations by event and browse them quickly in an overview. Export your registrations into a spreadsheet using a .csv export feature.
 
 = Features =
 
@@ -32,9 +32,10 @@ Registrations are saved in the WordPress database and can be manually added, edi
 * Customizable form and messages. Easy to manually translate and tweak to your use case.
 * Set limits customized to each event for total registrations
 * Form submits without the visitor needing to leave the page or even refresh using AJAX.
+* Registrants are sent a customizable confirmation email and the event organizer can be sent a notification email when a registration is made.
 * Optional attendee list visible above the form
 * Validate emails, allow only one registration per email per event
-* Many options can be customized for each event including email recipients, email "from" addresses, and registration limits
+* Many options can be customized for each event including email recipients, email "from" addresses, deadline, and registration limits
 * Shortcodes to display registration forms in other areas of your website
 * Manage registrations in the backend with the ability to add, edit, and delete.
 * Export registrations to a spreadsheet in .csv form.
@@ -82,20 +83,23 @@ Special thanks to Henrik (hjald) for fixing a bug in the .csv exporter!
 
 == Screenshots ==
 
-1. Default position and look of the Register button in an event page
-2. View of the registration form revealed on "click"
+
+1. View of the registration form revealed on "click"
+2. Default position and look of the Register button in an event page
 3. The Registrations tab in at-a-glance view
-4. Detailed view of a single event's registrations. Buttons to edit, delete, and add registrations
+4. Detailed view of a single event's registrations. Buttons to delete, edit, add and export registrations
 5. View of the settings on the "Form" tab
 6. View of the settings on the "Email" tab
 7. Example confirmation email
 8. Example notification email
+9. Search through registrants
+10. Example .csv export file
 
 == Frequently Asked Questions ==
 
 = Can I limit the number of registrations for an event? =
 
-Yes. You can set up the maximum number of registrants on the "Form" tab.
+Yes. You can set up the maximum number of registrants on the "Form" tab or set this for each event individually.
 
 = Can I add more fields to the form? =
 
@@ -107,7 +111,7 @@ By default, registrations are enabled for every event. You can disable registrat
 
 = Can I set a deadline for when registrations are accepted? =
 
-You can configure an offset for how long registrations will be available relative to the event start time.
+You can configure an offset for how long registrations will be available relative to the event start time or set a specific deadline for each event.
 
 = Can I edit registrations and export them for an event? =
 
@@ -129,6 +133,18 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.0 =
+* New: Much of the codebase has changed. Custom code may no longer work. See documentation for new hooks for developers.
+* New: Redesigned "Registrations" tab now offers more filtering options for events, list view of events, and ability to search through registrations
+* New: Notification and Confirmation are now HTML emails. You can use the tiny mce editor for your email templates on the "Email" tab.
+* New: Several styling/UI improvements for the settings pages. Some options reordered for a more logical flow. Asterisks added by settings that can be set for each event.
+* New: Field added to set specific date and times for deadlines for each event. Find this on the "edit event" screen or in the event options drop-down menu on the "Register" tab.
+* Tweak: If the form is filled out incorrectly, the registrant will be scrolled to the field with the first error automatically
+* Tweak: If "The Events Calendar" is not active, notice appears at the top of the admin page to notify the user that "The Events Calendar" needs to be activated.
+* Tweak: Custom field data is now stored differently in the database.
+* Tweak: CSS added to override theme styling that may cause problems with form field display.
+* Fix: Attendee list will not appear on events that have registrations disabled.
+
 = 1.6.2 =
 * Fix: CSV export feature not working in certain circumstances
 

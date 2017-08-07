@@ -4,6 +4,7 @@ settings_errors(); ?>
 <div class="rtec-individual-available-notice">
     <p><strong><span class="rtec-individual-available">&#42;</span>Can also be set for each event separately on the Events->Edit page</strong></p>
 </div>
+<hr>
 <form method="post" action="options.php">
     <?php settings_fields( 'rtec_options' ); ?>
     <?php //echo'<pre>';var_dump(get_option('rtec_options'));echo'</pre>'; ?>

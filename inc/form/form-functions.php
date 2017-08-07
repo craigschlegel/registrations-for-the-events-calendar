@@ -203,7 +203,7 @@ function rtec_the_default_attendee_list( $registrants_data )
 	$rtec = RTEC();
 	$form = $rtec->form->instance();
 
-	$form::get_registrants_data_html( $registrants_data );
+	$form->get_registrants_data_html( $registrants_data );
 }
 add_action( 'rtec_the_attendee_list', 'rtec_the_default_attendee_list', 10, 1 );
 

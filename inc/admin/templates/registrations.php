@@ -38,7 +38,7 @@ rtec_the_admin_notices();
 
 <?php do_action( 'rtec_registrations_tab_after_the_title' ); ?>
 
-	<div class="rtec-wrapper rtec-overview">
+	<div class="rtec-wrapper rtec-overview rtec-overview-<?php echo $view_type; ?>">
 
 		<?php do_action( 'rtec_registrations_tab_before_events' ); ?>
 

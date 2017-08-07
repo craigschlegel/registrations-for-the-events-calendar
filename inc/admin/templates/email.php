@@ -7,11 +7,11 @@ settings_errors(); ?>
 <?php
 $new_status = get_transient( 'rtec_new_messages' );
 if ( $new_status === 'yes' ) : ?>
-<div class="rtec-em-alert">
-    <p><?php _e( 'For best results with email delivery, check out the related <a href="https://roundupwp.com/faq/my-confirmationnotification-emails-are-missing/" target="_blank">article</a> on our website', 'registrations-for-the-events-calendar' ); ?></p>
-</div>
+    <div class="rtec-notice">
+        <p><?php _e( 'For best results with email delivery, check out the related <a href="https://roundupwp.com/faq/my-confirmationnotification-emails-are-missing/" target="_blank">article</a> on our website', 'registrations-for-the-events-calendar' ); ?></p>
+    </div>
 <?php endif; ?>
-
+<hr>
 <form method="post" action="options.php">
     <?php settings_fields( 'rtec_options' ); ?>
     <?php do_settings_sections( 'rtec_email_all' ); ?>

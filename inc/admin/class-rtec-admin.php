@@ -257,7 +257,7 @@ class RTEC_Admin
         // Registration Deadline
         $this->create_settings_field( array(
             'name' => 'registration_deadline',
-            'title' => '<label for="rtec_registration_deadline">Registration Deadline Offset<span class="rtec-individual-available">&#42;</span></label>', // label for the input field
+            'title' => '<label for="rtec_registration_deadline">Default Deadline for Registration<span class="rtec-individual-available">&#42;</span></label>', // label for the input field
             'callback'  => 'deadline_offset', // name of the function that outputs the html
             'page' => 'rtec_form_registration_availability', // matches the section name
             'section' => 'rtec_form_registration_availability', // matches the section name
@@ -469,28 +469,28 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'preserve_registrations',
-            'title' => '<label for="rtec_preserve_db">Preserve registrations on uninstall</label>',
+            'title' => '<label for="rtec_preserve_registrations">Preserve registrations on uninstall</label>',
             'example' => '',
             'description' => 'Keep your registration records preserved in the database when you uninstall the plugin',
             'callback'  => 'preserve_checkbox',
             'class' => 'default-text',
             'page' => 'rtec_advanced',
             'section' => 'rtec_advanced',
-            'default' => false
+            'default' => true
         ));
 
 	    // preserve settings
 	    $this->create_settings_field( array(
 		    'option' => 'rtec_options',
 		    'name' => 'preserve_settings',
-		    'title' => '<label for="rtec_preserve_db">Preserve settings on uninstall</label>',
+		    'title' => '<label for="rtec_preserve_settings">Preserve settings on uninstall</label>',
 		    'example' => '',
 		    'description' => 'Keep your form and email settings preserved when you uninstall the plugin',
 		    'callback'  => 'preserve_checkbox',
 		    'class' => 'default-text',
 		    'page' => 'rtec_advanced',
 		    'section' => 'rtec_advanced',
-		    'default' => false
+		    'default' => true
 	    ));
 
         /**

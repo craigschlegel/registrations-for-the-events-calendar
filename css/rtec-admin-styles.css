@@ -45,8 +45,9 @@
     background: #CFF7F3;
     border: 1px solid #9EE6DE;
 }
-
-
+.rtec-admin-wrap .rtec-notice {
+    margin-bottom: 0;
+}
 .rtec-wrapper {
     box-sizing: border-box;
 }
@@ -87,9 +88,6 @@ div.rtec-a-button {
     clear: both;
     content: " ";
     visibility: hidden;
-}
-.rtec-individual-available-notice {
-    margin-bottom: 50px;
 }
 .rtec-admin-wrap hr {
     margin: 40px 0;

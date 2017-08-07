@@ -80,6 +80,7 @@
     position: relative;
     margin-bottom: 30px;
     padding: 12px 40px 12px 16px;
+    padding-right: 40px !important;
     font-size: 16px;
 }
 #rtec .rtec-submit-button {
@@ -103,17 +104,17 @@
 #rtec textarea {
     box-sizing: border-box;
     display: inline-block;
-    padding: .3em .6em;
+    padding: 8px;
     margin: 0;
     width: 100%;
     height: auto;
-    border: 1px solid #ddd;
-    line-height: 1.5em;
+    font-size: 18px;
+    line-height: 1.5;
     background: #fff;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    font-size: 1em;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
 }
 #rtec input[type="number"] {
     max-width: 100px;
@@ -138,29 +139,33 @@
 #rtec .rtec-error {
     border: 1px solid rgb(255, 92, 51) !important;
 }
-#rtec .rtec-email-spinner {
-    position: absolute;
-    top: .25em;
-    right: .25em;
-}
 #rtec .rtec-email-spinner img{
+    position: absolute;
+    top: 11px;
+    right: 11px;
     border-radius: 0;
-    box-shadow: none;
-    margin: 0;
-    padding: 0;
-    border: none;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
     width: 24px;
     height: 24px;
 }
+#rtec .rtec-form-buttons .rtec-email-spinner {
+    top: 50%;
+    right: 50%;
+    margin-top: -12px;
+    margin-right: -12px;
+}
 #rtec .rtec-error-message {
     position: absolute;
-    top: 2.13em;
+    bottom: -23px;
     margin: 0;
-    padding: 0 .2em 2px;
-    font-size: 1em;
+    padding: 0 5px;
     font-weight: bold;
     background: rgb(255, 92, 51);
     color: #fff;
+    border-radius: 3px;
 }
 #rtec .rtec-success-message {
     text-align: center;

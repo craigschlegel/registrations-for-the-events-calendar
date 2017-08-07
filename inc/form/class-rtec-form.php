@@ -558,11 +558,8 @@ class RTEC_Form
 	 *
 	 * @return bool
 	 */
-	public function registrations_are_disabled( $filter_disable = false )
+	public function registrations_are_disabled()
 	{
-		if ( $filter_disable === true ) {
-			return true;
-		}
 		return ( $this->event_meta['registrations_disabled'] === '1' || $this->event_meta['registrations_disabled'] === true );
 	}
 

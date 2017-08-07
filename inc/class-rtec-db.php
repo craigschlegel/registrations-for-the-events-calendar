@@ -340,7 +340,6 @@ class RTEC_Db
 
 		$rtec = RTEC();
 		$form = $rtec->form->instance();
-		//var_dump($rtec->form->instance());
 
 		$registrants = $this->retrieve_entries( $args, false, 300, $arrange = 'DESC' );
 
