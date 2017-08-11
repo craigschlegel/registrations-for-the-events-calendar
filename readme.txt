@@ -137,7 +137,7 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 * New: Read an explanation of what's new [here](https://roundupwp.com/rtec-2-0/)
 * New: Much of the codebase has changed. Custom code may no longer work. See [documentation](https://roundupwp.com/docs/codex) for new hooks for developers.
 * New: Redesigned "Registrations" tab now offers more filtering options for events, list view of events, and ability to search through registrations
-* New: Notification and Confirmation are now HTML emails. You can use the tiny mce editor for your email templates on the "Email" tab.
+* New: Notification and Confirmation emails are now HTML emails. You can use the tiny mce editor for your email templates on the "Email" tab.
 * New: Several styling/UI improvements for the settings pages. Some options reordered for a more logical flow. Asterisks added by settings that can be set for each event.
 * New: Field added to set specific date and times for deadlines for each event. Find this on the "edit event" screen or in the event options drop-down menu on the "Register" tab.
 * Tweak: If the form is filled out incorrectly, the registrant will be scrolled to the field with the first error automatically

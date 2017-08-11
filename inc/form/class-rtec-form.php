@@ -468,7 +468,7 @@ class RTEC_Form
 				$fields_data[ $i ]['meta'] = '';
 				$fields_data[ $i ]['default_value'] = '';
 				$fields_data[ $i ]['is_required'] = true;
-				$fields_data[ $i ]['error_text'] = rtec_get_text( $rtec_options[ $type . '_error' ], __( 'Error', 'registrations-for-the-events-calendar' ) );
+				$fields_data[ $i ]['error_text'] = rtec_get_text( $rtec_options[ 'recaptcha_error' ], __( 'Error', 'registrations-for-the-events-calendar' ) );
 			}
 
 		} else {
