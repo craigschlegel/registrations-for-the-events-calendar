@@ -65,7 +65,7 @@ function rtec_the_admin_notices() {
 				<img src="<?php echo RTEC_PLUGIN_URL . 'img/RTEC-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar">
 			</div>
 			<div class="rtec-msg-wrap">
-				<p><?php esc_attr_e( 'Registration forms are not added to all of your single event pages. Check out the ' , 'registrations-for-the-events-calendar' ); ?><a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form">"Form" tab</a> to configure options</p>
+				<p><?php esc_attr_e( 'Registration forms are now added to all of your single event pages. Check out the ' , 'registrations-for-the-events-calendar' ); ?><a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form">"Form" tab</a> to configure options</p>
 				<p><?php esc_attr_e( 'You can also view setup directions ' , 'registrations-for-the-events-calendar' ); ?><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank">on our website</a></p>
 			</div>
 		</div>
@@ -192,7 +192,7 @@ function rtec_meta_boxes_html(){
 
 	$notification_email = rtec_get_notification_email_recipients( $post->ID, true );
 	$confirmation_from = rtec_get_confirmation_from_address( $post->ID, true );
-	$deadline_time = isset( $event_meta['deadline_time'] ) ? $event_meta['deadline_time'] : strtotime( $event_meta['start_date'] );
+	$deadline_time = isset( $event_meta['deadline_other_timestamp'] ) ? $event_meta['deadline_other_timestamp'] : strtotime( $event_meta['start_date'] );
 	if ( $deadline_time == 0 ) {
 		$deadline_time = strtotime( date( 'Y/m/d' ) ) + 28800;
 	}

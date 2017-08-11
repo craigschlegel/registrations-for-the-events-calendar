@@ -392,6 +392,29 @@ function rtec_sanitize_outputted_html( $input ) {
 		'ul' => array(
 			'class' => array(),
 		),
+		'table' => array(
+			'style'  => array(),
+			'class'  => array(),
+			'cellpadding' => array(),
+			'cellspacing' => array(),
+			'border' => array(),
+		),
+		'tbody' => array(
+			'style'  => array(),
+			'class'  => array(),
+		),
+		'td' => array(
+			'style'  => array(),
+			'class'  => array(),
+		),
+		'th' => array(
+			'style'  => array(),
+			'class'  => array(),
+		),
+		'tr' => array(
+			'style'  => array(),
+			'class'  => array(),
+		)
 	);
 
 	return wp_kses( $input, $allowed_tags );

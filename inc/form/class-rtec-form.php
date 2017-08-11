@@ -198,7 +198,10 @@ class RTEC_Form
 					'value_2' => $value2
 				);
 				$field_attributes[ $field['field_name'] ]['valid_params']['sum'] = (int)$field_attributes[$field['field_name']]['valid_params']['value_1'] + (int)$field_attributes[ $field['field_name'] ]['valid_params']['value_2'];
-				$field_attributes[ $field['field_name'] ]['label'] = str_replace( '&#42;', ' ' . $field_attributes['recaptcha']['valid_params']['value_1'] . ' &#43; ' . $field_attributes['recaptcha']['valid_params']['value_2'] .'&#42;', $field_attributes['recaptcha']['label'] );
+				$recaptcha_label = isset( $rtec_options['recaptcha_label'] ) ? $rtec_options['recaptcha_label'] : 'Waht is';
+				$field_attributes[ $field['field_name'] ]['label'] = trim( $recaptcha_label ) . ' ' . $field_attributes['recaptcha']['valid_params']['value_1'] . ' &#43; ' . $field_attributes['recaptcha']['valid_params']['value_2'] .'&#42;';
+				$field_attributes[ $field['field_name'] ]['error_message'] = isset( $rtec_options['recaptcha_error'] ) ? $rtec_options['recaptcha_error'] : 'Please try again';
+
 			}
 
 			$standard_fields = rtec_get_standard_form_fields();
