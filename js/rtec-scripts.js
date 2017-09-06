@@ -122,11 +122,17 @@ jQuery(document).ready(function($) {
             }
         },
 
+        enableSubmitButton : function(_callback,$context) {
+            if (_callback()) {
+                $context.find('input[name=rtec_submit]').removeAttr('disabled').css('opacity',1);
+            }
+        },
+
         isDuplicateEmail : function(email,eventID,$context) {
             var $emailEl = $context.find('input[name=rtec_email]'),
-                $spinner = '<span class="rtec-email-spinner"><img title="Tribe Loading Animation Image" alt="Tribe Loading Animation Image" class="tribe-events-spinner-medium" src="http://localhost/development/wp-content/plugins/the-events-calendar/src/resources/images/tribe-loading.gif"></span>';
+                $spinnerImg = $('.rtec-spinner').length ? $('.rtec-spinner').html() : '',
+                $spinner = '<span class="rtec-email-spinner">'+$spinnerImg+'</span>';
 
-            $context.find('input[name=rtec_submit]').attr('disabled',true).css('opacity','.5');
             $emailEl.attr('disabled',true)
                 .css('opacity',.5)
                 .closest('div').append($spinner);
@@ -168,7 +174,7 @@ jQuery(document).ready(function($) {
                         $emailEl.addClass(RtecForm.validClass);
                         RtecForm.removeErrorMessage($emailEl);
                     }
-                    $context.find('input[name=rtec_submit]').removeAttr('disabled').css('opacity',1);;
+                    $context.find('input[name=rtec_submit]').removeAttr('disabled').css('opacity',1);
                     $emailEl.removeAttr('disabled')
                         .css('opacity',1);
                     $context.find('.rtec-email-spinner').remove();
@@ -185,12 +191,15 @@ jQuery(document).ready(function($) {
             typingTimer,
             doneTypingInterval = 1500;
         $rtecEmailField.keyup(function(){
-            var $this = $(this);
+            var $this = $(this),
+                $context = $this.closest('.rtec');
+            $context.find('input[name=rtec_submit]').attr('disabled',true).css('opacity','.5');
             clearTimeout(typingTimer);
             typingTimer = setTimeout(function() {
-                var $context = $this.closest('.rtec'),
-                    $eventID = $context.find('input[name=rtec_event_id]').val();
-                RtecForm.isDuplicateEmail($this.val(),$eventID,$context);
+                var $eventID = $context.find('input[name=rtec_event_id]').val();
+                RtecForm.enableSubmitButton(function() {
+                    RtecForm.isDuplicateEmail($this.val(), $eventID, $context);
+                },$context);
             }, doneTypingInterval);
         });
         $rtecEmailField.each(function() {

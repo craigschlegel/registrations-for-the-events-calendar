@@ -2,10 +2,10 @@
 
 Contributors: roundupwp
 Support Website: https://roundupwp.com/support
-Tags: registration, The Events Calendar, RSVP, events, workshops, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event registration, event contact, events calendar
+Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.0
 Tested up to: 4.8
-Stable tag: 2.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,7 +83,6 @@ Special thanks to Henrik (hjald) for fixing a bug in the .csv exporter!
 
 == Screenshots ==
 
-
 1. View of the registration form revealed on "click"
 2. Default position and look of the Register button in an event page
 3. The Registrations tab in at-a-glance view
@@ -133,6 +132,10 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.0.1 =
+* Tweak: When checking for duplicate email addresses while a visitor is filling out the form, the submit button is disabled while the person is typing.
+* Fix: Incorrect file path for the loading .gif when checking for duplicate emails.
+
 = 2.0 =
 * New: Read an explanation of what's new [here](https://roundupwp.com/rtec-2-0/)
 * New: Much of the codebase has changed. Custom code may no longer work. See [documentation](https://roundupwp.com/docs/codex) for new hooks for developers.
