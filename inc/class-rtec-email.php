@@ -104,35 +104,36 @@ class RTEC_Email {
 
 		$date_format = isset( $rtec_options['custom_date_format'] ) ? $rtec_options['custom_date_format'] : 'F j, Y';
 		$date_str = date_i18n( $date_format, strtotime( $sanitized_data['date'] ) );
-		$body = __( 'You are registered!', 'registrations-for-the-events-calendar' ) . "\n\n";
-		$body .= sprintf( __( 'Event', 'registrations-for-the-events-calendar' ) .': %1$s at %2$s on %3$s'. "\n",
-			esc_html( $sanitized_data['title'] ) , esc_html( $sanitized_data['venue_title'] ) , $date_str );
+		$body = '<p>';
+		$body .= __( 'You are registered!', 'registrations-for-the-events-calendar' ) . "<br><br>";
+		$first_message = sprintf( __( 'Event: %1$s at %2$s on %3$s', 'registrations-for-the-events-calendar' ), $sanitized_data['title'], $sanitized_data['venue_title'], $date_str );
+		$body .= esc_html( $first_message ) . '<br>';
 		$first = ! empty( $sanitized_data['first'] ) ? esc_html( $sanitized_data['first'] ) : '';
 		$last = ! empty( $sanitized_data['last'] ) ? esc_html( $sanitized_data['last'] ) : '';
-		$body .= sprintf ( __( 'Name', 'registrations-for-the-events-calendar' ) .': %1$s %2$s', $first, $last ) . "\n";
+		$body .= sprintf ( __( 'Name', 'registrations-for-the-events-calendar' ) .': %1$s %2$s', $first, $last ) . "<br>";
 
 		if ( ! empty( $sanitized_data['phone'] ) ) {
 			$phone = esc_html( $sanitized_data['phone'] );
-			$body .= sprintf (  __( 'Phone', 'registrations-for-the-events-calendar' ) .': %1$s', $phone ) . "\n";
+			$body .= sprintf (  __( 'Phone', 'registrations-for-the-events-calendar' ) .': %1$s', $phone ) . "<br>";
 		}
 
 		if ( ! empty( $sanitized_data['guests'] ) ) {
 			$guests = esc_html( $sanitized_data['guests'] );
-			$body .= sprintf (  __( 'Guests', 'registrations-for-the-events-calendar' ) .': %1$s', $guests ) . "\n";
+			$body .= sprintf (  __( 'Guests', 'registrations-for-the-events-calendar' ) .': %1$s', $guests ) . "<br>";
 		}
 
 		if ( ! empty( $sanitized_data['other'] ) ) {
 			$other = esc_html( $sanitized_data['other'] );
-			$body .= sprintf (  __( 'Other', 'registrations-for-the-events-calendar' ) .': %1$s', $other ) . "\n\n";
+			$body .= sprintf (  __( 'Other', 'registrations-for-the-events-calendar' ) .': %1$s', $other ) . "<br><br>";
 		}
 
 		if ( ! empty( $sanitized_data['venue_address'] ) ) {
-			$body .= __( 'The event will be held at this location', 'registrations-for-the-events-calendar' ) . ':' . "\n\n";
+			$body .= __( 'The event will be held at this location', 'registrations-for-the-events-calendar' ) . ':' . "<br><br>";
 			$body .= sprintf( '%1$s'. "\n", esc_html( $sanitized_data['venue_address'] ) );
 			$body .= sprintf( '%1$s, %2$s %3$s'. "\n\n", esc_html( $sanitized_data['venue_city'] ), esc_html( $sanitized_data['venue_state'] ), esc_html( $sanitized_data['venue_zip'] ) );
 		}
 
-		$body .=  "\n\n" . __( 'Thank You!', 'registrations-for-the-events-calendar' );
+		$body .=  "<br><br>" . __( 'Thank You!', 'registrations-for-the-events-calendar' ) . '</p>';
 
 		return $body;
 	}
@@ -157,9 +158,8 @@ class RTEC_Email {
 			$first_label = rtec_get_text( $rtec_options['first_label'], __( 'First', 'registrations-for-the-events-calendar' ) );
 			$last_label = rtec_get_text( $rtec_options['last_label'], __( 'Last', 'registrations-for-the-events-calendar' ) );
 			$email_label = rtec_get_text( $rtec_options['email_label'], __( 'Email', 'registrations-for-the-events-calendar' ) );
-
-			$body .= sprintf( '<p>The following submission was made for: %1$s at %2$s on %3$s</p>',
-				esc_html( $sanitized_data['title'] ) , esc_html( $sanitized_data['venue_title'] ) , $date_str );
+			$first_message = sprintf( __( 'The following submission was made for: %1$s at %2$s on %3$s', 'registrations-for-the-events-calendar' ), $sanitized_data['title'], $sanitized_data['venue_title'], $date_str );
+			$body .= '<p>' . esc_html( $first_message ) . '</p>';
 			$first = ! empty( $sanitized_data['first'] ) ? esc_html( $sanitized_data['first'] ) . ' ' : ' ';
 			$last = ! empty( $sanitized_data['last'] ) ? esc_html( $sanitized_data['last'] ) : '';
 
@@ -429,6 +429,11 @@ class RTEC_Email {
 		$phone = isset( $sanitized_data['phone'] ) ? rtec_format_phone_number( $sanitized_data['phone'] ) : '';
 		$other = isset( $sanitized_data['other'] ) ? $sanitized_data['other'] : '';
 		$mvt_label = isset( $sanitized_data['mvt_label'] ) ? $sanitized_data['mvt_label'] : '';
+		$ical_link = '';
+		if ( isset( $sanitized_data['event_id'] ) && ! empty( $sanitized_data['event_id'] ) ) {
+			$event_link = get_the_permalink( $sanitized_data['event_id'] );
+			$ical_link = add_query_arg( 'ical', 1, $event_link );
+		}
 
 		if ( ! empty( $sanitized_data ) ) {
 			$search_replace = array(
@@ -445,7 +450,7 @@ class RTEC_Email {
 				'{phone}' => $phone,
 				'{other}' => $other,
 				'{venue-or-tier}' => $mvt_label,
-				'{ical-url}' => $sanitized_data['ical_url'],
+				'{ical-url}' => $ical_link,
 			);
 
 			$sanitized_data['event_id'] = isset( $sanitized_data['event_id'] ) ? $sanitized_data['event_id'] : $sanitized_data['post_id'];
@@ -503,8 +508,12 @@ class RTEC_Email {
 
 		foreach ( $malicious as $m ) {
 
-			if( stripos( $value, $m ) !== false ) {
-				return 'untrusted';
+			if ( stripos( $value, $m ) !== false ) {
+				if ( $m === 'to:' ) {
+					$value = str_replace( 'to:', 'to', $value );
+				} else {
+					return 'It looks like your message contains something potentially harmful.';
+				}
 			}
 
 		}

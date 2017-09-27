@@ -45,9 +45,9 @@ function rtec_TEC_check() {
 					<img src="<?php echo plugin_dir_url( __FILE__ ) . 'img/RTEC-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar">
 				</div>
 				<div class="rtec-msg-wrap">
-					<p>It looks like The Events Calendar plugin is not currently active.</p>
-					<p class="rtec-instructions">Please install The Events Calendar by Modern Tribe to get started with your registrations.</p>
-					<p><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank">Setup Instructions</a></p>
+					<p><?php _e( 'It looks like The Events Calendar plugin is not currently active.', 'registrations-for-the-events-calendar' ); ?></p>
+					<p class="rtec-instructions"><?php _e( 'Please install The Events Calendar by Modern Tribe to get started with your registrations.', 'registrations-for-the-events-calendar' ); ?></p>
+					<p><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank"><?php _e( 'Setup Instructions', 'registrations-for-the-events-calendar' ); ?></a></p>
 				</div>
 			</div>
 		<?php
@@ -276,7 +276,7 @@ endif; // End if class_exists check.
 register_activation_hook( __FILE__, array( 'Registrations_For_The_Events_Calendar', 'install' ) );
 
 function rtec_text_domain() {
-	load_plugin_textdomain( 'registrations-for-the-events-calendar', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
+	load_plugin_textdomain( 'registrations-for-the-events-calendar', false, basename( dirname(__FILE__) ) . '/lang' );
 }
 add_action( 'plugins_loaded', 'rtec_text_domain' );
 

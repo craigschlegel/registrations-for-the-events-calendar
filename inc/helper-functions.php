@@ -321,6 +321,15 @@ function rtec_get_text( $custom, $translation ) {
 
 }
 
+function rtec_using_translations() {
+	global $rtec_options;
+
+	if ( isset( $rtec_options['message_source'] ) && $rtec_options['message_source'] === 'custom' ) {
+		return false;
+	}
+
+	return true;
+}
 
 function rtec_sanitize_outputted_html( $input ) {
 	$allowed_tags = array(

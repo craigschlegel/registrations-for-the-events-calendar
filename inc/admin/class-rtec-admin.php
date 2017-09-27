@@ -31,7 +31,7 @@ class RTEC_Admin
      */
     public function add_tribe_submenu()
     {
-        $menu_title = 'Registrations';
+        $menu_title = __( 'Registrations', 'registrations-for-the-events-calendar' );
 
         $new_registrations_count = rtec_get_existing_new_reg_count();
 
@@ -39,7 +39,7 @@ class RTEC_Admin
             $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . esc_html( $new_registrations_count ) . '</span></span>';
         } else {
             if ( get_transient( 'rtec_new_messages' ) === 'yes' ) {
-                $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>New!</span></span>';
+                $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . __( 'New!', 'registrations-for-the-events-calendar' ) . '</span></span>';
             }
         }
 
@@ -124,11 +124,15 @@ class RTEC_Admin
             'rtec_form_form_fields'
         );
 
+        $first_error = __( 'Please enter your first name', 'registrations-for-the-events-calendar' );
+        $last_error = __( 'Please enter your last name', 'registrations-for-the-events-calendar' );
+        $email_error = __( 'Please enter a valid email address', 'registrations-for-the-events-calendar' );
+        $phone_error = __( 'Please enter a valid phone number', 'registrations-for-the-events-calendar' );
         $form_fields_array = array(
-            0 => array( 'first', 'First', 'Please enter your first name', true, true, '' ),
-            1 => array( 'last', 'Last', 'Please enter your last name', true, true, '' ),
-            2 => array( 'email', 'Email', 'Please enter a valid email address', true, true, '' ),
-            3 => array( 'phone', 'Phone', 'Please enter a valid phone number', false, false, '7, 10' )
+            0 => array( 'first', 'First', $first_error, true, true, '' ),
+            1 => array( 'last', 'Last', $last_error, true, true, '' ),
+            2 => array( 'email', 'Email', $email_error, true, true, '' ),
+            3 => array( 'phone', 'Phone', $phone_error, false, false, '7, 10' )
         );
 
         $this->create_settings_field( array(
@@ -145,7 +149,7 @@ class RTEC_Admin
         /* Registration Messages */
         add_settings_section(
             'rtec_attendee_data',
-            'Attendee Display',
+            __( 'Attendee Display', 'registrations-for-the-events-calendar' ),
             array( $this, 'blank' ),
             'rtec_attendee_data'
         );
@@ -153,9 +157,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'show_registrants_data',
-            'title' => '<label for="rtec_show_registrants_data">Show Attendee List Above Form</label>',
+            'title' => '<label for="rtec_show_registrants_data">' . __( 'Show Attendee List Above Form', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'description' => 'A list of registrations will appear above the registration form in the "Single Event" view. Note that only registrations that have been reviewed in the backend will be displayed (do not have the "new" bubble next to them)',
+            'description' => __( 'A list of registrations will appear above the registration form in the "Single Event" view. Note that only registrations that have been reviewed in the backend will be displayed (do not have the "new" bubble next to them)', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_checkbox',
             'class' => '',
             'page' => 'rtec_attendee_data',
@@ -167,7 +171,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'attendee_list_title',
-            'title' => '<label for="rtec_attendee_list_title">Attendee List Title</label>',
+            'title' => '<label for="rtec_attendee_list_title">' . __( 'Attendee List Title', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'description' => '',
             'callback'  => 'default_text',
@@ -176,13 +180,13 @@ class RTEC_Admin
             'page' => 'rtec_attendee_data',
             'section' => 'rtec_attendee_data',
             'type' => 'text',
-            'default' => 'Currently Registered'
+            'default' => __( 'Currently Registered', 'registrations-for-the-events-calendar' )
         ));
 
         /* Registration Messages */
         add_settings_section(
             'rtec_form_registration_availability',
-            'General Registration Options',
+            __( 'General Registration Options', 'registrations-for-the-events-calendar' ),
             array( $this, 'blank' ),
             'rtec_form_registration_availability'
         );
@@ -190,9 +194,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'disable_by_default',
-            'title' => '<label for="rtec_disable_by_default">Disable Registrations by Default<span class="rtec-individual-available">&#42;</span></label>',
+            'title' => '<label for="rtec_disable_by_default">' . __( 'Disable Registrations by Default', 'registrations-for-the-events-calendar' ) . '<span class="rtec-individual-available">&#42;</span></label>',
             'example' => '',
-            'description' => 'New events and existing events will not allow registrations until enabled manually',
+            'description' => __( 'New events and existing events will not allow registrations until enabled manually', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_checkbox',
             'class' => '',
             'page' => 'rtec_form_registration_availability',
@@ -203,9 +207,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'limit_registrations',
-            'title' => '<label for="rtec_limit_registrations">Limit Registrations by Default<span class="rtec-individual-available">&#42;</span></label>',
+            'title' => '<label for="rtec_limit_registrations">' . __( 'Limit Registrations by Default', 'registrations-for-the-events-calendar' ) . '<span class="rtec-individual-available">&#42;</span></label>',
             'example' => '',
-            'description' => 'Only allow a certain amount of registrations for each event',
+            'description' => __( 'Only allow a certain amount of registrations for each event', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_checkbox',
             'class' => '',
             'page' => 'rtec_form_registration_availability',
@@ -216,9 +220,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'default_max_registrations',
-            'title' => '<label for="rtec_default_max_registrations">Default Max Registrations<span class="rtec-individual-available">&#42;</span></label>',
+            'title' => '<label for="rtec_default_max_registrations">' . __( 'Default Max Registrations', 'registrations-for-the-events-calendar' ) . '<span class="rtec-individual-available">&#42;</span></label>',
             'example' => '',
-            'description' => 'Maximum allowed registrants for every event (if any limit)',
+            'description' => __( 'Maximum allowed registrants for every event (if any limit)', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_text',
             'class' => 'small-text',
             'page' => 'rtec_form_registration_availability',
@@ -230,9 +234,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'check_for_duplicates',
-            'title' => '<label for="rtec_check_for_duplicate">Check for Duplicate Emails</label>',
+            'title' => '<label for="rtec_check_for_duplicate">' . __( 'Check for Duplicate Emails', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'description' => 'Only allow one registration per event per submitted email',
+            'description' => __( 'Only allow one registration per event per submitted email', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_checkbox',
             'class' => '',
             'page' => 'rtec_form_registration_availability',
@@ -244,10 +248,10 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'error_duplicate_message',
-            'title' => '<label>Duplicate Email Error Message</label>',
+            'title' => '<label>' . __( 'Duplicate Email Error Message', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'default' => 'You have already registered for this event',
-            'description' => 'Enter an error message if the visitor has already registered',
+            'default' => __( 'You have already registered for this event', 'registrations-for-the-events-calendar' ),
+            'description' => __( 'Enter an error message if the visitor has already registered', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_text',
             'class' => 'regular-text',
             'page' => 'rtec_form_registration_availability',
@@ -257,7 +261,7 @@ class RTEC_Admin
         // Registration Deadline
         $this->create_settings_field( array(
             'name' => 'registration_deadline',
-            'title' => '<label for="rtec_registration_deadline">Default Deadline for Registration<span class="rtec-individual-available">&#42;</span></label>', // label for the input field
+            'title' => '<label for="rtec_registration_deadline">' . __( 'Default Deadline for Registration', 'registrations-for-the-events-calendar' ) . '<span class="rtec-individual-available">&#42;</span></label>', // label for the input field
             'callback'  => 'deadline_offset', // name of the function that outputs the html
             'page' => 'rtec_form_registration_availability', // matches the section name
             'section' => 'rtec_form_registration_availability', // matches the section name
@@ -269,7 +273,7 @@ class RTEC_Admin
 
         add_settings_section(
             'rtec_form_custom_text',
-            'Custom Text/Labels',
+            __( 'Custom Text/Labels', 'registrations-for-the-events-calendar' ),
             array( $this, 'blank' ),
             'rtec_form_custom_text'
         );
@@ -282,10 +286,10 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'message_source',
-            'title' => '<label for="use_translations">Messaging</label>',
+            'title' => '<label for="use_translations">' . __( 'Messaging', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'values' => $translation_options,
-            'description' => 'Select "Custom" for custom text (best for most cases). Select "Translations" only if there is a language file for your specific translation. Otherwise English will be used.',
+            'description' => __( 'Select "Custom" for custom text (best for most cases). Select "Translations" only if there is a language file for your specific translation. Otherwise English will be used.', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_radio',
             'class' => 'default-text',
             'page' => 'rtec_form_custom_text',
@@ -297,9 +301,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'register_text',
-            'title' => '<label for="rtec_register_text">"Register" Button Text</label>',
+            'title' => '<label for="rtec_register_text">' . __( '"Register" Button Text', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'description' => 'The text displayed on the button that reveals the form',
+            'description' => __( 'The text displayed on the button that reveals the form', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_text',
             'class' => 'default-text',
             'page' => 'rtec_form_custom_text',
@@ -311,7 +315,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'num_registrations_messages',
-            'title' => '<label>Event Attendance Messages</label>',
+            'title' => '<label>' . __( 'Event Attendance Messages', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'default' => '',
             'description' => '',
@@ -325,9 +329,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'submit_text',
-            'title' => '<label for="rtec_submit_text">"Submit" Button Text</label>',
+            'title' => '<label for="rtec_submit_text">' . __( '"Submit" Button Text', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'description' => 'The text displayed on the button that submits the form',
+            'description' => __( 'The text displayed on the button that submits the form', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_text',
             'class' => 'default-text',
             'page' => 'rtec_form_custom_text',
@@ -340,10 +344,10 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'success_message',
-            'title' => '<label>Website Success Message</label>',
+            'title' => '<label>' . __( 'Website Success Message', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'default' => 'Success! Please check your email inbox for a confirmation message',
-            'description' => 'Enter the message you would like to display on your site after a successful form completion',
+            'default' => __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ),
+            'description' => __( 'Enter the message you would like to display on your site after a successful form completion', 'registrations-for-the-events-calendar' ),
             'callback'  => 'message_text_area',
             'rows' => '3',
             'class' => '',
@@ -377,14 +381,14 @@ class RTEC_Admin
                 3 => array( 'tribe_events_single_event_before_the_meta', 'Before the meta' ),
                 4 => array( 'tribe_events_single_event_after_the_meta', 'After the meta' )
             ),
-            'description' => "Location where the form will appear in the single event template" // what is this? text
+            'description' => __( "Location where the form will appear in the single event template", 'registrations-for-the-events-calendar' ) // what is this? text
         ) );
 
         // width
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'width',
-            'title' => '<label for="rtec_form_width">Width of Form</label>',
+            'title' => '<label for="rtec_form_width">' . __( 'Width of Form', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'description' => 'The width of the form',
             'callback'  => 'width_and_height_settings',
@@ -400,7 +404,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'form_bg_color',
-            'title' => '<label for="rtec_form_bg_color">Form Background Color</label>',
+            'title' => '<label for="rtec_form_bg_color">' . __( 'Form Background Color', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'callback'  => 'default_color',
             'class' => 'small-text',
@@ -412,7 +416,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'button_bg_color',
-            'title' => '<label for="rtec_button_bg_color">Button Background Color</label>',
+            'title' => '<label for="rtec_button_bg_color">' . __( 'Button Background Color', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'callback'  => 'default_color',
             'class' => 'small-text',
@@ -424,7 +428,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'button_text_color',
-            'title' => '<label for="rtec_button_text_color">Button Text Color</label>',
+            'title' => '<label for="rtec_button_text_color">' . __( 'Button Text Color', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'callback'  => 'default_color',
             'class' => 'small-text',
@@ -435,25 +439,25 @@ class RTEC_Admin
         // Custom CSS
         $this->create_settings_field( array(
             'name' => 'custom_css',
-            'title' => '<label for="rtec_custom_css">Custom CSS</label>', // label for the input field
+            'title' => '<label for="rtec_custom_css">' . __( 'Custom CSS', 'registrations-for-the-events-calendar' ) . '</label>', // label for the input field
             'callback'  => 'custom_code', // name of the function that outputs the html
             'page' => 'rtec_form_styles', // matches the section name
             'section' => 'rtec_form_styles', // matches the section name
             'option' => 'rtec_options', // matches the options name
             'class' => 'default-text', // class for the wrapper and input field
-            'description' => 'Enter your own custom CSS in the box below'
+            'description' => __( 'Enter your own custom CSS in the box below', 'registrations-for-the-events-calendar' )
         ));
 
         // Custom JS
         $this->create_settings_field( array(
             'name' => 'custom_js',
-            'title' => '<label for="rtec_custom_js">Custom Javascript</label>', // label for the input field
+            'title' => '<label for="rtec_custom_js">' . __( 'Custom JavaScript', 'registrations-for-the-events-calendar' ) . '</label>', // label for the input field
             'callback'  => 'custom_code', // name of the function that outputs the html
             'page' => 'rtec_form_styles', // matches the section name
             'section' => 'rtec_form_styles', // matches the section name
             'option' => 'rtec_options', // matches the options name
             'class' => 'default-text', // class for the wrapper and input field
-            'description' => 'Enter your own custom Javascript/JQuery in the box below',
+            'description' => __( 'Enter your own custom Javascript/JQuery in the box below', 'registrations-for-the-events-calendar' ),
         ));
 
         /* Advanced */
@@ -469,9 +473,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'preserve_registrations',
-            'title' => '<label for="rtec_preserve_registrations">Preserve registrations on uninstall</label>',
+            'title' => '<label for="rtec_preserve_registrations">' . __( 'Preserve registrations on uninstall', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'description' => 'Keep your registration records preserved in the database when you uninstall the plugin',
+            'description' => __( 'Keep your registration records preserved in the database when you uninstall the plugin', 'registrations-for-the-events-calendar' ),
             'callback'  => 'preserve_checkbox',
             'class' => 'default-text',
             'page' => 'rtec_advanced',
@@ -483,9 +487,9 @@ class RTEC_Admin
 	    $this->create_settings_field( array(
 		    'option' => 'rtec_options',
 		    'name' => 'preserve_settings',
-		    'title' => '<label for="rtec_preserve_settings">Preserve settings on uninstall</label>',
+		    'title' => '<label for="rtec_preserve_settings">' . __( 'Preserve settings on uninstall', 'registrations-for-the-events-calendar' ) . '</label>',
 		    'example' => '',
-		    'description' => 'Keep your form and email settings preserved when you uninstall the plugin',
+		    'description' => __( 'Keep your form and email settings preserved when you uninstall the plugin', 'registrations-for-the-events-calendar' ),
 		    'callback'  => 'preserve_checkbox',
 		    'class' => 'default-text',
 		    'page' => 'rtec_advanced',
@@ -501,7 +505,7 @@ class RTEC_Admin
 
         add_settings_section(
             'rtec_email_all',
-            'General Email Options',
+            __( 'General Email Options', 'registrations-for-the-events-calendar' ),
             array( $this, 'blank' ),
             'rtec_email_all'
         );
@@ -510,9 +514,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'confirmation_from_address',
-            'title' => '<label>Confirmation/Notification From Address<span class="rtec-individual-available">&#42;</span></label>',
-            'example' => 'example: registrations@yoursite.com',
-            'description' => 'Enter an email address that you would like emails to be sent from',
+            'title' => '<label>' . __( 'Confirmation/Notification From Address', 'registrations-for-the-events-calendar' ) . '<span class="rtec-individual-available">&#42;</span></label>',
+            'example' => __( 'example', 'registrations-for-the-events-calendar' ) . ': registrations@yoursite.com',
+            'description' => __( 'Enter an email address that you would like emails to be sent from', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_text',
             'class' => 'regular-text',
             'page' => 'rtec_email_all',
@@ -523,13 +527,13 @@ class RTEC_Admin
         // date format
         $this->create_settings_field( array(
             'name' => 'custom_date_format',
-            'title' => '<label for="rtec_custom_date_format">Custom Date Format</label>', // label for the input field
+            'title' => '<label for="rtec_custom_date_format">' . __( 'Custom Date Format', 'registrations-for-the-events-calendar' ) . '</label>', // label for the input field
             'callback'  => 'customize_custom_date_format', // name of the function that outputs the html
             'page' => 'rtec_email_all', // matches the section name
             'section' => 'rtec_email_all', // matches the section name
             'option' => 'rtec_options', // matches the options name
             'class' => 'default-text', // class for the wrapper and input field
-            'description' => 'If you would like a custom date format in your messages, enter it here using the examples as a guide',
+            'description' => __( 'If you would like a custom date format in your messages, enter it here using the examples as a guide', 'registrations-for-the-events-calendar' ),
             'default' => 'F jS, g:i a'
         ));
 
@@ -545,7 +549,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'disable_notification',
-            'title' => '<label for="rtec_disable_notification">Disable Notification Email</label>',
+            'title' => '<label for="rtec_disable_notification">' . __( 'Disable Notification Email', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'description' => '',
             'callback'  => 'default_checkbox',
@@ -559,8 +563,8 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'recipients',
-            'title' => '<label>Notification Recipient(s) Email<span class="rtec-individual-available">&#42;</span></label>',
-            'example' => 'example: one@yoursite.com, two@yoursite.com',
+            'title' => '<label>' . __( 'Notification Recipient(s) Email', 'registrations-for-the-events-calendar' ) . '<span class="rtec-individual-available">&#42;</span></label>',
+            'example' => __( 'example', 'registrations-for-the-events-calendar' ) . ': one@yoursite.com, two@yoursite.com',
             'description' => 'Enter the email addresses you would like notification emails to go to separated by commas',
             'callback'  => 'default_text',
             'class' => 'large-text',
@@ -573,9 +577,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'notification_from',
-            'title' => '<label>Notification From</label>',
-            'example' => 'example: New Registration',
-            'description' => 'Enter the name you would like the notification email to come from',
+            'title' => '<label>' . __( 'Notification From', 'registrations-for-the-events-calendar' ) . '</label>',
+            'example' => __( 'example', 'registrations-for-the-events-calendar' ) . ': ' . __( 'New Registration', 'registrations-for-the-events-calendar' ),
+            'description' => __( 'Enter the name you would like the notification email to come from', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_text',
             'class' => 'regular-text',
             'page' => 'rtec_email_notification',
@@ -587,22 +591,22 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'notification_subject',
-            'title' => '<label>Notification Subject</label>',
-            'example' => 'example: Registration Notification',
-            'description' => 'Enter a subject for the notification email',
+            'title' => '<label>' . __( 'Notification Subject', 'registrations-for-the-events-calendar' ) . '</label>',
+            'example' => __( 'example', 'registrations-for-the-events-calendar' ) . ': ' . __( 'Registration Notification', 'registrations-for-the-events-calendar' ),
+            'description' => __( 'Enter a subject for the notification email', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_text',
             'class' => 'regular-text',
             'page' => 'rtec_email_notification',
             'section' => 'rtec_email_notification',
-            'default' => 'Registration Notification'
+            'default' => __( 'Registration Notification', 'registrations-for-the-events-calendar' )
         ));
 
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'use_custom_notification',
-            'title' => '<label for="rtec_disable_notification">Use Custom Notification Message</label>',
+            'title' => '<label for="rtec_disable_notification">' . __( 'Use Custom Notification Message', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'description' => 'Click to reveal and use a custom message that you can configure',
+            'description' => __( 'Click to reveal and use a custom message that you can configure', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_checkbox',
             'class' => '',
             'page' => 'rtec_email_notification',
@@ -614,7 +618,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'notification_message',
-            'title' => '<label>Notification Message</label>',
+            'title' => '<label>' . __( 'Notification Message', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'default' => '<p>The following submission was made for: {event-title} at {venue} on {event-date}</p><table><tbody><tr><td>First&#58;</td><td>{first}</td></tr><tr><td>Last&#58;</td><td>{last}</td></tr><tr><td>Email&#58;</td><td>{email}</td></tr><tr><td>Phone&#58;</td><td>{phone}</td></tr><tr><td>Other&#58;</td><td>{other}</td></tr></tbody></table>',
             'description' => '',
@@ -640,7 +644,7 @@ class RTEC_Admin
 
         add_settings_section(
             'rtec_email_confirmation',
-            'Confirmation Email',
+            __( 'Confirmation Email', 'registrations-for-the-events-calendar' ),
             array( $this, 'blank' ),
             'rtec_email_confirmation'
         );
@@ -648,7 +652,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'disable_confirmation',
-            'title' => '<label for="rtec_disable_confirmation">Disable Confirmation Email</label>',
+            'title' => '<label for="rtec_disable_confirmation">' . __( 'Disable Confirmation Email', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'description' => '',
             'callback'  => 'default_checkbox',
@@ -662,9 +666,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'confirmation_from',
-            'title' => '<label>Confirmation From</label>',
-            'example' => 'example: Your Site',
-            'description' => 'Enter the name you would like visitors to get the email from',
+            'title' => '<label>' . __( 'Confirmation From', 'registrations-for-the-events-calendar' ) . '</label>',
+            'example' => __( 'example: Your Site', 'registrations-for-the-events-calendar' ),
+            'description' => __( 'Enter the name you would like visitors to get the email from', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_text',
             'class' => 'regular-text',
             'page' => 'rtec_email_confirmation',
@@ -676,9 +680,9 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'confirmation_subject',
-            'title' => '<label>Confirmation Subject</label>',
-            'example' => 'example: Registration Confirmation',
-            'description' => 'Enter a subject for the confirmation email',
+            'title' => '<label>' . __( 'Confirmation Subject', 'registrations-for-the-events-calendar' ) . '</label>',
+            'example' => __( 'example: Registration Confirmation', 'registrations-for-the-events-calendar' ),
+            'description' => __( 'Enter a subject for the confirmation email', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_text',
             'class' => 'regular-text',
             'page' => 'rtec_email_confirmation',
@@ -690,7 +694,7 @@ class RTEC_Admin
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'confirmation_message',
-            'title' => '<label>Confirmation Message</label>',
+            'title' => '<label>' . __( 'Confirmation Message', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'default' => 'Hey {first},<br />You are registered for {event-title} at {venue} on {event-date}. We are looking forward to having you there. The event will be held at this location:<br /><br />{venue-address}<br />{venue-city}, {venue-state} {venue-zip}<br /><br />See you there!',
             'description' => '',
@@ -714,6 +718,12 @@ class RTEC_Admin
 
     }
 
+    public function the_description( $description ) {
+        ?>
+        <span class="description"><?php echo esc_html( $description ); ?></span>
+        <?php
+    }
+
     public function default_text( $args )
     {
         // get option 'text_string' value from the database
@@ -723,7 +733,7 @@ class RTEC_Admin
         $type = ( isset( $args['type'] ) ) ? 'type="'. $args['type'].'"' : 'type="text"';
         ?>
         <input id="rtec-<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>" name="<?php echo $args['option'].'['.$args['name'].']'; ?>" <?php echo $type; ?> value="<?php echo $option_string; ?>"/>
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+        <br><?php $this->the_description( $args['description'] ); ?>
         <?php
     }
 
@@ -737,7 +747,7 @@ class RTEC_Admin
                 <option value="<?php echo $field[0]; ?>" id="rtec-<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>"<?php if( $selected == $field[0] ) { echo ' selected'; } ?>><?php _e( $field[1], 'registrations-for-the-events-calendar' ); ?></option>
             <?php endforeach; ?>
         </select>
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+        <br><?php $this->the_description( $args['description'] ); ?>
         <?php
     }
 
@@ -747,7 +757,7 @@ class RTEC_Admin
         $option_checked = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $args['default'];
         ?>
         <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="checkbox" <?php if ( $option_checked == true ) echo "checked"; ?> />
-        <br><span class="description"><?php echo esc_html( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+        <br><?php $this->the_description( $args['description'] ); ?>
         <?php
     }
 
@@ -759,7 +769,7 @@ class RTEC_Admin
         <?php foreach ( $args['values'] as $value ) : ?>
         <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="radio" value="<?php echo $value[0]; ?>" <?php if ( $option_checked == $value[0] ) echo "checked"; ?> /><label class="rtec-radio-label"><?php echo $value[1]; ?></label>
         <?php endforeach; ?>
-        <br><span class="description"><?php echo esc_html( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+        <br><?php $this->the_description( $args['description'] ); ?>
         <?php
     }
 
@@ -773,7 +783,7 @@ class RTEC_Admin
 		}
 		?>
 		<input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="checkbox" <?php if ( $option_checked == true ) echo "checked"; ?> />
-		<br><span class="description"><?php echo esc_html( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+		<br><?php $this->the_description( $args['description'] ); ?>
 		<?php
 	}
 
@@ -1074,7 +1084,7 @@ class RTEC_Admin
         </span>
         <?php endif; ?>
 
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+        <br><?php $this->the_description( $args['description'] ); ?>
         <?php
     }
 
@@ -1128,7 +1138,7 @@ class RTEC_Admin
         </span>
         <?php endif; ?>
 
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+        <br><?php $this->the_description( $args['description'] ); ?>
         <?php if ( $preview ) : ?>
 	    <td>
 		    <h4>Preview:</h4>
@@ -1142,114 +1152,17 @@ class RTEC_Admin
 
     public function timezone()
     {
-        $options = get_option( 'rtec_options' );
-        $rtec_timezone = ( isset( $options['timezone'] ) ) ? esc_attr( $options['timezone'] ) : '';
-        ?>
-        <select name="rtec_options[timezone]" id="rtec_timezone" style="width: 300px;">
-            <option value="America/New_York" <?php if( $rtec_timezone == "(GMT05:00) Eastern Time (US & Canada)" ) echo 'selected="selected"' ?> ><?php _e( '(GMT05:00) Eastern Time (US & Canada)' ) ?></option>
-            <option value="Pacific/Midway" <?php if( $rtec_timezone == "Pacific/Midway" ) echo 'selected="selected"' ?> ><?php _e( '(GMT11:00) Midway Island, Samoa' ) ?></option>
-            <option value="America/Adak" <?php if( $rtec_timezone == "America/Adak" ) echo 'selected="selected"' ?> ><?php _e( '(GMT10:00) HawaiiAleutian' ) ?></option>
-            <option value="Etc/GMT+10" <?php if( $rtec_timezone == "Etc/GMT+10" ) echo 'selected="selected"' ?> ><?php _e( '(GMT10:00) Hawaii' ) ?></option>
-            <option value="Pacific/Marquesas" <?php if( $rtec_timezone == "Pacific/Marquesas" ) echo 'selected="selected"' ?> ><?php _e( '(GMT09:30) Marquesas Islands' ) ?></option>
-            <option value="Pacific/Gambier" <?php if( $rtec_timezone == "Pacific/Gambier" ) echo 'selected="selected"' ?> ><?php _e( '(GMT09:00) Gambier Islands' ) ?></option>
-            <option value="America/Anchorage" <?php if( $rtec_timezone == "America/Anchorage" ) echo 'selected="selected"' ?> ><?php _e( '(GMT09:00) Alaska' ) ?></option>
-            <option value="America/Ensenada" <?php if( $rtec_timezone == "America/Ensenada" ) echo 'selected="selected"' ?> ><?php _e( '(GMT08:00) Tijuana, Baja California' ) ?></option>
-            <option value="Etc/GMT+8" <?php if( $rtec_timezone == "Etc/GMT+8" ) echo 'selected="selected"' ?> ><?php _e( '(GMT08:00) Pitcairn Islands' ) ?></option>
-            <option value="America/Los_Angeles" <?php if( $rtec_timezone == "America/Los_Angeles" ) echo 'selected="selected"' ?> ><?php _e( '(GMT08:00) Pacific Time (US & Canada)' ) ?></option>
-            <option value="America/Denver" <?php if( $rtec_timezone == "America/Denver" ) echo 'selected="selected"' ?> ><?php _e( '(GMT07:00) Mountain Time (US & Canada)' ) ?></option>
-            <option value="America/Chihuahua" <?php if( $rtec_timezone == "America/Chihuahua" ) echo 'selected="selected"' ?> ><?php _e( '(GMT07:00) Chihuahua, La Paz, Mazatlan' ) ?></option>
-            <option value="America/Dawson_Creek" <?php if( $rtec_timezone == "America/Dawson_Creek" ) echo 'selected="selected"' ?> ><?php _e( '(GMT07:00) Arizona' ) ?></option>
-            <option value="America/Belize" <?php if( $rtec_timezone == "America/Belize" ) echo 'selected="selected"' ?> ><?php _e( '(GMT06:00) Saskatchewan, Central America' ) ?></option>
-            <option value="America/Cancun" <?php if( $rtec_timezone == "America/Cancun" ) echo 'selected="selected"' ?> ><?php _e( '(GMT06:00) Guadalajara, Mexico City, Monterrey' ) ?></option>
-            <option value="Chile/EasterIsland" <?php if( $rtec_timezone == "Chile/EasterIsland" ) echo 'selected="selected"' ?> ><?php _e( '(GMT06:00) Easter Island' ) ?></option>
-            <option value="America/Chicago" <?php if( $rtec_timezone == "America/Chicago" ) echo 'selected="selected"' ?> ><?php _e( '(GMT06:00) Central Time (US & Canada)' ) ?></option>
-            <option value="America/New_York" <?php if( $rtec_timezone == "America/New_York" ) echo 'selected="selected"' ?> ><?php _e( '(GMT05:00) Eastern Time (US & Canada)' ) ?></option>
-            <option value="America/Havana" <?php if( $rtec_timezone == "America/Havana" ) echo 'selected="selected"' ?> ><?php _e( '(GMT05:00) Cuba' ) ?></option>
-            <option value="America/Bogota" <?php if( $rtec_timezone == "America/Bogota" ) echo 'selected="selected"' ?> ><?php _e( '(GMT05:00) Bogota, Lima, Quito, Rio Branco' ) ?></option>
-            <option value="America/Caracas" <?php if( $rtec_timezone == "America/Caracas" ) echo 'selected="selected"' ?> ><?php _e( '(GMT04:30) Caracas' ) ?></option>
-            <option value="America/Santiago" <?php if( $rtec_timezone == "America/Santiago" ) echo 'selected="selected"' ?> ><?php _e( '(GMT04:00) Santiago' ) ?></option>
-            <option value="America/La_Paz" <?php if( $rtec_timezone == "America/La_Paz" ) echo 'selected="selected"' ?> ><?php _e( '(GMT04:00) La Paz' ) ?></option>
-            <option value="Atlantic/Stanley" <?php if( $rtec_timezone == "Atlantic/Stanley" ) echo 'selected="selected"' ?> ><?php _e( '(GMT04:00) Faukland Islands' ) ?></option>
-            <option value="America/Campo_Grande" <?php if( $rtec_timezone == "America/Campo_Grande" ) echo 'selected="selected"' ?> ><?php _e( '(GMT04:00) Brazil' ) ?></option>
-            <option value="America/Goose_Bay" <?php if( $rtec_timezone == "America/Goose_Bay" ) echo 'selected="selected"' ?> ><?php _e( '(GMT04:00) Atlantic Time (Goose Bay)' ) ?></option>
-            <option value="America/Glace_Bay" <?php if( $rtec_timezone == "America/Glace_Bay" ) echo 'selected="selected"' ?> ><?php _e( '(GMT04:00) Atlantic Time (Canada)' ) ?></option>
-            <option value="America/St_Johns" <?php if( $rtec_timezone == "America/St_Johns" ) echo 'selected="selected"' ?> ><?php _e( '(GMT03:30) Newfoundland' ) ?></option>
-            <option value="America/Araguaina" <?php if( $rtec_timezone == "America/Araguaina" ) echo 'selected="selected"' ?> ><?php _e( '(GMT03:00) UTC3' ) ?></option>
-            <option value="America/Montevideo" <?php if( $rtec_timezone == "America/Montevideo" ) echo 'selected="selected"' ?> ><?php _e( '(GMT03:00) Montevideo' ) ?></option>
-            <option value="America/Miquelon" <?php if( $rtec_timezone == "America/Miquelon" ) echo 'selected="selected"' ?> ><?php _e( '(GMT03:00) Miquelon, St. Pierre' ) ?></option>
-            <option value="America/Godthab" <?php if( $rtec_timezone == "America/Godthab" ) echo 'selected="selected"' ?> ><?php _e( '(GMT03:00) Greenland' ) ?></option>
-            <option value="America/Argentina/Buenos_Aires" <?php if( $rtec_timezone == "America/Argentina/Buenos_Aires" ) echo 'selected="selected"' ?> ><?php _e( '(GMT03:00) Buenos Aires' ) ?></option>
-            <option value="America/Sao_Paulo" <?php if( $rtec_timezone == "America/Sao_Paulo" ) echo 'selected="selected"' ?> ><?php _e( '(GMT03:00) Brasilia' ) ?></option>
-            <option value="America/Noronha" <?php if( $rtec_timezone == "America/Noronha" ) echo 'selected="selected"' ?> ><?php _e( '(GMT02:00) MidAtlantic' ) ?></option>
-            <option value="Atlantic/Cape_Verde" <?php if( $rtec_timezone == "Atlantic/Cape_Verde" ) echo 'selected="selected"' ?> ><?php _e( '(GMT01:00) Cape Verde Is.' ) ?></option>
-            <option value="Atlantic/Azores" <?php if( $rtec_timezone == "Atlantic/Azores" ) echo 'selected="selected"' ?> ><?php _e( '(GMT01:00) Azores' ) ?></option>
-            <option value="Europe/Belfast" <?php if( $rtec_timezone == "Europe/Belfast" ) echo 'selected="selected"' ?> ><?php _e( '(GMT) Greenwich Mean Time : Belfast' ) ?></option>
-            <option value="Europe/Dublin" <?php if( $rtec_timezone == "Europe/Dublin" ) echo 'selected="selected"' ?> ><?php _e( '(GMT) Greenwich Mean Time : Dublin' ) ?></option>
-            <option value="Europe/Lisbon" <?php if( $rtec_timezone == "Europe/Lisbon" ) echo 'selected="selected"' ?> ><?php _e( '(GMT) Greenwich Mean Time : Lisbon' ) ?></option>
-            <option value="Europe/London" <?php if( $rtec_timezone == "Europe/London" ) echo 'selected="selected"' ?> ><?php _e( '(GMT) Greenwich Mean Time : London' ) ?></option>
-            <option value="Africa/Abidjan" <?php if( $rtec_timezone == "Africa/Abidjan" ) echo 'selected="selected"' ?> ><?php _e( '(GMT) Monrovia, Reykjavik' ) ?></option>
-            <option value="Europe/Amsterdam" <?php if( $rtec_timezone == "Europe/Amsterdam" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna' ) ?></option>
-            <option value="Europe/Belgrade" <?php if( $rtec_timezone == "Europe/Belgrade" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague' ) ?></option>
-            <option value="Europe/Brussels" <?php if( $rtec_timezone == "Europe/Brussels" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+01:00) Brussels, Copenhagen, Madrid, Paris' ) ?></option>
-            <option value="Africa/Algiers" <?php if( $rtec_timezone == "Africa/Algiers" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+01:00) West Central Africa' ) ?></option>
-            <option value="Africa/Windhoek" <?php if( $rtec_timezone == "Africa/Windhoek" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+01:00) Windhoek' ) ?></option>
-            <option value="Asia/Beirut" <?php if( $rtec_timezone == "Asia/Beirut" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+02:00) Beirut' ) ?></option>
-            <option value="Africa/Cairo" <?php if( $rtec_timezone == "Africa/Cairo" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+02:00) Cairo' ) ?></option>
-            <option value="Asia/Gaza" <?php if( $rtec_timezone == "Asia/Gaza" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+02:00) Gaza' ) ?></option>
-            <option value="Africa/Blantyre" <?php if( $rtec_timezone == "Africa/Blantyre" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+02:00) Harare, Pretoria' ) ?></option>
-            <option value="Asia/Jerusalem" <?php if( $rtec_timezone == "Asia/Jerusalem" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+02:00) Jerusalem' ) ?></option>
-            <option value="Europe/Minsk" <?php if( $rtec_timezone == "Europe/Minsk" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+02:00) Minsk' ) ?></option>
-            <option value="Asia/Damascus" <?php if( $rtec_timezone == "Asia/Damascus" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+02:00) Syria' ) ?></option>
-            <option value="Europe/Moscow" <?php if( $rtec_timezone == "Europe/Moscow" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+03:00) Moscow, St. Petersburg, Volgograd' ) ?></option>
-            <option value="Africa/Addis_Ababa" <?php if( $rtec_timezone == "Africa/Addis_Ababa" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+03:00) Nairobi' ) ?></option>
-            <option value="Asia/Tehran" <?php if( $rtec_timezone == "Asia/Tehran" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+03:30) Tehran' ) ?></option>
-            <option value="Asia/Dubai" <?php if( $rtec_timezone == "Asia/Dubai" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+04:00) Abu Dhabi, Muscat' ) ?></option>
-            <option value="Asia/Yerevan" <?php if( $rtec_timezone == "Asia/Yerevan" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+04:00) Yerevan' ) ?></option>
-            <option value="Asia/Kabul" <?php if( $rtec_timezone == "Asia/Kabul" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+04:30) Kabul' ) ?></option>
-            <option value="Asia/Yekaterinburg" <?php if( $rtec_timezone == "Asia/Yekaterinburg" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+05:00) Ekaterinburg' ) ?></option>
-            <option value="Asia/Tashkent" <?php if( $rtec_timezone == "Asia/Tashkent" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+05:00) Tashkent' ) ?></option>
-            <option value="Asia/Kolkata" <?php if( $rtec_timezone == "Asia/Kolkata" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi' ) ?></option>
-            <option value="Asia/Katmandu" <?php if( $rtec_timezone == "Asia/Katmandu" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+05:45) Kathmandu' ) ?></option>
-            <option value="Asia/Dhaka" <?php if( $rtec_timezone == "Asia/Dhaka" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+06:00) Astana, Dhaka' ) ?></option>
-            <option value="Asia/Novosibirsk" <?php if( $rtec_timezone == "Asia/Novosibirsk" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+06:00) Novosibirsk' ) ?></option>
-            <option value="Asia/Rangoon" <?php if( $rtec_timezone == "Asia/Rangoon" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+06:30) Yangon (Rangoon)' ) ?></option>
-            <option value="Asia/Bangkok" <?php if( $rtec_timezone == "Asia/Bangkok" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+07:00) Bangkok, Hanoi, Jakarta' ) ?></option>
-            <option value="Asia/Krasnoyarsk" <?php if( $rtec_timezone == "Asia/Krasnoyarsk" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+07:00) Krasnoyarsk' ) ?></option>
-            <option value="Asia/Hong_Kong" <?php if( $rtec_timezone == "Asia/Hong_Kong" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi' ) ?></option>
-            <option value="Asia/Irkutsk" <?php if( $rtec_timezone == "Asia/Irkutsk" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+08:00) Irkutsk, Ulaan Bataar' ) ?></option>
-            <option value="Australia/Perth" <?php if( $rtec_timezone == "Australia/Perth" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+08:00) Perth' ) ?></option>
-            <option value="Australia/Eucla" <?php if( $rtec_timezone == "Australia/Eucla" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+08:45) Eucla' ) ?></option>
-            <option value="Asia/Tokyo" <?php if( $rtec_timezone == "Asia/Tokyo" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+09:00) Osaka, Sapporo, Tokyo' ) ?></option>
-            <option value="Asia/Seoul" <?php if( $rtec_timezone == "Asia/Seoul" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+09:00) Seoul' ) ?></option>
-            <option value="Asia/Yakutsk" <?php if( $rtec_timezone == "Asia/Yakutsk" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+09:00) Yakutsk' ) ?></option>
-            <option value="Australia/Adelaide" <?php if( $rtec_timezone == "Australia/Adelaide" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+09:30) Adelaide' ) ?></option>
-            <option value="Australia/Darwin" <?php if( $rtec_timezone == "Australia/Darwin" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+09:30) Darwin' ) ?></option>
-            <option value="Australia/Brisbane" <?php if( $rtec_timezone == "Australia/Brisbane" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+10:00) Brisbane' ) ?></option>
-            <option value="Australia/Hobart" <?php if( $rtec_timezone == "Australia/Hobart" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+10:00) Sydney' ) ?></option>
-            <option value="Asia/Vladivostok" <?php if( $rtec_timezone == "Asia/Vladivostok" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+10:00) Vladivostok' ) ?></option>
-            <option value="Australia/Lord_Howe" <?php if( $rtec_timezone == "Australia/Lord_Howe" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+10:30) Lord Howe Island' ) ?></option>
-            <option value="Etc/GMT11" <?php if( $rtec_timezone == "Etc/GMT11" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+11:00) Solomon Is., New Caledonia' ) ?></option>
-            <option value="Asia/Magadan" <?php if( $rtec_timezone == "Asia/Magadan" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+11:00) Magadan' ) ?></option>
-            <option value="Pacific/Norfolk" <?php if( $rtec_timezone == "Pacific/Norfolk" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+11:30) Norfolk Island' ) ?></option>
-            <option value="Asia/Anadyr" <?php if( $rtec_timezone == "Asia/Anadyr" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+12:00) Anadyr, Kamchatka' ) ?></option>
-            <option value="Pacific/Auckland" <?php if( $rtec_timezone == "Pacific/Auckland" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+12:00) Auckland, Wellington' ) ?></option>
-            <option value="Etc/GMT12" <?php if( $rtec_timezone == "Etc/GMT12" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+12:00) Fiji, Kamchatka, Marshall Is.' ) ?></option>
-            <option value="Pacific/Chatham" <?php if( $rtec_timezone == "Pacific/Chatham" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+12:45) Chatham Islands' ) ?></option>
-            <option value="Pacific/Tongatapu" <?php if( $rtec_timezone == "Pacific/Tongatapu" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+13:00) Nuku\'alofa' ) ?></option>
-            <option value="Pacific/Kiritimati" <?php if( $rtec_timezone == "Pacific/Kiritimati" ) echo 'selected="selected"' ?> ><?php _e( '(GMT+14:00) Kiritimati' ) ?></option>
-        </select>
-    <?php
     }
 
     public function customize_custom_date_format( $args )
     {
         $options = get_option( $args['option'] );
-        $default = isset( $args['default'] ) ? esc_attr( $args['default'] ) : '';
-        $option_string = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : $default;
+        $default = isset( $args['default'] ) ? $args['default'] : '';
+        $option_string = ( isset( $options[ $args['name'] ] ) ) ? $options[ $args['name'] ] : $default;
         ?>
         <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="text" value="<?php esc_attr_e( $option_string ); ?>" size="10" placeholder="Eg. F jS, Y" />
-        <a href="https://www.roundupwp.com/products/registrations-for-the-events-calendar/docs/date-formatting-guide/" target="_blank"><?php _e( 'Examples' , 'registrations-for-the-events-calendar'); ?></a>
-        <br><span class="description"><?php esc_attr_e( $args['description'], 'registrations-for-the-events-calendar' ); ?></span>
+        <a href="https://www.roundupwp.com/products/registrations-for-the-events-calendar/docs/date-formatting-guide/" target="_blank"><?php _e( 'Examples' , 'registrations-for-the-events-calendar' ); ?></a>
+        <br><?php $this->the_description( $args['description'] ); ?>
         <?php
     }
 

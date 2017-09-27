@@ -47,7 +47,7 @@ function rtec_registrations_bubble() {
 
 		foreach ( $menu as $key => $value ) {
 			if ( $menu[$key][2] === RTEC_TRIBE_MENU_PAGE ) {
-				$menu[$key][0] .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>Registrations</span></span>';
+				$menu[$key][0] .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . __( 'Registrations', 'registrations-for-the-events-calendar' ) . '</span></span>';
 				return;
 			}
 		}
@@ -65,8 +65,8 @@ function rtec_the_admin_notices() {
 				<img src="<?php echo RTEC_PLUGIN_URL . 'img/RTEC-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar">
 			</div>
 			<div class="rtec-msg-wrap">
-				<p><?php esc_attr_e( 'Registration forms are now added to all of your single event pages. Check out the ' , 'registrations-for-the-events-calendar' ); ?><a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form">"Form" tab</a> to configure options</p>
-				<p><?php esc_attr_e( 'You can also view setup directions ' , 'registrations-for-the-events-calendar' ); ?><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank">on our website</a></p>
+				<p><?php esc_html_e( 'Registration forms are now added to all of your single event pages. Check out the <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form">"Form" tab</a> to configure options</p>' , 'registrations-for-the-events-calendar' ); ?>
+				<p><?php esc_html_e( 'You can also view setup directions <a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank">on our website</a></p>' , 'registrations-for-the-events-calendar' ); ?>
 			</div>
 		</div>
 	<?php endif;
@@ -164,7 +164,7 @@ add_action( 'wp_ajax_rtec_update_event_options', 'rtec_update_event_options' );
  */
 function rtec_meta_boxes_init(){
 	add_meta_box( 'rtec-event-details',
-		'Registrations for The Events Calendar',
+		__( 'Registrations for The Events Calendar', 'registrations-for-the-events-calendar' ),
 		'rtec_meta_boxes_html',
 		'tribe_events',
 		'normal',
@@ -340,7 +340,7 @@ function rtec_meta_boxes_html(){
 			</tr>
 			<tr>
 				<td colspan="2">
-					<p><?php _e( 'More single event options like custom confirmation email templates, multiple venues/tier registration, settings for logged-in users and others in', 'registrations-for-the-events-calendar' ); ?> <a href="https://roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank">Registrations for the Events Calendar Pro</a></p>
+					<p><?php _e( 'More single event options like custom confirmation email templates, multiple venues/tier registration, settings for logged-in users and others in', 'registrations-for-the-events-calendar' ); ?> <a href="https://roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank"><?php _e( 'Registrations for The Events Calendar', 'registrations-for-the-events-calendar' ) ?> Pro</a></p>
 				</td>
 			</tr>
 			</tbody>
@@ -673,12 +673,12 @@ function rtec_get_search_results() {
 	<table class="widefat rtec-registrations-data">
 		<thead>
 		<tr>
-			<th>Registration Date</th>
+			<th><?php _e( 'Registration Date', 'registrations-for-the-events-calendar' ) ?></th>
 			<?php foreach ( $labels as $label ) : ?>
 				<th><?php echo esc_html( $label ); ?></th>
 			<?php endforeach; ?>
-			<th>Event</th>
-			<th>Start Date</th>
+			<th><?php _e( 'Event', 'registrations-for-the-events-calendar' ) ?></th>
+			<th><?php _e( 'Start Date', 'registrations-for-the-events-calendar' ) ?></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -717,7 +717,7 @@ function rtec_get_search_results() {
 		<?php else: ?>
 
 			<tr>
-				<td colspan="4"><?php _e( 'No Registrations Found', 'registrations-for-the-events-calendar-pro' ); ?></td>
+				<td colspan="4"><?php _e( 'No Registrations Found', 'registrations-for-the-events-calendar' ); ?></td>
 			</tr>
 
 		<?php endif; // registrations not empty ?>

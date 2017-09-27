@@ -216,6 +216,7 @@ jQuery(document).ready(function($) {
         event.preventDefault();
 
         $rtecEl = $(this).closest('.rtec');
+        $rtecEl.find('input[name=rtec_submit]').attr('disabled',true);
 
         if ($rtecEl.find('.rtec-screen-reader-error').length) {
             $rtecEl.find('.rtec-screen-reader-error').remove();
@@ -276,10 +277,11 @@ jQuery(document).ready(function($) {
                     } else {
                         $rtecEl.prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">'+$('#rtec').attr('data-rtec-success-message')+'</p>');
                     }
-                    
+
                 }
             }); // ajax
         } else { // if not .rtec-error
+            $rtecEl.find('input[name=rtec_submit]').removeAttr('disabled').css('opacity',1);
             RtecForm.addScreenReaderError();
             $('html, body').animate({
                 scrollTop: $('.rtec-error-message').first().closest('.rtec-input-wrapper').offset().top - 200

@@ -2,7 +2,7 @@
 	<thead>
 	<tr>
 		<?php foreach ( $event_obj->labels as $label ) : ?>
-			<th><?php echo esc_html( stripslashes( $label ) ); ?></th>
+			<th><?php esc_html_e( stripslashes( $label ), 'registrations-for-the-events-calendar' ); ?></th>
 		<?php endforeach; ?>
 	</tr>
 	</thead>
@@ -34,17 +34,17 @@
 	<?php else: ?>
 
 		<tr>
-			<td colspan="4" align="center"><?php _e( 'No Registrations Yet', 'registrations-for-the-events-calendar-pro' ); ?></td>
+			<td colspan="4" align="center"><?php _e( 'No Registrations Yet', 'registrations-for-the-events-calendar' ); ?></td>
 		</tr>
 
 	<?php endif; // registrations not empty ?>
 
 	<?php if ( $event_obj->pagination_needed ) : ?>
-		<tr><td colspan="4"><a href="<?php $this->the_detailed_view_href( $event->ID, '' ); ?>" class="button rtec-wide rtec-view-all"><i class="fa fa-list" aria-hidden="true"></i> <?php printf( __( 'View all', 'registrations-for-the-events-calendar-pro' ) ); ?></a></td></tr>
+		<tr><td colspan="4"><a href="<?php $this->the_detailed_view_href( $event->ID, '' ); ?>" class="button rtec-wide rtec-view-all"><i class="fa fa-list" aria-hidden="true"></i> <?php printf( __( 'View all', 'registrations-for-the-events-calendar' ) ); ?></a></td></tr>
 	<?php endif; ?>
 
 	</tbody>
 </table>
 <div class="rtec-event-actions rtec-clear">
-	<a href="<?php $this->the_detailed_view_href( $event->ID, '' ); ?>" class="rtec-admin-secondary-button button action"><i class="fa fa-list" aria-hidden="true"></i> <?php _e( 'Detailed View', 'registrations-for-the-events-calendar-pro' ); ?></a>
+	<a href="<?php $this->the_detailed_view_href( $event->ID, '' ); ?>" class="rtec-admin-secondary-button button action"><i class="fa fa-list" aria-hidden="true"></i> <?php _e( 'Detailed View', 'registrations-for-the-events-calendar' ); ?></a>
 </div>

@@ -8,5 +8,5 @@ $mvt = '';
 	<td><?php echo date_i18n( 'F jS, g:i a', strtotime( $event_meta['end_date'] ) ); ?></td>
 	<td class="rtec-venue-highlight"><?php echo esc_html( $venue ); ?></td>
 	<td class="rtec-list-attendance"><?php echo esc_html( $event_obj->get_registration_text( array(), $num_registered ) ); ?></td>
-	<td><a href="<?php $this->the_detailed_view_href( $event->ID, $mvt ); ?>"><i class="fa fa-list" aria-hidden="true"></i> Details</a></td>
+	<td><a href="<?php $this->the_detailed_view_href( $event->ID, $mvt ); ?>"><i class="fa fa-list" aria-hidden="true"></i> <?php _e( 'Details', 'registrations-for-the-events-calendar' ); ?></a></td>
 </tr>
