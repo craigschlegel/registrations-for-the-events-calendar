@@ -289,7 +289,7 @@ class RTEC_Admin
             'title' => '<label for="use_translations">' . __( 'Messaging', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
             'values' => $translation_options,
-            'description' => __( 'Select "Custom" for custom text (best for most cases). Select "Translations" only if there is a language file for your specific translation. Otherwise English will be used.', 'registrations-for-the-events-calendar' ),
+            'description' => __( 'Select "Custom" for text saved in the Settings pages, "Translate" to use language files (French, Spanish, Russian are available. Contact support to offer your translations)', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_radio',
             'class' => 'default-text',
             'page' => 'rtec_form_custom_text',
