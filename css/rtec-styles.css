@@ -158,8 +158,6 @@
     margin-right: -12px;
 }
 #rtec .rtec-error-message {
-    position: absolute;
-    bottom: -23px;
     margin: 0;
     padding: 0 5px;
     font-weight: bold;

@@ -574,8 +574,8 @@ function rtec_event_csv() {
 
 		$event_meta_string = array(
 			array( $event_meta['title'] ) ,
-			array( date_i18n( 'F jS, g:i a', strtotime( $event_meta['start_date'] ) ) ),
-			array( date_i18n( 'F jS, g:i a', strtotime( $event_meta['end_date'] ) ) ),
+			array( date_i18n( 'F jS g:i a', strtotime( $event_meta['start_date'] ) ) ),
+			array( date_i18n( 'F jS g:i a', strtotime( $event_meta['end_date'] ) ) ),
 			array( $venue_title ),
 			$event_obj->labels
 		);
@@ -585,7 +585,7 @@ function rtec_event_csv() {
 		// output headers so that the file is downloaded rather than displayed
 		header( 'Content-Encoding: UTF-8' );
 		header( 'Content-type: text/csv; charset=UTF-8' );
-		header( 'Content-Disposition: attachment; filename=' . $file_name . '.csv' );
+		header( 'Content-Disposition: attachment; filename="' . str_replace( ',', '', $file_name ) . '.csv"' );
 		echo "\xEF\xBB\xBF"; // UTF-8 BOM
 
 		// create a file pointer connected to the output stream

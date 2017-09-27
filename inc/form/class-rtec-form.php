@@ -200,8 +200,8 @@ class RTEC_Form
 				$field_attributes[ $field['field_name'] ]['valid_params']['sum'] = (int)$field_attributes[$field['field_name']]['valid_params']['value_1'] + (int)$field_attributes[ $field['field_name'] ]['valid_params']['value_2'];
 				$recaptcha_label = isset( $rtec_options['recaptcha_label'] ) ? $rtec_options['recaptcha_label'] : __( 'What is', 'registrations-for-the-events-calendar' );
 				$field_attributes[ $field['field_name'] ]['label'] = trim( rtec_get_text( $recaptcha_label, __( 'What is', 'registrations-for-the-events-calendar' ) ) ) . ' ' . $field_attributes['recaptcha']['valid_params']['value_1'] . ' &#43; ' . $field_attributes['recaptcha']['valid_params']['value_2'] .'&#42;';
-				$field_attributes[ $field['field_name'] ]['error_message'] = isset( $rtec_options['recaptcha_error'] ) ? $rtec_options['recaptcha_error'] : 'Please try again';
-
+				$recaptcha_error = isset( $rtec_options['recaptcha_error'] ) ? $rtec_options['recaptcha_error'] : __( 'Please try again', 'registrations-for-the-events-calendar' );
+				$field_attributes[ $field['field_name'] ]['error_message'] = rtec_get_text( $recaptcha_error, __( 'Please try again', 'registrations-for-the-events-calendar' ) );
 			}
 
 			$standard_fields = rtec_get_standard_form_fields();

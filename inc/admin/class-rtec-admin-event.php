@@ -141,7 +141,7 @@ class RTEC_Admin_Event {
 
 		$event_meta = $this->event_meta;
 		$columns = array( 'registration_date' );
-		$labels = array( 'Registration Date' );
+		$labels = array( __( 'Registration Date', 'registrations-for-the-events-calendar' ) );
 		$column_label = array();
 		$no_backend_label_fields = rtec_get_no_backend_column_fields();
 
@@ -149,7 +149,7 @@ class RTEC_Admin_Event {
 			foreach ( $field_atts as $field => $atts ) {
 				if ( !in_array( $field, $no_backend_label_fields, true ) ) {
 					$columns[] = $field;
-					$labels[] = $atts['label'];
+					$labels[] = __( $atts['label'], 'registrations-for-the-events-calendar' );
 					$column_label[$field] = $atts['label'];
 				}
 			}
@@ -162,7 +162,7 @@ class RTEC_Admin_Event {
 				foreach ( $field_atts as $field => $atts ) {
 					if ( !in_array( $field, $no_backend_label_fields, true ) ) {
 						$columns[] = $field;
-						$labels[] = str_replace( '&#42;', '', stripslashes( $atts['label'] ) );
+						$labels[] = str_replace( '&#42;', '',  __( stripslashes( $atts['label'] ), 'registrations-for-the-events-calendar' ) );
 						$column_label[$field] = str_replace( '&#42;', '', stripslashes( $atts['label'] ) );
 					}
 				}
