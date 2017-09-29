@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.0
 Tested up to: 4.8
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -132,6 +132,13 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.0.2 =
+* Fix: French, Russian, and Spanish translations updated and fixed.
+* Fix: gettext calls fixed and updated for all strings.
+* Fix: Submit button is disabled while processing a submission to prevent duplicate submissions.
+* Fix: Spacing of error messages has been improved for mobile devices.
+* Fix: ERR_RESPONSE_HEADERS_MULTIPLE_CONTENT_DISPOSITION when exporting registrations for events with commas in the title.
+
 = 2.0.1 =
 * Tweak: When checking for duplicate email addresses while a visitor is filling out the form, the submit button is disabled while the person is typing.
 * Fix: Incorrect file path for the loading .gif when checking for duplicate emails.
