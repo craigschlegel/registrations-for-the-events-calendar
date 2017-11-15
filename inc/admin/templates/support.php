@@ -1,12 +1,12 @@
-<h1><?php _e( 'Need Help?', 'registrations-for-the-events-calendar-pro' ); ?></h1>
+<h1><?php _e( 'Need Help?', 'registrations-for-the-events-calendar' ); ?></h1>
 
 <p>
 	<span class="rtec-support-title"><i class="fa fa-life-ring" aria-hidden="true"></i>&nbsp; <a href="http://roundupwp.com/products/registrations-for-the-events-calendar/setup" target="_blank"><?php _e( 'Setup Directions', 'registrations-for-the-events-calendar' ); ?></a></span>
-	<br />A step-by-step guide on how to setup and use the plugin.
+	<br /><?php _e( 'A step-by-step guide on how to setup and use the plugin.', 'registrations-for-the-events-calendar' ); ?>
 </p>
 <p>
 	<span class="rtec-support-title"><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp; <a href="https://roundupwp.com/docs/faqs/" target="_blank"><?php _e( 'FAQs and Documentation', 'registrations-for-the-events-calendar' ); ?></a></span>
-	<br /><?php _e( 'You might find some help with our FAQs and troubleshooting guides.', 'registrations-for-the-events-calendar-pro' ); ?>
+	<br /><?php _e( 'You might find some help with our FAQs and troubleshooting guides.', 'registrations-for-the-events-calendar' ); ?>
 </p>
 <p>
 	<span class="rtec-support-title"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp; <a href="https://roundupwp.com/support/" target="_blank"><?php _e( 'Request Support', 'registrations-for-the-events-calendar' ); ?></a></span>

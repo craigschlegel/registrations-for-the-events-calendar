@@ -5,12 +5,12 @@
 <table class="widefat rtec-registrations-data">
 	<thead>
 	<tr>
-		<th>Title</th>
-		<th>Start Date</th>
-		<th>End Date</th>
-		<th>Venue</th>
-		<th>Attendance</th>
-		<th>Link</th>
+		<th><?php _e( 'Title', 'registrations-for-the-events-calendar' ); ?></th>
+		<th><?php _e( 'Start Date', 'registrations-for-the-events-calendar' ); ?></th>
+		<th><?php _e( 'Start Date', 'registrations-for-the-events-calendar' ); ?></th>
+		<th><?php _e( 'Venue', 'registrations-for-the-events-calendar' ); ?></th>
+		<th><?php _e( 'Attendance', 'registrations-for-the-events-calendar' ); ?></th>
+		<th><?php _e( 'Link', 'registrations-for-the-events-calendar' ); ?></th>
 	</tr>
 	</thead>
 	<tbody>

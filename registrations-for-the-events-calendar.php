@@ -2,7 +2,7 @@
 /*
 Plugin Name: Registrations for The Events Calendar
 Description: Collect and manage registrations for events posted using The Events Calendar by Modern Tribe.
-Version: 2.0.1
+Version: 2.0.2
 Author: Roundup WP
 Author URI: roundupwp.com
 License: GPLv2 or later
@@ -45,9 +45,9 @@ function rtec_TEC_check() {
 					<img src="<?php echo plugin_dir_url( __FILE__ ) . 'img/RTEC-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar">
 				</div>
 				<div class="rtec-msg-wrap">
-					<p>It looks like The Events Calendar plugin is not currently active.</p>
-					<p class="rtec-instructions">Please install The Events Calendar by Modern Tribe to get started with your registrations.</p>
-					<p><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank">Setup Instructions</a></p>
+					<p><?php _e( 'It looks like The Events Calendar plugin is not currently active.', 'registrations-for-the-events-calendar' ); ?></p>
+					<p class="rtec-instructions"><?php _e( 'Please install The Events Calendar by Modern Tribe to get started with your registrations.', 'registrations-for-the-events-calendar' ); ?></p>
+					<p><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank"><?php _e( 'Setup Instructions', 'registrations-for-the-events-calendar' ); ?></a></p>
 				</div>
 			</div>
 		<?php
@@ -151,7 +151,7 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
         private function constants() {
             // Plugin version.
             if ( ! defined( 'RTEC_VERSION' ) ) {
-                define( 'RTEC_VERSION', '2.0.1' );
+                define( 'RTEC_VERSION', '2.0.2' );
             }
             // Plugin Folder Path.
             if ( ! defined( 'RTEC_PLUGIN_DIR' ) ) {
@@ -231,36 +231,18 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 
 		    if ( ! $rtec_options ) {
 			    $defaults = array(
-				    'first_label' => 'First',
 				    'first_show' => true,
 				    'first_require' => true,
-				    'first_error' => 'Please enter your first name',
-				    'last_label' => 'Last',
 				    'last_show' => true,
 				    'last_require' => true,
-				    'last_error' => 'Please enter your last name',
-				    'email_label' => 'Email',
 				    'email_show' => true,
 				    'email_require' => true,
-				    'email_error' => 'Please enter a valid email address',
 				    'phone_show' => false,
 				    'phone_require' => false,
-				    'phone_error' => 'Please enter a valid phone number',
 				    'phone_valid_count' => '7, 10',
 				    'recaptcha_require' => false,
 				    'other_show' => false,
 				    'other_require' => false,
-				    'other_error' => 'There is an error with your entry',
-				    'register_text' => 'Register',
-				    'success_message' => 'Success! Please check your email inbox for a confirmation message',
-				    'attendance_text_before_up' => 'Join',
-				    'attendance_text_after_up' => 'others!',
-				    'attendance_text_before_down' => 'Only',
-				    'attendance_text_after_down' => 'spots left',
-				    'attendance_text_one_up' => 'Join one other person',
-				    'attendance_text_one_down' => 'Only one spot left!',
-				    'attendance_text_none_yet' => 'Be the first!',
-				    'submit_text' => 'Submit',
 				    'message_source' => 'custom'
 			    );
 			    // get form options from the db
@@ -276,7 +258,7 @@ endif; // End if class_exists check.
 register_activation_hook( __FILE__, array( 'Registrations_For_The_Events_Calendar', 'install' ) );
 
 function rtec_text_domain() {
-	load_plugin_textdomain( 'registrations-for-the-events-calendar', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
+	load_plugin_textdomain( 'registrations-for-the-events-calendar', false, basename( dirname(__FILE__) ) . '/lang' );
 }
 add_action( 'plugins_loaded', 'rtec_text_domain' );
 

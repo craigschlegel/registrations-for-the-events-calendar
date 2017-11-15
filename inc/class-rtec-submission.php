@@ -281,20 +281,12 @@ class RTEC_Submission
 		$sanitized_data = array();
 		// for each submitted form field
 		foreach ( $submission as $input_key => $input_value ) {
-			if ( $input_key === 'ical_url' ) {
-				// the ical has url so escaped
-				$new_val = esc_url( $input_value );
-			} else {
-				// sanitize the input value
-				$new_val = sanitize_text_field( $input_value );
-			}
-
 			// strip potentially malicious header strings
-			$new_val = $this->strip_malicious( $new_val );
+			$new_val = $this->strip_malicious( $input_value );
 			// replace single quotes
 			$new_val = str_replace( "'", '`', $new_val );
 			// assign the sanitized value
-			$sanitized_data[$input_key] = $new_val;
+			$sanitized_data[ $input_key ] = $new_val;
 		}
 
 		return $sanitized_data;
@@ -327,7 +319,7 @@ class RTEC_Submission
 			require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-email.php';
 			$confirmation_message = new RTEC_Email();
 
-			$message = isset( $rtec_options['confirmation_message'] ) ? $rtec_options['confirmation_message'] : $confirmation_message->get_generic_confirmation( $sanitized_data );
+			$message = isset( $rtec_options['confirmation_message'] ) && !rtec_using_translations() ? $rtec_options['confirmation_message'] : $confirmation_message->get_generic_confirmation( $sanitized_data );
 
 			$args = array(
 				'template_type' => 'confirmation',
@@ -359,7 +351,7 @@ class RTEC_Submission
 			require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-email.php';
 			$notification_message = new RTEC_Email();
 			$use_custom_notification = isset( $rtec_options['use_custom_notification'] ) ? $rtec_options['use_custom_notification'] : false;
-			if ( !$use_custom_notification ) {
+			if ( !$use_custom_notification || rtec_using_translations() ) {
 				$message = $notification_message->get_generic_submission_notification( $sanitized_data, $this->field_attributes );
 			} else {
 				$message = isset( $rtec_options['notification_message'] ) ? $rtec_options['notification_message'] : $notification_message->get_generic_submission_notification( $sanitized_data );

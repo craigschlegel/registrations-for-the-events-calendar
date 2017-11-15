@@ -9,29 +9,29 @@ $settings = $this->settings;
 			<input type="hidden" name="v" value="<?php echo esc_attr( $settings['v'] ); ?>">
 			<div class="view-switch rtec-grid-view-switch">
 				<a href="<?php $this->the_toolbar_href( 'v', 'list' ); ?>" class="view-list<?php if( $settings['v'] === 'list' ) echo ' current'; ?>">
-					<span class="screen-reader-text">List View</span>
+					<span class="screen-reader-text"><?php _e( 'List View', 'registrations-for-the-events-calendar' ); ?></span>
 				</a>
 				<a href="<?php $this->the_toolbar_href( 'v', 'grid' ); ?>" class="view-grid<?php if( $settings['v'] === 'grid' ) echo ' current'; ?>">
-					<span class="screen-reader-text">Grid View</span>
+					<span class="screen-reader-text"><?php _e( 'Grid View', 'registrations-for-the-events-calendar' ); ?></span>
 				</a>
 			</div>
-			<label for="rtec-registrations-date" class="screen-reader-text">Filter by start date</label>
+			<label for="rtec-registrations-date" class="screen-reader-text"><?php _e( 'Filter by start date', 'registrations-for-the-events-calendar' ); ?></label>
 			<select id="rtec-registrations-date" name="qtype" class="registrations-filters">
-				<option value="upcoming" <?php if ( $settings['qtype'] === 'upcoming' ) echo 'selected'; ?>>View Upcoming</option>
-				<option value="start" <?php if ( $settings['qtype'] === 'start' ) echo 'selected'; ?>>Select Start Date</option>
-				<option value="all" <?php if ( $settings['qtype'] === 'all' ) echo 'selected'; ?>>View All</option>
+				<option value="upcoming" <?php if ( $settings['qtype'] === 'upcoming' ) echo 'selected'; ?>><?php _e( 'View Upcoming', 'registrations-for-the-events-calendar' ); ?></option>
+				<option value="start" <?php if ( $settings['qtype'] === 'start' ) echo 'selected'; ?>><?php _e( 'Select Start Date', 'registrations-for-the-events-calendar' ); ?></option>
+				<option value="all" <?php if ( $settings['qtype'] === 'all' ) echo 'selected'; ?>><?php _e( 'View All', 'registrations-for-the-events-calendar' ); ?></option>
 			</select>
-			<label for="rtec-registrations-start" class="screen-reader-text">Filter by event start date</label>
+			<label for="rtec-registrations-start" class="screen-reader-text"><?php _e( 'Filter by event start date', 'registrations-for-the-events-calendar' ); ?></label>
 			<input type="text" id="rtec-date-picker" name="start" value="<?php echo date( "m/d/Y", strtotime( $settings['start'] ) ); ?>" class="rtec-date-picker" style="vertical-align: middle;<?php if ( $settings['qtype'] !== 'start' ) echo 'display: none;'; ?>"/>
-			<label for="rtec-registrations-reg" class="screen-reader-text">Filter by registrations</label>
+			<label for="rtec-registrations-reg" class="screen-reader-text"><?php _e( 'Filter by registrations', 'registrations-for-the-events-calendar' ); ?></label>
 			<select id="rtec-registrations-reg" name="with" class="registrations-filters">
-				<option value="with" <?php if ( $settings['with'] === 'with' ) echo 'selected'; ?>>With registrations enabled</option>
-				<option value="either" <?php if ( $settings['with'] === 'either' ) echo 'selected'; ?>>With/without registrations</option>
+				<option value="with" <?php if ( $settings['with'] === 'with' ) echo 'selected'; ?>><?php _e( 'With registrations enabled', 'registrations-for-the-events-calendar' ); ?></option>
+				<option value="either" <?php if ( $settings['with'] === 'either' ) echo 'selected'; ?>><?php _e( 'With/without registrations', 'registrations-for-the-events-calendar' ); ?></option>
 			</select>
-			<button id="rtec-filter-go" type="button" class="button rtec-toolbar-button" data-rtec-view-settings="<?php echo esc_attr( json_encode( $settings ) ); ?>">Go</button>
+			<button id="rtec-filter-go" type="button" class="button rtec-toolbar-button" data-rtec-view-settings="<?php echo esc_attr( json_encode( $settings ) ); ?>"><?php _e( 'Go', 'registrations-for-the-events-calendar' ); ?></button>
 		</form>
 	</div>
-	<div class="rtec-toolbar-primary search-form"><label for="rtec-search-input" class="screen-reader-text">Search Registrants</label>
-		<input type="search" placeholder="Search Registrants" id="rtec-search-input" class="search">
+	<div class="rtec-toolbar-primary search-form"><label for="rtec-search-input" class="screen-reader-text"><?php _e( 'Search Registrants', 'registrations-for-the-events-calendar' ); ?></label>
+		<input type="search" placeholder="<?php _e( 'Search Registrants', 'registrations-for-the-events-calendar' ); ?>" id="rtec-search-input" class="search">
 	</div>
 </div>

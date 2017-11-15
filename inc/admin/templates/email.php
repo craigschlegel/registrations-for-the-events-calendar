@@ -2,7 +2,7 @@
 settings_errors(); ?>
 <h1><?php _e( 'Email Settings', 'rtec' ); ?></h1>
 <div class="rtec-individual-available-notice">
-    <p><strong><span class="rtec-individual-available">&#42;</span>Can also be set for each event separately on the Events->Edit page</strong></p>
+    <p><strong><span class="rtec-individual-available">&#42;</span><?php _e( 'Can also be set for each event separately on the Events->Edit page', 'registrations-for-the-events-calendar' ); ?></strong></p>
 </div>
 <?php
 $new_status = get_transient( 'rtec_new_messages' );

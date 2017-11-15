@@ -47,8 +47,8 @@ if ( ! $event_meta['show_registrants_data'] ) {
 }
 ?>
 <div class="rtec-event-options postbox closed">
-	<button type="button" class="handlediv button-link" aria-expanded="false"><span class="screen-reader-text"><?php _e( 'Toggle panel: Information', 'registrations-for-the-events-calendar-pro' ); ?></span><span class="toggle-indicator" aria-hidden="true"></span></button>
-	<span class="hndle"><span><?php _e( 'Event Options', 'registrations-for-the-events-calendar-pro' ); ?></span></span>
+	<button type="button" class="handlediv button-link" aria-expanded="false"><span class="screen-reader-text"><?php _e( 'Toggle panel: Information', 'registrations-for-the-events-calendar' ); ?></span><span class="toggle-indicator" aria-hidden="true"></span></button>
+	<span class="hndle"><span><?php _e( 'Event Options', 'registrations-for-the-events-calendar' ); ?></span></span>
 </div>
 <div class="rtec-event-options rtec-hidden-options postbox">
 	<form class="rtec-event-options-form" action="">
@@ -88,7 +88,7 @@ if ( ! $event_meta['show_registrants_data'] ) {
 
 		</div>
 		<div class="rtec-hidden-option-wrap">
-			<h4><?php _e( 'Email', 'registrations-for-the-events-calendar-pro' ); ?></h4>
+			<h4><?php _e( 'Email', 'registrations-for-the-events-calendar' ); ?></h4>
 			<div class="rtec-hidden-option-wrap">
 				<label for="rtec-not-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Notification email recipients', 'registrations-for-the-events-calendar' ); ?></label><br />
 				<input type="text" size="50" id="rtec-not-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECnotificationEmailRecipient" value="<?php echo esc_attr( $notification_email ); ?>" placeholder="leave blank for default"/>
@@ -98,7 +98,7 @@ if ( ! $event_meta['show_registrants_data'] ) {
 				<input type="text" size="50" id="rtec-conf-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECconfirmationEmailFrom" value="<?php echo esc_attr( $conf_email ); ?>" placeholder="leave blank for default"/>
 			</div>
 		</div>
-		<button class="button action rtec-admin-secondary-button rtec-update-event-options"><?php _e( 'Update', 'registrations-for-the-events-calendar-pro'  ); ?></button>
+		<button class="button action rtec-admin-secondary-button rtec-update-event-options"><?php _e( 'Update', 'registrations-for-the-events-calendar'  ); ?></button>
 		<div class="rtec-clear"></div>
 	</form>
 </div>

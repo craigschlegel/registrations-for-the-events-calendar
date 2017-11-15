@@ -1,4 +1,5 @@
 <?php
+$date_format = 'F jS, ' . rtec_get_time_format();
 ?>
 
 <div class="rtec-outline">
@@ -7,7 +8,7 @@
 	<?php else : ?>
 	<h3><?php echo esc_html( $event_obj->event_meta['title'] ); ?></h3>
 	<?php endif; ?>
-	<p class="rtec-event-date"><?php echo date_i18n( 'F jS, g:i a', strtotime( $event_obj->event_meta['start_date'] ) ); ?> to <span class="rtec-end-time"><?php echo date_i18n( 'F jS, g:i a', strtotime( $event_obj->event_meta['end_date'] ) ); ?></span></p>
+	<p class="rtec-event-date"><?php echo date_i18n( $date_format, strtotime( $event_obj->event_meta['start_date'] ) ); ?> to <span class="rtec-end-time"><?php echo date_i18n( $date_format, strtotime( $event_obj->event_meta['end_date'] ) ); ?></span></p>
 </div>
 <p class="rtec-venue-highlight"><?php echo esc_html( $event_obj->event_meta['venue_title'] ); ?></p>
 <div class="rtec-reg-info rtec-border-sides">
