@@ -231,36 +231,18 @@ if ( ! class_exists( 'Registrations_For_The_Events_Calendar' ) ) :
 
 		    if ( ! $rtec_options ) {
 			    $defaults = array(
-				    'first_label' => 'First',
 				    'first_show' => true,
 				    'first_require' => true,
-				    'first_error' => 'Please enter your first name',
-				    'last_label' => 'Last',
 				    'last_show' => true,
 				    'last_require' => true,
-				    'last_error' => 'Please enter your last name',
-				    'email_label' => 'Email',
 				    'email_show' => true,
 				    'email_require' => true,
-				    'email_error' => 'Please enter a valid email address',
 				    'phone_show' => false,
 				    'phone_require' => false,
-				    'phone_error' => 'Please enter a valid phone number',
 				    'phone_valid_count' => '7, 10',
 				    'recaptcha_require' => false,
 				    'other_show' => false,
 				    'other_require' => false,
-				    'other_error' => 'There is an error with your entry',
-				    'register_text' => 'Register',
-				    'success_message' => 'Success! Please check your email inbox for a confirmation message',
-				    'attendance_text_before_up' => 'Join',
-				    'attendance_text_after_up' => 'others!',
-				    'attendance_text_before_down' => 'Only',
-				    'attendance_text_after_down' => 'spots left',
-				    'attendance_text_one_up' => 'Join one other person',
-				    'attendance_text_one_down' => 'Only one spot left!',
-				    'attendance_text_none_yet' => 'Be the first!',
-				    'submit_text' => 'Submit',
 				    'message_source' => 'custom'
 			    );
 			    // get form options from the db

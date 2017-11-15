@@ -13,7 +13,7 @@
 
 		<tr class="rtec-reg-row<?php echo $this->get_registrant_tr_classes( $registration['status'], $is_user ); ?>" >
 			<td class="rtec-first-data">
-				<?php echo $this->get_registrant_icons( $registration['status'], $is_user ) . esc_html( date_i18n( 'm/d g:i a', strtotime( $registration['registration_date'] ) + $event_obj->tz_offset ) ); ?>
+				<?php echo $this->get_registrant_icons( $registration['status'], $is_user ) . esc_html( date_i18n( 'm/d ' . rtec_get_time_format(), strtotime( $registration['registration_date'] ) + $event_obj->tz_offset ) ); ?>
 			</td>
 			<?php foreach ( $event_obj->column_label as $column => $label ) : ?>
 				<td><?php
@@ -40,7 +40,7 @@
 	<?php endif; // registrations not empty ?>
 
 	<?php if ( $event_obj->pagination_needed ) : ?>
-		<tr><td colspan="4"><a href="<?php $this->the_detailed_view_href( $event->ID, '' ); ?>" class="button rtec-wide rtec-view-all"><i class="fa fa-list" aria-hidden="true"></i> <?php printf( __( 'View all', 'registrations-for-the-events-calendar' ) ); ?></a></td></tr>
+		<tr><td colspan="4"><a href="<?php $this->the_detailed_view_href( $event->ID, '' ); ?>" class="button rtec-wide rtec-view-all"><i class="fa fa-list" aria-hidden="true"></i> <?php _e( 'View all', 'registrations-for-the-events-calendar' ); ?></a></td></tr>
 	<?php endif; ?>
 
 	</tbody>

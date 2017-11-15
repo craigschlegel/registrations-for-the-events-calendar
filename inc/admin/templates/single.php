@@ -47,8 +47,8 @@ echo '<pre>';
 //var_dump($form);
 echo '</pre>';
 ?>
-<h1><?php _e( 'Single Event Details', 'registrations-for-the-events-calendar-pro' ); ?></h1>
-<a id="rtec-back-overview" href="<?php $admin_registrations->the_toolbar_href( 'tab', 'registrations' ) ?>"><?php _e( 'Back to Overview', 'registrations-for-the-events-calendar-pro' ); ?></a>
+<h1><?php _e( 'Single Event Details', 'registrations-for-the-events-calendar' ); ?></h1>
+<a id="rtec-back-overview" href="<?php $admin_registrations->the_toolbar_href( 'tab', 'registrations' ) ?>"><?php _e( 'Back to Overview', 'registrations-for-the-events-calendar' ); ?></a>
 
 <input type="hidden" value="<?php echo esc_attr( $event_id ); ?>" name="event_id">
 <div class="rtec-wrapper rtec-single<?php echo $event_obj->get_single_event_wrapper_classes(); ?>">
@@ -61,7 +61,7 @@ echo '</pre>';
         <thead>
         <tr>
             <td scope="col" class="manage-column column-rtec check-column">
-                <label class="screen-reader-text" for="rtec-select-all-1"><?php _e( 'Select All', 'registrations-for-the-events-calendar-pro' ); ?></label>
+                <label class="screen-reader-text" for="rtec-select-all-1"><?php _e( 'Select All', 'registrations-for-the-events-calendar' ); ?></label>
                 <input type="checkbox" id="rtec-select-all-1">
             </td>
             <?php foreach ( $event_obj->labels as $label ) : ?>
@@ -78,7 +78,8 @@ echo '</pre>';
                 $custom_data = isset( $registration['custom'] ) ? maybe_unserialize( $registration['custom'] ) : array();
                 $is_user = isset( $registration['user_id'] ) && (int)$registration['user_id'] > 0 ? true : false;
                 if ( isset( $registration['registration_date'] ) ) {
-                    $registration['registration_date'] = date_i18n( 'F jS, g:i a', strtotime( $registration['registration_date'] ) + $tz_offset );
+                	$time_format = rtec_get_time_format();
+                    $registration['registration_date'] = date_i18n( 'F jS, ' . $time_format, strtotime( $registration['registration_date'] ) + $tz_offset );
                 }
                 ?>
                 <tr class="rtec-reg-row<?php echo $admin_registrations->get_registrant_tr_classes( $registration['status'], $is_user ); ?>" data-rtec-id="<?php echo esc_attr( (int)$registration['id'] ); ?>">
@@ -125,7 +126,7 @@ echo '</pre>';
                 <tfoot>
                 <tr>
                     <td scope="col" class="manage-column column-rtec check-column">
-                        <label class="screen-reader-text" for="rtec-select-all-1"><?php _e( 'Select All', 'registrations-for-the-events-calendar-pro' ); ?></label>
+                        <label class="screen-reader-text" for="rtec-select-all-1"><?php _e( 'Select All', 'registrations-for-the-events-calendar' ); ?></label>
                         <input type="checkbox" id="rtec-select-all-1">
                     </td>
                     <?php foreach ( $event_obj->labels as $label ) : ?>
@@ -172,21 +173,21 @@ echo '</pre>';
 
             </tr>
             <tr>
-                <td colspan="6" align="center"><?php _e( 'No Registrations Yet', 'registrations-for-the-events-calendar-pro' ); ?></td>
+                <td colspan="6" align="center"><?php _e( 'No Registrations Yet', 'registrations-for-the-events-calendar' ); ?></td>
             </tr>
             </tbody>
         <?php endif; // registrations not empty?>
         </table>
         <div class="rtec-event-actions rtec-clear">
             <div class="tablenav">
-                <button class="button action rtec-action rtec-admin-secondary-button" data-rtec-action="delete"><i class="fa fa-minus" aria-hidden="true"></i> <?php _e( 'Delete Selected', 'registrations-for-the-events-calendar-pro'  ); ?></button>
-                <button class="button action rtec-action rtec-admin-secondary-button" data-rtec-action="edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php _e( 'Edit Selected', 'registrations-for-the-events-calendar-pro'  ); ?></button>
-                <button class="button action rtec-action rtec-admin-secondary-button" data-rtec-action="add"><i class="fa fa-plus" aria-hidden="true"></i> <?php _e( 'Add New', 'registrations-for-the-events-calendar-pro'  ); ?></button>
+                <button class="button action rtec-action rtec-admin-secondary-button" data-rtec-action="delete"><i class="fa fa-minus" aria-hidden="true"></i> <?php _e( 'Delete Selected', 'registrations-for-the-events-calendar'  ); ?></button>
+                <button class="button action rtec-action rtec-admin-secondary-button" data-rtec-action="edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php _e( 'Edit Selected', 'registrations-for-the-events-calendar'  ); ?></button>
+                <button class="button action rtec-action rtec-admin-secondary-button" data-rtec-action="add"><i class="fa fa-plus" aria-hidden="true"></i> <?php _e( 'Add New', 'registrations-for-the-events-calendar'  ); ?></button>
 
                 <form method="post" id="rtec_csv_export_form" action="">
                     <?php wp_nonce_field( 'rtec_csv_export', 'rtec_csv_export_nonce' ); ?>
                     <input type="hidden" name="rtec_id" value="<?php echo esc_attr( $event_id ); ?>" />
-                    <input type="submit" name="rtec_event_csv" class="button action rtec-admin-secondary-button" value="<?php _e( 'Export (.csv)', 'registrations-for-the-events-calendar-pro' ); ?>" />
+                    <input type="submit" name="rtec_event_csv" class="button action rtec-admin-secondary-button" value="<?php _e( 'Export (.csv)', 'registrations-for-the-events-calendar' ); ?>" />
                 </form>
 
             </div>

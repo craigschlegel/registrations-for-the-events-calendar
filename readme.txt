@@ -3,52 +3,74 @@
 Contributors: roundupwp
 Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
-Requires at least: 3.0
-Tested up to: 4.8
+Requires at least: 3.5
+Tested up to: 4.9
 Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-Manage registrations for your events and classes with ease. The Registrations for The Events Calendar plugin is an extension for Modern Tribe's The Events Calendar (free edition) though it may also work with paid extensions. Collect registration form submissions for your events, classes, meetings, meetups, workshops and more.
+Whether you're holding a meetup, class, workshop, tournament, or any other kind of event, you need a way to handle registrations. Our plugin makes managing this process easy and simple. Even nontechnical users can setup the plugin and start collecting registrations within minutes.
 
-= Highly Customizable =
+= Parent Plugin =
 
-Create a simple, straight-forward registration form with the ability to add as many text form fields as you need. Automatically add the form to every single event page in one of four areas (parts of the template). Change the labels, error messaging and whether or not the field is required. The form is submitted using AJAX so your guests never have to leave the single event page while submitting a registration. Optionally, you can set limits for the number of guests allowed to register per event along with displaying a list of current attendees above the form.
+In order for the Registrations for the Events Calendar to work properly, you need to install its parent plugin, [The Events Calendar](https://wordpress.org/plugins/the-events-calendar/). (Both are free.)
 
 = Quick to Set Up and Easy to Get Started =
 
-As soon as you install and activate the plugin you can begin collecting registrations. No need for shortcodes (although they are available), the registration form is added to every single event page by default. The form asks for a guest's first name, last name, and email address by default though you can change or add to these fields on the "Form" tab.
+As soon as you install and activate the plugin, you can begin collecting registrations. You don't need any shortcodes (although they're available). Instead, the registration form is automatically added to every single event page by default.
+
+= User-Friendly Features =
+
+* Reduce incomplete registrations by limiting the entire process to a single page (AJAX form submit).
+* Keep your event page uncluttered (your registration form is hidden initially and revealed by clicking a customizable "Register" button).
+* Follow-up with your attendees with a customizable confirmation email.
+* Save entries in a database table for easy event management.
+
+= Highly Customizable =
+
+* Add as many text fields as you'd like to the registration form.
+* Add the registration form to one of several parts of the page your event is displayed on.
+* Display the registration form anywhere on your site with shortcodes.
+* Customize the labels, error messages, directions for your attendees, and which fields are required.
+* Customize both the email templates sent to your attendees and the notification email sent to the event holder.
+* Limit the number of registrations per event.
+* Display a list of current registered attendees.
+* Specify a registration deadline (both date and time).
 
 = Powerful Backend Features for Easy Management =
 
-Registrations are saved in the WordPress database and can be manually added, edited, and deleted in the admin area. See notifications of when new registrations need to be reviewed. View a breakdown of registrations by event and browse them quickly in an overview. Export your registrations into a spreadsheet using a .csv export feature.
-
-= Features =
-
-* Visitors can register for your events
-* Registration form automatically appears on all single event pages, options to disable them for any specific event
-* Customizable form and messages. Easy to manually translate and tweak to your use case.
-* Set limits customized to each event for total registrations
-* Form submits without the visitor needing to leave the page or even refresh using AJAX.
-* Registrants are sent a customizable confirmation email and the event organizer can be sent a notification email when a registration is made.
-* Optional attendee list visible above the form
-* Validate emails, allow only one registration per email per event
-* Many options can be customized for each event including email recipients, email "from" addresses, deadline, and registration limits
-* Shortcodes to display registration forms in other areas of your website
-* Manage registrations in the backend with the ability to add, edit, and delete.
-* Export registrations to a spreadsheet in .csv form.
+* Registrations are saved in the WordPress database, where you can manually add, edit, and delete them.
+* Email addresses can be checked for duplicates (this prevents duplicate registrations).
+* Get notifications when new registrations need to be reviewed.
+* View a breakdown of registrations by event, and browse them quickly in an overview.
+* Export your registrations to a CSV spreadsheet.
+* Search registrations by name, phone, or email.
 
 = Benefits =
-* Simple workflow for setting up registrations for your events frees up time.
-* Give your events a personal touch with custom messages in emails
-* Build a community by allowing others to see who's attending
-* Straight-forward registration process provides a great user experience for your guests.
 
-<strong>Check out [Registrations for the Events Calendar Pro](https://roundupwp.com/products/registrations-for-the-events-calendar-pro/) for premium features like a form builder, enforced email address confirmation, and more options for logged-in users.</strong>
+* Simple workflow frees up your time.
+* Customizations allow you to add a personal touch.
+* Optional display of a registered attendee list builds community.
+* Straightforward registration process provides a world-class user experience.
 
-Also, consider donating to the "parent" plugin for this extension [The Events Calendar](https://wordpress.org/plugins/the-events-calendar/). It's a truly awesome plugin that's why we extended it!
+= Feature Reviews =
+
+"**Perfect plugin, excellent support!** Really, two things you can never find combined. The plugin works great. Even the free version has many options, and the support is great. They answer quickly and provide answers to help you achieve what you need. Totally recommend it, and hope they keep creating great plugins!" -[delfidream](https://wordpress.org/support/topic/perfect-plugin-excelent-support/)
+
+"I needed a plugin to allow signing up for advising sessions at a university; this worked great. **Simple, easy to set up.**" -[adowdle](https://wordpress.org/support/topic/great-extension-for-the-events-calendar/)
+
+= Pro Version =
+
+Do you need even more customization and control? Check out [Registrations for the Events Calendar Pro](https://roundupwp.com/products/registrations-for-the-events-calendar-pro/). Pro features include:
+
+* Multiple forms specific to each event.
+* Drop-down, checkbox, radio, and paragraph fields.
+* Guest registrations (register for more than one person at a time).
+* Multiple confirmation email templates.
+* Multiple registration venues and tiers.
+
 == Feedback or Support ==
 
 We would love to hear feedback and support the plugin so please visit the "Support" tab inside the plugin settings page for assistance.
@@ -133,11 +155,13 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
 = 2.0.2 =
+* Tweak: Date formatting more dynamic. Date format saved on the "Email" tab will be used in the admin area in some situations.
 * Fix: French, Russian, and Spanish translations updated and fixed.
 * Fix: gettext calls fixed and updated for all strings.
 * Fix: Submit button is disabled while processing a submission to prevent duplicate submissions.
 * Fix: Spacing of error messages has been improved for mobile devices.
-* Fix: ERR_RESPONSE_HEADERS_MULTIPLE_CONTENT_DISPOSITION when exporting registrations for events with commas in the title.
+* Fix: ERR_RESPONSE_HEADERS_MULTIPLE_CONTENT_DISPOSITION when exporting registrations for events with commas in the title is fixed.
+* Fix: ical link in emails not working for all events
 
 = 2.0.1 =
 * Tweak: When checking for duplicate email addresses while a visitor is filling out the form, the submit button is disabled while the person is typing.

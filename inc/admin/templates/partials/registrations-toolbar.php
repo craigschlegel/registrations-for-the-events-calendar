@@ -15,7 +15,7 @@ $settings = $this->settings;
 					<span class="screen-reader-text"><?php _e( 'Grid View', 'registrations-for-the-events-calendar' ); ?></span>
 				</a>
 			</div>
-			<label for="rtec-registrations-date" class="screen-reader-text">Filter by start date</label>
+			<label for="rtec-registrations-date" class="screen-reader-text"><?php _e( 'Filter by start date', 'registrations-for-the-events-calendar' ); ?></label>
 			<select id="rtec-registrations-date" name="qtype" class="registrations-filters">
 				<option value="upcoming" <?php if ( $settings['qtype'] === 'upcoming' ) echo 'selected'; ?>><?php _e( 'View Upcoming', 'registrations-for-the-events-calendar' ); ?></option>
 				<option value="start" <?php if ( $settings['qtype'] === 'start' ) echo 'selected'; ?>><?php _e( 'Select Start Date', 'registrations-for-the-events-calendar' ); ?></option>
@@ -32,6 +32,6 @@ $settings = $this->settings;
 		</form>
 	</div>
 	<div class="rtec-toolbar-primary search-form"><label for="rtec-search-input" class="screen-reader-text"><?php _e( 'Search Registrants', 'registrations-for-the-events-calendar' ); ?></label>
-		<input type="search" placeholder="Search Registrants" id="rtec-search-input" class="search">
+		<input type="search" placeholder="<?php _e( 'Search Registrants', 'registrations-for-the-events-calendar' ); ?>" id="rtec-search-input" class="search">
 	</div>
 </div>

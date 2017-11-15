@@ -129,10 +129,10 @@ class RTEC_Admin
         $email_error = __( 'Please enter a valid email address', 'registrations-for-the-events-calendar' );
         $phone_error = __( 'Please enter a valid phone number', 'registrations-for-the-events-calendar' );
         $form_fields_array = array(
-            0 => array( 'first', 'First', $first_error, true, true, '' ),
-            1 => array( 'last', 'Last', $last_error, true, true, '' ),
-            2 => array( 'email', 'Email', $email_error, true, true, '' ),
-            3 => array( 'phone', 'Phone', $phone_error, false, false, '7, 10' )
+            0 => array( 'first', __( 'First', 'registrations-for-the-events-calendar' ), $first_error, true, true, '' ),
+            1 => array( 'last', __( 'Last', 'registrations-for-the-events-calendar' ), $last_error, true, true, '' ),
+            2 => array( 'email', __( 'Email', 'registrations-for-the-events-calendar' ), $email_error, true, true, '' ),
+            3 => array( 'phone', __( 'Phone', 'registrations-for-the-events-calendar' ), $phone_error, false, false, '7, 10' )
         );
 
         $this->create_settings_field( array(
@@ -309,7 +309,7 @@ class RTEC_Admin
             'page' => 'rtec_form_custom_text',
             'section' => 'rtec_form_custom_text',
             'type' => 'text',
-            'default' => 'Register'
+            'default' => __( 'Register', 'registrations-for-the-events-calendar' )
         ));
 
         $this->create_settings_field( array(
@@ -337,7 +337,7 @@ class RTEC_Admin
             'page' => 'rtec_form_custom_text',
             'section' => 'rtec_form_custom_text',
             'type' => 'text',
-            'default' => 'Submit'
+            'default' => __( 'Submit', 'registrations-for-the-events-calendar' )
         ));
 
         // success message
@@ -369,17 +369,17 @@ class RTEC_Admin
         // Template Location
         $this->create_settings_field( array(
             'name' => 'template_location',
-            'title' => 'Form Location', // label for the input field
+            'title' => __( 'Form Location', 'registrations-for-the-events-calendar' ), // label for the input field
             'callback'  => 'default_select', // name of the function that outputs the html
             'page' => 'rtec_form_styles', // matches the section name
             'section' => 'rtec_form_styles', // matches the section name
             'option' => 'rtec_options', // matches the options name
             'class' => 'default-text', // class for the wrapper and input field
             'fields' => array(
-                1 => array( 'tribe_events_single_event_before_the_content', 'Before the content' ),
-                2 => array( 'tribe_events_single_event_after_the_content', 'After the content' ),
-                3 => array( 'tribe_events_single_event_before_the_meta', 'Before the meta' ),
-                4 => array( 'tribe_events_single_event_after_the_meta', 'After the meta' )
+                1 => array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
+                2 => array( 'tribe_events_single_event_after_the_content', __( 'After the content(middle top)', 'registrations-for-the-events-calendar' ) ),
+                3 => array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
+                4 => array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) )
             ),
             'description' => __( "Location where the form will appear in the single event template", 'registrations-for-the-events-calendar' ) // what is this? text
         ) );
@@ -464,7 +464,7 @@ class RTEC_Admin
 
         add_settings_section(
             'rtec_advanced',
-            'Advanced',
+            __( 'Advanced', 'registrations-for-the-events-calendar' ),
             array( $this, 'blank' ),
             'rtec_advanced'
         );
@@ -534,7 +534,7 @@ class RTEC_Admin
             'option' => 'rtec_options', // matches the options name
             'class' => 'default-text', // class for the wrapper and input field
             'description' => __( 'If you would like a custom date format in your messages, enter it here using the examples as a guide', 'registrations-for-the-events-calendar' ),
-            'default' => 'F jS, g:i a'
+            'default' => rtec_get_date_time_format()
         ));
 
         /* Notification Email Settings Section */
@@ -696,7 +696,7 @@ class RTEC_Admin
             'name' => 'confirmation_message',
             'title' => '<label>' . __( 'Confirmation Message', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'default' => 'Hey {first},<br />You are registered for {event-title} at {venue} on {event-date}. We are looking forward to having you there. The event will be held at this location:<br /><br />{venue-address}<br />{venue-city}, {venue-state} {venue-zip}<br /><br />See you there!',
+            'default' => 'Hey {first},<br /><br />You are registered for {event-title} at {venue} on {event-date}. We are looking forward to having you there. The event will be held at this location:<br /><br />{venue-address}<br />{venue-city}, {venue-state} {venue-zip}<br /><br />See you there!',
             'description' => '',
             'callback'  => 'rich_editor',
             'settings' => array(
@@ -907,13 +907,13 @@ class RTEC_Admin
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
-        <div class="rtec-green-bg"><a href="JavaScript:void(0);" class="rtec-add-field"><i class="fa fa-plus" aria-hidden="true"></i> <?php _e( 'Add Field', 'registrations-for-the-events-calendar-pro'  ); ?></a></div>
+        <div class="rtec-green-bg"><a href="JavaScript:void(0);" class="rtec-add-field"><i class="fa fa-plus" aria-hidden="true"></i> <?php _e( 'Add Field', 'registrations-for-the-events-calendar'  ); ?></a></div>
         <input type="hidden" id="rtec_custom_field_names" name="rtec_options[custom_field_names]" value="<?php echo $custom_field_string; ?>"/>
         <?php
         // the other field is treated specially
-        $label = isset( $options[ 'recaptcha_label' ] ) ? esc_attr( $options[ 'recaptcha_label' ] ) : 'What is';
-        $require = isset( $options[ 'recaptcha_require' ] ) ? esc_attr( $options[ 'recaptcha_require' ] ) : false;
-        $error = isset( $options[ 'recaptcha_error' ] ) ? esc_attr( $options[ 'recaptcha_error' ] ) : 'Please try again';
+        $label = isset( $options[ 'recaptcha_label' ] ) ? esc_attr( $options[ 'recaptcha_label' ] ) : __( 'What is', 'registrations-for-the-events-calendar' );
+        $require = isset( $options[ 'recaptcha_require' ] ) ? $options[ 'recaptcha_require' ] : false;
+        $error = isset( $options[ 'recaptcha_error' ] ) ? esc_attr( $options[ 'recaptcha_error' ] ) :  __( 'Please try again', 'registrations-for-the-events-calendar' );
         ?>
         <div class="rtec-field-options-wrapper" style="margin-top: 0.5em;">
             <h4><?php _e( 'Recaptcha', 'registrations-for-the-events-calendar' ); ?> <span>(<?php _e( 'Simple math question to avoid spam entries. Spam "honey pot" field is in the form by default', 'registrations-for-the-events-calendar' ); ?>)</span></h4>
@@ -963,14 +963,14 @@ class RTEC_Admin
     
     public function num_registrations_messages( $args ) {
         $options = get_option( $args['option'] );
-        $text_before_up = ( isset( $options['attendance_text_before_up'] ) ) ? esc_attr( $options['attendance_text_before_up'] ) : 'Join';
-        $text_after_up = ( isset( $options['attendance_text_after_up'] ) ) ? esc_attr( $options['attendance_text_after_up'] ) : 'others';
-        $one_up = ( isset( $options['attendance_text_one_up'] ) ) ? esc_attr( $options['attendance_text_one_up'] ) : 'Join one other person';
-        $text_before_down = ( isset( $options['attendance_text_before_down'] ) ) ? esc_attr( $options['attendance_text_before_down'] ) : 'Only';
-        $text_after_down = ( isset( $options['attendance_text_after_down'] ) ) ? esc_attr( $options['attendance_text_after_down'] ) : 'spots left';
-        $one_down = ( isset( $options['attendance_text_one_down'] ) ) ? esc_attr( $options['attendance_text_one_down'] ) : 'Only one spot left!';
-        $none_yet = ( isset( $options['attendance_text_none_yet'] ) ) ? esc_attr( $options['attendance_text_none_yet'] ) : 'Be the first!';
-        $closed = ( isset( $options['registrations_closed_message'] ) ) ? esc_attr( $options['registrations_closed_message'] ) : 'Registrations are closed for this event';
+        $text_before_up = ( isset( $options['attendance_text_before_up'] ) ) ? esc_attr( $options['attendance_text_before_up'] ) : __( 'Join', 'registrations-for-the-events-calendar' );
+        $text_after_up = ( isset( $options['attendance_text_after_up'] ) ) ? esc_attr( $options['attendance_text_after_up'] ) : __( 'others!', 'registrations-for-the-events-calendar' );
+        $one_up = ( isset( $options['attendance_text_one_up'] ) ) ? esc_attr( $options['attendance_text_one_up'] ) : __( 'Join one other person', 'registrations-for-the-events-calendar' );
+        $text_before_down = ( isset( $options['attendance_text_before_down'] ) ) ? esc_attr( $options['attendance_text_before_down'] ) : __( 'Only', 'registrations-for-the-events-calendar' );
+        $text_after_down = ( isset( $options['attendance_text_after_down'] ) ) ? esc_attr( $options['attendance_text_after_down'] ) : __( 'spots left', 'registrations-for-the-events-calendar' );
+        $one_down = ( isset( $options['attendance_text_one_down'] ) ) ? esc_attr( $options['attendance_text_one_down'] ) : __( 'Only one spot left!', 'registrations-for-the-events-calendar' );
+        $none_yet = ( isset( $options['attendance_text_none_yet'] ) ) ? esc_attr( $options['attendance_text_none_yet'] ) : __( 'Be the first!', 'registrations-for-the-events-calendar' );
+        $closed = ( isset( $options['registrations_closed_message'] ) ) ? esc_attr( $options['registrations_closed_message'] ) : __( 'Registrations are closed for this event', 'registrations-for-the-events-calendar' );
         $option_checked = ( isset( $options['include_attendance_message'] ) ) ? $options['include_attendance_message'] : true;
         $option_selected = ( isset( $options['attendance_message_type'] ) ) ? $options['attendance_message_type'] : 'up';
         ?>
@@ -1030,13 +1030,8 @@ class RTEC_Admin
     {
         // get option 'text_string' value from the database
         $options = get_option( $args['option'] );
-        //$option_string = delete_option( 'rtecconfirmation' );
         $default = isset( $args['default'] ) ? $args['default'] : false;
         $option_string = isset( $options[ $args['name'] ] ) ? str_replace( '{nl}', '<br />', $options[ $args['name'] ] ) : $default;
-
-        //$string = 'You are registered!{nl}{nl}Here are the details of your registration.{nl}{nl}Event: {event-title} at {venue} on {event-date}{nl}Registered Name: {first} {last}{nl}Phone: {phone}{nl}Other: {other}{nl}{nl}The event will be held at this location:{nl}{nl}{venue-address}{nl}{venue-city}, {venue-state} {venue-zip}{nl}{nl}See you there!';
-        //$option_string = str_replace( '{nl}', '<br />', $string);
-
 
         $settings = $args['settings'];
         $settings['textarea_name'] = $args['option'] . '[' . $args['name'] . ']';
@@ -1157,10 +1152,11 @@ class RTEC_Admin
     public function customize_custom_date_format( $args )
     {
         $options = get_option( $args['option'] );
-        $default = isset( $args['default'] ) ? $args['default'] : '';
+        $default = rtec_get_date_time_format();
         $option_string = ( isset( $options[ $args['name'] ] ) ) ? $options[ $args['name'] ] : $default;
+        //echo rtec_get_date_time_format();
         ?>
-        <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="text" value="<?php esc_attr_e( $option_string ); ?>" size="10" placeholder="Eg. F jS, Y" />
+        <input name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="text" value="<?php echo esc_attr( $option_string ); ?>" size="10" placeholder="Eg. F jS, Y" />
         <a href="https://www.roundupwp.com/products/registrations-for-the-events-calendar/docs/date-formatting-guide/" target="_blank"><?php _e( 'Examples' , 'registrations-for-the-events-calendar' ); ?></a>
         <br><?php $this->the_description( $args['description'] ); ?>
         <?php

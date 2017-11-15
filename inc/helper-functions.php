@@ -300,6 +300,32 @@ function rtec_has_deprecated_data_structure( $custom ) {
 
 }
 
+function rtec_get_date_time_format() {
+	global $rtec_options;
+
+	if ( isset( $rtec_options['custom_date_format'] ) ) {
+		$date_time_format = $rtec_options['custom_date_format'];
+	} else {
+		$date_format = get_option( 'date_format' );
+		$time_format = get_option( 'time_format' );
+		if ( $date_format && $time_format ) {
+			$date_time_format = $date_format . ' ' . $time_format;
+		} else {
+			$date_time_format = 'F j, Y g:i a';
+		}
+	}
+
+	return $date_time_format;
+}
+
+function rtec_get_time_format() {
+
+	$time_format = get_option( 'time_format' );
+
+	$time_format = $time_format ? $time_format : 'g:i a';
+
+	return $time_format;
+}
 /**
  * Returns the appropriate translation/custom/default text
  *
