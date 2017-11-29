@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -154,6 +154,10 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.0.3 =
+* New: German translations for the front-end added as well as a .pot file and additional translation files for several languages.
+* Fix: Disabled Utf-8 helper code for the .csv exporter due to problems with cyrillic alphabet. This can be manually enabled again using a filter "rtec_utf8_fix".
+
 = 2.0.2 =
 * Tweak: Date formatting more dynamic. Date format saved on the "Email" tab will be used in the admin area in some situations.
 * Fix: French, Russian, and Spanish translations updated and fixed.

@@ -559,12 +559,16 @@ function rtec_event_csv() {
 		if ( ! wp_verify_nonce( $nonce, 'rtec_csv_export' ) ) {
 			die ( 'You did not do this the right way!' );
 		}
+		$use_utf8_fix = apply_filters( 'rtec_utf8_fix', false );
 
-		require_once RTEC_PLUGIN_DIR . 'vendor/ForceUTF8/Encoding.php';
+		if ( $use_utf8_fix ) {
+			require_once RTEC_PLUGIN_DIR . 'vendor/ForceUTF8/Encoding.php';
+			$encoding = new RTEC_Encoding();
+		}
+
 		$rtec = RTEC();
 		$form = $rtec->form->instance();
 
-		$encoding = new RTEC_Encoding();
 		$event_obj = new RTEC_Admin_Event();
 		$form->build_form( (int)$_GET['id'] );
 
@@ -578,7 +582,7 @@ function rtec_event_csv() {
 			array( date_i18n( str_replace( ',', ' ', rtec_get_date_time_format() ), strtotime( $event_meta['start_date'] ) ) ),
 			array( date_i18n( str_replace( ',', ' ', rtec_get_date_time_format() ), strtotime( $event_meta['end_date'] ) ) ),
 			array( $venue_title ),
-			$event_obj->labels
+			array_map( 'stripslashes', $event_obj->labels )
 		);
 
 		$file_name = str_replace( ' ', '-', substr( $event_meta['title'], 0, 10 ) ) . '_' . str_replace( ' ', '-', substr( $event_meta['venue_title'], 0, 10 ) ) . '_'  . date_i18n( 'm.d', strtotime( $event_meta['start_date'] ) );
@@ -601,14 +605,18 @@ function rtec_event_csv() {
 			foreach ( $event_obj->column_label as $column => $label ) {
 
 				if ( isset( $registration[$column] ) ) {
-					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration[$column] ) );
+					$value = stripslashes( $registration[$column] );
 				} else if ( isset( $registration[$column.'_name'] ) ) {
-					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration[$column.'_name'] ) );
+					$value = stripslashes( $registration[$column.'_name'] );
 				} else if ( isset( $registration['custom'][$column] ) ) {
-					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration['custom'][$column]['value'] ) );
+					$value = stripslashes( $registration['custom'][$column]['value'] );
 				} else if ( isset( $registration['custom'][$label] ) ) {
-					$formatted_registration[$column] = $encoding->fixUTF8( stripslashes( $registration['custom'][$label] ) );
+					$value = stripslashes( $registration['custom'][$label] );
 				}
+
+				$value = $use_utf8_fix ? $encoding->fixUTF8( $value ) : $value;
+
+				$formatted_registration[$column] = $value;
 
 			}
 
