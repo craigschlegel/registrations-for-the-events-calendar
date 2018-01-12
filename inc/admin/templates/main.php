@@ -31,16 +31,16 @@
     <?php
     if ( current_user_can( 'manage_options' ) ) { ?>
         <h2 class="nav-tab-wrapper">
-            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=registrations" class="nav-tab <?php if ( $active_tab == 'registrations' || $active_tab == 'single' ) { echo 'nav-tab-active'; } ?>"><?php _e( 'Registrations', 'registrations-for-the-events-calendar' ); ?></a>
-            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form" class="nav-tab <?php if ( $active_tab == 'form' || $active_tab == 'create' ) { echo 'nav-tab-active'; } ?>"><?php _e( 'Form', 'registrations-for-the-events-calendar' ); ?></a>
-            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=email" class="nav-tab <?php if( $active_tab == 'email' ){ echo 'nav-tab-active'; } ?>"><?php _e( 'Email', 'registrations-for-the-events-calendar' ); ?></a>
+            <a href="<?php echo RTEC_ADMIN_URL; ?>&tab=registrations" class="nav-tab <?php if ( $active_tab == 'registrations' || $active_tab == 'single' ) { echo 'nav-tab-active'; } ?>"><?php _e( 'Registrations', 'registrations-for-the-events-calendar' ); ?></a>
+            <a href="<?php echo RTEC_ADMIN_URL; ?>&tab=form" class="nav-tab <?php if ( $active_tab == 'form' || $active_tab == 'create' ) { echo 'nav-tab-active'; } ?>"><?php _e( 'Form', 'registrations-for-the-events-calendar' ); ?></a>
+            <a href="<?php echo RTEC_ADMIN_URL; ?>&tab=email" class="nav-tab <?php if( $active_tab == 'email' ){ echo 'nav-tab-active'; } ?>"><?php _e( 'Email', 'registrations-for-the-events-calendar' ); ?></a>
             <?php foreach ( $additional_tabs as $additional_tab ) :
                 $label = isset( $additional_tab['label'] ) ? $additional_tab['label'] : '';
                 $value = isset( $additional_tab['value'] ) ? $additional_tab['value'] : false;
                 ?>
-                <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=<?php echo urlencode( $value ); ?>" class="nav-tab <?php if( $active_tab == $value ){ echo 'nav-tab-active'; } ?>"><?php echo $label; ?></a>
+                <a href="<?php echo RTEC_ADMIN_URL; ?>&tab=<?php echo urlencode( $value ); ?>" class="nav-tab <?php if( $active_tab == $value ){ echo 'nav-tab-active'; } ?>"><?php echo $label; ?></a>
             <?php endforeach; ?>
-            <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=support" class="nav-tab <?php if( $active_tab == 'support' ){ echo 'nav-tab-active'; } ?>"><?php _e( 'Support', 'registrations-for-the-events-calendar' ); ?></a>
+            <a href="<?php echo RTEC_ADMIN_URL; ?>&tab=support" class="nav-tab <?php if( $active_tab == 'support' ){ echo 'nav-tab-active'; } ?>"><?php _e( 'Support', 'registrations-for-the-events-calendar' ); ?></a>
         </h2>
         <?php
         if ( $active_tab === 'email' ) {

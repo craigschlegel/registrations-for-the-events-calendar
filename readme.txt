@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-Whether you're holding a meetup, class, workshop, tournament, or any other kind of event, you need a way to handle registrations. Our plugin makes managing this process easy and simple. Even nontechnical users can setup the plugin and start collecting registrations within minutes.
+Collect and manage registrations with a customizable form and email template. Whether you're holding a meetup, class, workshop, tournament, or any other kind of event, you need a way to handle registration. Our plugin makes managing this process easy and simple. Even nontechnical users can setup the plugin and start collecting registrations within minutes.
 
 = Parent Plugin =
 
@@ -155,6 +155,7 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
 = 2.0.4 =
+* Tweak: Menu slug changed for admin pages to accommodate custom uses. You may need to close and reopen your browser window if seeing message "You do not have sufficient permissions to access this page".
 * Tweak: Data and settings will not be removed on uninstall if the "Pro" version is active even if the options to preserve settings and registrations is unchecked.
 * Tweak: Changes to the CSS to help style buttons correctly in certain themes.
 * Fix: Styling not being applied to date picker with version 4.6+ of The Events Calendar.

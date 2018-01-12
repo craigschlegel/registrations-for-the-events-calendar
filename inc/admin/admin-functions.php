@@ -65,7 +65,7 @@ function rtec_the_admin_notices() {
 				<img src="<?php echo RTEC_PLUGIN_URL . 'img/RTEC-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar">
 			</div>
 			<div class="rtec-msg-wrap">
-				<p><?php _e( 'Registration forms are now added to all of your single event pages. Check out the <a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form">"Form" tab</a> to configure options</p>' , 'registrations-for-the-events-calendar' ); ?>
+				<p><?php _e( 'Registration forms are now added to all of your single event pages. Check out the <a href="' . RTEC_ADMIN_URL . '&tab=form">"Form" tab</a> to configure options</p>' , 'registrations-for-the-events-calendar' ); ?>
 				<p><?php _e( 'You can also view setup directions <a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank">on our website</a></p>' , 'registrations-for-the-events-calendar' ); ?>
 			</div>
 		</div>
@@ -287,7 +287,7 @@ function rtec_meta_boxes_html(){
 						<tr class="rtec-hidden-option-wrap">
 							<td class="tribe-table-field-label"><?php _e( 'Notification Email Recipients:', 'registrations-for-the-events-calendar' ); ?></td>
 							<td>
-								<input type="text" size="50" id="rtec-not-email" name="_RTECnotificationEmailRecipient" value="<?php echo esc_attr( $notification_email ); ?>" placeholder="leave blank for default"/>
+								<input type="text" style="width: 100%; max-width: 400px;" id="rtec-not-email" name="_RTECnotificationEmailRecipient" value="<?php echo esc_attr( $notification_email ); ?>" placeholder="leave blank for default"/>
 							</td>
 						</tr>
 						</tbody>
@@ -356,6 +356,11 @@ function rtec_meta_boxes_html(){
  * @since 1.1
  */
 function rtec_save_meta(){
+    // do not save for non tribe_events post types
+	if ( ! isset( $_POST['_RTECdeadlineType'] ) && ! isset( $_POST['_RTECregistrationsDisabled'] ) ) {
+		return;
+	}
+
 	global $post;
 
 	$registrations_disabled_status = 0;
@@ -718,7 +723,7 @@ function rtec_get_search_results() {
 						}
 						?></td>
 				<?php endforeach; ?>
-				<td><a href="edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=single&id=<?php echo esc_attr( $event_meta['post_id'] ); ?>&record=<?php echo esc_attr( $registration['id'] ) ?>mvt=<?php echo esc_attr( '' ); ?>"><?php echo  esc_html( $event_meta['title'] ); ?></a></td>
+				<td><a href="<?php echo RTEC_ADMIN_URL; ?>&tab=single&id=<?php echo esc_attr( $event_meta['post_id'] ); ?>&record=<?php echo esc_attr( $registration['id'] ) ?>mvt=<?php echo esc_attr( '' ); ?>"><?php echo  esc_html( $event_meta['title'] ); ?></a></td>
 				<td><?php echo date_i18n( rtec_get_date_time_format(), strtotime( $event_meta['start_date'] ) ); ?></td>
 			</tr>
 		<?php endforeach; // registration ?>
@@ -745,7 +750,7 @@ add_action( 'wp_ajax_rtec_get_search_results', 'rtec_get_search_results' );
 function rtec_admin_scripts_and_styles() {
 	wp_enqueue_style( 'rtec_admin_styles', trailingslashit( RTEC_PLUGIN_URL ) . 'css/rtec-admin-styles.css', array(), RTEC_VERSION );
 
-	if ( isset( $_GET['page'] ) && $_GET['page'] === 'registrations-for-the-events-calendar/_settings' ) {
+	if ( isset( $_GET['page'] ) && $_GET['page'] === RTEC_MENU_SLUG ) {
 
 		wp_enqueue_script( 'rtec_admin_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-scripts.js', array( 'jquery', 'jquery-ui-datepicker','tribe-jquery-timepicker' ), RTEC_VERSION, false );
 		wp_localize_script( 'rtec_admin_scripts', 'rtecAdminScript',
@@ -779,7 +784,7 @@ add_action( 'admin_enqueue_scripts', 'rtec_admin_scripts_and_styles' );
  * @since 1.0
  */
 function rtec_plugin_action_links( $links ) {
-	$links[] = '<a href="'. esc_url( get_admin_url( null, 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar%2F_settings&tab=form' ) ) .'">Settings</a>';
+	$links[] = '<a href="'. esc_url( get_admin_url( null, RTEC_ADMIN_URL . '&tab=form' ) ) .'">Settings</a>';
 	return $links;
 }
 add_filter( 'plugin_action_links_' . RTEC_PLUGIN_BASENAME, 'rtec_plugin_action_links' );

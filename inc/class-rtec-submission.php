@@ -389,7 +389,8 @@ class RTEC_Submission
 			$event_meta = rtec_get_event_meta( (int)$data['event_id'] );
 		}
 
-		if ( $this->email_given( $sanitized_data['email'] ) && ! $disable_confirmation && ! $confirmation_success ) {
+		$email = isset( $sanitized_data['email'] ) ? $sanitized_data['email'] : '';
+		if ( $this->email_given( $email ) && ! $disable_confirmation && ! $confirmation_success ) {
 			return 'email';
 		}
 

@@ -5,7 +5,7 @@ $settings = $this->settings;
 	<div class="rtec-toolbar-secondary">
 		<form id="rtec-toolbar-form" action="" method="get" style="margin-bottom: 0;">
 			<input type="hidden" name="post_type" value="tribe_events">
-			<input type="hidden" name="page" value="registrations-for-the-events-calendar/_settings">
+			<input type="hidden" name="page" value="<?php echo RTEC_MENU_SLUG; ?>">
 			<input type="hidden" name="v" value="<?php echo esc_attr( $settings['v'] ); ?>">
 			<div class="view-switch rtec-grid-view-switch">
 				<a href="<?php $this->the_toolbar_href( 'v', 'list' ); ?>" class="view-list<?php if( $settings['v'] === 'list' ) echo ' current'; ?>">

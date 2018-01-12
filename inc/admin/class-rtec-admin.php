@@ -48,7 +48,7 @@ class RTEC_Admin
             'Registrations',
             $menu_title,
             'edit_posts',
-            RTEC_PLUGIN_DIR . '_settings',
+	        RTEC_MENU_SLUG,
             array( $this, 'create_options_page' )
         );
     }

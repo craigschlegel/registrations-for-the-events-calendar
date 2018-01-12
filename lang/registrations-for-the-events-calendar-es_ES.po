@@ -24,7 +24,7 @@ msgstr "Registros"
 msgid ""
 "Registration forms are now added to all of your single event pages. Check "
 "out the <a href=\"edit.php?post_type=tribe_events&page=registrations-for-the-"
-"events-calendar%2F_settings&tab=form\">\"Form\" tab</a> to configure "
+"events-calendar&tab=form\">\"Form\" tab</a> to configure "
 "options</p>"
 msgstr ""
 
