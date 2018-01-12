@@ -1,5 +1,5 @@
 <?php
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) || class_exists('Registrations_For_The_Events_Calendar_Pro' ) ) {
 	exit();
 }
 

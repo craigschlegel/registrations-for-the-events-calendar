@@ -182,7 +182,14 @@ jQuery(document).ready(function($){
     $('.rtec-date-picker').each(function() {
         $(this).datepicker({
             defaultDate: rtecDiffInDays(deadlineDate, nowTime),
-            dateFormat: 'yy-mm-dd'
+            dateFormat: 'yy-mm-dd',
+            beforeShow: function( element, object ){
+                // Capture the datepicker div here; it's dynamically generated so best to grab here instead of elsewhere.
+                $dpDiv = $( object.dpDiv );
+
+                // "Namespace" our CSS a bit so that our custom jquery-ui-datepicker styles don't interfere with other plugins'/themes'.
+                $dpDiv.addClass( 'tribe-ui-datepicker rtec-ui-datepicker' );
+            }
         });
     });
 
@@ -192,6 +199,7 @@ jQuery(document).ready(function($){
             $(this).timepicker();
         });
     }
+
     // search registrants
     var $rtecSearchInput = $('#rtec-search-input');
 

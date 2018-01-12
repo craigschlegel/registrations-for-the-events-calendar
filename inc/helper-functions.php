@@ -25,7 +25,7 @@ function rtec_get_event_meta( $id = '' ) {
 	}
 
 	// set post meta
-	$meta = get_post_meta( $post_obj->ID );
+	$meta = isset( $post_obj->ID ) ? get_post_meta( $post_obj->ID ) : array();
 
 	// set venue meta
 	$venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
@@ -37,7 +37,7 @@ function rtec_get_event_meta( $id = '' ) {
 	$event_meta['start_date_utc'] = isset( $meta['_EventStartDateUTC'][0] ) ? $meta['_EventStartDateUTC'][0] : '';
 	$event_meta['end_date_utc'] = isset( $meta['_EventEndDateUTC'][0] ) ? $meta['_EventEndDateUTC'][0] : '';
 	$event_meta['venue_id'] = isset( $meta['_EventVenueID'][0] ) ? $meta['_EventVenueID'][0] : '';
-	$venue = rtec_get_venue( $post_obj->ID );
+	$venue = isset( $post_obj->ID ) ? rtec_get_venue( $post_obj->ID ) : array();
 	$event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
 	$event_meta['venue_address'] = isset( $venue_meta['_VenueAddress'][0] ) ? $venue_meta['_VenueAddress'][0] : '';
 	$event_meta['venue_city'] = isset( $venue_meta['_VenueCity'][0] ) ? $venue_meta['_VenueCity'][0] : '';
@@ -510,7 +510,7 @@ function rtec_get_custom_name_label_pairs() {
 	}
 
 	foreach ( $custom_field_names as $custom_field_name ) {
-		$custom_name_label_pairs[ $custom_field_name ]['label'] = $rtec_options[ $custom_field_name . '_label' ];
+		$custom_name_label_pairs[ $custom_field_name ]['label'] = isset( $rtec_options[ $custom_field_name . '_label' ] ) ? $rtec_options[ $custom_field_name . '_label' ] : '';
 	}
 
 	return $custom_name_label_pairs;

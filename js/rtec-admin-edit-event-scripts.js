@@ -8,14 +8,25 @@ jQuery(document).ready(function($){
     var deadlineDate = parseInt( $('.rtec-date-picker').attr('data-rtec-deadline') ) * 1000,
         nowTime = Date.now();
 
-    $('.rtec-date-picker').datepicker({
-        defaultDate: rtecDiffInDays(deadlineDate, nowTime),
-        dateFormat: 'yy-mm-dd'
+    $('.rtec-date-picker').each(function() {
+        $(this).datepicker({
+            defaultDate: rtecDiffInDays(deadlineDate, nowTime),
+            dateFormat: 'yy-mm-dd',
+            beforeShow: function( element, object ){
+                // Capture the datepicker div here; it's dynamically generated so best to grab here instead of elsewhere.
+                $dpDiv = $( object.dpDiv );
+
+                // "Namespace" our CSS a bit so that our custom jquery-ui-datepicker styles don't interfere with other plugins'/themes'.
+                $dpDiv.addClass( 'tribe-ui-datepicker rtec-ui-datepicker' );
+            }
+        });
     });
 
     // time picker
     if (typeof $().timepicker !== 'undefined') {
-        $('#rtec-time-picker').timepicker();
+        $('.rtec-time-picker').each(function() {
+            $(this).timepicker();
+        });
     }
 
     $('.rtec-reveal-mvt').click(function(event) {

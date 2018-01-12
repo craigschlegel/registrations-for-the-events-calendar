@@ -175,7 +175,6 @@ class RTEC_Submission
 		$raw_data['venue_zip'] = $event_meta['venue_zip'];
 		$raw_data['num_registered'] = $event_meta['num_registered'];
 
-		$raw_data['ical_url'] = $unvalidated_submission['ical_url'];
 		$raw_data['date'] = $event_meta['start_date'];
 		$raw_data['event_id'] = $unvalidated_submission['rtec_event_id'];
 
@@ -199,7 +198,8 @@ class RTEC_Submission
 	 */
     public function attendance_limit_not_reached( $num_registered = 0 )
     {
-	    if ( $this->event_meta['limit_registrations'] ) {
+    	$limit_registrations = isset( $this->event_meta['limit_registrations'] ) ? $this->event_meta['limit_registrations'] : false;
+	    if ( $limit_registrations ) {
 	    	$registrations_left = $this->event_meta['max_registrations'] - (int)$num_registered;
 
 		    if ( $registrations_left > 0 ) {
@@ -225,7 +225,7 @@ class RTEC_Submission
 		require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-db.php';
 
 		$email = is_email( $email ) ? $email : false;
-		$event_id = (int)$this->submission['rtec_event_id'];
+		$event_id = (int)$this->event_meta['post_id'];
 
 		$is_duplicate = 'not';
 

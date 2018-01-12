@@ -248,7 +248,7 @@ function rtec_meta_boxes_html(){
 							</tr>
 							<tr class="rtec-hidden-option-wrap<?php echo $deadline_disabled_class; ?>">
 								<td class="tribe-table-field-label"><?php _e( 'Deadline Type:', 'registrations-for-the-events-calendar' ); ?></td>
-								<td>
+								<td class="tribe-datetime-block">
 									<div class="rtec-sameline">
 										<input type="radio" id="rtec-start-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECdeadlineType" <?php if( $event_meta['deadline_type'] === 'start' ) { echo 'checked'; } ?> value="start"<?php echo $deadline_disabled_att;?>/>
 										<label for="rtec-start-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Start Time', 'registrations-for-the-events-calendar' ); ?></label>
@@ -264,8 +264,8 @@ function rtec_meta_boxes_html(){
 									<br />
 									<input type="radio" id="rtec-other-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECdeadlineType" <?php if( $event_meta['deadline_type'] === 'other' ) { echo 'checked'; } ?> value="other"<?php echo $deadline_disabled_att;?>/>
 									<label for="rtec-other-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Other:', 'registrations-for-the-events-calendar' ); ?></label>
-									<input type="text" id="rtec-date-picker-deadline" name="_RTECdeadlineDate" value="<?php echo date( 'Y-m-d', $deadline_time ); ?>" data-rtec-deadline="<?php echo $deadline_time; ?>"class="rtec-date-picker<?php echo $deadline_other_disabled_class; ?>" style="width: 100px;"/>
-									<input autocomplete="off" tabindex="2001" type="text" class="rtec-time-picker ui-timepicker-input<?php echo $deadline_other_disabled_class; ?>" name="_RTECdeadlineTime" id="rtec-time-picker" data-step="30" data-round="" value="<?php echo date( "H:i:s", $deadline_time ); ?>" style="width: 80px;">
+									<input type="text" id="rtec-date-picker-deadline" name="_RTECdeadlineDate" value="<?php echo date( 'Y-m-d', $deadline_time ); ?>" data-rtec-deadline="<?php echo $deadline_time; ?>" class="rtec-date-picker<?php echo $deadline_other_disabled_class; ?>" style="width: 100px;"/>
+									<input autocomplete="off" tabindex="2001" type="text" class="rtec-time-picker tribe-timepicker tribe-field-end_time ui-timepicker-input<?php echo $deadline_other_disabled_class; ?>" name="_RTECdeadlineTime" id="rtec-time-picker" data-step="30" data-round="" value="<?php echo date( "H:i:s", $deadline_time ); ?>" style="width: 80px;">
 								</td>
 							</tr>
 
@@ -446,9 +446,9 @@ function rtec_records_edit()
 	}
 
 	$event_id = (int)$_POST['event_id'];
-	$venue = (string)$_POST['venue'];
 	$entry_id = isset( $_POST['entry_id'] ) ? (int)$_POST['entry_id'] : false;
 	$event_meta = rtec_get_event_meta( $event_id );
+	$venue = isset( $_POST['venue'] ) ? (string)$_POST['venue'] : $event_meta['venue_id'];
 
 	require_once RTEC_PLUGIN_DIR . 'inc/form/class-rtec-form.php';
 

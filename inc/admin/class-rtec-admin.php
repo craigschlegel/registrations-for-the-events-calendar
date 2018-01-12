@@ -278,24 +278,7 @@ class RTEC_Admin
             'rtec_form_custom_text'
         );
 
-        // translate
-        $translation_options = array(
-            0 => array( 'custom', 'Custom' ),
-            1 => array( 'translate', 'Translations (if available)' )
-        );
-        $this->create_settings_field( array(
-            'option' => 'rtec_options',
-            'name' => 'message_source',
-            'title' => '<label for="use_translations">' . __( 'Messaging', 'registrations-for-the-events-calendar' ) . '</label>',
-            'example' => '',
-            'values' => $translation_options,
-            'description' => __( 'Select "Custom" for text saved in the Settings pages, "Translate" to use language files (French, Spanish, Russian are available. Contact support to offer your translations)', 'registrations-for-the-events-calendar' ),
-            'callback'  => 'default_radio',
-            'class' => 'default-text',
-            'page' => 'rtec_form_custom_text',
-            'section' => 'rtec_form_custom_text',
-            'default' => 'custom'
-        ));
+
 
         // register text
         $this->create_settings_field( array(
@@ -468,6 +451,25 @@ class RTEC_Admin
             array( $this, 'blank' ),
             'rtec_advanced'
         );
+
+	    // translate
+	    $translation_options = array(
+		    0 => array( 'custom', 'Custom' ),
+		    1 => array( 'translate', 'Translations (if available)' )
+	    );
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'message_source',
+		    'title' => '<label for="use_translations">' . __( 'Messaging Source', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'values' => $translation_options,
+		    'description' => __( 'Select "Custom" for text saved in the Settings pages, "Translate" to use strictly language files (French, German, Spanish, and Russian are available. Contact support to offer your translations)', 'registrations-for-the-events-calendar' ),
+		    'callback'  => 'default_radio',
+		    'class' => 'default-text',
+		    'page' => 'rtec_advanced',
+		    'section' => 'rtec_advanced',
+		    'default' => 'custom'
+	    ));
 
         // preserve database  preserve_db
         $this->create_settings_field( array(

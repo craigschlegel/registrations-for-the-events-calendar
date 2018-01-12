@@ -108,7 +108,8 @@ div.rtec-a-button {
 }
 #rtec-back-overview {
     margin-bottom: 20px;
-    display: block;
+    display: inline-block;
+    font-weight: bold;
 }
 .rtec-event-actions,
 .rtec-outline {
@@ -635,3 +636,9 @@ span.rtec-is-user{
 
 /* Support tab */
 .rtec-support-title { font-size: 16px; font-weight: bold; }
+
+/* Date Picker */
+.rtec-ui-datepicker .ui-datepicker-prev .ui-icon,
+.rtec-ui-datepicker .ui-datepicker-next .ui-icon {
+    display: none;
+}
