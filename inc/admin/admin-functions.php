@@ -750,7 +750,7 @@ add_action( 'wp_ajax_rtec_get_search_results', 'rtec_get_search_results' );
 function rtec_admin_scripts_and_styles() {
 	wp_enqueue_style( 'rtec_admin_styles', trailingslashit( RTEC_PLUGIN_URL ) . 'css/rtec-admin-styles.css', array(), RTEC_VERSION );
 
-	if ( isset( $_GET['page'] ) && $_GET['page'] === RTEC_MENU_SLUG ) {
+	if ( isset( $_GET['page'] ) && ($_GET['page'] === RTEC_MENU_SLUG || $_GET['page'] === 'registrations-for-the-events-calendar/_settings' ) ) {
 
 		wp_enqueue_script( 'rtec_admin_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-scripts.js', array( 'jquery', 'jquery-ui-datepicker','tribe-jquery-timepicker' ), RTEC_VERSION, false );
 		wp_localize_script( 'rtec_admin_scripts', 'rtecAdminScript',

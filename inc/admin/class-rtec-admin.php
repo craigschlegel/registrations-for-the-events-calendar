@@ -51,6 +51,14 @@ class RTEC_Admin
 	        RTEC_MENU_SLUG,
             array( $this, 'create_options_page' )
         );
+	    add_submenu_page(
+		    '',
+		    esc_html__( 'Registrations', 'registrations-for-the-events-calendar' ),
+		    esc_html__( 'Registrations', 'registrations-for-the-events-calendar' ),
+		    'edit_posts',
+		    RTEC_PLUGIN_DIR . '_settings',
+		    array( $this, 'create_options_page' )
+	    );
     }
     
     /**
