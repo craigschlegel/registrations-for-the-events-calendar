@@ -130,21 +130,49 @@ function rtec_get_event_deadline_utc( $event_meta ) {
  *
  * @param $raw_number string    telephone number from database with no
  * @since 1.1
+ * @since 2.1                   added support for custom formats through filter or setting
  *
  * @return string               telephone number formatted for display
  */
 function rtec_format_phone_number( $raw_number ) {
-	switch ( strlen( $raw_number ) ) {
-		case 11:
-			return preg_replace( '/([0-9]{3})([0-9]{4})([0-9]{4})/', '($1) $2-$3', $raw_number );
-			break;
-		case 7:
-			return preg_replace( '/([0-9]{3})([0-9]{4})/', '$1-$2', $raw_number );
-			break;
-		default:
-			return preg_replace( '/([0-9]{3})([0-9]{3})([0-9]{4})/', '($1) $2-$3', $raw_number );
-			break;
+	global $rtec_options;
+	$phone_option = isset( $rtec_options['phone_format'] ) ? $rtec_options['phone_format'] : '1';
+
+	$rules = array(
+		7 => array(
+			'pattern' => '/([0-9]{3})([0-9]{4})/',
+			'replacement' => '$1-$2'
+		),
+		10 => array(
+			'pattern' => '/([0-9]{3})([0-9]{3})([0-9]{4})/',
+			'replacement' => '($1) $2-$3'
+		),
+		11 => array(
+			'pattern' => '/([0-9]{3})([0-9]{4})([0-9]{4})/',
+			'replacement' => '($1) $2-$3'
+		),
+	);
+
+	if ( $phone_option === '2' ) {
+		$rules[10]['pattern'] = '/([0-9]{2})([0-9]{4})([0-9]{4})/';
+		$rules[10]['replacment'] = '$1 $2 $3';
+	} elseif ( $phone_option === '3' ) {
+		$rules[10]['pattern'] = '/([0-9]{2})([0-9]{4})([0-9]{4})/';
+		$rules[10]['replacment'] = '($1) $2 $3';
 	}
+
+	$rules = apply_filters( 'rtec_phone_formatting_rules', $rules );
+	$number_length = strlen( $raw_number );
+
+	if ( isset( $rules[ $number_length ] ) ) {
+
+		if ( isset( $rules[ $number_length ]['pattern'] ) && isset( $rules[ $number_length ]['replacement'] ) ) {
+			return preg_replace( $rules[ $number_length ]['pattern'], $rules[ $number_length ]['replacement'], $raw_number );
+		}
+
+	}
+
+	return $raw_number;
 }
 
 /**

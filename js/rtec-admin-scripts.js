@@ -1,6 +1,5 @@
 jQuery(document).ready(function($){
 
-
     // FORM tab
     var $body = $('body');
     $body.on('click', '.rtec_require_checkbox', function (event) {
@@ -232,6 +231,22 @@ jQuery(document).ready(function($){
         clearTimeout(typingTimer);
     });
 
+    // dismiss new
+    $('#rtec-new-dismiss').click(function(event) {
+        event.preventDefault();
+        $('#rtec-new-dismiss,.rtec-notice-admin-reg-count').remove();
+
+        var submitData = {
+                action: 'rtec_dismiss_new',
+                rtec_nonce : rtecAdminScript.rtec_nonce
+            },
+            successFunc = function (data) {
+                $('#rtec-new-dismiss,.rtec-notice-admin-reg-count').remove();
+                $('.rtec-notice-new').hide();
+                console.log('done');
+            };
+        rtecRegistrationAjax(submitData,successFunc);
+    });
     $('.rtec-hidden-options').hide();
 
     var $rtecOptionsHandle = $('.rtec-event-options .handlediv');

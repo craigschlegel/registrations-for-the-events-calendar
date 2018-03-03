@@ -1,4 +1,5 @@
 <?php
+$dismiss_new_needed = ((int)get_transient( 'rtec_new_registrations' ) > 0);
 $settings = $this->settings;
 ?>
 <div class="rtec-toolbar wp-filter">
@@ -34,4 +35,8 @@ $settings = $this->settings;
 	<div class="rtec-toolbar-primary search-form"><label for="rtec-search-input" class="screen-reader-text"><?php _e( 'Search Registrants', 'registrations-for-the-events-calendar' ); ?></label>
 		<input type="search" placeholder="<?php _e( 'Search Registrants', 'registrations-for-the-events-calendar' ); ?>" id="rtec-search-input" class="search">
 	</div>
+	<?php if ( $dismiss_new_needed ) : ?>
+        <div class="rtec-clear"></div>
+        <a id="rtec-new-dismiss" href="JavaScript:void(0);" class="rtec-email-creator-send"><span class="rtec-notice-new"><i class="fa fa-tag" aria-hidden="true"></i></span> <?php _e( 'dismiss new', 'registrations-for-the-events-calendar' ); ?></a>
+	<?php endif; ?>
 </div>

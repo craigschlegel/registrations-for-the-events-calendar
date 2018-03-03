@@ -675,7 +675,7 @@ function rtec_get_search_results() {
 	if ( ! empty( $WP_offset ) ) {
 		$tz_offset = $WP_offset * HOUR_IN_SECONDS;
 	} else {
-		$timezone = isset( $options['timezone'] ) ? $options['timezone'] : 'America/New_York';
+		$timezone = isset( $options['timezone'] ) ? $rtec_options['timezone'] : 'America/New_York';
 		// use php DateTimeZone class to handle the date formatting and offsets
 		$date_obj = new DateTime( date( 'm/d g:i a' ), new DateTimeZone( "UTC" ) );
 		$date_obj->setTimeZone( new DateTimeZone( $timezone ) );
@@ -741,6 +741,20 @@ function rtec_get_search_results() {
 	die();
 }
 add_action( 'wp_ajax_rtec_get_search_results', 'rtec_get_search_results' );
+
+function rtec_dismiss_new() {
+	$nonce = $_POST['rtec_nonce'];
+
+	if ( ! wp_verify_nonce( $nonce, 'rtec_nonce' ) ) {
+		die ( 'You did not do this the right way!' );
+	}
+
+	$rtec = RTEC();
+	$rtec->db_frontend->dismiss_new();
+
+	die();
+}
+add_action( 'wp_ajax_rtec_dismiss_new', 'rtec_dismiss_new' );
 
 /**
  * Some CSS and JS needed in the admin area as well

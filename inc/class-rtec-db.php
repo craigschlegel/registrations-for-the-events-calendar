@@ -174,6 +174,17 @@ class RTEC_Db
 		return true;
 	}
 
+	public function dismiss_new() {
+		global $wpdb;
+
+		$sql = "UPDATE $this->table_name SET status='c' WHERE status='n';";
+		$return = $wpdb->query( $sql );
+
+		delete_transient( 'rtec_new_registrations' );
+
+		return $return;
+	}
+
 	/**
 	 * Generates the registration form with a shortcode
 	 *

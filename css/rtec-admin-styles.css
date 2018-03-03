@@ -336,6 +336,17 @@ a.rtec-wide {
     color: #fff;
     font-size: 10px;
 }
+#rtec-new-dismiss {
+    padding-bottom: 5px;
+    display: block;
+}
+#rtec-new-dismiss .rtec-notice-new {
+    position: relative;
+    top:auto;
+    left:auto;
+    margin:0;
+    padding: 3px 5px;
+}
 .rtec-field-options-wrapper {
     width: 425px;
 }
@@ -499,7 +510,7 @@ a.rtec-wide {
 }
 
 .rtec-event-options.postbox {
-    margin-bottom: 0;
+    margin: 0;
     padding: 8px 2px 8px 10px;
     border: 1px solid #ddd;
     background: #e5e5e5;
