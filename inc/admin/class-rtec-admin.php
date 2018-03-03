@@ -479,6 +479,25 @@ class RTEC_Admin
 		    'default' => 'custom'
 	    ));
 
+	    $pformat_select = array(
+		    array( '1', '(123) 456-7890' ),
+		    array( '2', '12 3456 7890' ),
+		    array( '3', '(12) 3456 7890' )
+	    );
+
+	    $this->create_settings_field( array(
+		    'name' => 'phone_format',
+		    'title' => '<label for="phone_format">' . __( 'Phone Number Format', 'registrations-for-the-events-calendar' ) . '</label>', // label for the input field
+		    'callback'  => 'default_select', // name of the function that outputs the html
+		    'page' => 'rtec_advanced', // matches the section name
+		    'section' => 'rtec_advanced', // matches the section name
+		    'option' => 'rtec_options', // matches the options name
+		    'class' => 'default-text', // class for the wrapper and input field
+		    'fields' => $pformat_select,
+		    'description' => __( "Formatting for 10 digit phone numbers", 'registrations-for-the-events-calendar' ),
+		    'after' => '<a href="https://roundupwp.com/faq/format-phone-numbers/" target="_blank">Custom Formatting Options</a>'
+	    ) );
+
         // preserve database  preserve_db
         $this->create_settings_field( array(
             'option' => 'rtec_options',
@@ -757,6 +776,11 @@ class RTEC_Admin
                 <option value="<?php echo $field[0]; ?>" id="rtec-<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>"<?php if( $selected == $field[0] ) { echo ' selected'; } ?>><?php _e( $field[1], 'registrations-for-the-events-calendar' ); ?></option>
             <?php endforeach; ?>
         </select>
+	    <?php
+	    if ( isset( $args['after'] ) ) {
+		    echo $args['after'];
+	    }
+	    ?>
         <br><?php $this->the_description( $args['description'] ); ?>
         <?php
     }

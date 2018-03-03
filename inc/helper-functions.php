@@ -155,10 +155,10 @@ function rtec_format_phone_number( $raw_number ) {
 
 	if ( $phone_option === '2' ) {
 		$rules[10]['pattern'] = '/([0-9]{2})([0-9]{4})([0-9]{4})/';
-		$rules[10]['replacment'] = '$1 $2 $3';
+		$rules[10]['replacement'] = '$1 $2 $3';
 	} elseif ( $phone_option === '3' ) {
 		$rules[10]['pattern'] = '/([0-9]{2})([0-9]{4})([0-9]{4})/';
-		$rules[10]['replacment'] = '($1) $2 $3';
+		$rules[10]['replacement'] = '($1) $2 $3';
 	}
 
 	$rules = apply_filters( 'rtec_phone_formatting_rules', $rules );
