@@ -14,6 +14,10 @@
     clear: both;
     content: "";
 }
+.rtec-tooltip-link i {
+    font-size: 16px;
+    padding: 0 5px;
+}
 .rtec-img-wrap {
     display: inline-block;
     float: left;
@@ -685,4 +689,51 @@ span.rtec-is-user{
 .rtec-ui-datepicker .ui-datepicker-prev .ui-icon,
 .rtec-ui-datepicker .ui-datepicker-next .ui-icon {
     display: none;
+}
+
+/* ad */
+.rtec-pro-ad-wrap {
+    text-decoration: none;
+}
+.rtec-pro-ad {
+    width: 100%;
+    max-width: 400px;
+    background: #CDF7F3;
+    -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+.rtec-pro-ad img,
+.rtec-pro-copy {
+    display: block;
+    margin: auto;
+    padding: 10px;
+}
+.rtec-pro-copy span {
+    font-size: 14px;
+    color: #777;
+}
+.rtec-pro-copy span.rtec-bold {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #444;
+    line-height: 1.2;
+}
+@media all and (min-width: 620px){
+    .rtec-pro-ad {
+        max-width: 700px;
+    }
+    .rtec-pro-ad img{
+        display: inline-block;
+    }
+    .rtec-pro-copy {
+        display: inline-block;
+        width: 70%;
+        max-width: 490px;
+        vertical-align: top;
+        margin-top: 50px;
+        padding: 0;
+    }
 }

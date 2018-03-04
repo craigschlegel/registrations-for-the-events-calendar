@@ -60,9 +60,23 @@
             require_once RTEC_PLUGIN_DIR.'inc/admin/templates/registrations.php';
         }
     }
+
+    $ad_text = array(
+        '<span class="rtec-bold">Easily collect and manage payments.</span><span>Get paid for your events using PayPal.</span>',
+        '<span class="rtec-bold">More forms. Lots of ways to customize.</span><span>Build them with our custom form building tool.</span>',
+        '<span class="rtec-bold">Do you have a membership site?</span><span>See our features tailored for your needs in the Registrations for the Events Calendar Pro.',
+	    '<span class="rtec-bold">More ways to follow up with your attendees.</span><span>Send event-wide emails right from the WordPress dashboard.</span>',
+	    '<span class="rtec-bold">Tailor your settings for each event.</span><span>Custom forms, custom confirmation messages, custom response categories.</span>'
+    );
+    $random_ad_key = array_rand( $ad_text, 1 );
     ?>
     <hr />
-    <a href="https://roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank" style="display: block; margin: 20px 0 0 0; float: left; clear: both;">
-        <img src="<?php echo RTEC_PLUGIN_URL . 'img/rtec-pro-features.png'; ?>" alt="Registrations for the Events Calendar Pro">
+    <a href="https://roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank" class="rtec-pro-ad-wrap">
+        <div class="rtec-pro-ad">
+            <img src="<?php echo RTEC_PLUGIN_URL . 'img/RTEC-Pro-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar Pro">
+            <div class="rtec-pro-copy">
+                <span><?php echo $ad_text[ $random_ad_key ]; ?></span>
+            </div>
+        </div>
     </a>
 </div>

@@ -928,7 +928,7 @@ class RTEC_Admin
                 <p>
                     <label><?php _e( 'Required length for validation:', 'registrations-for-the-events-calendar' ); ?></label>
                     <input type="text" name="<?php echo $args['option'].'['.$field[0].'_valid_count]'; ?>" value="<?php echo $valid_count; ?>" class="large-text rtec-valid-count-input">
-                    <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'What is this?' ); ?></a>
+                    <a class="rtec-tooltip-link" href="JavaScript:void(0);"><i class="fas fa fa-question-circle"></i></a>
                     <span class="rtec-tooltip rtec-notice"><?php _e( 'Enter the length or lengths of the responses that are valid for this field separated by commas. For example, to accept North American phone numbers with and without area codes you would enter "7, 10". If area code is required, enter "10"' ); ?></span>
                 </p>
                 <?php endif; ?>
@@ -1164,7 +1164,7 @@ class RTEC_Admin
 
         if ( $args['legend'] ) : ?>
             <br />
-            <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'Template Text (find and replace)' ); ?></a>
+            <a class="rtec-tooltip-link" href="JavaScript:void(0);">+ <?php _e( 'Template Text (find and replace)' ); ?></a>
             <span class="rtec-tooltip-table rtec-tooltip rtec-availability-options-wrapper">
             <span class="rtec-col-1">{venue}</span><span class="rtec-col-2"><?php _e( 'Event venue/location', 'registrations-for-the-events-calendar' ); ?></span>
             <span class="rtec-col-1">{venue-address}</span><span class="rtec-col-2"><?php _e( 'Venue street address', 'registrations-for-the-events-calendar' ); ?></span>
