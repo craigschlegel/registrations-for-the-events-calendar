@@ -167,13 +167,33 @@ class RTEC_Admin
             'name' => 'show_registrants_data',
             'title' => '<label for="rtec_show_registrants_data">' . __( 'Show Attendee List Above Form', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'description' => __( 'A list of registrations will appear above the registration form in the "Single Event" view. Note that only registrations that have been reviewed in the backend will be displayed (do not have the "new" bubble next to them)', 'registrations-for-the-events-calendar' ),
+            'description' => __( 'A list of registrations will appear above the registration form in the "Single Event" view.', 'registrations-for-the-events-calendar' ),
             'callback'  => 'default_checkbox',
             'class' => '',
             'page' => 'rtec_attendee_data',
             'section' => 'rtec_attendee_data',
             'default' => false
         ));
+
+	    // show who
+	    $who_options = array(
+		    array( 'any', __( 'Any registration', 'registrations-for-the-events-calendar' ) ),
+            array( 'users_and_confirmed', __( 'Reviewed', 'registrations-for-the-events-calendar' ) )
+	    );
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'registrants_data_who',
+		    'title' => '<label for="rtec_registrants_who_include">' . __( 'What Registrations Will Display', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'description' => __( 'Choosing "Reviewed" will only display registrations after they have been reviewed in the admin dashboard of your site (do not have a "new tag" next to them).', 'registrations-for-the-events-calendar' ),
+		    'callback'  => 'default_radio',
+		    'values' => $who_options,
+		    'class' => 'rtec-show-registrant-options',
+		    'page' => 'rtec_attendee_data',
+		    'section' => 'rtec_attendee_data',
+		    'default' => 'users_and_confirmed',
+		    'new_line' => true
+	    ));
 
         // attendee text
         $this->create_settings_field( array(

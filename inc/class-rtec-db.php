@@ -360,6 +360,8 @@ class RTEC_Db
 	 */
 	public function get_registrants_data( $event_meta, $attendee_list_fields = array() )
 	{
+		global $rtec_options;
+
 		if ( empty( $attendee_list_fields ) ) {
 			$attendee_list_fields =  array( 'first_name', 'last_name' );
 		}
@@ -367,11 +369,14 @@ class RTEC_Db
 		$args = array(
 			'fields' => $attendee_list_fields,
 			'where' => array(
-				array( 'event_id', $event_meta['post_id'], '=', 'int' ),
-				array( 'status', '"n"', '!=', 'string' )
+				array( 'event_id', $event_meta['post_id'], '=', 'int' )
 			),
 			'order_by' => 'registration_date'
 		);
+
+		if ( isset( $rtec_options['registrants_data_who'] ) && $rtec_options['registrants_data_who'] === 'users_and_confirmed' ) {
+			$args['where'][] = array( 'status', '"n"', '!=', 'string' );
+		}
 
 		$rtec = RTEC();
 		$form = $rtec->form->instance();
