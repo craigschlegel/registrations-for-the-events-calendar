@@ -347,6 +347,37 @@ class RTEC_Admin
             'legend' => false
         ));
 
+	    // unregister text
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'unregister_link_text',
+		    'title' => '<label for="rtec_unregister_link_text">' . __( '"Unregister" Link Text', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'description' => __( 'used for link in emails added using the template {unregister-link}', 'registrations-for-the-events-calendar' ),
+		    'callback'  => 'default_text',
+		    'class' => '',
+		    'input_class' => 'regular-text',
+		    'page' => 'rtec_form_custom_text',
+		    'section' => 'rtec_form_custom_text',
+		    'type' => 'text',
+		    'default' => __( 'Unregister from this event', 'registrations-for-the-events-calendar' )
+	    ));
+
+	    // unregister success message
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'success_unregistration',
+		    'title' => '<label>' . __( 'Website Unregister Success Message', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'default' => __( 'You have been unregistered.', 'registrations-for-the-events-calendar' ),
+		    'description' => __( 'Enter the message you would like to display on your site after an unregistration', 'registrations-for-the-events-calendar' ),
+		    'callback'  => 'message_text_area',
+		    'rows' => '3',
+		    'class' => '',
+		    'page' => 'rtec_form_custom_text',
+		    'section' => 'rtec_form_custom_text',
+		    'legend' => false
+	    ));
 
         /* Form Styling */
 

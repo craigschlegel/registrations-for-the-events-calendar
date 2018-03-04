@@ -28,6 +28,7 @@ class RTEC_Db_Admin extends RTEC_Db
         if ( $wpdb->get_var( "show tables like '$table_name'" ) != $table_name ) {
             $sql = "CREATE TABLE " . $table_name . " (
                 id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+                user_id BIGINT(20) UNSIGNED DEFAULT 0 NOT NULL,
                 event_id BIGINT(20) UNSIGNED NOT NULL,
                 registration_date DATETIME NOT NULL,
                 last_name VARCHAR(1000) NOT NULL,
@@ -36,13 +37,15 @@ class RTEC_Db_Admin extends RTEC_Db
                 venue VARCHAR(1000) NOT NULL,
                 phone VARCHAR(40) DEFAULT '' NOT NULL,
                 other VARCHAR(1000) DEFAULT '' NOT NULL,
+                guests INT(11) UNSIGNED DEFAULT 0 NOT NULL,
                 custom LONGTEXT DEFAULT '' NOT NULL,
                 status CHAR(1) DEFAULT 'y' NOT NULL,
+                action_key VARCHAR(40) DEFAULT '' NOT NULL,
                 UNIQUE KEY id (id)
             ) $charset_collate;";
-            require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-            dbDelta( $sql );
-            add_option( 'rtec_db_version', RTEC_DBVERSION );
+	        $wpdb->query( $sql );
+
+	        add_option( 'rtec_db_version', RTEC_DBVERSION );
 
         }
 
@@ -64,7 +67,6 @@ class RTEC_Db_Admin extends RTEC_Db
 		global $wpdb;
 
 		$set_string = '';
-		var_dump( $data);
 
 		foreach ( $data as $key => $value ) {
 
@@ -76,7 +78,6 @@ class RTEC_Db_Admin extends RTEC_Db
 					$custom = $this->get_custom_data( $entry_id );
 
 					$custom = $this->update_custom_data_for_db( $custom, $data['custom'], $field_atts );
-					var_dump( $custom);
 
 					$set_string .= "custom='" . esc_sql( $custom ) . "', ";
 				}

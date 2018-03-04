@@ -436,7 +436,7 @@ class RTEC_Email {
 			return $working_text;
 		}
 
-		$date_str = date_i18n( rtec_get_date_time_format(), strtotime( $sanitized_data['date'] ) );
+		$date_str = isset( $sanitized_data['date'] ) ? date_i18n( rtec_get_date_time_format(), strtotime( $sanitized_data['date'] ) ) : '';
 		$first = isset( $sanitized_data['first'] ) ? $sanitized_data['first'] : '';
 		$last = isset( $sanitized_data['last'] ) ? $sanitized_data['last'] : '';
 		$email = isset( $sanitized_data['email'] ) ? $sanitized_data['email'] : '';
@@ -501,6 +501,18 @@ class RTEC_Email {
 
 			foreach ( $search_replace as $search => $replace ) {
 				$working_text = str_replace( $search, $replace, $working_text );
+			}
+
+			if ( strpos( $working_text, '{unregister-link}' ) !== false ) {
+				if ( isset( $sanitized_data['action_key'] ) && $sanitized_data['action_key'] != '' ) {
+					$unregister_link_text = isset( $rtec_options['unregister_link_text'] ) ? $rtec_options['unregister_link_text'] : __( 'Unregister from this event', 'registrations-for-the-events-calendar' );
+					$unregister_link_text = rtec_get_text( $unregister_link_text, __( 'Unregister from this event', 'registrations-for-the-events-calendar' ) );
+					$u_link = rtec_generate_unregister_link( $sanitized_data['event_id'], $sanitized_data['action_key'], $sanitized_data['email'], $unregister_link_text );
+				} else {
+					$u_link = '';
+				}
+
+				$working_text = str_replace( '{unregister-link}', $u_link, $working_text );
 			}
 
 		}

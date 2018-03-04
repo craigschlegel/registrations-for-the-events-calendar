@@ -309,6 +309,7 @@ class RTEC_Submission
 		$status = 'n';
 
 		$sanitized_data = $this->sanitize_submission( $raw_data );
+		$sanitized_data['action_key'] = sha1( uniqid( '', true ) );
 		$this->submission = $sanitized_data;
 
 		$confirmation_success = false;

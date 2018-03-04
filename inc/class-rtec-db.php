@@ -58,8 +58,9 @@ class RTEC_Db
 	{
 		global $wpdb;
 
-		$now = date( "Y-m-d H:i:s" );
 		$event_id = isset( $data['event_id'] ) ? $data['event_id'] : '';
+		$event_meta = ! empty( $event_id ) ? rtec_get_event_meta( $event_id ) : array( 'venue_id' => '' );
+		$now = date( "Y-m-d H:i:s" );
 		$registration_date = isset( $data['entry_date'] ) ? $data['entry_date'] : $now;
 
 		if ( isset( $data['last'] ) ) {
@@ -75,14 +76,16 @@ class RTEC_Db
 		}
 
 		$email = isset( $data['email'] ) ? $data['email'] : '';
-		$venue = isset( $data['venue'] ) ? $data['venue'] : '';
+		$venue = ! empty( $data['venue'] ) ? $data['venue'] : $event_meta['venue_id'];
 		$phone = isset( $data['phone'] ) ? preg_replace( '/[^0-9]/', '', $data['phone'] ) : '';
 		$other = isset( $data['other'] ) ? str_replace( "'", '`', $data['other'] ) : '';
 		$custom = rtec_serialize_custom_data( $data, $field_attributes, $from_form );
 		$status = isset( $data['status'] ) ? $data['status'] : 'n';
+		$user_id = get_current_user_id();
+		$action_key = isset( $data['action_key'] ) ? $data['action_key'] : rtec_generate_action_key();
 		$wpdb->query( $wpdb->prepare( "INSERT INTO $this->table_name
-          ( event_id, registration_date, last_name, first_name, email, venue, phone, other, custom, status ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %s, %s, %s )",
-			$event_id, $registration_date, $last, $first, $email, $venue, $phone, $other, $custom, $status ) );
+          ( event_id, user_id, registration_date, last_name, first_name, email, venue, phone, other, custom, status, action_key ) VALUES ( %d, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )",
+			$event_id, $user_id, $registration_date, $last, $first, $email, $venue, $phone, $other, $custom, $status, $action_key ) );
 
 	}
 
@@ -207,6 +210,27 @@ class RTEC_Db
 			return 0;
 		}
 	}
+
+	public function maybe_verify_token( $data )
+	{
+		global $wpdb;
+
+		$result = $wpdb->get_results( $wpdb->prepare (
+			"SELECT * FROM $this->table_name WHERE email=%s AND action_key=%s",
+			$data['email'], $data['token'] ), ARRAY_A
+		);
+		$return = isset( $result[0] ) ? $result[0] : false;
+
+		return $return;
+	}
+
+	public function remove_record_by_action_key( $action_key ) {
+		global $wpdb;
+
+		return $wpdb->query( $wpdb->prepare( "DELETE FROM $this->table_name 
+			WHERE action_key=%s LIMIT 1;", $action_key ), ARRAY_A );
+	}
+
 	/**
 	 * Gets all entries that meet a set of parameters
 	 *

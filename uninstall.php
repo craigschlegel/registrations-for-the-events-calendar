@@ -16,10 +16,10 @@ if ( ! class_exists('Registrations_For_The_Events_Calendar_Pro' ) ) {
 
 		$table_name = esc_sql( $wpdb->prefix . "postmeta" );
 		$result = $wpdb->query("
-    DELETE
-    FROM $table_name
-    WHERE `meta_key` LIKE ('%_RTEC%')
-    ");
+	    DELETE
+	    FROM $table_name
+	    WHERE `meta_key` LIKE ('%_RTEC%')
+	    ");
 	}
 
 	if ( !( isset( $options['preserve_db'] ) && $options['preserve_db'] == true ) && !( isset( $options['preserve_registrations'] ) && $options['preserve_registrations'] == true ) ) {
