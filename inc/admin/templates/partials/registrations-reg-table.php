@@ -13,7 +13,7 @@
 
 		<tr class="rtec-reg-row<?php echo $this->get_registrant_tr_classes( $registration['status'], $is_user ); ?>" >
 			<td class="rtec-first-data">
-				<?php echo $this->get_registrant_icons( $registration['status'], $is_user ) . esc_html( date_i18n( 'm/d ' . rtec_get_time_format(), strtotime( $registration['registration_date'] ) + $event_obj->tz_offset ) ); ?>
+				<?php echo $this->get_registrant_icons( $registration['status'], $is_user ) . esc_html( date_i18n( 'm/d ' . rtec_get_time_format(), strtotime( $registration['registration_date'] ) + rtec_get_time_zone_offset() ) ); ?>
 			</td>
 			<?php foreach ( $event_obj->column_label as $column => $label ) : ?>
 				<td><?php

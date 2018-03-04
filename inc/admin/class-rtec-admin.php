@@ -167,7 +167,7 @@ class RTEC_Admin
             'name' => 'show_registrants_data',
             'title' => '<label for="rtec_show_registrants_data">' . __( 'Show Attendee List Above Form', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'description' => __( 'A list of registrations will appear above the registration form in the "Single Event" view.', 'registrations-for-the-events-calendar' ),
+            'description' => '',
             'callback'  => 'default_checkbox',
             'class' => '',
             'page' => 'rtec_attendee_data',

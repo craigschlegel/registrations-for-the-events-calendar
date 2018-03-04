@@ -125,6 +125,24 @@ function rtec_get_event_deadline_utc( $event_meta ) {
 	return $deadline_time;
 }
 
+function rtec_get_time_zone_offset() {
+	$WP_offset = get_option( 'gmt_offset' );
+
+	if ( ! empty( $WP_offset ) ) {
+		$tz_offset = $WP_offset * HOUR_IN_SECONDS;
+	} else {
+		$options = get_option( 'rtec_options' );
+
+		$timezone = isset( $options['timezone'] ) ? $options['timezone'] : 'America/New_York';
+		// use php DateTimeZone class to handle the date formatting and offsets
+		$date_obj = new DateTime( date( 'm/d g:i a' ), new DateTimeZone( "UTC" ) );
+		$date_obj->setTimeZone( new DateTimeZone( $timezone ) );
+		$tz_offset = $date_obj->getOffset();
+	}
+
+	return $tz_offset;
+}
+
 /**
  * Converts raw phone number strings into a properly formatted one
  *

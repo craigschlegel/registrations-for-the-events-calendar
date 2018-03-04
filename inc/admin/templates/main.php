@@ -12,18 +12,7 @@
     $active_tab = RTEC_Admin::get_active_tab( $tab, $additional_tabs );
 
     $options = get_option( 'rtec_options' );
-    $WP_offset = get_option( 'gmt_offset' );
-
-    if ( ! empty( $WP_offset ) ) {
-        $tz_offset = $WP_offset * HOUR_IN_SECONDS;
-    } else {
-        $timezone = isset( $options['timezone'] ) ? $options['timezone'] : 'America/New_York';
-        // use php DateTimeZone class to handle the date formatting and offsets
-        $date_obj = new DateTime( date( 'm/d g:i a' ), new DateTimeZone( "UTC" ) );
-        $date_obj->setTimeZone( new DateTimeZone( $timezone ) );
-        $utc_offset = $date_obj->getOffset();
-        $tz_offset = $utc_offset;
-    }
+    $tz_offset = rtec_get_time_zone_offset();
 
     ?>
 

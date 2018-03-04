@@ -42,10 +42,6 @@ $custom_column_keys = $event_obj->form_obj->get_custom_column_keys();
 $custom_fields_label_name_pairs = $event_obj->form_obj->get_custom_fields_label_name_pairs();
 $custom_fields_name_label_pairs = array_flip ( $custom_fields_label_name_pairs );
 
-echo '<pre>';
-//var_dump($_GET);
-//var_dump($form);
-echo '</pre>';
 ?>
 <h1><?php _e( 'Single Event Details', 'registrations-for-the-events-calendar' ); ?></h1>
 <a id="rtec-back-overview" href="<?php $admin_registrations->the_toolbar_href( 'tab', 'registrations' ) ?>"><?php _e( 'Back to Overview', 'registrations-for-the-events-calendar' ); ?></a>
@@ -79,7 +75,7 @@ echo '</pre>';
                 $is_user = isset( $registration['user_id'] ) && (int)$registration['user_id'] > 0 ? true : false;
                 if ( isset( $registration['registration_date'] ) ) {
                 	$time_format = rtec_get_time_format();
-                    $registration['registration_date'] = date_i18n( 'F jS, ' . $time_format, strtotime( $registration['registration_date'] ) + $tz_offset );
+                    $registration['registration_date'] = date_i18n( 'F jS, ' . $time_format, strtotime( $registration['registration_date'] ) + rtec_get_time_zone_offset() );
                 }
                 ?>
                 <tr class="rtec-reg-row<?php echo $admin_registrations->get_registrant_tr_classes( $registration['status'], $is_user ); ?>" data-rtec-id="<?php echo esc_attr( (int)$registration['id'] ); ?>">

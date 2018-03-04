@@ -605,7 +605,8 @@ function rtec_event_csv() {
 		}
 		foreach ( $event_obj->registrants_data as $registration ) {
 
-			$formatted_registration = array( 'registration_date' => $registration['registration_date'] );
+			$time_format = rtec_get_time_format();
+			$formatted_registration = array( 'registration_date' => date_i18n( 'F jS, ' . $time_format, strtotime( $registration['registration_date'] ) + rtec_get_time_zone_offset() ) );
 
 			foreach ( $event_obj->column_label as $column => $label ) {
 
