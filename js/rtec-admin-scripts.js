@@ -14,6 +14,22 @@ jQuery(document).ready(function($){
         }
     });
 
+    $body.on('click', '.rtec-reveal-field-atts', function (event) {
+        var $self = $(event.target);
+        $self.next().slideToggle();
+    });
+
+    $('.rtec-field-wrapper-email .rtec_include_checkbox').click(function() {
+        var $self = $(this);
+
+        if (!$self.is(':checked')) {
+            if (!confirm('This field is used for sending all emails to your attendees. Removing it from this form will prevent confirmation emails from being sent. Continue?')) {
+                $self.attr('checked',true);
+            }
+        }
+
+    });
+
     var $rtecAttendanceMessageType = $('.rtec_attendance_message_type');
     function rtecToggleMessageTypeOptions(val) {
         if ( val === 'down' ) {
@@ -54,7 +70,7 @@ jQuery(document).ready(function($){
 
         $(this).closest('div').before(
             '<div id="rtec-custom-field-'+customFieldID+'" class="rtec-field-options-wrapper rtec-custom-field" data-name="custom'+customFieldID+'">' +
-                '<a href="JavaScript:void(0);" class="rtec-custom-field-remove"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                '<a href="JavaScript:void(0);" class="rtec-custom-field-remove"><i class="fa fa-trash-o" aria-hidden="true"></i></a>' +
                 '<h4>Custom Field '+customFieldID+'</h4> ' +
                 '<p>' +
                     '<label>Label:</label><input type="text" name="rtec_options[custom'+customFieldID+'_label]" value="Custom '+customFieldID+'" class="large-text">' +

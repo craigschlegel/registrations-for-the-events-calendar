@@ -225,7 +225,7 @@ a.rtec-wide {
 
 .rtec-admin-wrap .rtec-add-field,
 .rtec-admin-wrap .rtec-add-mvt {
-    width: 435px;
+    width: 425px;
 }
 .rtec-single-event table td {
     word-wrap: break-word;
@@ -248,6 +248,7 @@ a.rtec-wide {
 }
 .rtec-admin-wrap .rtec-green-bg a,
 .rtec-admin-wrap .rtec-green-bg span {
+    box-sizing: border-box;
     display: block;
     padding: 10px;
     color: #fff;
@@ -353,23 +354,56 @@ a.rtec-wide {
 .rtec-field-options-wrapper,
 .rtec-availability-options-wrapper {
     position: relative;
-    padding: 1em;
     margin-bottom: .5em;
     border: 1px solid #ddd;
     background: #fbfbfb;
 }
 .rtec-field-options-wrapper h4,
 .rtec-availability-options-wrapper h4 {
-    margin: .5rem 0;
+    margin: 0;
+    padding: .5em 1em;
     font-size: 1.2em;
+    background: #ddd;
 }
 .rtec-field-options-wrapper .fa-trash{
     font-size: 1.2em;
+}
+.rtec-admin-wrap .rtec-field-options-wrapper > p {
+    padding: 0 1em;
+    margin-bottom: 10px;
+}
+.rtec-admin-wrap .rtec-field-options-wrapper label {
+    font-weight: 600;
+}
+.rtec-reveal-field-atts {
+    padding: 0 1em;
+    margin: 5px 1em 1em !important;
+}
+.rtec-field-atts {
+    padding: 0 1em;
+    display: none;
+}
+.rtec-field-atts ul {
+    list-style: disc inside;
 }
 #rtec-message-text-wrapper-up,
 #rtec-message-text-wrapper-down,
 #rtec-message-text-wrapper-other {
     margin-top: 0;
+}
+.rtec-message-group-wrap {
+    box-sizing: border-box;
+}
+.rtec-message-group-wrap .rtec-admin-2-columns {
+    width: 48.75%;
+    margin: 0 0 5px;
+    vertical-align: top;
+}
+.rtec-message-group-wrap .rtec-admin-row .rtec-admin-2-columns:first-child {
+    margin-right: 1%;
+}
+.rtec-message-group-wrap .rtec-input-group {
+    padding: 1em;
 }
 .rtec-field-options-wrapper h4 span {
     font-size: 12px;
@@ -381,15 +415,14 @@ a.rtec-wide {
 .rtec-field-options-wrapper .rtec-valid-count-input {
     width: 130px;
 }
-.rtec-availability-options-wrapper input[type=text] {
-    margin-right: 1em;
-}
-.rtec-custom-field-remove,
-.rtec-mvt-field-remove,
-.rtec-mvt-field-hide{
+.rtec-custom-field-remove{
     position: absolute;
-    top: 20px;
-    right: 20px;
+    right: 0;
+    top: 0;
+    padding: .5em;
+    font-size: 1.2em;
+    background: #FDA7AD;
+    color: #23282d;
 }
 .rtec-checkbox-row label {
     margin-right: 1em;
