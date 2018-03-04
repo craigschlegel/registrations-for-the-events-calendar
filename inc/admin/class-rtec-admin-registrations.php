@@ -89,9 +89,11 @@ class RTEC_Admin_Registrations {
 		}
 		if ( $this->settings['with'] === 'with' && ( isset( $rtec_options['disable_by_default'] ) && $rtec_options['disable_by_default'] === true ) ) {
 			$args['meta_query'] = array(
-				'key' => '_RTECregistrationsDisabled',
-				'value' => '0',
-				'compare' => '='
+				array(
+					'key' => '_RTECregistrationsDisabled',
+					'value' => '0',
+					'compare' => '='
+				)
 			);
 		}
 
