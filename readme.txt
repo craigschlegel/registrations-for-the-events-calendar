@@ -5,13 +5,13 @@ Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 2.0.4
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-Collect and manage registrations with a customizable form and email template. Whether you're holding a meetup, class, workshop, tournament, or any other kind of event, you need a way to handle registration. Our plugin makes managing this process easy and simple. Even nontechnical users can setup the plugin and start collecting registrations within minutes.
+Collect and manage event registrations with a customizable form and email template. Whether you're holding a meetup, class, workshop, tournament, or any other kind of event, you need a way to handle registration. Our plugin makes managing this process easy and simple. Even nontechnical users can setup the plugin and start collecting registrations within minutes.
 
 = Parent Plugin =
 
@@ -27,6 +27,7 @@ As soon as you install and activate the plugin, you can begin collecting registr
 * Keep your event page uncluttered (your registration form is hidden initially and revealed by clicking a customizable "Register" button).
 * Follow-up with your attendees with a customizable confirmation email.
 * Save entries in a database table for easy event management.
+* Attendees can unregister (cancel registration) using a link sent in an email.
 
 = Highly Customizable =
 
@@ -67,6 +68,7 @@ Do you need even more customization and control? Check out [Registrations for th
 
 * Multiple forms specific to each event.
 * Drop-down, checkbox, radio, and paragraph fields.
+* Online payments for events using PayPal.
 * Guest registrations (register for more than one person at a time).
 * Multiple confirmation email templates.
 * Multiple registration venues and tiers.
@@ -154,6 +156,15 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.1 =
+* New: Generate a unique link for attendees to "unregister" from an event by adding the template {unregister-link} in the confirmation email.
+* New: Setting (and hook) for custom formatting of phone numbers. Read about it [here](https://roundupwp.com/faq/format-phone-numbers/).
+* New: Translations for front-end text added for Dutch (nl_NL) and Italian (it_IT).
+* New: Added columns to the rtec_registrations table in the database to record user id and create a unique key for attendees to unregister.
+* New: Added button to dismiss all new notices. Appears in the toolbar on the "Registrations" tab when a "new" notice exists.
+* Tweak: By default, all new registrations will appear right away in the attendee list. You can enable an option to review a submission before they appear on the "Form" tab.
+* Fix: Better filtering of events in the "Overview" when registrations are disabled by default.
+
 = 2.0.4 =
 * Tweak: Menu slug changed for admin pages to accommodate custom uses. You may need to close and reopen your browser window if seeing message "You do not have sufficient permissions to access this page".
 * Tweak: Data and settings will not be removed on uninstall if the "Pro" version is active even if the options to preserve settings and registrations is unchecked.
