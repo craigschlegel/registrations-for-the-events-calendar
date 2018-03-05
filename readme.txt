@@ -158,7 +158,7 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 == Changelog ==
 = 2.1 =
 * New: Generate a unique link for attendees to "unregister" from an event by adding the template {unregister-link} in the confirmation email.
-* New: Setting (and hook) for custom formatting of phone numbers. Read about it [here](https://roundupwp.com/faq/format-phone-numbers/).
+* New: Setting (and hook) for custom formatting of phone numbers. Change format of 10 digit numbers at the bottom of the "Form" tab. Read about further customization [here](https://roundupwp.com/faq/format-phone-numbers/).
 * New: Translations for front-end text added for Dutch (nl_NL) and Italian (it_IT).
 * New: Added columns to the rtec_registrations table in the database to record user id and create a unique key for attendees to unregister.
 * New: Added button to dismiss all new notices. Appears in the toolbar on the "Registrations" tab when a "new" notice exists.

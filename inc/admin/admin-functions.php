@@ -915,11 +915,11 @@ function rtec_db_update_check() {
 		update_option( 'rtec_db_version', RTEC_DBVERSION );
 
 		$db = new RTEC_Db_Admin();
-		$db->maybe_add_column_to_table( 'guests', 'INT(11) UNSIGNED', 0 );
+		$db->maybe_add_column_to_table_no_string( 'guests', 'INT(11) UNSIGNED' );
 		$db->maybe_add_column_to_table( 'reminder', 'VARCHAR(40)', 'pending', true );
 		$db->maybe_add_index( 'reminder', 'reminder' );
 		$db->maybe_add_column_to_table( 'action_key', 'VARCHAR(40)', '', true );
-		$db->maybe_add_column_to_table( 'user_id', 'BIGINT(20) UNSIGNED', 0 );
+		$db->maybe_add_column_to_table_no_string( 'user_id', 'BIGINT(20) UNSIGNED' );
 	}
 
 }

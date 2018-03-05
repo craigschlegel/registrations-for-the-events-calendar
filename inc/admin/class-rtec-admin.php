@@ -954,7 +954,7 @@ class RTEC_Admin
         $label = isset( $options[ 'other_label' ] ) ? esc_attr( $options[ 'other_label' ] ) : __( 'Other', 'registrations-for-the-events-calendar' );
         $show = isset( $options[ 'other_show' ] ) ? esc_attr( $options[ 'other_show' ] ) : false;
         $require = isset( $options[ 'other_require' ] ) ? $options[ 'other_require' ] : false;
-        $error = isset( $options[ 'other_error' ] ) ? $options[ 'other_error' ] : false;
+        $error = isset( $options[ 'other_error' ] ) ? $options[ 'other_error' ] : __( 'This is required', 'registrations-for-the-events-calendar' );
         ?>
         <div class="rtec-field-options-wrapper">
             <h4><?php _e( 'Other', 'registrations-for-the-events-calendar' ); ?> <span>(<?php _e( 'will create a plain text field with your label', 'registrations-for-the-events-calendar' ); ?>)</span></h4>
@@ -990,7 +990,7 @@ class RTEC_Admin
             <?php
             $custom_field_id = str_replace( 'custom', '', $custom_field );
             $label = isset( $options[$custom_field . '_label'] ) ? $options[$custom_field . '_label'] : 'Custom '.$custom_field_id;
-            $error = isset( $options[$custom_field . '_error'] ) ? $options[$custom_field . '_error'] : 'Error';
+            $error = isset( $options[$custom_field . '_error'] ) ? $options[$custom_field . '_error'] : __( 'This is required', 'registrations-for-the-events-calendar' );
             $show = isset( $options[$custom_field . '_show'] ) ? $options[$custom_field . '_show'] : false;
             $require = isset( $options[$custom_field . '_require'] ) ? $options[$custom_field . '_require'] : false;
             ?>

@@ -693,6 +693,8 @@ span.rtec-is-user{
 
 /* ad */
 .rtec-pro-ad-wrap {
+    display: block;
+    max-width: 700px;
     text-decoration: none;
 }
 .rtec-pro-ad {

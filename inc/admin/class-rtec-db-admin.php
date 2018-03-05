@@ -287,6 +287,27 @@ class RTEC_Db_Admin extends RTEC_Db
     }
 
 	/**
+	 * Used to update the database to accommodate new columns added since release
+	 *
+	 * @param $column string    name of column to add if it doesn't exist
+	 * @since 1.1
+	 */
+	public function maybe_add_column_to_table_no_string( $column, $type = 'INT(11)' )
+	{
+		global $wpdb;
+
+		$table_name = esc_sql( $this->table_name );
+		$column_name = esc_sql( $column );
+		$type_name = esc_sql( $type );
+
+		$results = $wpdb->query( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$table_name' AND column_name = '$column_name'" );
+
+		if ( $results == 0 ){
+			$wpdb->query( "ALTER TABLE $table_name ADD $column_name $type_name DEFAULT 0 NOT NULL" );
+		}
+	}
+
+	/**
 	 * Used to add indices to registrations table
 	 *
 	 * @param $index string    name of index to add if it doesn't exist
