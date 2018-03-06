@@ -68,6 +68,7 @@ function rtec_the_registration_form( $atts = array() )
 
 			if ( $doing_shortcode ) {
 				$return_html .= $form->get_form_html( $fields_atts );
+				return $return_html;
 			} else {
 				echo $form->get_form_html( $fields_atts );
 			}
@@ -78,6 +79,7 @@ function rtec_the_registration_form( $atts = array() )
 			$message = $form->get_success_message_html();
 			if ( $doing_shortcode ) {
 				$return_html .= $message;
+				return $return_html;
 			} else {
 				echo $message;
 			}
