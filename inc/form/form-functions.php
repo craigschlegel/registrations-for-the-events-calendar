@@ -41,7 +41,9 @@ function rtec_the_registration_form( $atts = array() )
 
 	$form->set_display_type( $atts );
 
-	if ( $event_meta['show_registrants_data'] && ! $doing_shortcode && ! $form->registrations_are_disabled() ) {
+	$shortcode_attendee_disable = isset( $atts['attendeelist'] ) ? ($atts['attendeelist'] !== 'true') : true;
+
+	if ( $event_meta['show_registrants_data'] && ( ! $doing_shortcode || ! $shortcode_attendee_disable ) && ! $form->registrations_are_disabled() ) {
 
 		$attendee_list_fields = array();
 		$attendee_list_fields = apply_filters( 'rtec_attendee_list_fields', $attendee_list_fields );
