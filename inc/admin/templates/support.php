@@ -26,6 +26,7 @@ if ( isset( $_GET['rtec_troubleshoot'] ) ) {
             ) $charset_collate;";
 		$wpdb->query( $sql );
 		if ( $wpdb->last_error !== '' ) {
+		    $last_db_error = $wpdb->last_error;
 			$wpdb->print_error();
 		} else {
 		    ?>
@@ -45,10 +46,9 @@ if ( isset( $_GET['rtec_troubleshoot'] ) ) {
 
 	$db = new RTEC_Db_Admin();
 	$db->maybe_add_index( 'event_id', 'event_id' );
-	if ( $wpdb->last_error !== '' ) {
+	if ( isset( $last_db_error ) && $last_db_error !== '' ) {
 		delete_transient( 'rtec_last_db_error' );
-		set_transient( 'rtec_last_db_error', $wpdb->last_error, 60 * 60 * 48 );
-		$wpdb->print_error();
+		set_transient( 'rtec_last_db_error', $last_db_error, 60 * 60 * 48 );
 	}
 	$db->maybe_add_index( 'status', 'status' );
 	if ( $wpdb->last_error !== '' ) {
@@ -58,7 +58,7 @@ if ( isset( $_GET['rtec_troubleshoot'] ) ) {
 
 
 $reg_table_exists = ($wpdb->get_var( "show tables like '$table_name'" ) == $table_name);
-if ( ! $reg_table_exists ) {
+if ( ! $reg_table_exists && ! isset( $_GET['rtec_troubleshoot'] ) ) {
     ?>
     <div class="error notice">
         <p>Registrations table does not exist. <a href="<?php echo add_query_arg( 'rtec_troubleshoot', 'true', get_admin_url( null, 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar&tab=support' ) ); ?>">Click here</a> to attempt to create the table and record debugging info.</p>
@@ -95,7 +95,8 @@ PHP Version:              <?php echo PHP_VERSION . "\n"; ?>
 Web Server Info:          <?php echo $_SERVER['SERVER_SOFTWARE'] . "\n"; ?>
 JSON:                     <?php echo function_exists( "json_decode" ) ? "Yes" . "\n" : "No" . "\n" ?>
 WPDB prefix:              <?php echo $wpdb->prefix . "\n"; ?>
-WPDB base prefix:              <?php echo $wpdb->base_prefix . "\n"; ?>
+WPDB base prefix:         <?php echo $wpdb->base_prefix . "\n"; ?>
+
 ## ACTIVE PLUGINS: ##
 <?php
 $plugins = get_plugins();
@@ -183,6 +184,7 @@ if ( function_exists( 'tribe_get_events' ) ) {
 }
 
 ?>
+
 # Last Submission Error: #
 <?php
 $last_sub_error = get_transient( 'rtecSubmissionError' );
@@ -190,8 +192,10 @@ if ( $last_sub_error ) {
 	var_dump($last_sub_error);
 } else {
 	echo 'no recent submission errors';
+	echo "\n";
 }
 ?>
+
 # Last Email Error: #
 <?php
 $last_email_error = get_transient( 'rtec_last_email_error' );
@@ -199,6 +203,7 @@ if ( $last_email_error ) {
 	var_dump($last_email_error);
 } else {
 	echo 'no recent email errors';
+	echo "\n";
 }
 if ( get_transient( 'rtec_last_db_error' ) ) {
     var_dump( get_transient( 'rtec_last_db_error' ) );
