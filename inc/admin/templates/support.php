@@ -1,4 +1,72 @@
 <h1><?php _e( 'Need Help?', 'registrations-for-the-events-calendar' ); ?></h1>
+<?php
+global $wpdb;
+$table_name = esc_sql( $wpdb->prefix . RTEC_TABLENAME );
+
+if ( isset( $_GET['rtec_troubleshoot'] ) ) {
+	$charset_collate = $wpdb->get_charset_collate();
+
+	if ( $wpdb->get_var( "show tables like '$table_name'" ) != $table_name ) {
+		$sql = "CREATE TABLE " . $table_name . " (
+                id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+                user_id BIGINT(20) UNSIGNED DEFAULT 0 NOT NULL,
+                event_id BIGINT(20) UNSIGNED NOT NULL,
+                registration_date DATETIME NOT NULL,
+                last_name VARCHAR(1000) NOT NULL,
+                first_name VARCHAR(1000) NOT NULL,
+                email VARCHAR(1000) NOT NULL,
+                venue VARCHAR(1000) NOT NULL,
+                phone VARCHAR(40) DEFAULT '' NOT NULL,
+                other VARCHAR(1000) DEFAULT '' NOT NULL,
+                guests INT(11) UNSIGNED DEFAULT 0 NOT NULL,
+                custom LONGTEXT DEFAULT '' NOT NULL,
+                status CHAR(1) DEFAULT 'y' NOT NULL,
+                action_key VARCHAR(40) DEFAULT '' NOT NULL,
+                UNIQUE KEY id (id)
+            ) $charset_collate;";
+		$wpdb->query( $sql );
+		if ( $wpdb->last_error !== '' ) {
+			$wpdb->print_error();
+		} else {
+		    ?>
+            <div class="updated notice">
+                <p>Registrations table created successfully.</p>
+            </div>
+            <?php
+        }
+
+	} else {
+		?>
+        <div class="updated notice">
+            <p>Registrations table exists.</p>
+        </div>
+		<?php
+	}
+
+	$db = new RTEC_Db_Admin();
+	$db->maybe_add_index( 'event_id', 'event_id' );
+	if ( $wpdb->last_error !== '' ) {
+		delete_transient( 'rtec_last_db_error' );
+		set_transient( 'rtec_last_db_error', $wpdb->last_error, 60 * 60 * 48 );
+		$wpdb->print_error();
+	}
+	$db->maybe_add_index( 'status', 'status' );
+	if ( $wpdb->last_error !== '' ) {
+		$wpdb->print_error();
+	}
+}
+
+
+$reg_table_exists = ($wpdb->get_var( "show tables like '$table_name'" ) == $table_name);
+if ( ! $reg_table_exists ) {
+    ?>
+    <div class="error notice">
+        <p>Registrations table does not exist. <a href="<?php echo add_query_arg( 'rtec_troubleshoot', 'true', get_admin_url( null, 'edit.php?post_type=tribe_events&page=registrations-for-the-events-calendar&tab=support' ) ); ?>">Click here</a> to attempt to create the table and record debugging info.</p>
+    </div>
+<?php
+
+}
+?>
 
 <p>
 	<span class="rtec-support-title"><i class="fa fa-life-ring" aria-hidden="true"></i>&nbsp; <a href="http://roundupwp.com/products/registrations-for-the-events-calendar/setup" target="_blank"><?php _e( 'Setup Directions', 'registrations-for-the-events-calendar' ); ?></a></span>
@@ -26,8 +94,8 @@ WordPress Version:        <?php echo get_bloginfo( 'version' ) . "\n"; ?>
 PHP Version:              <?php echo PHP_VERSION . "\n"; ?>
 Web Server Info:          <?php echo $_SERVER['SERVER_SOFTWARE'] . "\n"; ?>
 JSON:                     <?php echo function_exists( "json_decode" ) ? "Yes" . "\n" : "No" . "\n" ?>
-WPDB prefix:              <?php global $wpdb; echo $wpdb->prefix . "\n"; ?>
-
+WPDB prefix:              <?php echo $wpdb->prefix . "\n"; ?>
+WPDB base prefix:              <?php echo $wpdb->base_prefix . "\n"; ?>
 ## ACTIVE PLUGINS: ##
 <?php
 $plugins = get_plugins();
@@ -54,9 +122,6 @@ foreach ( $options as $key => $val ) {
 }
 
 // DB troubleshooting
-
-$table_name = esc_sql( $wpdb->prefix . RTEC_TABLENAME );
-
 $column_descriptions = $wpdb->get_results( "DESCRIBE $table_name" );
 
 echo "\n";
@@ -65,28 +130,31 @@ foreach ( $column_descriptions as $column ) {
 	echo 'Field: ' . $column->Field . ', Type: ' . $column->Type . ', Key: ' . $column->Key . ', Extra: ' . $column->Extra . "\n";
 }
 
-$last_result = $wpdb->get_results( "SELECT * FROM $table_name ORDER BY id DESC LIMIT 1;" );
+if ( $reg_table_exists ) {
 
-echo "\n";
+	$last_result = $wpdb->get_results( "SELECT * FROM $table_name ORDER BY id DESC LIMIT 1;" );
 
-if ( is_array( $last_result ) ) {
-	
-	foreach ( $last_result as $column ) {
+	echo "\n";
 
-		foreach ( $column as $key => $value ) {
+	if ( is_array( $last_result ) ) {
 
-			if ( $key != 'first_name' && $key != 'last_name' && $key != 'first_name' && $key != 'custom' && $key != 'phone' && $key != 'email' ) {
-				echo $key . ': ' . $value;
-			} else {
-				echo $key . ': ' . substr( $value, 0, 3 );
+		foreach ( $last_result as $column ) {
+
+			foreach ( $column as $key => $value ) {
+
+				if ( $key != 'first_name' && $key != 'last_name' && $key != 'first_name' && $key != 'custom' && $key != 'phone' && $key != 'email' ) {
+					echo $key . ': ' . $value;
+				} else {
+					echo $key . ': ' . substr( $value, 0, 3 );
+				}
+
+				echo "\n";
 			}
-
-			echo "\n";
 		}
-	}
 
-} else {
-	echo 'no submissions currently';
+	} else {
+		echo 'no submissions currently';
+	}
 }
 
 if ( function_exists( 'tribe_get_events' ) ) {
@@ -114,7 +182,26 @@ if ( function_exists( 'tribe_get_events' ) ) {
 	echo 'tribe_get_events does not exist';
 }
 
-
 ?>
-
+# Last Submission Error: #
+<?php
+$last_sub_error = get_transient( 'rtecSubmissionError' );
+if ( $last_sub_error ) {
+	var_dump($last_sub_error);
+} else {
+	echo 'no recent submission errors';
+}
+?>
+# Last Email Error: #
+<?php
+$last_email_error = get_transient( 'rtec_last_email_error' );
+if ( $last_email_error ) {
+	var_dump($last_email_error);
+} else {
+	echo 'no recent email errors';
+}
+if ( get_transient( 'rtec_last_db_error' ) ) {
+    var_dump( get_transient( 'rtec_last_db_error' ) );
+}
+?>
 </textarea>

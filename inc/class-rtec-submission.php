@@ -85,6 +85,7 @@ class RTEC_Submission
 		$this->event_meta = $event_meta;
 		$raw_data = array();
 		$errors = array();
+		$error_report = array();
 
 		// for each submitted form field
 		require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-validator.php';
@@ -92,6 +93,7 @@ class RTEC_Submission
 
 		if ( isset( $unvalidated_submission['rtec_user_address'] ) && ! empty( $unvalidated_submission['rtec_user_address'] ) ) {
 			$errors[] = 'user_address';
+			$error_report['user_address'] = $unvalidated_submission['rtec_user_address'];
 		}
 
 		foreach ( $fields_atts as $show_field => $value ) {
@@ -157,6 +159,7 @@ class RTEC_Submission
 
 				if ( ! $valid ) {
 					$errors[] = $show_field;
+					$error_report[$show_field] = $unvalidated_submission[ 'rtec_' . $show_field ];
 				}
 			}
 
@@ -179,6 +182,12 @@ class RTEC_Submission
 		$raw_data['event_id'] = $unvalidated_submission['rtec_event_id'];
 
 		$this->errors = $errors;
+
+		if ( !empty( $errors ) ) {
+			delete_transient( 'rtecSubmissionError' );
+			$error_report['submission'] = $raw_data;
+			set_transient( 'rtecSubmissionError', $error_report, 60 * 60 * 12 );
+		}
 
 		return $raw_data;
 	}
