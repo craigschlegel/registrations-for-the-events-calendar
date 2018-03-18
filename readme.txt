@@ -156,6 +156,12 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.1.1 =
+* New: Shortcode support for displaying the attendee list elsewhere on your site. Use the shortcode [rtec-attendee-list event="123"].
+* New: Support for including the attendee list when using the registration form shortcode. Use the shortcode [rtec-registration-form event="123" attendeelist=true].
+* Tweak: Changed email validation regular expression to recognize real email addresses that were being marked as invalid.
+* Fix: Changed name of spam honeypot field to avoid browsers automatically filling in a value.
+
 = 2.1 =
 * New: Generate a unique link for attendees to "unregister" from an event by adding the template {unregister-link} in the confirmation email.
 * New: Setting (and hook) for custom formatting of phone numbers. Change format of 10 digit numbers at the bottom of the "Form" tab. Read about further customization [here](https://roundupwp.com/faq/format-phone-numbers/).

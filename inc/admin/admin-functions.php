@@ -308,29 +308,40 @@ function rtec_meta_boxes_html(){
 					</table>
 				</td>
 			</tr>
-			<tr>
-				<td colspan="2" class="tribe_sectionheader">
-					<div class="tribe_sectionheader" style="">
-						<h4><?php _e( 'Shortcodes', 'registrations-for-the-events-calendar' ); ?></h4>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td class="tribe-table-field-label"><?php _e( 'Display registration form on another page:', 'registrations-for-the-events-calendar' ); ?></td>
-				<td>
-					<?php _e( 'Use this shortcode: ', 'registrations-for-the-events-calendar' ); ?><br /><code>[rtec-registration-form event=<?php echo $post->ID; ?>]</code><br /><small><?php _e( 'Note that the registration form appears on the single event view automatically.', 'registrations-for-the-events-calendar' ); ?></small>
-				</td>
-			</tr>
-			<tr>
-				<td class="tribe-table-field-label"><?php _e( 'Shortcode Settings:', 'registrations-for-the-events-calendar' ); ?></td>
-				<td>
-					<span class="rtec-tooltip-table">
-			            <span class="rtec-col-1">event="123"</span><span class="rtec-col-2"><?php _e( 'Show registration form by event ID', 'registrations-for-the-events-calendar' ); ?></span>
+            <tr>
+                <td colspan="2" class="tribe_sectionheader">
+                    <div class="tribe_sectionheader" style="">
+                        <h4><?php _e( 'Shortcodes', 'registrations-for-the-events-calendar' ); ?></h4>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+					<?php _e( 'Copy and paste these shortcodes to display the registration form and the attendee list on a page outside of the single event view.', 'registrations-for-the-events-calendar' ); ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><?php _e( 'Registration Form: ', 'registrations-for-the-events-calendar' ); ?></h4><code>[rtec-registration-form event=<?php echo $event_meta['post_id']; ?>]</code><br /><small><?php _e( 'Note that the registration form appears on the single event view automatically.', 'registrations-for-the-events-calendar' ); ?></small>
+                    <span class="rtec-tooltip-table">
+                        <strong><?php _e( 'Shortcode Settings:', 'registrations-for-the-events-calendar' ); ?></strong></br>
+                        <span class="rtec-col-1">event="123"</span><span class="rtec-col-2"><?php _e( 'Show registration form by event ID', 'registrations-for-the-events-calendar' ); ?></span>
 			            <span class="rtec-col-1">hidden="true"</span><span class="rtec-col-2"><?php _e( 'Use "false" to show the form initially', 'registrations-for-the-events-calendar' ); ?></span>
                         <span class="rtec-col-1">showheader="false"</span><span class="rtec-col-2"><?php _e( 'Use "true" to add the event title and start/end time information above the form', 'registrations-for-the-events-calendar' ); ?></span>
+                        <span class="rtec-col-1">attendeelist="false"</span><span class="rtec-col-2"><?php _e( 'Use "true" to add the attendee list above the form if enabled for this event', 'registrations-for-the-events-calendar' ); ?></span>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><?php _e( 'Attendee List: ', 'registrations-for-the-events-calendar' ); ?></h4><code>[rtec-attendee-list event=<?php echo $event_meta['post_id']; ?>]</code>
+                    <span class="rtec-tooltip-table">
+                        <strong><?php _e( 'Shortcode Settings:', 'registrations-for-the-events-calendar' ); ?></strong></br>
+                        <span class="rtec-col-1">event="123"</span><span class="rtec-col-2"><?php _e( 'Show attendee list by event ID', 'registrations-for-the-events-calendar' ); ?></span>
+                        <span class="rtec-col-1">showheader="false"</span><span class="rtec-col-2"><?php _e( 'Use "true" to add the event title and start/end time information above the list', 'registrations-for-the-events-calendar' ); ?></span>
 					</span>
-				</td>
-			</tr>
+                </td>
+            </tr>
 			<tr>
 				<td colspan="2" class="tribe_sectionheader">
 					<div class="tribe_sectionheader" style="">
