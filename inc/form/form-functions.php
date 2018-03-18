@@ -49,8 +49,10 @@ function rtec_the_registration_form( $atts = array() )
 		$attendee_list_fields = apply_filters( 'rtec_attendee_list_fields', $attendee_list_fields );
 
 		$registrants_data = $db->get_registrants_data( $event_meta, $attendee_list_fields );
-
+		ob_start();
 		do_action( 'rtec_the_attendee_list', $registrants_data );
+		$return_html .= ob_get_contents();
+		ob_get_clean();
 	}
 
 	if ( $rtec->submission != NULL && $event_meta['post_id'] === (int)$_POST['rtec_event_id'] ) {

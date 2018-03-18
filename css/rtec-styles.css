@@ -229,3 +229,22 @@ h3.rtec-header, .entry-content h3.rtec-header { margin: 1em 0 1.5em; }
         width: 100% !important;
     }
 }
+
+/* Attendee List Shortcode */
+
+.rtec-attendee-list-wrap .rtec-section-title {
+    padding: 0 4%;
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 20px 0 10px;
+}
+.rtec-attendee-list-wrap .tribe-events-single-section-title.rtec-section-subtitle {
+    font-size: 1.2em;
+    font-weight: 700;
+    margin: 20px 0 10px;
+}
+.rtec-attendee-list-wrap .tribe-events-event-meta {
+    background: #fafafa;
+    border: 1px solid #eee;
+    margin: 30px 0;
+}

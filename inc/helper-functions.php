@@ -640,3 +640,65 @@ function rtec_the_registration_form_shortcode( $atts ) {
 
 }
 
+/**
+ * Generates the attendee list with a shortcode
+ *
+ * @param   $atts        array  settings for the form, $atts['event'] required
+ * @since   2.1
+ */
+add_shortcode( 'rtec-attendee-list', 'rtec_the_attendee_list_shortcode' );
+function rtec_the_attendee_list_shortcode( $atts ) {
+	$post_id = isset( $atts['event'] ) ? (int)$atts['event'] : false;
+
+	if ( ! $post_id ) {
+		$post_id = isset( $_GET['event_id'] ) ? sanitize_text_field( (int)$_GET['event_id'] ) : false;
+
+		if ( $post_id ) {
+			$atts['event'] = $post_id;
+		}
+	}
+
+	if ( (int)$post_id > 0 ) {
+		$rtec = RTEC();
+		$event_id = (int)$post_id;
+		$rtec->form->build_form( $event_id );
+		$fields_atts = $rtec->form->get_field_attributes();
+
+		$event_meta = $rtec->form->get_event_meta();
+
+		$to_include = apply_filters( 'rtec_attendee_list_fields', array() );
+		$attendee_list_fields = apply_filters( 'rtec_attendee_list_fields', $to_include );
+		$registrants_data = $rtec->db_frontend->get_registrants_data( $event_meta, $attendee_list_fields );
+		ob_start();
+		echo '<div class="rtec-attendee-list-wrap">';
+		if ( isset( $atts['showheader'] ) && $atts['showheader'] === 'true' ) {
+			$rtec->form->the_event_header();
+		}
+
+		if ( !empty( $registrants_data ) ) {
+			do_action( 'rtec_the_attendee_list', $registrants_data );
+		} else {
+			global $rtec_options;
+
+			$f_text = isset( $rtec_options['attendance_text_none_yet'] ) ? $rtec_options['attendance_text_none_yet'] : __( 'Be the first!', 'registrations-for-the-events-calendar' );
+			$f_message = rtec_get_text( $f_text, __( 'Be the first!', 'registrations-for-the-events-calendar' ) );
+			$text_string = $f_message;
+
+			$title = isset( $rtec_options['attendee_list_title'] ) ? $rtec_options['attendee_list_title'] : __( 'Currently Registered', 'registrations-for-the-events-calendar' );
+			$title = rtec_get_text( $title,  __( 'Currently Registered', 'registrations-for-the-events-calendar' ) );
+			?>
+
+			<div class="tribe-events-event-meta rtec-event-meta"><h3 class="rtec-section-title"><?php esc_html_e( $title ); ?></h3>
+				<p style="padding-left: 4%;"><?php esc_html_e( $text_string ); ?></p>
+			</div>
+			<?php
+		}
+		echo '</div>';
+		$html = ob_get_contents();
+		ob_get_clean();
+	} else {
+		$html = '<p>'.__( 'Please enter an Event ID to view the attendee list', 'registrations-for-the-events-calendar' ) . '</p>';
+	}
+
+	return $html;
+}

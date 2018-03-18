@@ -1092,9 +1092,9 @@ class RTEC_Form
 	    $button_classes = ! empty( $button_hover_class ) ? $button_hover_class : '';
 	    $html = '';
 				    $html .= '<div class="rtec-form-field rtec-user-address" style="display: none;">';
-				    $html .= '<label for="rtec_user_address" class="rtec_text_label">Address</label>';
+				    $html .= '<label for="rtec_user_comments" class="rtec_text_label">Comments</label>';
 					    $html .= '<div class="rtec-input-wrapper">';
-						    $html .= '<input type="text" name="rtec_user_address" value="" id="rtec_user_address" />';
+						    $html .= '<input type="text" name="rtec_user_comments" value="" id="rtec_user_comments" />';
 	                        $html .= '<p>' . __( 'If you are a human, do not fill in this field', 'registrations-for-the-events-calendar' ) .'</p>';
 					    $html .= '</div>';
 				    $html .= '</div>';
@@ -1139,7 +1139,7 @@ class RTEC_Form
 
 		$title = isset( $rtec_options['attendee_list_title'] ) ? $rtec_options['attendee_list_title'] : __( 'Currently Registered', 'registrations-for-the-events-calendar' );
 		$title = rtec_get_text( $title, __( 'Currently Registered', 'registrations-for-the-events-calendar' ) );
-		$return_html = '<div class="tribe-events-event-meta rtec-event-meta"><h3 class="rtec-section-title">' . esc_html( $title ) . '</h3>';
+		$return_html = '<div class="tribe-events-event-meta rtec-event-meta rtec-attendee-list-meta"><h3 class="rtec-section-title">' . esc_html( $title ) . '</h3>';
 
 		// to prevent looping through the data twice, two columns are created by alternating appending of qualified registrations
 		$column_1_html = '<div class="rtec-attendee-list rtec-list-column-2">';
@@ -1175,6 +1175,16 @@ class RTEC_Form
 		$return_html .= '</div>'; // rtec-event-meta
 
 		echo $return_html;
+	}
+
+	public function the_event_header()
+	{
+		$html = '<h2 class="rtec-header">'.$this->event_meta['title'].'</h2>';
+		if ( function_exists( 'tribe_events_event_schedule_details' ) ) {
+			$html .= tribe_events_event_schedule_details( $this->event_meta['post_id'], '<h3 class="rtec-header">', '</h3>' );
+		}
+
+		echo $html;
 	}
 
 	/**

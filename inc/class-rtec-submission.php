@@ -91,9 +91,9 @@ class RTEC_Submission
 		require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-validator.php';
 		$validator = new RTEC_Validator();
 
-		if ( isset( $unvalidated_submission['rtec_user_address'] ) && ! empty( $unvalidated_submission['rtec_user_address'] ) ) {
-			$errors[] = 'user_address';
-			$error_report['user_address'] = $unvalidated_submission['rtec_user_address'];
+		if ( isset( $unvalidated_submission['rtec_user_comments'] ) && ! empty( $unvalidated_submission['rtec_user_comments'] ) ) {
+			$errors[] = 'user_comments';
+			$error_report['user_comments'] = $unvalidated_submission['rtec_user_comments'];
 		}
 
 		foreach ( $fields_atts as $show_field => $value ) {
