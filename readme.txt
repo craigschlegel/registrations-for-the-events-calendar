@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 2.1
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -151,6 +151,10 @@ Yes. You would need to use the post ID for that event in the shortcode. Example:
 = The form is not hidden initially. Why is that? =
 
 It's likely that you have a javascript error somewhere on that page. Try disabling other plugins or switching themes to see if this corrects the issue.
+
+= Is this plugin compatible with WordPress multisite? =
+
+The plugin is not yet fully compatible with a WordPress multisite installation. It will be soon! Please contact us if you are interested in using the plugin with multisite.
 
 = What do I do if I have a request or need help? =
 
