@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-03-05 10:27-0600\n"
-"PO-Revision-Date: 2018-03-05 10:27-0600\n"
+"POT-Creation-Date: 2018-03-29 10:49-0500\n"
+"PO-Revision-Date: 2018-03-29 10:50-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -34,7 +34,7 @@ msgid ""
 "website</a></p>"
 msgstr ""
 
-#: inc/admin/admin-functions.php:167 inc/admin/admin-functions.php:343
+#: inc/admin/admin-functions.php:167 inc/admin/admin-functions.php:354
 msgid "Registrations for The Events Calendar"
 msgstr ""
 
@@ -78,7 +78,7 @@ msgstr ""
 msgid "Other:"
 msgstr ""
 
-#: inc/admin/admin-functions.php:279 inc/admin/admin-functions.php:838
+#: inc/admin/admin-functions.php:279 inc/admin/admin-functions.php:850
 #: inc/admin/class-rtec-admin.php:142 inc/admin/templates/main.php:25
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:91
 #: inc/class-rtec-email.php:174 inc/form/class-rtec-form.php:246
@@ -99,21 +99,23 @@ msgstr ""
 msgid "Shortcodes"
 msgstr ""
 
-#: inc/admin/admin-functions.php:319
-msgid "Display registration form on another page:"
+#: inc/admin/admin-functions.php:320
+msgid ""
+"Copy and paste these shortcodes to display the registration form and the "
+"attendee list on a page outside of the single event view."
 msgstr ""
 
-#: inc/admin/admin-functions.php:321
-msgid "Use this shortcode: "
+#: inc/admin/admin-functions.php:325
+msgid "Registration Form: "
 msgstr ""
 
-#: inc/admin/admin-functions.php:321
+#: inc/admin/admin-functions.php:325
 msgid ""
 "Note that the registration form appears on the single event view "
 "automatically."
 msgstr ""
 
-#: inc/admin/admin-functions.php:325
+#: inc/admin/admin-functions.php:327 inc/admin/admin-functions.php:339
 msgid "Shortcode Settings:"
 msgstr ""
 
@@ -131,60 +133,80 @@ msgid ""
 "form"
 msgstr ""
 
+#: inc/admin/admin-functions.php:331
+msgid ""
+"Use \"true\" to add the attendee list above the form if enabled for this "
+"event"
+msgstr ""
+
 #: inc/admin/admin-functions.php:337
+msgid "Attendee List: "
+msgstr ""
+
+#: inc/admin/admin-functions.php:340
+msgid "Show attendee list by event ID"
+msgstr ""
+
+#: inc/admin/admin-functions.php:341
+msgid ""
+"Use \"true\" to add the event title and start/end time information above the "
+"list"
+msgstr ""
+
+#: inc/admin/admin-functions.php:348
 msgid "More Single Event Options"
 msgstr ""
 
-#: inc/admin/admin-functions.php:343
+#: inc/admin/admin-functions.php:354
 msgid ""
 "More single event options like custom confirmation email templates, multiple "
 "venues/tier registration, settings for logged-in users and others in"
 msgstr ""
 
-#: inc/admin/admin-functions.php:691 inc/admin/class-rtec-admin-event.php:144
+#: inc/admin/admin-functions.php:703 inc/admin/class-rtec-admin-event.php:144
 msgid "Registration Date"
 msgstr ""
 
-#: inc/admin/admin-functions.php:695
+#: inc/admin/admin-functions.php:707
 msgid "Event"
 msgstr ""
 
-#: inc/admin/admin-functions.php:696
+#: inc/admin/admin-functions.php:708
 #: inc/admin/templates/partials/registrations-list-view.php:9
 #: inc/admin/templates/partials/registrations-list-view.php:10
 msgid "Start Date"
 msgstr ""
 
-#: inc/admin/admin-functions.php:710
+#: inc/admin/admin-functions.php:722
 msgid "new"
 msgstr ""
 
-#: inc/admin/admin-functions.php:735
+#: inc/admin/admin-functions.php:747
 msgid "No Registrations Found"
 msgstr ""
 
-#: inc/admin/admin-functions.php:836 inc/admin/class-rtec-admin.php:140
+#: inc/admin/admin-functions.php:848 inc/admin/class-rtec-admin.php:140
 #: inc/class-rtec-email.php:172 inc/form/class-rtec-form.php:236
 #: inc/form/class-rtec-form.php:438 inc/form/class-rtec-form.php:439
 #: inc/form/class-rtec-form.php:630
 msgid "First"
 msgstr ""
 
-#: inc/admin/admin-functions.php:837 inc/admin/class-rtec-admin.php:141
+#: inc/admin/admin-functions.php:849 inc/admin/class-rtec-admin.php:141
 #: inc/class-rtec-email.php:173 inc/form/class-rtec-form.php:241
 #: inc/form/class-rtec-form.php:444 inc/form/class-rtec-form.php:445
 #: inc/form/class-rtec-form.php:633
 msgid "Last"
 msgstr ""
 
-#: inc/admin/admin-functions.php:839 inc/admin/class-rtec-admin.php:143
+#: inc/admin/admin-functions.php:851 inc/admin/class-rtec-admin.php:143
 #: inc/class-rtec-email.php:116 inc/class-rtec-email.php:199
 #: inc/form/class-rtec-form.php:256 inc/form/class-rtec-form.php:456
 #: inc/form/class-rtec-form.php:457 inc/form/class-rtec-form.php:639
 msgid "Phone"
 msgstr ""
 
-#: inc/admin/admin-functions.php:840 inc/admin/class-rtec-admin.php:954
+#: inc/admin/admin-functions.php:852 inc/admin/class-rtec-admin.php:954
 #: inc/admin/class-rtec-admin.php:960 inc/class-rtec-email.php:126
 #: inc/class-rtec-email.php:207 inc/form/class-rtec-form.php:251
 #: inc/form/class-rtec-form.php:652
@@ -247,7 +269,8 @@ msgid "Attendee List Title"
 msgstr ""
 
 #: inc/admin/class-rtec-admin.php:211 inc/form/class-rtec-form.php:1140
-#: inc/form/class-rtec-form.php:1141
+#: inc/form/class-rtec-form.php:1141 inc/helper-functions.php:687
+#: inc/helper-functions.php:688
 msgid "Currently Registered"
 msgstr ""
 
@@ -294,7 +317,7 @@ msgid "Duplicate Email Error Message"
 msgstr ""
 
 #: inc/admin/class-rtec-admin.php:281 inc/form/class-rtec-form.php:887
-#: inc/form/class-rtec-form.php:888 inc/form/form-functions.php:176
+#: inc/form/class-rtec-form.php:888 inc/form/form-functions.php:188
 msgid "You have already registered for this event"
 msgstr ""
 
@@ -373,8 +396,8 @@ msgstr ""
 msgid "Website Unregister Success Message"
 msgstr ""
 
-#: inc/admin/class-rtec-admin.php:392 inc/form/form-functions.php:218
-#: inc/form/form-functions.php:219
+#: inc/admin/class-rtec-admin.php:392 inc/form/form-functions.php:230
+#: inc/form/form-functions.php:231
 msgid "You have been unregistered."
 msgstr ""
 
@@ -451,8 +474,8 @@ msgstr ""
 #: inc/admin/class-rtec-admin.php:525
 msgid ""
 "Select \"Custom\" for text saved in the Settings pages, \"Translate\" to use "
-"strictly language files (French, German, Spanish, and Russian are available. "
-"Contact support to offer your translations)"
+"strictly language files (French, German, Spanish, Dutch, Italian and Russian "
+"are available. Contact support to offer your translations)"
 msgstr ""
 
 #: inc/admin/class-rtec-admin.php:541
@@ -590,6 +613,14 @@ msgstr ""
 msgid "Confirmation Message"
 msgstr ""
 
+#: inc/admin/class-rtec-admin.php:779
+msgid ""
+"Hey {first},<br /><br />You are registered for {event-title} at {venue} on "
+"{event-date}. We are looking forward to having you there. The event will be "
+"held at this location:<br /><br />{venue-address}<br />{venue-city}, {venue-"
+"state} {venue-zip}<br /><br />See you there!"
+msgstr ""
+
 #: inc/admin/class-rtec-admin.php:914 inc/admin/class-rtec-admin.php:962
 #: inc/admin/class-rtec-admin.php:1001 inc/admin/class-rtec-admin.php:1036
 msgid "Label"
@@ -638,6 +669,13 @@ msgstr ""
 #: inc/admin/class-rtec-admin.php:946 inc/admin/class-rtec-admin.php:979
 #: inc/admin/class-rtec-admin.php:1018
 msgid "Email template text"
+msgstr ""
+
+#: inc/admin/class-rtec-admin.php:957 inc/admin/class-rtec-admin.php:993
+#: inc/form/class-rtec-form.php:145 inc/form/class-rtec-form.php:253
+#: inc/form/class-rtec-form.php:263 inc/form/class-rtec-form.php:463
+#: inc/form/class-rtec-form.php:464
+msgid "This is required"
 msgstr ""
 
 #: inc/admin/class-rtec-admin.php:960
@@ -729,7 +767,8 @@ msgid "Only one spot left!"
 msgstr ""
 
 #: inc/admin/class-rtec-admin.php:1087 inc/form/class-rtec-form.php:793
-#: inc/form/class-rtec-form.php:794
+#: inc/form/class-rtec-form.php:794 inc/helper-functions.php:683
+#: inc/helper-functions.php:684
 msgid "Be the first!"
 msgstr ""
 
@@ -1056,37 +1095,37 @@ msgstr ""
 msgid "Need Help?"
 msgstr ""
 
-#: inc/admin/templates/support.php:4
+#: inc/admin/templates/support.php:72
 msgid "Setup Directions"
 msgstr ""
 
-#: inc/admin/templates/support.php:5
+#: inc/admin/templates/support.php:73
 msgid "A step-by-step guide on how to setup and use the plugin."
 msgstr ""
 
-#: inc/admin/templates/support.php:8
+#: inc/admin/templates/support.php:76
 msgid "FAQs and Documentation"
 msgstr ""
 
-#: inc/admin/templates/support.php:9
+#: inc/admin/templates/support.php:77
 msgid "You might find some help with our FAQs and troubleshooting guides."
 msgstr ""
 
-#: inc/admin/templates/support.php:12
+#: inc/admin/templates/support.php:80
 msgid "Request Support"
 msgstr ""
 
-#: inc/admin/templates/support.php:13
+#: inc/admin/templates/support.php:81
 msgid ""
 "Have a problem? Submit a support ticket on our website. Please include your "
 "<strong>System Info</strong> below with support requests."
 msgstr ""
 
-#: inc/admin/templates/support.php:17
+#: inc/admin/templates/support.php:85
 msgid "System Info"
 msgstr ""
 
-#: inc/admin/templates/support.php:18
+#: inc/admin/templates/support.php:86
 msgid "Click the text below to select all"
 msgstr ""
 
@@ -1132,12 +1171,6 @@ msgstr ""
 msgid "Registration email"
 msgstr ""
 
-#: inc/form/class-rtec-form.php:145 inc/form/class-rtec-form.php:253
-#: inc/form/class-rtec-form.php:263 inc/form/class-rtec-form.php:463
-#: inc/form/class-rtec-form.php:464
-msgid "This is required"
-msgstr ""
-
 #: inc/form/class-rtec-form.php:483 inc/form/class-rtec-form.php:626
 #: inc/form/class-rtec-form.php:651
 msgid "Error"
@@ -1151,13 +1184,17 @@ msgstr ""
 msgid "If you are a human, do not fill in this field"
 msgstr ""
 
-#: inc/form/form-functions.php:228
+#: inc/form/form-functions.php:240
 msgid "No record found."
 msgstr ""
 
-#: inc/form/form-functions.php:267
+#: inc/form/form-functions.php:279
 #, php-format
 msgid "A registrant %s has unregistered from this event %s."
+msgstr ""
+
+#: inc/helper-functions.php:700
+msgid "Please enter an Event ID to view the attendee list"
 msgstr ""
 
 #: registrations-for-the-events-calendar.php:48

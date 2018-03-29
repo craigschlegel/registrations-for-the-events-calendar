@@ -776,7 +776,7 @@ class RTEC_Admin
             'name' => 'confirmation_message',
             'title' => '<label>' . __( 'Confirmation Message', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'default' => 'Hey {first},<br /><br />You are registered for {event-title} at {venue} on {event-date}. We are looking forward to having you there. The event will be held at this location:<br /><br />{venue-address}<br />{venue-city}, {venue-state} {venue-zip}<br /><br />See you there!',
+            'default' => __( 'Hey {first},<br /><br />You are registered for {event-title} at {venue} on {event-date}. We are looking forward to having you there. The event will be held at this location:<br /><br />{venue-address}<br />{venue-city}, {venue-state} {venue-zip}<br /><br />See you there!', 'registrations-for-the-events-calendar' ),
             'description' => '',
             'callback'  => 'rich_editor',
             'settings' => array(

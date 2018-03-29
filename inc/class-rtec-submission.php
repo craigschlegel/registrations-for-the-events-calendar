@@ -309,8 +309,8 @@ class RTEC_Submission
 	public function process_valid_submission( $raw_data ) {
 		global $rtec_options;
 
-		require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-db.php';
-		$db = new RTEC_Db();
+		$rtec = RTEC();
+		$db = $rtec->db_frontend->instance();
 
 		$disable_confirmation = isset( $rtec_options['disable_confirmation'] ) ? $rtec_options['disable_confirmation'] : false;
 		$disable_notification = isset( $rtec_options['disable_notification'] ) ? $rtec_options['disable_notification'] : false;
@@ -329,7 +329,7 @@ class RTEC_Submission
 			require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-email.php';
 			$confirmation_message = new RTEC_Email();
 
-			$message = isset( $rtec_options['confirmation_message'] ) && !rtec_using_translations() ? $rtec_options['confirmation_message'] : $confirmation_message->get_generic_confirmation( $sanitized_data );
+			$message = isset( $rtec_options['confirmation_message'] ) ? __( $rtec_options['confirmation_message'], 'registrations-for-the-events-calendar' ) : $confirmation_message->get_generic_confirmation( $sanitized_data );
 
 			$args = array(
 				'template_type' => 'confirmation',

@@ -552,7 +552,8 @@ function rtec_update_status() {
 		die ( 'You did not do this the right way!' );
 	}
 
-	$db = new RTEC_Db();
+	$rtec = RTEC();
+	$db = $rtec->db_frontend->instance();
 
 	$entry_ids = $_POST['entry_ids'];
 
