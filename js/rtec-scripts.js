@@ -255,6 +255,9 @@ jQuery(document).ready(function($) {
             });
 
             submittedData['action'] = 'rtec_process_form_submission';
+            if ($('input[name=lang]').length) {
+                submittedData['lang'] = $('input[name=lang]').val();
+            }
 
             $.ajax({
                 url : rtec.ajaxUrl,

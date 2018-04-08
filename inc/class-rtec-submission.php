@@ -328,8 +328,8 @@ class RTEC_Submission
 		if ( $this->email_given( $email ) && ! $disable_confirmation ) {
 			require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-email.php';
 			$confirmation_message = new RTEC_Email();
-
-			$message = isset( $rtec_options['confirmation_message'] ) ? __( $rtec_options['confirmation_message'], 'registrations-for-the-events-calendar' ) : $confirmation_message->get_generic_confirmation( $sanitized_data );
+			$fresh_options = get_option( 'rtec_options' );
+			$message = isset( $fresh_options['confirmation_message'] ) ? __( $fresh_options['confirmation_message'], 'registrations-for-the-events-calendar' ) : $confirmation_message->get_generic_confirmation( $sanitized_data );
 
 			$args = array(
 				'template_type' => 'confirmation',

@@ -816,7 +816,13 @@ class RTEC_Form
         $html .= wp_nonce_field( 'rtec_form_nonce', '_wpnonce', true, false );
         $html .= '<input type="hidden" name="rtec_email_submission" value="1" />';
         $html .= '<input type="hidden" name="rtec_event_id" value="' . esc_attr( $event_meta['post_id'] ) . '" />';
-
+	    if ( ! empty( $GLOBALS['sitepress'] ) && $GLOBALS['sitepress'] instanceof SitePress ) {
+		    ob_start();
+		    do_action( 'wpml_add_language_form_field' );
+		    $lang_field = ob_get_contents();
+		    ob_get_clean();
+		    $html .= $lang_field;
+	    }
         return $html;
     }
 

@@ -132,6 +132,12 @@ function rtec_process_form_submission()
 	require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-submission.php';
 	require_once RTEC_PLUGIN_DIR . 'inc/form/class-rtec-form.php';
 
+	if ( isset( $_POST['lang'] ) && ! empty( $GLOBALS['sitepress'] ) && $GLOBALS['sitepress'] instanceof SitePress ) {
+	    $lang = sanitize_text_field( $_POST['lang'] );
+		global $sitepress;
+		$sitepress->switch_lang( $lang, true );
+	}
+
 	$submission = new RTEC_Submission();
 	$form = new RTEC_Form();
 
