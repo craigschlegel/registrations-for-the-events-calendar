@@ -593,7 +593,15 @@ add_action( 'wp_ajax_rtec_update_status', 'rtec_update_status' );
  * @since 2.0
  */
 function rtec_event_csv() {
-	if ( isset( $_POST['rtec_event_csv'] ) && current_user_can( 'edit_posts' ) ) {
+	if ( isset( $_POST['rtec_my_events_csv'] ) && current_user_can( 'edit_posts' ) ) {
+		$nonce = $_POST['rtec_csv_export_nonce'];
+
+		if ( ! wp_verify_nonce( $nonce, 'rtec_csv_export' ) ) {
+			die ( 'You did not do this the right way!' );
+		}
+
+		rtec_my_events_csv();
+	} elseif ( isset( $_POST['rtec_event_csv'] ) && current_user_can( 'edit_posts' ) ) {
 
 		$nonce = $_POST['rtec_csv_export_nonce'];
 
@@ -672,6 +680,131 @@ function rtec_event_csv() {
 	}
 }
 add_action( 'admin_init', 'rtec_event_csv' );
+
+/**
+ * Export registrations for a single event
+ *
+ * @since 2.2
+ */
+function rtec_my_events_csv() {
+	$use_utf8_fix = apply_filters( 'rtec_utf8_fix', false );
+
+	if ( $use_utf8_fix ) {
+		require_once RTEC_PLUGIN_DIR . 'vendor/ForceUTF8/Encoding.php';
+		$encoding = new RTEC_Encoding();
+	}
+
+	$rtec = RTEC();
+	$db = $rtec->db_frontend->instance();
+
+	$admin_registrations = new RTEC_Admin_Registrations();
+	$settings = array(
+		'v' => '',
+		'qtype' => 'all',
+		'with' => 'with',
+		'off' => 0,
+		'start' => 0,
+		'id' => 0,
+		'mvt' => '',
+		'rpag' => 0
+	);
+	$admin_registrations->build_admin_registrations( 'my-registrations', $settings );
+	$events = $admin_registrations->get_events( true );
+
+	$event_meta_string = array(
+		array( __( 'My Events', 'registrations-for-the-events-calendar' ) ),
+	);
+
+	$file_name = str_replace( ' ', '_', __( 'My Events', 'registrations-for-the-events-calendar' ) );
+
+	if ( isset( $_POST['rtec_email'] ) ) {
+		$file_name .= '_' . sanitize_text_field( $_POST['rtec_email'] );
+	}
+
+	// output headers so that the file is downloaded rather than displayed
+	header( 'Content-Encoding: UTF-8' );
+	header( 'Content-type: text/csv; charset=UTF-8' );
+	header( 'Content-Disposition: attachment; filename="' . str_replace( ',', '', $file_name ) . '.csv"' );
+	echo "\xEF\xBB\xBF"; // UTF-8 BOM
+
+	// create a file pointer connected to the output stream
+	$output = fopen( 'php://output', 'w' );
+	foreach ( $event_meta_string as $meta ) {
+		fputcsv( $output, $meta );
+	}
+
+	fputcsv( $output, array( '' ) );
+
+	foreach ( $events as $event ) {
+		$event_meta = rtec_get_event_meta( $event->ID );
+		fputcsv( $output, array( get_the_title( $event->ID ) ) );
+		$event_string = sprintf( __( '%1$s to %2$s at %3$s', 'registrations-for-the-events-calendar' ), date_i18n( 'F jS, ' . rtec_get_time_format(), strtotime( $event_meta['start_date'] ) ), date_i18n( 'F jS, ' . rtec_get_time_format(), strtotime( $event_meta['end_date'] ) ), $event_meta['venue_title'] );
+		fputcsv( $output, array( $event_string ) );
+
+		$args = array(
+			'fields' => array( 'registration_date', 'id', 'status', 'user_id', 'first', 'last', 'email', 'other', 'phone', 'custom' ),
+			'where' => array(
+				array( 'event_id', $event_meta['post_id'], '=', 'int' ),
+				array( 'email', sanitize_text_field( $_POST['rtec_email'] ), '=', 'string' )
+			),
+			'order_by' => 'registration_date'
+		);
+		$registrations = $rtec->db_frontend->retrieve_entries( $args, true );
+
+		foreach( $registrations as $registration ) {
+
+			$custom_data = isset( $registration['custom'] ) ? maybe_unserialize( $registration['custom'] ) : array();
+
+			$status = $registration['status'];
+
+			$first_name = empty( $first_name ) && isset( $registration['first_name'] ) ? $registration['first_name'] : $first_name;
+			$last_name = empty( $last_name ) && isset( $registration['last_name'] ) ? $registration['last_name'] : $last_name;
+
+			if ( isset( $registration['registration_date'] ) ) {
+				$registration_date = date_i18n( str_replace( ',', ' ', 'm/d/Y ' . rtec_get_time_format() ), strtotime( $registration['registration_date'] ) + rtec_get_utc_offset() );
+				$formatted_registration = array( __( 'Registration Date', 'registrations-for-the-events-calendar' ), $registration_date );
+				fputcsv( $output, $formatted_registration );
+			}
+
+			$formatted_registration = array( __( 'First', 'registrations-for-the-events-calendar' ), $first_name );
+			fputcsv( $output, $formatted_registration );
+			$formatted_registration = array( __( 'Last', 'registrations-for-the-events-calendar' ), $last_name );
+			fputcsv( $output, $formatted_registration );
+			$formatted_registration = array( __( 'Status', 'registrations-for-the-events-calendar' ), $status );
+			fputcsv( $output, $formatted_registration );
+
+			if ( isset( $registration['email']  ) ) {
+				$formatted_registration = array( __( 'Email', 'registrations-for-the-events-calendar'  ), $registration['email'] );
+				fputcsv( $output, $formatted_registration );
+			}
+
+			if ( isset( $registration['phone']  ) ) {
+				$formatted_registration = array( __( 'Phone', 'registrations-for-the-events-calendar'  ), $registration['phone'] );
+				fputcsv( $output, $formatted_registration );
+			}
+
+			if ( isset( $registration['other']  ) ) {
+				$formatted_registration = array( __( 'Other', 'registrations-for-the-events-calendar'  ), $registration['other'] );
+				fputcsv( $output, $formatted_registration );
+			}
+
+			if ( ! empty( $custom_data ) ) {
+				foreach ( $custom_data as $entry_data_key ) {
+					$formatted_registration = array( str_replace( '&#42;', '', $entry_data_key['label'] ), $entry_data_key['value'] );
+					fputcsv( $output, $formatted_registration );
+				}
+			}
+
+			fputcsv( $output, array( '' ) );
+		}
+
+
+	}
+
+	fclose( $output );
+
+	die();
+}
 
 /**
  * Accessed with AJAX from admin pages to show search results for matching

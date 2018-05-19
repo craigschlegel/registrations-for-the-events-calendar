@@ -29,6 +29,8 @@ class RTEC_Admin_Registrations {
 	 */
 	private $ids_on_page = array();
 
+	private $events_user_is_attending = array();
+
 	/**
 	 * @param $tab
 	 * @param array $settings
@@ -36,6 +38,18 @@ class RTEC_Admin_Registrations {
 	public function build_admin_registrations( $tab, $settings = array() ) {
 		$this->tab = $tab;
 		$this->settings = $settings;
+		$capability = 'edit_posts';
+
+		if ( $this->tab === 'my-registrations' && current_user_can( $capability ) && isset( $_POST['rtec_email'] ) ) {
+			$db            = new RTEC_Db_Admin();
+			$event_id_args['where'] = array(
+				array( 'email', sanitize_text_field( $_POST['rtec_email'] ), '=', 'string' ),
+				array( 'status', '"x"', '!=', 'string' )
+			);
+			$this->events_user_is_attending     = $db->get_event_ids( $event_id_args, $arrange = 'DESC' );
+		} else {
+			$this->events_user_is_attending = array(0);
+		}
 	}
 
 	/**
@@ -57,7 +71,7 @@ class RTEC_Admin_Registrations {
 	/**
 	 * @return array
 	 */
-	public function get_events()
+	public function get_events( $full = false )
 	{
 		global $rtec_options;
 		$settings = $this->settings;
@@ -95,6 +109,29 @@ class RTEC_Admin_Registrations {
 					'compare' => '='
 				)
 			);
+		}
+
+		if ( $this->tab === 'my-registrations' ) {
+			$event_ids = $this->events_user_is_attending;
+			$posts_per_page = $full ? 100 : $this->posts_per_page;
+			if ( ! empty ( $event_ids ) ) {
+				if ( $settings['qtype'] === 'all' ) {
+					$start_date = date( '2000-1-1 0:0:0' );
+				} else {
+					$start_date = date( 'Y-m-d H:i:s', (time() + rtec_get_utc_offset() - 6 *  HOUR_IN_SECONDS) );
+				}
+				$args = array(
+					'orderby' => '_EventStartDate',
+					'order' => 'ASC',
+					'posts_per_page' => $posts_per_page,
+					'start_date' => $start_date,
+					'offset' => $settings['off'],
+					'post__in' => $event_ids,
+				);
+			} else {
+				$args = false;
+			}
+
 		}
 
 		return tribe_get_events( $args );

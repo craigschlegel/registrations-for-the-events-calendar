@@ -347,4 +347,18 @@ class RTEC_Db_Admin extends RTEC_Db
 
 		$results = $wpdb->query( "ALTER TABLE $table_name MODIFY $column_name $edit" );
 	}
+
+	/**
+	 * @since 2.3
+	 */
+	public function get_event_ids( $args, $arrange = 'DESC' )
+	{
+		global $wpdb;
+
+		$where_clause = $this->build_escaped_where_clause( $args['where'] );
+		$results = $wpdb->get_col( "SELECT event_id FROM $this->table_name WHERE $where_clause;" );
+
+		return $results;
+
+	}
 }

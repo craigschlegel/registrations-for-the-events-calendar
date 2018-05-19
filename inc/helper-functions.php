@@ -385,6 +385,24 @@ function rtec_get_time_format() {
 
 	return $time_format;
 }
+
+function rtec_get_utc_offset() {
+	$WP_offset = get_option( 'gmt_offset' );
+	$WP_offset = $WP_offset !== false ? $WP_offset * HOUR_IN_SECONDS : 0;
+
+	return $WP_offset;
+}
+
+function rtec_get_start_date( $event_id, $date_format = 'Y-m-d H:i:s' ) {
+	if ( function_exists( 'tribe_get_start_date' ) ) {
+		return tribe_get_start_date( $event_id, true, $date_format );
+	} else {
+		$start_date_meta = get_post_meta( $event_id, '_EventStartDate', true );
+
+		return $start_date_meta[0];
+	}
+}
+
 /**
  * Returns the appropriate translation/custom/default text
  *
