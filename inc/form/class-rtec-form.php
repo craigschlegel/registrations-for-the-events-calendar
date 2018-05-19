@@ -146,7 +146,7 @@ class RTEC_Form
 			$field_attributes[ $field['field_name'] ]['placeholder']   = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
 			$field_attributes[ $field['field_name'] ]['meta']   = isset( $field['meta'] ) ? maybe_unserialize( $field['meta'] ) : array();
 			$field_attributes[ $field['field_name'] ]['html']  = isset( $field['meta']['html'] ) ? $field['meta']['html'] : '';
-
+var_dump($field['meta']);
 			if ( $field_attributes[ $field['field_name'] ]['type'] === 'checkbox' || $field_attributes[ $field['field_name'] ]['type'] === 'radio' || $field_attributes[ $field['field_name'] ]['type'] === 'select') {
 				$field_attributes[ $field['field_name'] ]['meta']['options'] = isset( $field_attributes[ $field['field_name'] ]['meta']['options'] ) ? $field_attributes[ $field['field_name'] ]['meta']['options'] : array();
 			}
@@ -467,6 +467,29 @@ class RTEC_Form
 					$i++;
 				}
 
+			}
+
+			// terms_conditions checkbox
+			if ( isset( $rtec_options['terms_conditions_require'] ) && $rtec_options['terms_conditions_require'] )  {
+				$i++;
+				$link = isset( $rtec_options[ 'terms_conditions_link' ] ) ? $rtec_options[ 'terms_conditions_link' ] :  '';
+				$link_label = isset( $rtec_options[ 'terms_conditions_link_label' ] ) ? $rtec_options[ 'terms_conditions_link_label' ] :  __( 'Terms and Conditions Page', 'registrations-for-the-events-calendar' );
+                $html = ! empty( $link ) ? '<a href="'.esc_url( $link ).'" target="_blank">'.esc_html( rtec_get_text( $link_label, __( 'Terms and Conditions Page', 'registrations-for-the-events-calendar' ) ) ) . '</a>' : '';
+				$fields_data[ $i ]['field_name'] = 'terms_conditions';
+				$fields_data[ $i ]['label'] = __( 'Terms and Conditions', 'registrations-for-the-events-calendar' );
+				$fields_data[ $i ]['field_type'] = 'checkbox';
+				$fields_data[ $i ]['valid_type'] = 'length';
+				$fields_data[ $i ]['valid_params'] = array();
+				$fields_data[ $i ]['placeholder'] = '';
+				$fields_data[ $i ]['meta'] = array(
+				        'options' => array(
+				                array( $rtec_options['terms_conditions_label'] . '&#42;', __( 'I accept the terms and conditions', 'registrations-for-the-events-calendar' ), false )
+                        ),
+                        'html' => $html
+                );
+				$fields_data[ $i ]['default_value'] = '';
+				$fields_data[ $i ]['is_required'] = true;
+				$fields_data[ $i ]['error_text'] = rtec_get_text( $rtec_options[ 'terms_conditions_error' ], __( 'This is required', 'registrations-for-the-events-calendar' ) );
 			}
 
 			// recaptcha field calculations for spam check
@@ -983,7 +1006,16 @@ class RTEC_Form
 				<option id="<?php echo esc_attr( $field_settings['field_name'] ) . $option[1]; ?>"<?php echo $field_settings['data_atts_string']; ?> value="<?php echo $option[1]; ?>"<?php if ( $option[2] ) { echo ' selected="selected"'; } ?> ><?php echo esc_html( $option[0] ); ?></option>
 			<?php endforeach; ?>
 		</select>
-	<?php else : ?>
+	<?php elseif ( $field_settings['type'] === 'checkbox' ) :
+        $i = 1;
+		foreach ( $field_settings['meta']['options'] as $option ) : ?>
+            <div class="rtec-checkbox-option-wrap">
+                <input type="checkbox" name="<?php echo esc_attr( $field_settings['field_name'] ); ?>" class="rtec-field-input" id="<?php echo esc_attr( $field_settings['field_name']  . '-' . $i ); ?>"<?php echo $field_settings['data_atts_string']; ?> value="<?php esc_attr_e( $option[1] ); ?>"<?php if ( $option[2] ) { echo ' checked="checked"'; } ?> /><label for="<?php echo esc_attr( $field_settings['field_name'] . '-' . $i ); ?>"><?php echo esc_html( $option[0] ); ?></label>
+            </div>
+		<?php $i++;
+		endforeach;
+		else : ?>
+
 		<?php do_action( 'rtec_field_html_' . $field_settings['type'], $field_settings ); ?>
 	<?php endif;
 	}

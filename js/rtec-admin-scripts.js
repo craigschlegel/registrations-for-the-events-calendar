@@ -208,13 +208,6 @@ jQuery(document).ready(function($){
         });
     });
 
-    // time picker
-    if (typeof $().timepicker !== 'undefined') {
-        $('.rtec-time-picker').each(function() {
-            $(this).timepicker();
-        });
-    }
-
     // search registrants
     var $rtecSearchInput = $('#rtec-search-input');
 
