@@ -244,6 +244,16 @@ a.rtec-wide {
     float: right;
     margin: .5em 1em .5em 1em;
 }
+.rtec-manage-match-actions {
+    position: relative;
+}
+.rtec-manage-match-actions .spinner {
+    margin-left: -10px;
+    margin-top: -10px;
+}
+.rtec-overview .rtec-match-action {
+    margin-top: .5em;
+}
 .rtec-admin-wrap .rtec-green-bg {
     font-weight: 700;
     background-color: #009688;

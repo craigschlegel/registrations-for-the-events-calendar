@@ -486,6 +486,7 @@ function rtec_records_edit()
 			}
 
 			$db->remove_records( $registrations_to_be_deleted );
+
 			break;
 		case 'add' :
 			$data = array();
@@ -530,6 +531,29 @@ function rtec_records_edit()
 				$data['venue'] = $venue;
 			}
 			$db->update_entry( $data, $entry_id, $fields_atts );
+
+			break;
+		case 'delete-all' :
+
+		    $email = isset( $_POST['email'] ) ? sanitize_text_field( $_POST['email'] ) : false;
+
+		    if ( ! $email ) {
+		        die();
+            }
+			$args = array(
+				'fields' => array( 'id' ),
+				'where' => array(
+					array( 'email', $email, '=', 'string' ),
+				)
+			);
+			$matches = $db->retrieve_entries( $args );
+			$registrations_to_be_deleted = array();
+
+			foreach ( $matches as $registration ) {
+				$registrations_to_be_deleted[] = sanitize_text_field( $registration['id'] );
+			}
+
+			$db->remove_records( $registrations_to_be_deleted );
 
 			break;
 		default :
@@ -680,7 +704,11 @@ function rtec_get_search_results() {
 	$table_columns = array( 'first_name', 'last_name', 'email', 'phone' ); //, 'event_id', 'venue'
 	$labels = array();
 	foreach ( $table_columns as $table_column ) {
-		$labels[] = isset( $rtec_options[ str_replace( '_name', '', $table_column ) . '_label' ] ) ? $rtec_options[ str_replace( '_name', '', $table_column )  . '_label' ] : '';
+	    $the_label = isset( $rtec_options[ str_replace( '_name', '', $table_column ) . '_label' ] ) ? $rtec_options[ str_replace( '_name', '', $table_column )  . '_label' ] : '';
+		if ( $table_column === 'email' ) {
+			$the_label .= ' ('.__( 'click to manage', 'registrations-for-the-events-calendar') . ')';
+        }
+		$labels[] = $the_label;
 	}
 
 	$WP_offset = get_option( 'gmt_offset' );
@@ -713,10 +741,9 @@ function rtec_get_search_results() {
 
 		if ( ! empty( $matches ) ) : foreach( $matches as $registration ) :
 			$event_meta = rtec_get_event_meta( $registration['event_id'] );
-
 			?>
 
-			<tr>
+			<tr data-email="<?php if ( isset( $registration[ 'email' ] ) ) esc_attr_e( stripslashes( $registration[ 'email' ] ) );?>">
 				<td class="rtec-first-data">
 					<?php if ( $registration['status'] == 'n' ) {
 						echo '<span class="rtec-notice-new">' . _( 'new' ) . '</span>';
@@ -728,9 +755,22 @@ function rtec_get_search_results() {
 						if ( isset( $registration[$column] ) ) {
 
 							if ( $column === 'phone' ) {
-								echo esc_html( rtec_format_phone_number( str_replace( '\\', '', $registration[ $column ] ) ) );
+								echo esc_html( rtec_format_phone_number( stripslashes( $registration[ $column ] ) ) );
+							} elseif ( $column === 'email' ) {
+								echo '<a class="rtec-manage-match" href="javascript:void(0);">' . esc_html( stripslashes( $registration[ $column ] ) ) . '</a>';
+								?>
+                                <div class="rtec-manage-match-actions" data-entry-id="<?php esc_attr_e( $registration['id'] ) ?>" data-email="<?php esc_attr_e( stripslashes( $registration[ $column ] ) ) ?>">
+                                    <button class="button action rtec-match-action" data-rtec-action="delete-single"><i class="fa fa-minus" aria-hidden="true"></i> <?php _e( 'Delete Single', 'registrations-for-the-events-calendar' ); ?></button>
+                                    <button class="button action rtec-match-action" data-rtec-action="delete-all"><i class="fa fa-minus" aria-hidden="true"></i> <?php _e( 'Delete All', 'registrations-for-the-events-calendar' ); ?></button>
+                                    <form method="post" id="rtec_csv_export_form" action="">
+		                                <?php wp_nonce_field( 'rtec_csv_export', 'rtec_csv_export_nonce' ); ?>
+                                        <input type="hidden" name="rtec_email" value="<?php esc_attr_e( stripslashes( $registration[ $column ] ) ) ?>" />
+                                        <button type="submit" name="rtec_my_events_csv" class="button action rtec-match-action"><i class="fa fa-download" aria-hidden="true"></i> <?php _e( 'Export (.csv)', 'registrations-for-the-events-calendar' ); ?></button>
+                                    </form>
+                                </div>
+                                <?php
 							} else {
-								echo esc_html( str_replace( '\\', '', $registration[ $column ] ) );
+							    echo esc_html( stripslashes( $registration[ $column ] ) );
 							}
 
 						}
