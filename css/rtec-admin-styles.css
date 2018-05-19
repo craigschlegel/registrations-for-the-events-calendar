@@ -246,6 +246,7 @@ a.rtec-wide {
 }
 .rtec-manage-match-actions {
     position: relative;
+    display: none;
 }
 .rtec-manage-match-actions .spinner {
     margin-left: -10px;

@@ -223,6 +223,14 @@ jQuery(document).ready(function($){
                     $('.rtec-overview').html(data);
                     $rtecSearchInput.removeAttr('disabled');
 
+                    $('.rtec-manage-match').click(function(event) {
+                        event.preventDefault();
+                        if ($(this).next('.rtec-manage-match-actions').is(':visible')) {
+                            $(this).next('.rtec-manage-match-actions').slideUp();
+                        } else {
+                            $(this).next('.rtec-manage-match-actions').slideDown();
+                        }
+                    });
                     $('.rtec-manage-match-actions button').click(function(event){
                         var $self = $(this),
                             $context = $self.closest('.rtec-manage-match-actions'),
@@ -231,7 +239,6 @@ jQuery(document).ready(function($){
                             action = typeof $self.attr('data-rtec-action') !== 'undefined' ? $self.attr('data-rtec-action') : 'none';
                         if ( action !== 'none' ) {
                             event.preventDefault();
-                            console.log(entry_id, email);
                             // start spinner to show user that request is processing
                             if (confirm('Delete this record? This cannot be undone.')) {
                                 $self
