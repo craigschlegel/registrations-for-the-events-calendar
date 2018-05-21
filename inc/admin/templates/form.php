@@ -17,6 +17,9 @@ settings_errors(); ?>
     <?php do_settings_sections( 'rtec_form_custom_text' ); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
     <hr />
+	<?php do_settings_sections( 'rtec_form_visitors_options' ); ?>
+    <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
+    <hr />
     <?php do_settings_sections( 'rtec_attendee_data' ); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
     <hr />

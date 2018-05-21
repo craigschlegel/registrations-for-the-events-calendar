@@ -306,8 +306,6 @@ class RTEC_Admin
             'rtec_form_custom_text'
         );
 
-
-
         // register text
         $this->create_settings_field( array(
             'option' => 'rtec_options',
@@ -397,6 +395,86 @@ class RTEC_Admin
 		    'page' => 'rtec_form_custom_text',
 		    'section' => 'rtec_form_custom_text',
 		    'legend' => false
+	    ));
+
+	    add_settings_section(
+		    'rtec_form_visitors_options',
+		    'Registration Management Tool',
+		    array( $this, 'blank' ),
+		    'rtec_form_visitors_options'
+	    );
+
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'visitors_can_edit_what_status',
+		    'title' => '<label for="rtec_add_send_unregister_button">' . __( 'Add Unregister Tool', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'description' => __( 'This will add a button to the event page that will allow attendees to send an "unregister" link by entering the email address they registered with.', 'registrations-for-the-events-calendar' ),
+		    'callback'  => 'default_checkbox',
+		    'class' => '',
+		    'page' => 'rtec_form_visitors_options',
+		    'section' => 'rtec_form_visitors_options',
+		    'default' => false
+	    ));
+
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'already_registered_question',
+		    'title' => '<label>' . __( 'Already Registered Text', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'default' => __( 'Already registered?', 'registrations-for-the-events-calendar' ),
+		    'description' => '',
+		    'callback'  => 'default_text',
+		    'class' => 'rtec-visitor-can-edit',
+		    'page' => 'rtec_form_visitors_options',
+		    'section' => 'rtec_form_visitors_options',
+	    ));
+
+	    // Tool directions
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'already_registered_directions',
+		    'title' => '<label>' . __( 'Tool Directions', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'default' => __( 'Use this tool to manage your registration.', 'registrations-for-the-events-calendar' ),
+		    'description' => '',
+		    'callback'  => 'message_text_area',
+		    'rows' => '2',
+		    'class' => 'rtec-visitor-can-edit',
+		    'page' => 'rtec_form_visitors_options',
+		    'section' => 'rtec_form_visitors_options',
+		    'legend' => false
+	    ));
+
+	    // edit entries text
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'enter_your_email_text',
+		    'title' => '<label for="rtec_enter_your_email_text">' . __( 'Registered Email Label', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'description' => '',
+		    'callback'  => 'default_text',
+		    'class' => 'rtec-visitor-can-edit',
+		    'input_class' => 'regular-text',
+		    'page' => 'rtec_form_visitors_options',
+		    'section' => 'rtec_form_visitors_options',
+		    'type' => 'text',
+		    'default' => __( 'Enter your registered email address', 'registrations-for-the-events-calendar' ),
+	    ));
+
+	    // edit entries text
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'send_unregister_link_text',
+		    'title' => '<label for="rtec_send_unregister_link_text">' . __( '"Send unregister link" Text', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'description' => '',
+		    'callback'  => 'default_text',
+		    'class' => 'rtec-visitor-can-edit',
+		    'page' => 'rtec_form_visitors_options',
+		    'section' => 'rtec_form_visitors_options',
+		    'type' => 'text',
+		    'default' => __( 'Send unregister link', 'registrations-for-the-events-calendar' ),
 	    ));
 
         /* Form Styling */
@@ -1451,7 +1529,7 @@ class RTEC_Admin
         $rich_editor_settings = array();
 
         if ( isset( $input['default_max_registrations'] ) ) {
-            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'terms_conditions_require', 'recaptcha_require', 'disable_by_default', 'show_registrants_data', 'limit_registrations', 'include_attendance_message', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
+            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'terms_conditions_require', 'recaptcha_require', 'disable_by_default', 'visitors_can_edit_what_status', 'show_registrants_data', 'limit_registrations', 'include_attendance_message', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
             $leave_spaces = array( 'custom_js', 'custom_css', 'notification_message' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $rich_editor_settings = array( 'confirmation_message', 'notification_message' );
@@ -1466,6 +1544,12 @@ class RTEC_Admin
 
         foreach ( $checkbox_settings as $checkbox_setting ) {
             $updated_options[$checkbox_setting] = false;
+        }
+
+        if ( isset( $updated_options['visitors_can_edit_what_status'] ) && $updated_options['visitors_can_edit_what_status'] ) {
+	        $updated_options['add_registration_management_tool'] = true;
+        } else {
+	        $updated_options['add_registration_management_tool'] = false;
         }
 
         foreach ( $input as $key => $val ) {

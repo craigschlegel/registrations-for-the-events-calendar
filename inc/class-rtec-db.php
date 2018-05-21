@@ -81,7 +81,7 @@ class RTEC_Db
 		$other = isset( $data['other'] ) ? str_replace( "'", '`', $data['other'] ) : '';
 		$custom = rtec_serialize_custom_data( $data, $field_attributes, $from_form );
 		$status = isset( $data['status'] ) ? $data['status'] : 'n';
-		$user_id = get_current_user_id();
+		$user_id = isset( $data['user_id'] ) ? $data['user_id'] : get_current_user_id();
 		$action_key = isset( $data['action_key'] ) ? $data['action_key'] : rtec_generate_action_key();
 		$wpdb->query( $wpdb->prepare( "INSERT INTO $this->table_name
           ( event_id, user_id, registration_date, last_name, first_name, email, venue, phone, other, custom, status, action_key ) VALUES ( %d, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )",
@@ -253,7 +253,7 @@ class RTEC_Db
 		if ( ! is_array( $fields ) ) {
 			$fields = explode( ',', str_replace( ' ', '', $fields ) );
 		}
-		$standard_fields = array( 'id', 'event_id', 'registration_date', 'last_name', 'first_name', 'last', 'first', 'email', 'venue', 'other', 'custom', 'phone', 'status' );
+		$standard_fields = array( 'id', 'event_id', 'registration_date', 'last_name', 'first_name', 'last', 'first', 'email', 'venue', 'other', 'custom', 'phone', 'status', 'action_key', 'guests', 'user_id' );
 		$request_fields = array();
 		$custom_flag = 0;
 

@@ -17,27 +17,20 @@ function rtec_get_event_meta( $id = '' ) {
 
 	$event_meta = array();
 
-	// construct post object
-	if ( ! empty( $id ) ) {
-		$post_obj = get_post( $id );
-	} else {
-		$post_obj = get_post();
-	}
-
 	// set post meta
-	$meta = isset( $post_obj->ID ) ? get_post_meta( $post_obj->ID ) : array();
+	$meta = ! empty( $id ) ? get_post_meta( $id ) : array();
 
 	// set venue meta
 	$venue_meta = isset( $meta['_EventVenueID'][0] ) ? get_post_meta( $meta['_EventVenueID'][0] ) : array();
 
-	$event_meta['post_id'] = isset( $post_obj->ID ) ? $post_obj->ID : '';
+	$event_meta['post_id'] = isset( $id ) ? $id : '';
 	$event_meta['title'] = ! empty( $id ) ? get_the_title( $id ) : get_the_title();
 	$event_meta['start_date'] = isset( $meta['_EventStartDate'][0] ) ? $meta['_EventStartDate'][0] : '';
 	$event_meta['end_date'] = isset( $meta['_EventEndDate'][0] ) ? $meta['_EventEndDate'][0] : '';
 	$event_meta['start_date_utc'] = isset( $meta['_EventStartDateUTC'][0] ) ? $meta['_EventStartDateUTC'][0] : '';
 	$event_meta['end_date_utc'] = isset( $meta['_EventEndDateUTC'][0] ) ? $meta['_EventEndDateUTC'][0] : '';
 	$event_meta['venue_id'] = isset( $meta['_EventVenueID'][0] ) ? $meta['_EventVenueID'][0] : '';
-	$venue = isset( $post_obj->ID ) ? rtec_get_venue( $post_obj->ID ) : array();
+	$venue = isset( $id ) ? rtec_get_venue( $id ) : array();
 	$event_meta['venue_title'] = ! empty( $venue ) ? $venue : '(no location)';
 	$event_meta['venue_address'] = isset( $venue_meta['_VenueAddress'][0] ) ? $venue_meta['_VenueAddress'][0] : '';
 	$event_meta['venue_city'] = isset( $venue_meta['_VenueCity'][0] ) ? $venue_meta['_VenueCity'][0] : '';

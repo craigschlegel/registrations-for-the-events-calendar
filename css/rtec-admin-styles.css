@@ -253,6 +253,7 @@ a.rtec-wide {
     margin-top: -10px;
 }
 .rtec-overview .rtec-match-action {
+    display: block;
     margin-top: .5em;
 }
 .rtec-admin-wrap .rtec-green-bg {
@@ -622,7 +623,7 @@ span.rtec-is-user{
     padding: 4px 5px;
 }
 .rtec-wrapper .striped tbody .rtec-is-user {
-    background: #9EE6DE;
+    background: #C8F6F1;
 }
 .rtec-wrapper .striped tbody .rtec-unconfirmed.rtec-notice-new,
 .rtec-legend.rtec-unconfirmed i {

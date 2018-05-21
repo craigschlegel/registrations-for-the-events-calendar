@@ -331,5 +331,19 @@ jQuery(document).ready(function($) {
         } // if not .rtec-error
     }); // on rtec-form submit
 
+    // hide options initially
+    var $rtecReveal = $('.rtec-already-registered-reveal'),
+        $rtecOptions = $('.rtec-already-registered-options.rtec-is-visitor'),
+        $rtecOptionsRemove = $('.rtec-already-registered-js-remove');
+    $rtecReveal.show();
+    $rtecOptions.hide();
+    $rtecOptionsRemove.remove();
+    $rtecReveal.click(function() {
+        if ($rtecOptions.is(':visible')) {
+            $rtecOptions.slideUp();
+        } else {
+            $rtecOptions.slideDown();
+        }
+    });
 
 });

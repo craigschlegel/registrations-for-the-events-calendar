@@ -49,6 +49,13 @@ As soon as you install and activate the plugin, you can begin collecting registr
 * Export your registrations to a CSV spreadsheet.
 * Search registrations by name, phone, or email.
 
+= Tools for GDPR Compliance =
+
+* Search for registrations filtered by email address.
+* Export all collected data attached to an email address whether connected to a user or not.
+* Delete individual registrations or permanently delete all data attached to an email address.
+* Require attendees to agree to terms and conditions before registering. Include a link to a terms and conditions page.
+
 = Benefits =
 
 * Simple workflow frees up your time.
@@ -56,7 +63,7 @@ As soon as you install and activate the plugin, you can begin collecting registr
 * Optional display of a registered attendee list builds community.
 * Straightforward registration process provides a world-class user experience.
 
-= Feature Reviews =
+= Featured Reviews =
 
 "**Perfect plugin, excellent support!** Really, two things you can never find combined. The plugin works great. Even the free version has many options, and the support is great. They answer quickly and provide answers to help you achieve what you need. Totally recommend it, and hope they keep creating great plugins!" -[delfidream](https://wordpress.org/support/topic/perfect-plugin-excelent-support/)
 
@@ -160,6 +167,14 @@ The plugin is not yet fully compatible with a WordPress multisite installation. 
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.2 =
+* New: "Terms and Conditions" opt-in checkbox can be added to the form. Include a link to a relevant terms and conditions page.
+* New: Delete registrations attached to an email address in bulk. This can be done whether or not the email address is from a user of your site.
+* New: Export personal data attached to an email address included with information about the event the registration was made for.
+* New: Add a tool to each event page to allow attendees to send themselves an email link to unregister. Enable this on the "Form" tab.
+* New: Better compatibility with WPML (free version only).
+* Fix: Manually adding a registration would assign the user id as the person adding the registration.
+
 = 2.1.1 =
 * New: Shortcode support for displaying the attendee list elsewhere on your site. Use the shortcode [rtec-attendee-list event="123"].
 * New: Support for including the attendee list when using the registration form shortcode. Use the shortcode [rtec-registration-form event="123" attendeelist=true].

@@ -504,6 +504,7 @@ function rtec_records_edit()
 
 			$data['status'] = 'c';
 			$data['event_id'] = $event_id;
+			$data['user_id'] = 0;
 
 			if ( !isset( $data['venue'] ) ) {
 				$data['venue'] = $venue;
@@ -773,25 +774,31 @@ function rtec_my_events_csv() {
 			$formatted_registration = array( __( 'Status', 'registrations-for-the-events-calendar' ), $status );
 			fputcsv( $output, $formatted_registration );
 
-			if ( isset( $registration['email']  ) ) {
+			if ( ! empty( $registration['email']  ) ) {
 				$formatted_registration = array( __( 'Email', 'registrations-for-the-events-calendar'  ), $registration['email'] );
 				fputcsv( $output, $formatted_registration );
 			}
 
-			if ( isset( $registration['phone']  ) ) {
+			if ( ! empty( $registration['phone']  ) ) {
 				$formatted_registration = array( __( 'Phone', 'registrations-for-the-events-calendar'  ), $registration['phone'] );
 				fputcsv( $output, $formatted_registration );
 			}
 
-			if ( isset( $registration['other']  ) ) {
+			if ( ! empty( $registration['other']  ) ) {
 				$formatted_registration = array( __( 'Other', 'registrations-for-the-events-calendar'  ), $registration['other'] );
 				fputcsv( $output, $formatted_registration );
 			}
 
 			if ( ! empty( $custom_data ) ) {
 				foreach ( $custom_data as $entry_data_key ) {
-					$formatted_registration = array( str_replace( '&#42;', '', $entry_data_key['label'] ), $entry_data_key['value'] );
-					fputcsv( $output, $formatted_registration );
+				    if ( isset( $entry_data_key['label'] ) ) {
+					    $formatted_registration = array( str_replace( '&#42;', '', $entry_data_key['label'] ), $entry_data_key['value'] );
+					    fputcsv( $output, $formatted_registration );
+                    } else {
+					    $formatted_registration = $entry_data_key;
+					    fputcsv( $output, array( $formatted_registration ) );
+                    }
+
 				}
 			}
 
