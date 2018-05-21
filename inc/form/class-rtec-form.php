@@ -1188,11 +1188,11 @@ class RTEC_Form
                     $html .= '<img title="Tribe Loading Animation Image" alt="Tribe Loading Animation Image" class="tribe-events-spinner-medium" src="' . plugins_url() . '/the-events-calendar/src/resources/images/tribe-loading.gif' . '">';
                 $html .= '</div>';
             $html .= '</div>'; // rtec-form-wrapper
-            ob_start();
-            $this->already_registered_visitor_html();
-            $tool_html = ob_get_contents();
-            ob_get_clean();
-            $html .= $tool_html;
+	    ob_start();
+	    do_action( 'wpml_add_language_form_field' );
+	    $lang_field = ob_get_contents();
+	    ob_get_clean();
+            $html .= $this->already_registered_visitor_html();
         $html .= '</div>'; // rtec
 
         return $html;

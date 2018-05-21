@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function rtec_the_registration_form( $atts = array() )
 {
 	$rtec = RTEC();
+	global $rtec_options;
 	$form = $rtec->form->instance();
 	$db = $rtec->db_frontend->instance();
 
@@ -21,6 +22,7 @@ function rtec_the_registration_form( $atts = array() )
 	if ( $doing_shortcode ) {
 		$event_id = isset( $atts['event'] ) ? (int)$atts['event'] : '';
 		$return_html = '';
+		$rtec_options['visitors_can_edit_what_status'] = false;
 	} else {
 		$event_id = get_the_ID();
 	}
@@ -354,7 +356,7 @@ function rtec_visitor_send_action_link() {
             $header_image = isset( $rtec_options['html_email_header_img'] ) ? $rtec_options['html_email_header_img'] : false;
 
             $args = array(
-                'template_type'         => 'confirmation',
+                'template_type'         => 'confirmatio',
                 'content_type'          => 'html',
                 'custom_template_pairs' => array(),
                 'recipients'            => $email,

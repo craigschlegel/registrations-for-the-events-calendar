@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 2.1.1
+Stable tag: 2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,7 @@ As soon as you install and activate the plugin, you can begin collecting registr
 
 = Tools for GDPR Compliance =
 
+* [View a breakdown of the tools with screenshots here](https://roundupwp.com/gdpr-compliance-with-registration/#free)
 * Search for registrations filtered by email address.
 * Export all collected data attached to an email address whether connected to a user or not.
 * Delete individual registrations or permanently delete all data attached to an email address.
@@ -168,6 +169,7 @@ The plugin is not yet fully compatible with a WordPress multisite installation. 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
 = 2.2 =
+* [Helpful tools for GDPR compliance](https://roundupwp.com/gdpr-compliance-with-registration/#free)
 * New: "Terms and Conditions" opt-in checkbox can be added to the form. Include a link to a relevant terms and conditions page.
 * New: Delete registrations attached to an email address in bulk. This can be done whether or not the email address is from a user of your site.
 * New: Export personal data attached to an email address included with information about the event the registration was made for.

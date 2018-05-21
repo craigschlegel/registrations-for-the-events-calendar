@@ -844,7 +844,7 @@ function rtec_get_search_results() {
 	$table_columns = array( 'first_name', 'last_name', 'email', 'phone' ); //, 'event_id', 'venue'
 	$labels = array();
 	foreach ( $table_columns as $table_column ) {
-	    $the_label = isset( $rtec_options[ str_replace( '_name', '', $table_column ) . '_label' ] ) ? $rtec_options[ str_replace( '_name', '', $table_column )  . '_label' ] : '';
+	    $the_label = isset( $rtec_options[ str_replace( '_name', '', $table_column ) . '_label' ] ) ? $rtec_options[ str_replace( '_name', '', $table_column )  . '_label' ] : $table_column;
 		if ( $table_column === 'email' ) {
 			$the_label .= ' ('.__( 'click to manage', 'registrations-for-the-events-calendar') . ')';
         }

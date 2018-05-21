@@ -102,6 +102,7 @@ div.rtec-a-button {
 }
 .rtec-single-event {
     display: inline-block;
+    vertical-align: top;
     width: 47.5%;
     margin: 0 2% 2em 0;
     border-radius: 5px;

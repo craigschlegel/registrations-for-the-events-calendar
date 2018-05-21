@@ -211,6 +211,24 @@
 .rtec-event-meta .rtec-attendee {
     display: block;
 }
+/** Visitor Tools **/
+.rtec .rtec-already-registered-options .rtec-event-meta {
+    padding: 4%;
+}
+#rtec-options-form input {
+    max-width: 400px;
+}
+.rtec-already-registered-options input[type=submit] {
+    line-height: inherit;
+    height: auto;
+    margin-bottom: 10px;
+    padding: 12px 16px;
+    font-size: 16px;
+}
+.rtec-unregister-link-wrap,
+.rtec-already-registered-options.rtec-is-user form{
+    display: inline-block;
+}
 /* Shortcode Forms */
 h2.rtec-header, .entry-content h2.rtec-header { margin: 0; }
 h3.rtec-header, .entry-content h3.rtec-header { margin: 1em 0 1.5em; }

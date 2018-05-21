@@ -169,9 +169,13 @@ class RTEC_Email {
 		if ( $use_custom_notification && $rtec_options['message_source'] !== 'translate' ) {
 			$body = $this->find_and_replace( $rtec_options['notification_message'], $sanitized_data );
 		} else {
-			$first_label = rtec_get_text( $rtec_options['first_label'], __( 'First', 'registrations-for-the-events-calendar' ) );
-			$last_label = rtec_get_text( $rtec_options['last_label'], __( 'Last', 'registrations-for-the-events-calendar' ) );
-			$email_label = rtec_get_text( $rtec_options['email_label'], __( 'Email', 'registrations-for-the-events-calendar' ) );
+			$first_text = isset( $rtec_options['first_label'] ) ? $rtec_options['first_label'] : __( 'First', 'registrations-for-the-events-calendar' );
+			$last_text = isset( $rtec_options['last_label'] ) ? $rtec_options['last_label'] : __( 'Last', 'registrations-for-the-events-calendar' );
+			$email_text = isset( $rtec_options['email_label'] ) ? $rtec_options['email_label'] : __( 'Email', 'registrations-for-the-events-calendar' );
+
+			$first_label = rtec_get_text( $first_text, __( 'First', 'registrations-for-the-events-calendar' ) );
+			$last_label = rtec_get_text( $last_text, __( 'Last', 'registrations-for-the-events-calendar' ) );
+			$email_label = rtec_get_text( $email_text, __( 'Email', 'registrations-for-the-events-calendar' ) );
 			$first_message = sprintf( __( 'The following submission was made for: %1$s at %2$s on %3$s', 'registrations-for-the-events-calendar' ), $sanitized_data['title'], $sanitized_data['venue_title'], $date_str );
 			$body .= '<p>' . esc_html( $first_message ) . '</p>';
 			$first = ! empty( $sanitized_data['first'] ) ? esc_html( $sanitized_data['first'] ) . ' ' : ' ';

@@ -239,8 +239,9 @@ jQuery(document).ready(function($){
                             action = typeof $self.attr('data-rtec-action') !== 'undefined' ? $self.attr('data-rtec-action') : 'none';
                         if ( action !== 'none' ) {
                             event.preventDefault();
+                            var message = action === 'delete-all' ? 'Delete all records with the email address '+email+'? This cannot be undone.' : 'Delete this record? This cannot be undone.';
                             // start spinner to show user that request is processing
-                            if (confirm('Delete this record? This cannot be undone.')) {
+                            if (confirm(message)) {
                                 $self
                                     .after('<div class="rtec-table-changing spinner is-active"></div>')
                                     .fadeTo("slow", .5).attr('disabled',true);
