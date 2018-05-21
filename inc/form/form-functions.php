@@ -356,7 +356,7 @@ function rtec_visitor_send_action_link() {
             $header_image = isset( $rtec_options['html_email_header_img'] ) ? $rtec_options['html_email_header_img'] : false;
 
             $args = array(
-                'template_type'         => 'confirmatio',
+                'template_type'         => 'confirmation',
                 'content_type'          => 'html',
                 'custom_template_pairs' => array(),
                 'recipients'            => $email,
