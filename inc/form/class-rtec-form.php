@@ -1189,10 +1189,10 @@ class RTEC_Form
                 $html .= '</div>';
             $html .= '</div>'; // rtec-form-wrapper
 	    ob_start();
-	    do_action( 'wpml_add_language_form_field' );
-	    $lang_field = ob_get_contents();
+	    $this->already_registered_visitor_html();
+	    $already_html = ob_get_contents();
 	    ob_get_clean();
-            $html .= $this->already_registered_visitor_html();
+            $html .= $already_html;
         $html .= '</div>'; // rtec
 
         return $html;
