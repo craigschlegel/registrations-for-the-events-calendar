@@ -286,7 +286,7 @@ jQuery(document).ready(function($) {
                         submittedData[name] = $(this).val();
                     }
                 } else {
-                    submittedData[name] = $(this).val();
+                    submittedData[name] = $(this).val().trim();
                 }
             });
 
