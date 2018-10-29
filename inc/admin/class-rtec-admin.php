@@ -1173,7 +1173,7 @@ class RTEC_Admin
                 </p>
             </div>
             <div class="rtec-recaptcha-type rtec-recaptcha-type-google rtec-padded-group">
-                <span class="description"><?php _e( '"Are you a robot?" checkbox connected to Google\'s Recaptcha.', 'registrations-for-the-events-calendar' ); ?> <a href="https://roundupwp.com/faq/get-google-recaptcha-api-key/" target="blank"><?php _e( 'Instructions', 'registrations-for-the-events-calendar' ); ?></a></span>
+                <span class="description"><?php _e( '"I\'m not a robot" checkbox connected to Google\'s Recaptcha.', 'registrations-for-the-events-calendar' ); ?> <a href="https://roundupwp.com/faq/get-google-recaptcha-api-key/" target="blank"><?php _e( 'Instructions', 'registrations-for-the-events-calendar' ); ?></a></span>
                 <p>
                     <label for="rtec-field-api-key-input"><?php _e( 'Google Recaptcha Site Key', 'registrations-for-the-events-calendar' ); ?></label>
                     <input type="text" class="large-text" name="<?php echo $args['option'].'[recaptcha_site_key]'; ?>" id="rtec-field-api-key-input" value="<?php echo esc_attr( stripslashes( $api_key ) ); ?>" />

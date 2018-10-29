@@ -83,6 +83,22 @@ jQuery(document).ready(function($) {
             }
         },
 
+        validateRecapthca : function(val, formEl){
+            if (val.length > 0) {
+                if (formEl.hasClass(RtecForm.invalidClass)) {
+                    formEl.removeClass(RtecForm.invalidClass);
+                }
+                formEl.addClass(RtecForm.validClass);
+                RtecForm.removeErrorMessage(formEl);
+            } else {
+                if (formEl.hasClass(RtecForm.validClass)) {
+                    formEl.removeClass(RtecForm.validClass);
+                }
+                formEl.addClass(RtecForm.invalidClass);
+                RtecForm.showErrorMessage(formEl);
+            }
+        },
+
         isValidEmail : function(val) {
             var regEx = /[^\s@]+@[^\s@]+\.[^\s@]+/;
 
@@ -269,6 +285,9 @@ jQuery(document).ready(function($) {
                 } else {
                     RtecForm.validateLength($input, 1, 10000);
                 }
+            } else if ($(this).find('.g-recaptcha').length) {
+                var recaptchaVal = typeof grecaptcha !== 'undefined' ? grecaptcha.getResponse() : '';
+                RtecForm.validateRecapthca(recaptchaVal, $(this));
             }
         });
 
@@ -325,9 +344,13 @@ jQuery(document).ready(function($) {
         } else { // if not .rtec-error
             $rtecEl.find('input[name=rtec_submit]').removeAttr('disabled').css('opacity',1);
             RtecForm.addScreenReaderError();
-            $('html, body').animate({
-                scrollTop: $('.rtec-error-message').first().closest('.rtec-input-wrapper').offset().top - 200
-            }, 750);
+
+            if ( $('.rtec-error-message').length ) {
+                $('html, body').animate({
+                    scrollTop: $errorEl.first().closest('.rtec-input-wrapper').offset().top - 200
+                }, 750);
+            }
+
         } // if not .rtec-error
     }); // on rtec-form submit
 
