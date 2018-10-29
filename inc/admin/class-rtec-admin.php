@@ -1134,24 +1134,55 @@ class RTEC_Admin
         </div>
         <?php
         // the other field is treated specially
-        $label = isset( $options[ 'recaptcha_label' ] ) ? esc_attr( $options[ 'recaptcha_label' ] ) : __( 'What is', 'registrations-for-the-events-calendar' );
+	    $recaptcha_type = isset( $options[ 'recaptcha_type' ] ) ? $options[ 'recaptcha_type' ] : 'math';
+	    $api_key = isset( $options['recaptcha_site_key'] ) ? $options['recaptcha_site_key'] : '';
+	    $secret_key = isset( $options['recaptcha_secret_key'] ) ? $options['recaptcha_secret_key'] : '';
+
+	    $label = isset( $options[ 'recaptcha_label' ] ) ? esc_attr( $options[ 'recaptcha_label' ] ) : __( 'What is', 'registrations-for-the-events-calendar' );
         $require = isset( $options[ 'recaptcha_require' ] ) ? $options[ 'recaptcha_require' ] : false;
         $error = isset( $options[ 'recaptcha_error' ] ) ? esc_attr( $options[ 'recaptcha_error' ] ) :  __( 'Please try again', 'registrations-for-the-events-calendar' );
         ?>
         <div class="rtec-field-options-wrapper" style="margin-top: 0.5em;">
-            <h4><?php _e( 'Recaptcha', 'registrations-for-the-events-calendar' ); ?> <span>(<?php _e( 'Simple math question to avoid spam entries. Spam "honey pot" field is in the form by default', 'registrations-for-the-events-calendar' ); ?>)</span></h4>
-            <p>
-                <label><?php _e( 'Label', 'registrations-for-the-events-calendar' ); ?>:</label><input type="text" name="<?php echo $args['option'].'[recaptcha_label]'; ?>" value="<?php echo $label; ?>" />
-                <span> 2 + 5</span>
-            </p>
+            <h4><?php _e( 'Recaptcha', 'registrations-for-the-events-calendar' ); ?></h4>
             <p class="rtec-checkbox-row">
                 <input type="checkbox" class="rtec_require_checkbox" name="<?php echo $args['option'].'[recaptcha_require]'; ?>" <?php if( $require == true ) { echo 'checked'; } ?>>
                 <label><?php _e( 'require and include', 'registrations-for-the-events-calendar' ); ?></label>
             </p>
-            <p>
-                <label><?php _e( 'Error Message:', 'registrations-for-the-events-calendar' ); ?></label>
-                <input type="text" name="<?php echo $args['option'].'[recaptcha_error]'; ?>" value="<?php echo $error; ?>" class="large-text rtec-recaptcha-input">
-            </p>
+            <div class="rtec-padded-group rtec-input-group" style="margin-top: 10px;">
+                <div class="rtec-admin-row">
+                    <div class="rtec-admin-2-columns">
+                        <input id="rtec_recaptcha_type_math" class="rtec-recaptcha-type-radio" name="<?php echo $args['option'].'[recaptcha_type]'; ?>" type="radio" value="math" <?php if ( $recaptcha_type == 'math' ) echo "checked"; ?> />
+                        <label for="rtec_recaptcha_type_math"><?php _e( 'Math Question', 'registrations-for-the-events-calendar' ); ?></label>
+                    </div>
+                    <div class="rtec-admin-2-columns">
+                        <input id="rtec_recaptcha_type_google" class="rtec-recaptcha-type-radio" name="<?php echo $args['option'].'[recaptcha_type]'; ?>" type="radio" value="google" <?php if ( $recaptcha_type == 'google' ) echo "checked"; ?> />
+                        <label for="rtec_recaptcha_type_google"><?php _e( 'Google reCAPTCHA', 'registrations-for-the-events-calendar' ); ?></label><a href="https://roundupwp.com/faq/get-google-recaptcha-api-key/" target="blank" title="<?php _e( "What's this?", 'registrations-for-the-events-calendar' ); ?>"><i class="fa fa-question-circle"></i></a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="rtec-recaptcha-type rtec-recaptcha-type-math rtec-padded-group">
+                <span class="description"><?php _e( 'Simple math question to avoid spam entries. Spam "honey pot" field is in the form by default', 'registrations-for-the-events-calendar' ); ?></span>
+                <p>
+                    <label><?php _e( 'Label', 'registrations-for-the-events-calendar' ); ?>:</label><input type="text" name="<?php echo $args['option'].'[recaptcha_label]'; ?>" value="<?php echo $label; ?>" />
+                    <span> 2 + 5</span>
+                </p>
+                <p>
+                    <label><?php _e( 'Error Message:', 'registrations-for-the-events-calendar' ); ?></label>
+                    <input type="text" name="<?php echo $args['option'].'[recaptcha_error]'; ?>" value="<?php echo $error; ?>" class="large-text rtec-recaptcha-input">
+                </p>
+            </div>
+            <div class="rtec-recaptcha-type rtec-recaptcha-type-google rtec-padded-group">
+                <span class="description"><?php _e( '"Are you a robot?" checkbox connected to Google\'s Recaptcha.', 'registrations-for-the-events-calendar' ); ?> <a href="https://roundupwp.com/faq/get-google-recaptcha-api-key/" target="blank"><?php _e( 'Instructions', 'registrations-for-the-events-calendar' ); ?></a></span>
+                <p>
+                    <label for="rtec-field-api-key-input"><?php _e( 'Google Recaptcha Site Key', 'registrations-for-the-events-calendar' ); ?></label>
+                    <input type="text" class="large-text" name="<?php echo $args['option'].'[recaptcha_site_key]'; ?>" id="rtec-field-api-key-input" value="<?php echo esc_attr( stripslashes( $api_key ) ); ?>" />
+                </p>
+                <p>
+                    <label for="rtec-field-api-key-input"><?php _e( 'Google Recaptcha Secret Key', 'registrations-for-the-events-calendar' ); ?></label>
+                    <input type="text" class="large-text" name="<?php echo $args['option'].'[recaptcha_secret_key]'; ?>" id="rtec-field-secret-key-input" value="<?php echo esc_attr( stripslashes( $secret_key ) ); ?>" />
+                </p>
+            </div>
         </div>
         <?php
     }

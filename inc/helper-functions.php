@@ -349,7 +349,14 @@ function rtec_generate_unregister_link( $event_id, $action_key, $email, $unregis
 	$unregister_url = add_query_arg( 'token' ,  $action_key, $unregister_url );
 	$unregister_url = add_query_arg( 'email' , $email, $unregister_url );
 
-	return '<span class="rtec-unregister-link-wrap"><a data-event-id="'.esc_attr( $event_id ).'" class="rtec-unregister-link" href="'.esc_url( $unregister_url ).'">' . $unregister_link_text . '</a></span>';
+	$should_escape = apply_filters( 'rtec_should_escape_url', true );
+
+	$final_url = $unregister_url;
+	if ( $should_escape ) {
+	    $final_url = esc_url( $unregister_url );
+    }
+
+	return '<span class="rtec-unregister-link-wrap"><a data-event-id="'.esc_attr( $event_id ).'" class="rtec-unregister-link" href="'. $final_url .'">' . $unregister_link_text . '</a></span>';
 }
 
 function rtec_get_date_time_format() {

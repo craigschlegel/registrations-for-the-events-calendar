@@ -101,7 +101,11 @@ class RTEC_Submission
 			if ( isset( $unvalidated_submission[ 'rtec_' . $show_field ] ) && is_array( $unvalidated_submission[ 'rtec_' . $show_field ] ) ) {
 				$unvalidated_submission[ 'rtec_' . $show_field ] = isset( $unvalidated_submission[ 'rtec_' . $show_field ] ) ? implode( ', ', $unvalidated_submission[ 'rtec_' . $show_field ] ) : '';
 			} elseif ( ! isset( $unvalidated_submission[ 'rtec_' . $show_field ] ) ) {
-				$unvalidated_submission[ 'rtec_' . $show_field ] = '';
+				if ( $show_field === 'recaptcha' && isset( $unvalidated_submission['g-recaptcha-response'] ) ) {
+					$unvalidated_submission[ 'rtec_' . $show_field ] = $unvalidated_submission['g-recaptcha-response'];
+				} else {
+					$unvalidated_submission[ 'rtec_' . $show_field ] = '';
+				}
 			}
 
 			if ( $show_field === 'email' && ( $fields_atts[ $show_field ]['required'] || $unvalidated_submission['rtec_email'] !== '' ) ) {
@@ -138,9 +142,13 @@ class RTEC_Submission
 							$valid = $validator->email( $unvalidated_submission[ 'rtec_' . $show_field ] );
 							break;
 						case 'recaptcha':
-							$recaptcha_strictness = 'normal';
-							$recaptcha_strictness = apply_filters( 'rtec_recaptcha_strictness', $recaptcha_strictness );
-							$valid = $validator->num_equality( $unvalidated_submission[ 'rtec_' . $show_field . '_sum' ], $unvalidated_submission[ 'rtec_' . $show_field ], $recaptcha_strictness );
+							if ( $rtec_options['recaptcha_type'] === 'google' && ! empty( $rtec_options['recaptcha_secret_key'] ) ) {
+								$valid = $validator->google_recaptcha( $unvalidated_submission['g-recaptcha-response'], $rtec_options['recaptcha_secret_key'] );
+							} else {
+								$recaptcha_strictness = 'normal';
+								$recaptcha_strictness = apply_filters( 'rtec_recaptcha_strictness', $recaptcha_strictness );
+								$valid                = $validator->num_equality( $unvalidated_submission[ 'rtec_' . $show_field . '_sum' ], $unvalidated_submission[ 'rtec_' . $show_field ], $recaptcha_strictness );
+							}
 							break;
 						case 'count':
 							$valid = $validator->count( $unvalidated_submission[ 'rtec_' . $show_field ], $fields_atts[ $show_field ]['valid_params']['count'], $fields_atts[ $show_field ]['valid_params']['count_what'] );

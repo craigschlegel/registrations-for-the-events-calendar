@@ -54,6 +54,7 @@
 }
 .rtec-wrapper {
     box-sizing: border-box;
+    padding-bottom: 100px;
 }
 .rtec-radio-label {
     margin-right: 20px;
@@ -385,7 +386,8 @@ a.rtec-wide {
 .rtec-field-options-wrapper .fa-trash{
     font-size: 1.2em;
 }
-.rtec-admin-wrap .rtec-field-options-wrapper > p {
+.rtec-admin-wrap .rtec-field-options-wrapper > p,
+.rtec-admin-wrap .rtec-field-options-wrapper .rtec-padded-group{
     padding: 0 1em;
     margin-bottom: 10px;
 }
@@ -687,6 +689,12 @@ span.rtec-is-user{
 #rtec-date-picker {
     background-color: #9EE6DE;
     border-color: #46A99E;
+}
+
+/* icons */
+.rtec-field-options-wrapper .fa-question-circle {
+    margin-left: 5px;
+    vertical-align: middle;
 }
 
 /* hidden event options */

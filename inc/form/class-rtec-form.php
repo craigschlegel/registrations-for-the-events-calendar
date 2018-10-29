@@ -190,19 +190,26 @@ class RTEC_Form
 
 			// recaptcha stuff to be changed
 			if ( $field_attributes[ $field['field_name'] ]['valid_type'] === 'recaptcha' ) {
-				$field_attributes[ $field['field_name'] ]['required'] = true;
-				$value1 = rand(2,5);
-				$value2 = rand(2,5);
-				$field_attributes[ $field['field_name'] ]['valid_params'] = array(
-					'value_1' => $value1,
-					'value_2' => $value2
-				);
-				$field_attributes[ $field['field_name'] ]['valid_params']['sum'] = (int)$field_attributes[$field['field_name']]['valid_params']['value_1'] + (int)$field_attributes[ $field['field_name'] ]['valid_params']['value_2'];
-				$recaptcha_label = isset( $rtec_options['recaptcha_label'] ) ? $rtec_options['recaptcha_label'] : __( 'What is', 'registrations-for-the-events-calendar' );
-				$field_attributes[ $field['field_name'] ]['label'] = trim( rtec_get_text( $recaptcha_label, __( 'What is', 'registrations-for-the-events-calendar' ) ) ) . ' ' . $field_attributes['recaptcha']['valid_params']['value_1'] . ' &#43; ' . $field_attributes['recaptcha']['valid_params']['value_2'] .'&#42;';
-				$recaptcha_error = isset( $rtec_options['recaptcha_error'] ) ? $rtec_options['recaptcha_error'] : __( 'Please try again', 'registrations-for-the-events-calendar' );
-				$field_attributes[ $field['field_name'] ]['error_message'] = rtec_get_text( $recaptcha_error, __( 'Please try again', 'registrations-for-the-events-calendar' ) );
-			}
+				$recaptcha_type = isset( $rtec_options[ 'recaptcha_type' ] ) ? $rtec_options[ 'recaptcha_type' ] : 'math';
+
+				if ( $recaptcha_type === 'google' && !empty( $rtec_options['recaptcha_site_key'] ) && !empty( $rtec_options['recaptcha_secret_key'] ) ) {
+					$field_attributes[ $field['field_name'] ]['label'] = __( 'Please verify that you are not a robot', 'registrations-for-the-events-calendar' ) . '&#42;';
+					$field_attributes[ $field['field_name'] ]['valid_type'] = 'google_recaptcha';
+				} else {
+					$field_attributes[ $field['field_name'] ]['required']            = true;
+					$value1                                                          = rand( 2, 5 );
+					$value2                                                          = rand( 2, 5 );
+					$field_attributes[ $field['field_name'] ]['valid_params']        = array(
+						'value_1' => $value1,
+						'value_2' => $value2
+					);
+					$field_attributes[ $field['field_name'] ]['valid_params']['sum'] = (int) $field_attributes[ $field['field_name'] ]['valid_params']['value_1'] + (int) $field_attributes[ $field['field_name'] ]['valid_params']['value_2'];
+					$recaptcha_label                                                 = isset( $rtec_options['recaptcha_label'] ) ? $rtec_options['recaptcha_label'] : __( 'What is', 'registrations-for-the-events-calendar' );
+					$field_attributes[ $field['field_name'] ]['label']               = trim( rtec_get_text( $recaptcha_label, __( 'What is', 'registrations-for-the-events-calendar' ) ) ) . ' ' . $field_attributes['recaptcha']['valid_params']['value_1'] . ' &#43; ' . $field_attributes['recaptcha']['valid_params']['value_2'] . '&#42;';
+					$recaptcha_error                                                 = isset( $rtec_options['recaptcha_error'] ) ? $rtec_options['recaptcha_error'] : __( 'Please try again', 'registrations-for-the-events-calendar' );
+					$field_attributes[ $field['field_name'] ]['error_message']       = rtec_get_text( $recaptcha_error, __( 'Please try again', 'registrations-for-the-events-calendar' ) );
+				}
+            }
 
 			$standard_fields = rtec_get_standard_form_fields();
 			$no_template_fields = rtec_get_no_template_fields();
@@ -890,13 +897,7 @@ class RTEC_Form
 			}
 
 		} else {
-			if ( isset( $user_data[ $field_name ] ) ) {
-				$field_settings['value'] = $user_data[ $field_name ];
-			} elseif ( isset( $user_data['custom'][ $field_name ]['value'] ) ) {
-				$field_settings['value'] = $user_data['custom'][ $field_name ]['value'];
-			} else {
-				$field_settings['value'] = $field_attributes['default'];
-			}
+		    $field_settings['value'] = $field_attributes['default'];
 		}
 
 		$field_settings['placeholder'] = isset( $field_attributes['placeholder'] ) && $field_attributes['placeholder'] !== '' ? ' placeholder="'.esc_attr( $field_attributes['placeholder'] ). '"' : '';
@@ -948,7 +949,14 @@ class RTEC_Form
 			$field_settings['html'] .= '<input type="hidden" name="' . esc_attr( $field_settings['field_name'] ) . '_sum" value="' . esc_attr( $field_attributes['valid_params']['sum'] ) . '" />';
 			$field_settings['type'] = 'text';
 		}
-		ob_start();
+
+		if ( isset( $field_attributes['valid_type'] ) && $field_attributes['valid_type'] === 'google_recaptcha'  ) {
+			$field_settings['valid_type'] = 'google_recaptcha';
+            $field_settings['data_atts_string'] = ' data-sitekey="' . esc_attr( $rtec_options['recaptcha_site_key'] ) . '"';
+            $label_classes .= ' rtec-screen-reader';
+		}
+
+        ob_start();
 
 		include RTEC_PLUGIN_DIR . 'templates/form/field.php';
 
@@ -961,7 +969,7 @@ class RTEC_Form
 	public function already_registered_visitor_html() {
 		global $rtec_options;
 
-		$show_unregister_link = isset( $rtec_options['visitors_can_edit_what_status'] ) ? $rtec_options['visitors_can_edit_what_status'] : false;
+		$show_unregister_link = isset( $rtec_options['visitors_can_edit_what_status'] ) ? $rtec_options['visitors_can_edit_what_status'] : true;
 		?>
 		<?php if ( $show_unregister_link ) :
 			$already_registered_question = isset( $rtec_options['already_registered_question'] ) ? $rtec_options['already_registered_question'] : __( 'Already registered?', 'registrations-for-the-events-calendar' );
@@ -1041,8 +1049,10 @@ class RTEC_Form
 	 */
 	protected function get_input_html_for_field_type( $field_settings )
 	{
-		?>
-	<?php if ( in_array( $field_settings['type'], array( 'text', 'number', 'tel', 'email' ), true ) ) : ?>
+    if ( isset( $field_settings['valid_type'] ) && $field_settings['valid_type'] === 'google_recaptcha' ) :
+        wp_enqueue_script( 'rtec_recaptcha' ); ?>
+        <div class="g-recaptcha" <?php echo $field_settings['data_atts_string']; ?>></div>
+	<?php elseif ( in_array( $field_settings['type'], array( 'text', 'number', 'tel', 'email' ), true ) ) : ?>
 		<input type="<?php echo esc_attr( $field_settings['type'] ); ?>" name="<?php echo esc_attr( $field_settings['field_name'] ); ?>" value="<?php echo esc_attr( stripslashes( $field_settings['value'] ) ); ?>"<?php echo $field_settings['placeholder']; ?> class="rtec-field-input" id="<?php echo esc_attr( $field_settings['field_name'] ); ?>"<?php echo $field_settings['data_atts_string']; ?> />
 	<?php elseif ( $field_settings['type'] === 'select' ) : ?>
 		<select type="select" name="<?php echo esc_attr( $field_settings['field_name'] ); ?>" class="rtec-field-input" id="<?php echo esc_attr( $field_settings['field_name'] ); ?>"<?php echo $field_settings['data_atts_string']; ?>>

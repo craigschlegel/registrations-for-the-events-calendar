@@ -30,6 +30,15 @@ jQuery(document).ready(function($){
 
     });
 
+    function rtecGoogleType() {
+        setTimeout(function(){
+            $('.rtec-recaptcha-type').hide();
+            $('.rtec-recaptcha-type.rtec-recaptcha-type-'+jQuery('.rtec-recaptcha-type-radio:checked').val()).show();
+        }, 1);
+    }
+    rtecGoogleType();
+    $('.rtec-recaptcha-type-radio').change(rtecGoogleType);
+
     var $rtecAttendanceMessageType = $('.rtec_attendance_message_type');
     function rtecToggleMessageTypeOptions(val) {
         if ( val === 'down' ) {
