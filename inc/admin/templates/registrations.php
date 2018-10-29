@@ -13,7 +13,10 @@ $db = $rtec->db_frontend->instance();
 $admin_registrations = new RTEC_Admin_Registrations();
 $tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'registrations';
 
-$view_type = isset( $_GET['v'] ) ? sanitize_text_field( $_GET['v'] ) : 'grid';
+$view_type = isset( $_GET['v'] ) ? sanitize_text_field( $_GET['v'] ) : $admin_registrations->get_view_type_for_user();
+if ( isset( $_GET['v'] ) ) {
+	$admin_registrations->update_view_type_for_user( $_GET['v'] );
+}
 $query_type = isset( $_GET['qtype'] ) ? sanitize_text_field( $_GET['qtype'] ) : 'upcoming';
 $start_date = isset( $_GET['start'] ) ? date( 'Y-m-d H:i:s', strtotime( $_GET['start'] ) ) : date( 'Y-m-d H:i:s' );
 $reg_status = isset( $_GET['with'] ) ? sanitize_text_field( $_GET['with'] ) : 'with';
