@@ -22,6 +22,7 @@ if ( isset( $_GET['rtec_troubleshoot'] ) ) {
                 custom LONGTEXT DEFAULT '' NOT NULL,
                 status CHAR(1) DEFAULT 'y' NOT NULL,
                 action_key VARCHAR(40) DEFAULT '' NOT NULL,
+                reminder VARCHAR(40) DEFAULT 'pending' NOT NULL,
                 UNIQUE KEY id (id)
             ) $charset_collate;";
 		$wpdb->query( $sql );

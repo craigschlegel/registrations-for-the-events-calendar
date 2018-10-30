@@ -125,4 +125,21 @@ class RTEC_Validator {
 		}
 	}
 
+	static public function google_recaptcha( $recaptcha_response, $secret_key )
+	{
+		$response = wp_remote_post(
+			'https://www.google.com/recaptcha/api/siteverify',
+			array(
+				'body' => array(
+					'secret'   => $secret_key,
+					'response'     => $recaptcha_response,
+				)
+			)
+		);
+
+		$response = json_decode( $response['body'] );
+
+		return (isset( $response->success ) && $response->success === true);
+	}
+
 }

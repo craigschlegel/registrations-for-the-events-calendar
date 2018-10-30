@@ -110,6 +110,14 @@ function rtec_the_registration_form( $atts = array() )
 
 		} else {
 			$return_html .= $form->registrations_closed_message();
+			ob_start();
+
+			echo '<div class="rtec">';
+			$form->already_registered_visitor_html();
+			echo '</div>';
+
+			$already_html = ob_get_contents();
+			ob_get_clean();
 
 			if ( $doing_shortcode === true ) {
 				return $return_html;
@@ -451,6 +459,8 @@ add_action( 'wp_head', 'rtec_custom_css' );
 function rtec_scripts_and_styles() {
 	wp_enqueue_style( 'rtec_styles', trailingslashit( RTEC_PLUGIN_URL ) . 'css/rtec-styles.css', array(), RTEC_VERSION );
 	wp_enqueue_script( 'rtec_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-scripts.js', array( 'jquery' ), RTEC_VERSION, true );
+
+	wp_register_script( 'rtec_recaptcha', 'https://www.google.com/recaptcha/api.js' );
 
 	$options = get_option( 'rtec_options' );
 	$check_for_duplicates = isset( $options['check_for_duplicates'] ) ? $options['check_for_duplicates'] : false;
