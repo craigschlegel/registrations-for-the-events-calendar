@@ -414,7 +414,7 @@ class RTEC_Admin
 		    'class' => '',
 		    'page' => 'rtec_form_visitors_options',
 		    'section' => 'rtec_form_visitors_options',
-		    'default' => false
+		    'default' => true
 	    ));
 
 	    $this->create_settings_field( array(

@@ -61,9 +61,7 @@ $custom_fields_name_label_pairs = array_flip ( $custom_fields_label_name_pairs )
                 <input type="checkbox" id="rtec-select-all-1">
             </td>
             <?php foreach ( $event_obj->labels as $label ) : ?>
-                <?php if ( ! empty( $label ) ) : ?>
-                    <th><?php echo esc_html( stripslashes( $label ) ); ?></th>
-                <?php endif; ?>
+                <th><?php echo esc_html( stripslashes( $label ) ); ?></th>
             <?php endforeach; ?>
         </tr>
         </thead>

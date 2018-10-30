@@ -175,6 +175,7 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 = 2.3 =
 * New: Support for Google's Recaptcha Version 2 spam prevention. Follow [these directions](https://roundupwp.com/faq/get-google-recaptcha-api-key/) to retrieve and use Google's API keys and start using this feature.
 * New: Files that generate html for emails can now be overridden by adding new files to your theme. Follow [these instructions](https://roundupwp.com/faq/change-html-email-templates/)
+* Tweak: When using the "check for duplicate emails" feature, attendees entering their email addresses will not be prevented from changing the email while the duplicate check is processing.
 * Tweak: Selecting the "List" view while on the Registrations tab will save this view to be the default for each user.
 * Tweak: Maximum number of records exported in a single csv file raised to 600 registrations.
 * Fix: Spaces in submitted email addresses causing it to be invalid when checked again server-side.

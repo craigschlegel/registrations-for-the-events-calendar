@@ -150,6 +150,15 @@ class RTEC_Submission
 								$valid                = $validator->num_equality( $unvalidated_submission[ 'rtec_' . $show_field . '_sum' ], $unvalidated_submission[ 'rtec_' . $show_field ], $recaptcha_strictness );
 							}
 							break;
+						case 'google_recaptcha':
+							if ( $rtec_options['recaptcha_type'] === 'google' && ! empty( $rtec_options['recaptcha_secret_key'] ) ) {
+								$valid = $validator->google_recaptcha( $unvalidated_submission['g-recaptcha-response'], $rtec_options['recaptcha_secret_key'] );
+							} else {
+								$recaptcha_strictness = 'normal';
+								$recaptcha_strictness = apply_filters( 'rtec_recaptcha_strictness', $recaptcha_strictness );
+								$valid                = $validator->num_equality( $unvalidated_submission[ 'rtec_' . $show_field . '_sum' ], $unvalidated_submission[ 'rtec_' . $show_field ], $recaptcha_strictness );
+							}
+							break;
 						case 'count':
 							$valid = $validator->count( $unvalidated_submission[ 'rtec_' . $show_field ], $fields_atts[ $show_field ]['valid_params']['count'], $fields_atts[ $show_field ]['valid_params']['count_what'] );
 							break;
