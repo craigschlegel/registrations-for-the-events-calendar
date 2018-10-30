@@ -87,7 +87,11 @@ class RTEC_Admin_Event {
 		if ( $view_type === 'grid' ) {
 			$this->records_to_retrieve = 11;
 			$this->registrants_data = $this->get_registrations( 'simple' );
-			$this->pagination_needed = ( count( $this->registrants_data ) === $this->records_to_retrieve );
+			if ( is_array( $this->registrants_data ) ) {
+				$this->pagination_needed = ( count( $this->registrants_data ) === $this->records_to_retrieve );
+			} else {
+				$this->pagination_needed = false;
+			}
 		} elseif ( $view_type === 'single' ) {
 			$this->records_to_retrieve = 600;
 			$this->registrants_data = $this->get_registrations( 'normal' );
