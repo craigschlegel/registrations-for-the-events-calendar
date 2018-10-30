@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 2.2
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,9 +77,13 @@ Do you need even more customization and control? Check out [Registrations for th
 * Multiple forms specific to each event.
 * Drop-down, checkbox, radio, and paragraph fields.
 * Online payments for events using PayPal.
+* Add multiple costs to events.
 * Guest registrations (register for more than one person at a time).
 * Multiple confirmation email templates.
 * Multiple registration venues and tiers.
+* Automatic email message sending.
+* Connect multiple events to a single registration.
+* Easy event management for membership sites.
 
 == Feedback or Support ==
 
@@ -168,6 +172,13 @@ The plugin is not yet fully compatible with a WordPress multisite installation. 
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.3 =
+* New: Support for Google's Recaptcha Version 2 spam prevention. Follow [these directions](https://roundupwp.com/faq/get-google-recaptcha-api-key/) to retrieve and use Google's API keys and start using this feature.
+* New: Files that generate html for emails can now be overridden by adding new files to your theme. Follow [these instructions](https://roundupwp.com/faq/change-html-email-templates/)
+* Tweak: Selecting the "List" view while on the Registrations tab will save this view to be the default for each user.
+* Tweak: Maximum number of records exported in a single csv file raised to 600 registrations.
+* Fix: Spaces in submitted email addresses causing it to be invalid when checked again server-side.
+
 = 2.2 =
 * [Helpful tools for GDPR compliance](https://roundupwp.com/gdpr-compliance-with-registration/#free)
 * New: "Terms and Conditions" opt-in checkbox can be added to the form. Include a link to a relevant terms and conditions page.
