@@ -89,10 +89,10 @@ class RTEC_Admin_Event {
 			$this->registrants_data = $this->get_registrations( 'simple' );
 			$this->pagination_needed = ( count( $this->registrants_data ) === $this->records_to_retrieve );
 		} elseif ( $view_type === 'single' ) {
-			$this->records_to_retrieve = 300;
+			$this->records_to_retrieve = 600;
 			$this->registrants_data = $this->get_registrations( 'normal' );
 		} elseif ( $view_type === 'csv' ) {
-			$this->records_to_retrieve = 300;
+			$this->records_to_retrieve = 600;
 			$this->registrants_data = $this->get_registrations( 'normal' );
 		}
 

@@ -409,9 +409,18 @@ class RTEC_Email {
 
 			ob_start();
 
-			include RTEC_PLUGIN_DIR . 'templates/email/header-generic.php';
-			include RTEC_PLUGIN_DIR . 'templates/email/confirmation-body.php';
-			include RTEC_PLUGIN_DIR . 'templates/email/footer-generic.php';
+			$custom_header_template = locate_template( 'rtec/email/header-generic.php', false, false );
+			$header_template = $custom_header_template ? $custom_header_template : RTEC_PLUGIN_DIR . 'templates/email/header-generic.php';
+			include $header_template;
+
+			$custom_confirmation_template = locate_template( 'rtec/email/confirmation-body.php', false, false );
+			$confirmation_template = $custom_confirmation_template ? $custom_confirmation_template: RTEC_PLUGIN_DIR . 'templates/email/confirmation-body.php';
+			include $confirmation_template;
+
+
+			$custom_footer_template = locate_template( 'rtec/email/footer-generic.php' , false, false );
+			$footer_template = $custom_footer_template ? $custom_footer_template : RTEC_PLUGIN_DIR . 'templates/email/footer-generic.php';
+			include $footer_template;
 
 			$html = ob_get_contents();
 			ob_end_clean();

@@ -164,9 +164,7 @@ jQuery(document).ready(function($) {
                 $spinnerImg = $('.rtec-spinner').length ? $('.rtec-spinner').html() : '',
                 $spinner = '<span class="rtec-email-spinner">'+$spinnerImg+'</span>';
 
-            $emailEl.attr('disabled',true)
-                .css('opacity',.5)
-                .closest('div').append($spinner);
+            $emailEl.closest('div').append($spinner);
 
             var submittedData = {
                 'action': 'rtec_registrant_check_for_duplicate_email',
@@ -206,8 +204,6 @@ jQuery(document).ready(function($) {
                         RtecForm.removeErrorMessage($emailEl);
                     }
                     $context.find('input[name=rtec_submit]').removeAttr('disabled').css('opacity',1);
-                    $emailEl.removeAttr('disabled')
-                        .css('opacity',1);
                     $context.find('.rtec-email-spinner').remove();
 
                 }
@@ -221,7 +217,7 @@ jQuery(document).ready(function($) {
         var $rtecEmailField = $('input[name=rtec_email]'),
             typingTimer,
             doneTypingInterval = 1500;
-        $rtecEmailField.keyup(function(){
+        $rtecEmailField.on('input',function(){
             var $this = $(this),
                 $context = $this.closest('.rtec');
             $context.find('input[name=rtec_submit]').attr('disabled',true).css('opacity','.5');

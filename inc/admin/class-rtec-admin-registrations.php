@@ -249,6 +249,26 @@ class RTEC_Admin_Registrations {
 		require_once RTEC_PLUGIN_DIR . 'inc/admin/templates/partials/registrations-pagination.php';
 	}
 
+	public function get_view_type_for_user() {
+		$meta = get_user_meta( get_current_user_id(), 'rtec_registrations_view_type', true );
+
+		if ( $meta === 'list' ) {
+			return 'list';
+		} else {
+			return 'grid';
+		}
+	}
+
+	public function update_view_type_for_user( $get_v ) {
+		$update = 'grid';
+
+		if ( $get_v === 'list' ) {
+			$update = 'list';
+		}
+
+		update_user_meta( get_current_user_id(), 'rtec_registrations_view_type', $update );
+	}
+
 	/**
 	 * @param $var
 	 * @param $value
