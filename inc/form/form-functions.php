@@ -17,6 +17,8 @@ function rtec_the_registration_form( $atts = array() )
 	$db = $rtec->db_frontend->instance();
 
 	$doing_shortcode = isset( $atts['doing_shortcode'] ) ? $atts['doing_shortcode'] : false;
+	$should_return_html_not_echo = isset( $atts['return_html'] ) ? $atts['return_html'] : false;
+
 	$return_html = '';
 
 	if ( $doing_shortcode ) {
@@ -56,7 +58,7 @@ function rtec_the_registration_form( $atts = array() )
 		$attendee_html = ob_get_contents();
 		ob_get_clean();
 
-		if ( $doing_shortcode ) {
+		if ( $doing_shortcode || $should_return_html_not_echo ) {
 			$return_html .= $attendee_html;
 		} else {
 		    echo $attendee_html;
@@ -76,7 +78,7 @@ function rtec_the_registration_form( $atts = array() )
 			$form->set_submission_data( $raw_data );
 			$form->set_max_registrations();
 
-			if ( $doing_shortcode ) {
+			if ( $doing_shortcode || $should_return_html_not_echo ) {
 				$return_html .= $form->get_form_html( $fields_atts );
 				return $return_html;
 			} else {
@@ -87,7 +89,7 @@ function rtec_the_registration_form( $atts = array() )
 			$submission->process_valid_submission( $raw_data );
 
 			$message = $form->get_success_message_html();
-			if ( $doing_shortcode ) {
+			if ( $doing_shortcode || $should_return_html_not_echo ) {
 				$return_html .= $message;
 				return $return_html;
 			} else {
@@ -100,7 +102,7 @@ function rtec_the_registration_form( $atts = array() )
 		if ( $form->registrations_available() && ! $form->registration_deadline_has_passed() ) {
 			$form->set_max_registrations();
 
-			if ( $doing_shortcode ) {
+			if ( $doing_shortcode || $should_return_html_not_echo ) {
 				$return_html .= $form->get_form_html( $fields_atts );
 
 				return $return_html;
@@ -119,7 +121,7 @@ function rtec_the_registration_form( $atts = array() )
 			$already_html = ob_get_contents();
 			ob_get_clean();
 
-			if ( $doing_shortcode === true ) {
+			if ( $doing_shortcode === true || $should_return_html_not_echo ) {
 				return $return_html;
 			} else {
 				echo $return_html;
@@ -222,9 +224,23 @@ function rtec_form_location_init()
 {
 	$options = get_option( 'rtec_options' );
 	$location = isset( $options['template_location'] ) ? $options['template_location'] : 'tribe_events_single_event_before_the_content';
-	add_action( $location, 'rtec_the_registration_form' );
+
+	if ( class_exists( 'Tribe__Editor__Blocks__Abstract' ) ) {
+	    if ( $location !== 'shortcode' ) {
+	        add_action( 'tribe_template_after_include:events/single-event', 'rtec_the_registration_form' );
+        }
+		// action exists so execute it
+		add_action( $location, 'rtec_the_registration_form' );
+		add_action( 'tribe_template_before_include:events/single-event', 'rtec_action_check_after_post' );
+	} else {
+		if ( $location !== 'shortcode' ) {
+		    add_action( $location, 'rtec_the_registration_form' );
+		}
+		add_action( 'tribe_events_single_event_before_the_content', 'rtec_action_check_after_post' );
+	}
+
 }
-add_action( 'plugins_loaded', 'rtec_form_location_init', 1 );
+add_action( 'init', 'rtec_form_location_init', 1 );
 
 /**
  *
@@ -327,7 +343,6 @@ function rtec_action_check_after_post() {
 
 	}
 }
-add_action( 'tribe_events_single_event_before_the_content', 'rtec_action_check_after_post' );
 
 /**
  *

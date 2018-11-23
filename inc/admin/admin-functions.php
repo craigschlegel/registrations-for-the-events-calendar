@@ -72,6 +72,18 @@ function rtec_the_admin_notices() {
 	<?php endif;
 }
 
+function rtec_shortcode_notice() {
+    $form_settings_link = RTEC_ADMIN_URL . '&tab=form#styling';
+	$new_status = get_transient( 'rtec_shortcode_notice' );
+	if ( $new_status ) :
+    ?>
+    <div class="notice notice-warning is-dismissible">
+        <p><strong><?php _e( 'Registrations for the Events Calendar' , 'registrations-for-the-events-calendar' ); ?></strong>: <?php _e( 'You can now use the shortcode <strong>[rtec-registration-form]</strong> to place your registration form anywhere on the single event page. Just change the "Form Location" setting to "Shortcode" on the "Form" tab <a target="_blank" href="' . $form_settings_link . '" >here.</a>' , 'registrations-for-the-events-calendar' ); ?></p>
+    </div>
+        <?php
+    endif;
+}
+add_action( 'admin_notices', 'rtec_shortcode_notice' );
 /**
  * Updates the individual event options with ajax
  *
@@ -213,7 +225,14 @@ function rtec_meta_boxes_html(){
 		$max_disabled_class = ' rtec-fade';
 	}
 
+	//
+    global $rtec_options;
 	?>
+    <?php if ( isset( $rtec_options['template_location'] ) && $rtec_options['template_location'] === 'shortcode') : ?>
+    <div class="rtec-notice">
+        <span><?php _e( sprintf( 'Add the shortcode %s using the editor above to display a registration form on this page.', '<code>[rtec-registration-form]</code>' ), 'registrations-for-the-events-calendar' ); ?></span>
+    </div>
+    <?php endif; ?>
 	<div id="eventDetails" class="inside eventForm">
 		<table cellspacing="0" cellpadding="0" id="EventInfo">
 			<tbody>
@@ -1112,6 +1131,12 @@ function rtec_db_update_check() {
 		$db->maybe_add_index( 'reminder', 'reminder' );
 		$db->maybe_add_column_to_table( 'action_key', 'VARCHAR(40)', '', true );
 		$db->maybe_add_column_to_table_no_string( 'user_id', 'BIGINT(20) UNSIGNED' );
+	}
+
+	if ( $db_ver < 1.6 ) {
+		update_option( 'rtec_db_version', RTEC_DBVERSION );
+
+		set_transient( 'rtec_shortcode_notice', 'yes', 60 * 60 * 24 * 3 );
 	}
 
 }

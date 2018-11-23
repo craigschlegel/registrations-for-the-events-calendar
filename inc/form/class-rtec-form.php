@@ -188,7 +188,6 @@ class RTEC_Form
 					$field_attributes[ $field['field_name'] ]['valid_params'] = isset( $field['valid_params'] ) && ! empty( $field['valid_params'] ) ? $field['valid_params'] : array( 'min' => 1, 'max' => 'no-max' );
 			}
 
-			// recaptcha stuff to be changed
 			if ( $field_attributes[ $field['field_name'] ]['valid_type'] === 'recaptcha' ) {
 				$recaptcha_type = isset( $rtec_options[ 'recaptcha_type' ] ) ? $rtec_options[ 'recaptcha_type' ] : 'math';
 
@@ -746,6 +745,19 @@ class RTEC_Form
 	    $width_unit = isset( $rtec_options['width_unit'] ) ? esc_attr( $rtec_options['width_unit'] ) : '%';
         $width = isset( $rtec_options['width'] ) ? 'width: ' . esc_attr( $rtec_options['width'] ) . $width_unit . ';' : '';
 	    $classes = '';
+
+	    $location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'tribe_events_single_event_before_the_content';
+        if ( class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
+            if ( $location === 'tribe_events_single_event_before_the_content' ) {
+	            $classes .= ' rtec-before-content rtec-move';
+            } elseif ( $location === 'tribe_events_single_event_after_the_content' ) {
+	            $classes .= ' rtec-after-content rtec-move';
+            } elseif ( $location === 'tribe_events_single_event_before_the_meta' ) {
+	            $classes .= ' rtec-before-meta rtec-move';
+            } elseif ( $location === 'tribe_events_single_event_after_the_meta' ) {
+	            $classes .= ' rtec-after-meta rtec-move';
+            }
+        }
 
 	    $success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' );
 	    $data = ' data-rtec-success-message="' . esc_attr( rtec_get_text( $success_message , __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) ) ) . '"';

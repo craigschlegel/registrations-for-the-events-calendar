@@ -22,6 +22,7 @@ settings_errors(); ?>
     <hr />
     <?php do_settings_sections( 'rtec_attendee_data' ); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
+    <span id="styling"></span>
     <hr />
     <?php do_settings_sections( 'rtec_form_styles' ); ?>
     <input class="button-primary" type="submit" name="save" value="<?php esc_attr_e( 'Save Changes' ); ?>" />

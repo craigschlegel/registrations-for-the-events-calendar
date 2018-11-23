@@ -617,9 +617,21 @@ function rtec_get_no_backend_column_fields() {
  */
 add_shortcode( 'rtec-registration-form', 'rtec_the_registration_form_shortcode' );
 function rtec_the_registration_form_shortcode( $atts ) {
-	$post_id = isset( $atts['event'] ) ? (int)$atts['event'] : false;
+    global $rtec_options;
 
-	if ( ! $post_id ) {
+    $atts = is_array( $atts ) ? $atts : array();
+
+    $shortcode_only = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] === 'shortcode' : false;
+
+    $atts['doing_shortcode'] = true;
+
+    $can_always_use_shortcode = false;
+	if ( $shortcode_only && tribe_is_event() && is_single() ) {
+		$atts['event'] = get_the_ID();
+		$atts['doing_shortcode'] = false;
+		$atts['return_html'] = true;
+		$can_always_use_shortcode = true;
+	} elseif ( ! isset( $atts['event'] ) ) {
 		$post_id = isset( $_GET['event_id'] ) ? sanitize_text_field( (int)$_GET['event_id'] ) : false;
 
 		if ( $post_id ) {
@@ -627,9 +639,10 @@ function rtec_the_registration_form_shortcode( $atts ) {
 		}
 	}
 
-	$atts['doing_shortcode'] = true;
+	$post_id = isset( $atts['event'] ) ? (int)$atts['event'] : false;
 
-	if ( $post_id !== get_the_ID() || ! is_singular( 'tribe_events' ) ) {
+	$error_html = '';
+	if ( $can_always_use_shortcode || ! (tribe_is_event() && is_single()) ) {
 
 		if ( function_exists( 'rtec_the_registration_form' ) && $post_id !== false ) {
 			$html = rtec_the_registration_form( $atts );
@@ -638,10 +651,10 @@ function rtec_the_registration_form_shortcode( $atts ) {
 		} else {
 
 			if ( current_user_can( 'edit_posts' ) ) {
-				echo '<div class="rtec-yellow-message">';
-				echo '<span>This message is only visible to logged-in editors:<br /><strong>Please enter a valid event ID in the shortcode to show a registration form here.</strong></span>';
-				echo '<span>For example: </span><code>[rtec-registration-form event=321]</code>';
-				echo '</div>';
+				$error_html .= '<div class="rtec-yellow-message">';
+				$error_html .= '<span>This message is only visible to logged-in editors:<br /><strong>Please enter a valid event ID in the shortcode to show a registration form here.</strong></span>';
+				$error_html .= '<span>For example: </span><code>[rtec-registration-form event=321]</code>';
+				$error_html .= '</div>';
 			}
 
 		}
@@ -649,13 +662,16 @@ function rtec_the_registration_form_shortcode( $atts ) {
 	} else {
 
 		if ( current_user_can( 'edit_posts' ) ) {
-			echo '<div class="rtec-yellow-message">';
-			echo '<span>This message is only visible to logged-in editors:<br /><strong>Shortcode not used. There is already a registration form on this page for this event.</strong></span>';
-			echo '</div>';
+			$error_html .= '<div class="rtec-yellow-message">';
+			$error_html .= '<span>This message is only visible to logged-in editors:<br /><strong>Shortcode not used. There is already a registration form on this page for this event.</strong> If you want to display the registration form with a shortcode only, go to the "Form" tab and change the setting "Form Location" to "Shortcode Only"</span>';
+			$error_html .= '</div>';
 		}
 
 	}
 
+	if ( $error_html !== '' ) {
+		return $error_html;
+	}
 }
 
 /**
