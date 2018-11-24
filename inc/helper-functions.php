@@ -665,7 +665,7 @@ function rtec_the_registration_form_shortcode( $atts ) {
 
 		if ( current_user_can( 'edit_posts' ) ) {
 			$error_html .= '<div class="rtec-yellow-message">';
-			$error_html .= '<span>This message is only visible to logged-in editors:<br /><strong>Shortcode not used. There is already a registration form on this page for this event.</strong> If you want to display the registration form with a shortcode only, go to the "Form" tab and change the setting "Form Location" to "Shortcode Only"</span>';
+			$error_html .= '<span>This message is only visible to logged-in editors:<br /><strong>Shortcode not used. There is already a registration form on this page for this event.</strong> If you want to display the registration form with a shortcode on this page, go to the "Form" tab and change the setting "Form Location" to "Shortcode"</span>';
 			$error_html .= '</div>';
 		}
 

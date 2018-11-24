@@ -75,10 +75,24 @@ function rtec_the_admin_notices() {
 function rtec_shortcode_notice() {
     $form_settings_link = RTEC_ADMIN_URL . '&tab=form#styling';
 	$new_status = get_transient( 'rtec_shortcode_notice' );
-	if ( $new_status ) :
+	if ( $new_status && current_user_can( 'edit_posts' ) && ! get_transient( 'rtec_new_messages' ) ) :
     ?>
     <div class="notice notice-warning is-dismissible">
-        <p><strong><?php _e( 'Registrations for the Events Calendar' , 'registrations-for-the-events-calendar' ); ?></strong>: <?php _e( 'You can now use the shortcode <strong>[rtec-registration-form]</strong> to place your registration form anywhere on the single event page. Just change the "Form Location" setting to "Shortcode" on the "Form" tab <a target="_blank" href="' . $form_settings_link . '" >here.</a>' , 'registrations-for-the-events-calendar' ); ?></p>
+        <p><?php _e( 'Registrations for the Events Calendar' , 'registrations-for-the-events-calendar' ); ?></p>
+        <?php
+        global $rtec_options;
+        $location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'not set';
+        if ( isset( $rtec_options['template_location'] ) && $location !== 'shortcode' && $location !== 'tribe_events_single_event_before_the_content' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) ) : ?>
+            <p><strong><?php _e( 'You\'re registration forms may have moved!' , 'registrations-for-the-events-calendar' ); ?></strong></p>
+            <p><?php _e( 'Due to the new Gutenberg block editor, custom placement of the registration requires using a shortcode. Follow these steps:' , 'registrations-for-the-events-calendar' ); ?>
+            <ol>
+                <li><?php _e( 'Change the "Form Location" setting to "Shortcode" on the "Form" tab <a target="_blank" href="' . $form_settings_link . '" >here.</a>' , 'registrations-for-the-events-calendar' ); ?></li>
+                <li><?php _e( 'Add the shortcode <code>[rtec-registration-form]</code> anywhere in the content area while editing an event.' , 'registrations-for-the-events-calendar' ); ?></li>
+            </ol>
+            </p>
+        <?php  else: ?>
+            <p><?php _e( 'You can now use the shortcode <strong>[rtec-registration-form]</strong> to place your registration form anywhere on the single event page. Just change the "Form Location" setting to "Shortcode" on the "Form" tab <a target="_blank" href="' . $form_settings_link . '" >here.</a>' , 'registrations-for-the-events-calendar' ); ?></p>
+        <?php endif; ?>
     </div>
         <?php
     endif;

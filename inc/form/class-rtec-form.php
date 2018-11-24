@@ -747,16 +747,8 @@ class RTEC_Form
 	    $classes = '';
 
 	    $location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'tribe_events_single_event_before_the_content';
-        if ( class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
-            if ( $location === 'tribe_events_single_event_before_the_content' ) {
-	            $classes .= ' rtec-before-content rtec-move';
-            } elseif ( $location === 'tribe_events_single_event_after_the_content' ) {
-	            $classes .= ' rtec-after-content rtec-move';
-            } elseif ( $location === 'tribe_events_single_event_before_the_meta' ) {
-	            $classes .= ' rtec-before-meta rtec-move';
-            } elseif ( $location === 'tribe_events_single_event_after_the_meta' ) {
-	            $classes .= ' rtec-after-meta rtec-move';
-            }
+        if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
+            $classes .= ' rtec-js-placement';
         }
 
 	    $success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' );

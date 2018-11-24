@@ -485,13 +485,33 @@ class RTEC_Admin
             'rtec_form_styles'
         );
 
-        $locations = array(
-            1 => array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
-            2 => array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
-            3 => array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
-            4 => array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) ),
-            5 => array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
-        );
+	    if ( class_exists( 'Tribe__Editor__Blocks__Abstract' ) ) {
+	        global $rtec_options;
+	        if ( ! isset( $rtec_options['template_location'] ) ||
+	             isset( $rtec_options['template_location'] ) && ($rtec_options['template_location'] === 'shortcode' || $rtec_options['template_location'] === 'tribe_events_single_event_before_the_content' ) ) {
+		        $locations = array(
+			        array( 'tribe_events_single_event_before_the_content', __( 'Automatic Placement (near top)', 'registrations-for-the-events-calendar' ) ),
+			        array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
+		        );
+            } else {
+		        $locations = array(
+			        array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
+			        array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
+			        array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
+			        array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) ),
+			        array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
+		        );
+	        }
+
+        } else {
+		    $locations = array(
+			    array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
+			    array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
+			    array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
+			    array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) ),
+			    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
+		    );
+        }
 
         // Template Location
         $this->create_settings_field( array(
@@ -503,7 +523,7 @@ class RTEC_Admin
             'option' => 'rtec_options', // matches the options name
             'class' => 'default-text', // class for the wrapper and input field
             'fields' => $locations,
-            'description' => __( "Location where the form will appear in the single event template. Use \"Shortcode\" for a custom placement", 'registrations-for-the-events-calendar' ) // what is this? text
+            'description' => __( "Set how the registration form will be added to the single event page. Use \"Shortcode\" for a custom placement", 'registrations-for-the-events-calendar' ) // what is this? text
         ) );
 
         // width
