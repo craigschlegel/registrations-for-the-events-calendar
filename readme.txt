@@ -4,8 +4,8 @@ Contributors: roundupwp
 Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
-Tested up to: 4.9
-Stable tag: 2.3
+Tested up to: 5.0
+Stable tag: 2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ In order for the Registrations for the Events Calendar to work properly, you nee
 
 = Quick to Set Up and Easy to Get Started =
 
-As soon as you install and activate the plugin, you can begin collecting registrations. You don't need any shortcodes (although they're available). Instead, the registration form is automatically added to every single event page by default.
+As soon as you install and activate the plugin, you can begin collecting registrations on the single event page for all of your events. You can also customize the placement of the form with a shortcode.
 
 = User-Friendly Features =
 
@@ -172,6 +172,10 @@ The plugin is not yet fully compatible with a WordPress multisite installation. 
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.4 =
+* New: Added the option of using a shortcode, [rtec-registration-form], to place the registration form anywhere on the single event page. Change the "Form Location" setting on the "Form" tab to "Shortcode" to use this feature.
+* New: Changed how the form is placed on the single event page to work with The Events Calendar 4.7 and WordPress 5.0.
+
 = 2.3 =
 * New: Support for Google's Recaptcha Version 2 spam prevention. Follow [these directions](https://roundupwp.com/faq/get-google-recaptcha-api-key/) to retrieve and use Google's API keys and start using this feature.
 * New: Files that generate html for emails can now be overridden by adding new files to your theme. Follow [these instructions](https://roundupwp.com/faq/change-html-email-templates/)

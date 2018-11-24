@@ -614,6 +614,8 @@ function rtec_get_no_backend_column_fields() {
  *
  * @param   $atts        array  settings for the form
  * @since   1.5
+ *
+ * @since   2.4          if placed on a single event page, use WP loop to get id and use all normal features
  */
 add_shortcode( 'rtec-registration-form', 'rtec_the_registration_form_shortcode' );
 function rtec_the_registration_form_shortcode( $atts ) {
