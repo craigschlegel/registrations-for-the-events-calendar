@@ -219,6 +219,8 @@ add_action( 'wp_ajax_rtec_registrant_check_for_duplicate_email', 'rtec_registran
  * Set the form location right away
  *
  * @since 1.0
+ *
+ * @since 2.4   logic added for The Events Calendar 4.7
  */
 function rtec_form_location_init()
 {
@@ -226,15 +228,14 @@ function rtec_form_location_init()
 	$location = isset( $options['template_location'] ) ? $options['template_location'] : 'tribe_events_single_event_before_the_content';
 
 	if ( class_exists( 'Tribe__Editor__Blocks__Abstract' ) ) {
-	    if ( $location !== 'shortcode' ) {
-	        add_action( 'tribe_template_after_include:events/single-event', 'rtec_the_registration_form' );
-        }
+		if ( $location !== 'shortcode' ) {
+			add_action( 'tribe_template_after_include:events/single-event', 'rtec_the_registration_form' );
+		}
 		// action exists so execute it
-		add_action( $location, 'rtec_the_registration_form' );
 		add_action( 'tribe_template_before_include:events/single-event', 'rtec_action_check_after_post' );
 	} else {
 		if ( $location !== 'shortcode' ) {
-		    add_action( $location, 'rtec_the_registration_form' );
+			add_action( $location, 'rtec_the_registration_form' );
 		}
 		add_action( 'tribe_events_single_event_before_the_content', 'rtec_action_check_after_post' );
 	}

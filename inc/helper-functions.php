@@ -25,8 +25,11 @@ function rtec_get_event_meta( $id = '' ) {
 
 	$event_meta['post_id'] = isset( $id ) ? $id : '';
 	$event_meta['title'] = ! empty( $id ) ? get_the_title( $id ) : get_the_title();
-	$event_meta['start_date'] = isset( $meta['_EventStartDate'][0] ) ? $meta['_EventStartDate'][0] : '';
-	$event_meta['end_date'] = isset( $meta['_EventEndDate'][0] ) ? $meta['_EventEndDate'][0] : '';
+	$start_date = tribe_get_start_date( $event_meta['post_id'], false, 'Y-m-d H:i:s' );
+	$end_date = tribe_get_end_date( $event_meta['post_id'], false, 'Y-m-d H:i:s' );
+
+	$event_meta['start_date'] = $start_date;
+	$event_meta['end_date'] = $end_date;
 	$event_meta['start_date_utc'] = isset( $meta['_EventStartDateUTC'][0] ) ? $meta['_EventStartDateUTC'][0] : '';
 	$event_meta['end_date_utc'] = isset( $meta['_EventEndDateUTC'][0] ) ? $meta['_EventEndDateUTC'][0] : '';
 	$event_meta['venue_id'] = isset( $meta['_EventVenueID'][0] ) ? $meta['_EventVenueID'][0] : '';
@@ -81,38 +84,38 @@ function rtec_get_event_meta( $id = '' ) {
  * @since   2.0 added specific deadline
  * @return  mixed   int if deadline, 'none' if no deadline
  */
-function rtec_get_event_deadline_utc( $event_meta ) {
+function rtec_get_event_deadline_utc( $event_meta, $start_date_utc, $end_date_utc ) {
 	global $rtec_options;
 
 	$deadline_time = 'none';
 
-	$WP_offset = get_option( 'gmt_offset' );
+	if ( class_exists( 'Tribe__Events__Timezones' ) ) {
+		$start_date_utc = Tribe__Events__Timezones::to_utc( tribe_get_start_date( $event_meta['post_id'], true, Tribe__Date_Utils::DBDATETIMEFORMAT ), '', 'c' );
+		$end_date_utc  = Tribe__Events__Timezones::to_utc( tribe_get_end_date( $event_meta['post_id'], true, Tribe__Date_Utils::DBDATETIMEFORMAT ), '', 'c' );
 
-	if ( ! empty( $WP_offset ) ) {
-		$tz_offset = $WP_offset * HOUR_IN_SECONDS;
-	} else {
-		$options = get_option( 'rtec_options' );
+		if ( $event_meta['deadline_type'] === 'start' ) {
 
-		$timezone = isset( $options['timezone'] ) ? $options['timezone'] : 'America/New_York';
-		// use php DateTimeZone class to handle the date formatting and offsets
-		$date_obj = new DateTime( date( 'm/d g:i a' ), new DateTimeZone( "UTC" ) );
-		$date_obj->setTimeZone( new DateTimeZone( $timezone ) );
-		$tz_offset = $date_obj->getOffset();
-	}
+			if ( $event_meta['start_date'] !== '' ) {
+				$deadline_time = strtotime( $start_date_utc );
+			}
 
-	if ( $event_meta['deadline_type'] === 'start' ) {
-
-		if ( $event_meta['start_date'] !== '' ) {
-			$deadline_multiplier = isset( $rtec_options['registration_deadline'] ) ? sanitize_text_field( $rtec_options['registration_deadline'] ) : 0;
-			$deadline_unit = isset( $rtec_options['registration_deadline_unit'] ) ? sanitize_text_field( $rtec_options['registration_deadline_unit'] ) : 0;
-			$offset_start_time = strtotime( $event_meta['start_date'] ) - $tz_offset;
-			$deadline_time = $offset_start_time - ($deadline_multiplier * $deadline_unit);
+		} elseif ( $event_meta['deadline_type'] === 'end' ) {
+			$deadline_time = strtotime( $end_date_utc );
+		} elseif ( $event_meta['deadline_type'] === 'other' ) {
+			$deadline_time = $event_meta['deadline_other_timestamp'];
 		}
+	} else {
+		if ( $event_meta['deadline_type'] === 'start' ) {
 
-	} elseif ( $event_meta['deadline_type'] === 'end' ) {
-		$deadline_time = strtotime( $event_meta['end_date'] ) - $tz_offset;
-	} elseif ( $event_meta['deadline_type'] === 'other' ) {
-		$deadline_time = $event_meta['deadline_other_timestamp'] - $tz_offset;
+			if ( $event_meta['start_date'] !== '' ) {
+				$deadline_time = strtotime( $event_meta['start_date'] );
+			}
+
+		} elseif ( $event_meta['deadline_type'] === 'end' ) {
+			$deadline_time = strtotime( $event_meta['end_date'] );
+		} elseif ( $event_meta['deadline_type'] === 'other' ) {
+			$deadline_time = $event_meta['deadline_other_timestamp'];
+		}
 	}
 
 	return $deadline_time;
