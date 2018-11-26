@@ -615,7 +615,7 @@ class RTEC_Form
 	public function registration_deadline_has_passed()
 	{
 		if ( $this->event_meta['registration_deadline'] !== 'none' ) {
-			return( $this->event_meta['registration_deadline'] < time() );
+			return( $this->event_meta['registration_deadline'] < (time() + rtec_get_utc_offset()) );
 		} else {
 			return false;
 		}

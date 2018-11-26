@@ -84,7 +84,7 @@ function rtec_get_event_meta( $id = '' ) {
  * @since   2.0 added specific deadline
  * @return  mixed   int if deadline, 'none' if no deadline
  */
-function rtec_get_event_deadline_utc( $event_meta, $start_date_utc, $end_date_utc ) {
+function rtec_get_event_deadline_utc( $event_meta ) {
 	global $rtec_options;
 
 	$deadline_time = 'none';

@@ -4,13 +4,22 @@ jQuery(document).ready(function($) {
     $('.rtec-js-hide').hide();
 
     // move the form for backwards compatibility
-    if ($('.rtec.rtec-js-placement').length) {
+    if ($('#rtec-js-move-flag').length) {
+
+        var $moveEl = $('#rtec-js-move-flag');
+        if ($('.rtec-outer-wrap').length) {
+            $moveEl = $('.rtec-outer-wrap');
+        } else if ($('.rtec').length) {
+            $moveEl = $('.rtec');
+        } else if ($('.rtec-success-message').length) {
+            $moveEl = $('.rtec-success-message');
+        }
+
+        // move the element that needs to be moved
         if ($('.tribe-events-schedule').length) {
-            $('.tribe-events-schedule').after($('.rtec.rtec-js-placement'));
-            $('.rtec.rtec-js-placement').before($('.rtec-attendee-list-meta'));
+            $('.tribe-events-schedule').after($moveEl);
         } else if ($('.tribe-events-single .tribe_events').length) {
-            $('.tribe-events-single .tribe_events').prepend($('.rtec.rtec-js-placement'));
-            $('.rtec.rtec-js-placement').before($('.rtec-attendee-list-meta'));
+            $('.tribe-events-single .tribe_events').prepend($moveEl);
         }
     }
 

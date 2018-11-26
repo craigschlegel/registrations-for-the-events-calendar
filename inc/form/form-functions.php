@@ -133,6 +133,21 @@ function rtec_the_registration_form( $atts = array() )
 }
 
 /**
+ * add element to the page to set a flag that form needs to be moved with JavaScript
+ *
+ * @since 2.4
+ */
+function rtec_the_move_flag()
+{
+	global $rtec_options;
+	$location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'tribe_events_single_event_before_the_content';
+	if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
+		echo '<span style="display:none;" id="rtec-js-move-flag"></span>';
+	}
+}
+add_action( 'tribe_template_after_include:events/single-event', 'rtec_the_move_flag' );
+
+/**
  * To separate concerns and avoid potential problems with redirects, this function performs
  * a check to see if the registrationsTEC form was submitted and initiates form
  * before the template is loaded.

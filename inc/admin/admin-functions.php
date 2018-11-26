@@ -75,10 +75,10 @@ function rtec_the_admin_notices() {
 function rtec_shortcode_notice() {
     $form_settings_link = RTEC_ADMIN_URL . '&tab=form#styling';
 	$new_status = get_transient( 'rtec_shortcode_notice' );
-	if ( $new_status && current_user_can( 'edit_posts' ) && ! get_transient( 'rtec_new_messages' ) ) :
+	if ( $new_status && current_user_can( 'edit_posts' ) ) :
     ?>
     <div class="notice notice-warning is-dismissible">
-        <p><?php _e( 'Registrations for the Events Calendar' , 'registrations-for-the-events-calendar' ); ?></p>
+        <p><?php _e( 'Registrations for the Events Calendar Pro' , 'registrations-for-the-events-calendar' ); ?></p>
         <?php
         global $rtec_options;
         $location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'not set';
