@@ -90,6 +90,11 @@
     font-size: 16px;
     cursor: pointer;
 }
+.rtec button,
+.rtec input[type="submit"] {
+    line-height: inherit;
+    height: auto;
+}
 #rtec .rtec-attendance p {
     text-align: center;
     margin: 0;
@@ -125,6 +130,10 @@
 }
 #rtec label {
     display: inline-block;
+}
+#rtec .rtec-checkbox-option-wrap label {
+    margin-left: 5px;
+    vertical-align: middle;
 }
 #rtec .rtec-form-buttons {
     text-align: center;

@@ -142,10 +142,10 @@ function rtec_the_move_flag()
 	global $rtec_options;
 	$location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'tribe_events_single_event_before_the_content';
 	if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
-		echo '<span style="display:none;" id="rtec-js-move-flag"></span>';
+		echo '<span style="display:none;" id="rtec-js-move-flag" data-location="'.$location.'"></span>';
 	}
 }
-add_action( 'tribe_template_after_include:events/single-event', 'rtec_the_move_flag' );
+add_action( 'tribe_events_single_event_meta_primary_section_end', 'rtec_the_move_flag' );
 
 /**
  * To separate concerns and avoid potential problems with redirects, this function performs
@@ -241,13 +241,19 @@ function rtec_form_location_init()
 {
 	$options = get_option( 'rtec_options' );
 	$location = isset( $options['template_location'] ) ? $options['template_location'] : 'tribe_events_single_event_before_the_content';
+	$using_custom_template = isset( $options['using_custom_template'] ) ? $options['using_custom_template'] : false;
 
-	if ( class_exists( 'Tribe__Editor__Blocks__Abstract' ) ) {
+	if ( $using_custom_template ) {
 		if ( $location !== 'shortcode' ) {
-			add_action( 'tribe_template_after_include:events/single-event', 'rtec_the_registration_form' );
+			add_action( $location, 'rtec_the_registration_form' );
+		}
+		add_action( 'tribe_events_single_event_before_the_content', 'rtec_action_check_after_post' );
+	} elseif ( class_exists( 'Tribe__Editor__Blocks__Abstract' ) ) {
+		if ( $location !== 'shortcode' ) {
+			add_action( 'tribe_events_single_event_meta_primary_section_end', 'rtec_the_registration_form' );
 		}
 		// action exists so execute it
-		add_action( 'tribe_template_before_include:events/single-event', 'rtec_action_check_after_post' );
+		add_action( 'tribe_events_single_event_meta_primary_section_end', 'rtec_action_check_after_post' );
 	} else {
 		if ( $location !== 'shortcode' ) {
 			add_action( $location, 'rtec_the_registration_form' );

@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
 Tested up to: 5.0
-Stable tag: 2.4
+Stable tag: 2.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,14 @@ The plugin is not yet fully compatible with a WordPress multisite installation. 
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.4.2 =
+* Tweak: More precise automatic placement of the form to fit better with most themes in The Events Calendar 4.7+.
+* Tweak: Form styling tweaks to add space between checkbox fields and labels as well as fix display issues for buttons in certain themes.
+* Fix: Added support for older versions of the single-event.php customizations. If the registration button is not displaying for an event, try enabling the setting "I'm using a custom single-event.php file in my theme" on the form tab.
+
+= 2.4.1 =
+* Fix: Changed the name of the action according to differences between beta version of The Events Calendar 4.7 and official release.
+
 = 2.4 =
 * New: Added the option of using a shortcode, [rtec-registration-form], to place the registration form anywhere on the single event page. Change the "Form Location" setting on the "Form" tab to "Shortcode" to use this feature.
 * New: Changed how the form is placed on the single event page to work with The Events Calendar 4.7 and WordPress 5.0.

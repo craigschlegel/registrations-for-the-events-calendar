@@ -219,6 +219,49 @@ class RTEC_Admin
             'rtec_form_registration_availability'
         );
 
+
+	    if ( class_exists( 'Tribe__Editor__Blocks__Abstract' ) ) {
+		    global $rtec_options;
+		    if ( ! isset( $rtec_options['template_location'] ) ||
+		         isset( $rtec_options['template_location'] ) && ($rtec_options['template_location'] === 'shortcode' || $rtec_options['template_location'] === 'tribe_events_single_event_before_the_content' || $rtec_options['template_location'] === 'tribe_events_single_event_after_the_content' ) ) {
+			    $locations = array(
+				    array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
+				    array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
+				    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
+			    );
+		    } else {
+			    $locations = array(
+				    array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
+				    array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
+				    array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
+				    array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) ),
+				    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
+			    );
+		    }
+
+	    } else {
+		    $locations = array(
+			    array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
+			    array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
+			    array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
+			    array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) ),
+			    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
+		    );
+	    }
+
+	    // Template Location
+	    $this->create_settings_field( array(
+		    'name' => 'template_location',
+		    'title' => '<label id="form-location" for="rtec_template_location">' . __( 'Form Location', 'registrations-for-the-events-calendar' ) . '</label>', // label for the input field
+		    'callback'  => 'location_select', // name of the function that outputs the html
+		    'page' => 'rtec_form_registration_availability', // matches the section name
+		    'section' => 'rtec_form_registration_availability', // matches the section name
+		    'option' => 'rtec_options', // matches the options name
+		    'class' => 'default-text', // class for the wrapper and input field
+		    'fields' => $locations,
+		    'description' => __( "Set how the registration form will be added to the single event page. Use \"Shortcode\" for a custom placement", 'registrations-for-the-events-calendar' ) // what is this? text
+	    ) );
+
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'disable_by_default',
@@ -484,47 +527,6 @@ class RTEC_Admin
             array( $this, 'blank' ),
             'rtec_form_styles'
         );
-
-	    if ( class_exists( 'Tribe__Editor__Blocks__Abstract' ) ) {
-	        global $rtec_options;
-	        if ( ! isset( $rtec_options['template_location'] ) ||
-	             isset( $rtec_options['template_location'] ) && ($rtec_options['template_location'] === 'shortcode' || $rtec_options['template_location'] === 'tribe_events_single_event_before_the_content' ) ) {
-		        $locations = array(
-			        array( 'tribe_events_single_event_before_the_content', __( 'Automatic Placement (near top)', 'registrations-for-the-events-calendar' ) ),
-			        array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
-		        );
-            } else {
-		        $locations = array(
-			        array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
-			        array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
-			        array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
-			        array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) ),
-			        array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
-		        );
-	        }
-
-        } else {
-		    $locations = array(
-			    array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
-			    array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
-			    array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
-			    array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) ),
-			    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
-		    );
-        }
-
-        // Template Location
-        $this->create_settings_field( array(
-            'name' => 'template_location',
-            'title' => '<label id="form-location" for="rtec_template_location">' . __( 'Form Location', 'registrations-for-the-events-calendar' ) . '</label>', // label for the input field
-            'callback'  => 'default_select', // name of the function that outputs the html
-            'page' => 'rtec_form_styles', // matches the section name
-            'section' => 'rtec_form_styles', // matches the section name
-            'option' => 'rtec_options', // matches the options name
-            'class' => 'default-text', // class for the wrapper and input field
-            'fields' => $locations,
-            'description' => __( "Set how the registration form will be added to the single event page. Use \"Shortcode\" for a custom placement", 'registrations-for-the-events-calendar' ) // what is this? text
-        ) );
 
         // width
         $this->create_settings_field( array(
@@ -935,6 +937,32 @@ class RTEC_Admin
         <br><?php $this->the_description( $args['description'] ); ?>
         <?php
     }
+
+	public function location_select( $args )
+	{
+		$options = get_option( $args['option'] );
+		$selected = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
+		$using_custom_template = isset( $options[ 'using_custom_template' ] ) ? $options[ 'using_custom_template' ] : false;
+		?>
+        <select name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>">
+			<?php foreach ( $args['fields'] as $field ) : ?>
+                <option value="<?php echo $field[0]; ?>" id="rtec-<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>"<?php if( $selected == $field[0] ) { echo ' selected'; } ?>><?php _e( $field[1], 'registrations-for-the-events-calendar' ); ?></option>
+			<?php endforeach; ?>
+        </select>
+
+		<?php
+		if ( isset( $args['after'] ) ) {
+			echo $args['after'];
+		}
+		?>
+        <br><?php $this->the_description( $args['description'] ); ?>
+        <p>
+            <input type="checkbox" name="<?php echo $args['option'] ?>[using_custom_template]" id="rtec_using_custom_template" <?php if ( $using_custom_template ) { echo ' checked'; } ?>><label for="rtec_using_custom_template"><?php _e( 'I\'m using a custom single-event.php file in my theme.', 'registrations-for-the-events-calendar' ); ?></label>
+            <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'What is this?' ); ?></a>
+            <span class="rtec-tooltip rtec-availability-options-wrapper" style="padding: 5px;"><?php _e( 'This will force the plugin to use the "tribe_events_single_event_before_the_content" or the "tribe_events_single_event_after_the_content" hooks. Try this setting if the registration form isn\'t showing up on the single event page. Read <a href="https://roundupwp.com/faq/registration-form-wont-show-event-page/" target="blank">this FAQ</a> for more information.', 'registrations-for-the-events-calendar' ); ?></span>
+        </p>
+		<?php
+	}
 
     public function default_checkbox( $args )
     {
@@ -1582,7 +1610,7 @@ class RTEC_Admin
         $rich_editor_settings = array();
 
         if ( isset( $input['default_max_registrations'] ) ) {
-            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'terms_conditions_require', 'recaptcha_require', 'disable_by_default', 'visitors_can_edit_what_status', 'show_registrants_data', 'limit_registrations', 'include_attendance_message', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
+            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'terms_conditions_require', 'recaptcha_require', 'disable_by_default', 'visitors_can_edit_what_status', 'show_registrants_data', 'limit_registrations', 'include_attendance_message', 'using_custom_template', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
             $leave_spaces = array( 'custom_js', 'custom_css', 'notification_message' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $rich_editor_settings = array( 'confirmation_message', 'notification_message' );
