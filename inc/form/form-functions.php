@@ -111,15 +111,20 @@ function rtec_the_registration_form( $atts = array() )
 			}
 
 		} else {
+			$return_html .= '<div id="rtec" class="rtec">';
+
 			$return_html .= $form->registrations_closed_message();
-			ob_start();
 
-			echo '<div class="rtec">';
-			$form->already_registered_visitor_html();
-			echo '</div>';
+			if ( ! $form->registration_deadline_has_passed() ) {
+				ob_start();
 
-			$already_html = ob_get_contents();
-			ob_get_clean();
+				$form->already_registered_visitor_html();
+
+				$return_html .= ob_get_contents();
+				ob_get_clean();
+            }
+
+			$return_html .= '</div>';
 
 			if ( $doing_shortcode === true || $should_return_html_not_echo ) {
 				return $return_html;

@@ -175,6 +175,7 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 = 2.4.2 =
 * Tweak: More precise automatic placement of the form to fit better with most themes in The Events Calendar 4.7+.
 * Tweak: Form styling tweaks to add space between checkbox fields and labels as well as fix display issues for buttons in certain themes.
+* Tweak: Tool to send an unregister link will be available even if the event is full as long as the registration deadline hasn't passed.
 * Fix: Added support for older versions of the single-event.php customizations. If the registration button is not displaying for an event, try enabling the setting "I'm using a custom single-event.php file in my theme" on the form tab.
 
 = 2.4.1 =

@@ -78,6 +78,7 @@
 }
 #rtec .rtec-register-button {
     position: relative;
+    vertical-align: middle;
     margin-bottom: 30px;
     padding: 12px 40px 12px 16px;
     padding-right: 40px !important;
