@@ -127,7 +127,7 @@ function rtec_get_event_deadline_utc( $event_meta ) {
 function rtec_get_time_zone_offset() {
 	$WP_offset = get_option( 'gmt_offset' );
 
-	if ( ! empty( $WP_offset ) ) {
+	if ( isset( $WP_offset ) ) {
 		$tz_offset = $WP_offset * HOUR_IN_SECONDS;
 	} else {
 		$options = get_option( 'rtec_options' );
