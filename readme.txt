@@ -172,6 +172,9 @@ The plugin is not yet fully compatible with a WordPress multisite installation. 
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.4.3 =
+* Tweak: JavaScript for the form is wrapped in a function for better portability. Use rtecInit() to initialize forms.
+
 = 2.4.2 =
 * Tweak: More precise automatic placement of the form to fit better with most themes in The Events Calendar 4.7+.
 * Tweak: Form styling tweaks to add space between checkbox fields and labels as well as fix display issues for buttons in certain themes.
