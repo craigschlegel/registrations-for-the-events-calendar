@@ -77,7 +77,7 @@ class RTEC_Db
 
 		$email = isset( $data['email'] ) ? $data['email'] : '';
 		$venue = ! empty( $data['venue'] ) ? $data['venue'] : $event_meta['venue_id'];
-		$phone = isset( $data['phone'] ) ? preg_replace( '/[^0-9]/', '', $data['phone'] ) : '';
+		$phone = isset( $data['phone'] ) ? $data['phone'] : '';
 		$other = isset( $data['other'] ) ? str_replace( "'", '`', $data['other'] ) : '';
 		$custom = rtec_serialize_custom_data( $data, $field_attributes, $from_form );
 		$status = isset( $data['status'] ) ? $data['status'] : 'n';

@@ -635,7 +635,8 @@ class RTEC_Admin
 	    $pformat_select = array(
 		    array( '1', '(123) 456-7890' ),
 		    array( '2', '12 3456 7890' ),
-		    array( '3', '(12) 3456 7890' )
+		    array( '3', '(12) 3456 7890' ),
+		    array( '4', __( 'No Format', 'registrations-for-the-events-calendar' ) )
 	    );
 
 	    $this->create_settings_field( array(

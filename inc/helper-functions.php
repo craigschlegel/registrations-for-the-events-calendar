@@ -155,6 +155,12 @@ function rtec_format_phone_number( $raw_number ) {
 	global $rtec_options;
 	$phone_option = isset( $rtec_options['phone_format'] ) ? $rtec_options['phone_format'] : '1';
 
+	if ( $phone_option === '4' ) {
+	    return $raw_number;
+    } else {
+	    $raw_number = preg_replace( '/[^0-9]/', '', $raw_number );
+    }
+
 	$rules = array(
 		7 => array(
 			'pattern' => '/([0-9]{3})([0-9]{4})/',

@@ -125,7 +125,11 @@ class RTEC_Submission
 
 				//temporary fix for phone numbers
 				if ( $show_field === 'phone' ) {
-					$unvalidated_submission[ 'rtec_' . $show_field ] = preg_replace( '/[^0-9]/', '', $unvalidated_submission[ 'rtec_' . $show_field ] );
+					$phone_option = isset( $rtec_options['phone_format'] ) ? $rtec_options['phone_format'] : '1';
+
+					if ( $phone_option !== '4' ) {
+						$unvalidated_submission[ 'rtec_' . $show_field ] = preg_replace( '/[^0-9]/', '', $unvalidated_submission[ 'rtec_' . $show_field ] );
+					}
 
 					if ( $fields_atts['phone']['valid_params']['count'] === '' ) {
 						$fields_atts[ $show_field ]['valid_type'] = 'length';
