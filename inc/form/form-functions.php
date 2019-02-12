@@ -11,6 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function rtec_the_registration_form( $atts = array() )
 {
+	if ( tribe_is_event() && is_single() ) {
+		rtec_action_check_after_post();
+	}
+
 	$rtec = RTEC();
 	global $rtec_options;
 	$form = $rtec->form->instance();
@@ -146,7 +150,9 @@ function rtec_the_move_flag()
 {
 	global $rtec_options;
 	$location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'tribe_events_single_event_before_the_content';
-	if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
+	$using_custom_template = isset( $rtec_options['using_custom_template'] ) ? $rtec_options['using_custom_template'] : false;
+
+	if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() && ! $using_custom_template ) {
 		echo '<span style="display:none;" id="rtec-js-move-flag" data-location="'.$location.'"></span>';
 	}
 }
@@ -252,18 +258,10 @@ function rtec_form_location_init()
 		if ( $location !== 'shortcode' ) {
 			add_action( $location, 'rtec_the_registration_form' );
 		}
-		add_action( 'tribe_events_single_event_before_the_content', 'rtec_action_check_after_post' );
-	} elseif ( class_exists( 'Tribe__Editor__Blocks__Abstract' ) ) {
-		if ( $location !== 'shortcode' ) {
-			add_action( 'tribe_events_single_event_meta_primary_section_end', 'rtec_the_registration_form' );
-		}
-		// action exists so execute it
-		add_action( 'tribe_events_single_event_meta_primary_section_end', 'rtec_action_check_after_post' );
-	} else {
+	} elseif ( ! class_exists( 'Tribe__Editor__Blocks__Abstract' ) ) {
 		if ( $location !== 'shortcode' ) {
 			add_action( $location, 'rtec_the_registration_form' );
 		}
-		add_action( 'tribe_events_single_event_before_the_content', 'rtec_action_check_after_post' );
 	}
 
 }
@@ -315,6 +313,22 @@ function rtec_check_action_before_post() {
 
 }
 add_action( 'init', 'rtec_check_action_before_post' );
+
+/**
+ * Set the form location right away
+ *
+ * @since 2.4.3
+ */
+function rtec_use_footer_to_add_form() {
+	global $rtec_options;
+	$location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'tribe_events_single_event_before_the_content';
+	$using_custom_template = isset( $rtec_options['using_custom_template'] ) ? $rtec_options['using_custom_template'] : false;
+	if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() && ! $using_custom_template ) {
+		rtec_the_registration_form();
+	}
+}
+add_action( 'wp_footer', 'rtec_use_footer_to_add_form', 1 );
+
 
 function rtec_action_check_after_post() {
 	if ( ! is_admin() && isset( $_GET['action'] ) && $_GET['action'] === 'unregister' ) {
@@ -471,7 +485,7 @@ function rtec_custom_js() {
 <?php
 	}
 }
-add_action( 'wp_footer', 'rtec_custom_js' );
+add_action( 'wp_footer', 'rtec_custom_js', 50 );
 
 /**
  * outputs the custom css from the "Customize" tab on the Settings page

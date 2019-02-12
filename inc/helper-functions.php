@@ -96,7 +96,10 @@ function rtec_get_event_deadline_utc( $event_meta ) {
 		if ( $event_meta['deadline_type'] === 'start' ) {
 
 			if ( $event_meta['start_date'] !== '' ) {
-				$deadline_time = strtotime( $start_date_utc );
+				$deadline_multiplier = isset( $rtec_options['registration_deadline'] ) ? sanitize_text_field( $rtec_options['registration_deadline'] ) : 0;
+				$deadline_unit = isset( $rtec_options['registration_deadline_unit'] ) ? sanitize_text_field( $rtec_options['registration_deadline_unit'] ) : 0;
+				$start_timestamp = strtotime( $start_date_utc );
+				$deadline_time = $start_timestamp - ($deadline_multiplier * $deadline_unit);
 			}
 
 		} elseif ( $event_meta['deadline_type'] === 'end' ) {
