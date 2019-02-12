@@ -173,7 +173,9 @@ The plugin is not yet fully compatible with a WordPress multisite installation. 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
 = 2.4.3 =
+* New: Added another option to apply no formatting to phone numbers. Phone numbers would then display as the attendee entered them on the form.
 * Tweak: JavaScript for the form is wrapped in a function for better portability. Use rtecInit() to initialize forms.
+* Fix: Multiple forms would display on the single event page when multiple elements had the class "tribe-events-single-event-description"
 
 = 2.4.2 =
 * Tweak: More precise automatic placement of the form to fit better with most themes in The Events Calendar 4.7+.

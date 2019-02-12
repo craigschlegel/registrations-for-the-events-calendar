@@ -22,14 +22,14 @@ jQuery(document).ready(function($) {
                 // move the element that needs to be moved jQuery('.tribe-events-single-event-description')
                 if ($('.tribe-events-single-event-description').length) {
                     if (location === 'tribe_events_single_event_after_the_content') {
-                        $('.tribe-events-single-event-description').after($moveEl);
+                        $('.tribe-events-single-event-description').first().after($moveEl);
                     } else {
-                        $('.tribe-events-single-event-description').before($moveEl);
+                        $('.tribe-events-single-event-description').first().before($moveEl);
                     }
                 } else if ($('.tribe-events-schedule').length) {
-                    $('.tribe-events-schedule').after($moveEl);
+                    $('.tribe-events-schedule').first().after($moveEl);
                 } else if ($('.tribe-events-single .tribe_events').length) {
-                    $('.tribe-events-single .tribe_events').prepend($moveEl);
+                    $('.tribe-events-single .tribe_events').first().prepend($moveEl);
                 }
 
                 if ($attendee_list !== false) {
