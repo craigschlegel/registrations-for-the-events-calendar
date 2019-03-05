@@ -4,8 +4,8 @@ Contributors: roundupwp
 Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
-Tested up to: 5.0
-Stable tag: 2.4.3
+Tested up to: 5.1
+Stable tag: 2.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,9 @@ The plugin is not yet fully compatible with a WordPress multisite installation. 
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.4.4 =
+* Fix: Missing code to make some text translatable such as "leave blank for default" and "Notification of Unregistration".
+
 = 2.4.3 =
 * New: Added another option to apply no formatting to phone numbers. Phone numbers would then display as the attendee entered them on the form.
 * Tweak: JavaScript for the form is wrapped in a function for better portability. Use rtecInit() to initialize forms.
