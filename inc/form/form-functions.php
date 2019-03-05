@@ -366,7 +366,7 @@ function rtec_action_check_after_post() {
                         'content_type'  => 'plain',
                         'recipients'    => $recipients,
                         'subject'       => array(
-                            'text' => 'Notification of Unregistration',
+                            'text' => __( 'Notification of Unregistration', 'registrations-for-the-events-calendar' ),
                             'data' => array()
                         ),
                         'body'          => array(
