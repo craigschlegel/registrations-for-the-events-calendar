@@ -191,7 +191,7 @@ class RTEC_Admin
 		    'class' => 'rtec-show-registrant-options',
 		    'page' => 'rtec_attendee_data',
 		    'section' => 'rtec_attendee_data',
-		    'default' => 'users_and_confirmed',
+		    'default' => 'any',
 		    'new_line' => true
 	    ));
 
