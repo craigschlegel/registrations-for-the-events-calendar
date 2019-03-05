@@ -294,7 +294,7 @@ function rtec_meta_boxes_html(){
 						<tr class="rtec-hidden-option-wrap">
 							<td class="tribe-table-field-label"><?php _e( 'Notification Email Recipients:', 'registrations-for-the-events-calendar' ); ?></td>
 							<td>
-								<input type="text" style="width: 100%; max-width: 400px;" id="rtec-not-email" name="_RTECnotificationEmailRecipient" value="<?php echo esc_attr( $notification_email ); ?>" placeholder="leave blank for default"/>
+								<input type="text" style="width: 100%; max-width: 400px;" id="rtec-not-email" name="_RTECnotificationEmailRecipient" value="<?php echo esc_attr( $notification_email ); ?>" placeholder="<?php _e( 'leave blank for default', 'registrations-for-the-events-calendar' ); ?>"/>
 							</td>
 						</tr>
 						</tbody>
@@ -308,7 +308,7 @@ function rtec_meta_boxes_html(){
 						<tr class="rtec-hidden-option-wrap">
 							<td class="tribe-table-field-label"><?php _e( 'Confirmation From Address:', 'registrations-for-the-events-calendar' ); ?></td>
 							<td>
-								<input type="text" size="30" id="rtec-conf-from" name="_RTECconfirmationEmailFrom" value="<?php echo esc_attr( $confirmation_from ); ?>" placeholder="leave blank for default"/>
+								<input type="text" size="30" id="rtec-conf-from" name="_RTECconfirmationEmailFrom" value="<?php echo esc_attr( $confirmation_from ); ?>" placeholder="<?php _e( 'leave blank for default', 'registrations-for-the-events-calendar' ); ?>"/>
 							</td>
 						</tr>
 						</tbody>

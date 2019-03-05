@@ -91,11 +91,11 @@ if ( ! $event_meta['show_registrants_data'] ) {
 			<h4><?php _e( 'Email', 'registrations-for-the-events-calendar' ); ?></h4>
 			<div class="rtec-hidden-option-wrap">
 				<label for="rtec-not-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Notification email recipients', 'registrations-for-the-events-calendar' ); ?></label><br />
-				<input type="text" size="50" id="rtec-not-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECnotificationEmailRecipient" value="<?php echo esc_attr( $notification_email ); ?>" placeholder="leave blank for default"/>
+				<input type="text" size="50" id="rtec-not-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECnotificationEmailRecipient" value="<?php echo esc_attr( $notification_email ); ?>" placeholder="<?php _e( 'leave blank for default', 'registrations-for-the-events-calendar' ); ?>"/>
 			</div>
 			<div class="rtec-hidden-option-wrap">
 				<label for="rtec-conf-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Confirmation email from address', 'registrations-for-the-events-calendar' ); ?></label><br />
-				<input type="text" size="50" id="rtec-conf-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECconfirmationEmailFrom" value="<?php echo esc_attr( $conf_email ); ?>" placeholder="leave blank for default"/>
+				<input type="text" size="50" id="rtec-conf-email-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECconfirmationEmailFrom" value="<?php echo esc_attr( $conf_email ); ?>" placeholder="<?php _e( 'leave blank for default', 'registrations-for-the-events-calendar' ); ?>"/>
 			</div>
 		</div>
 		<button class="button action rtec-admin-secondary-button rtec-update-event-options"><?php _e( 'Update', 'registrations-for-the-events-calendar'  ); ?></button>
