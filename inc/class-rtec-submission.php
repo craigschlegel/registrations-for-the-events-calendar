@@ -226,13 +226,11 @@ class RTEC_Submission
 	 * @since 1.2
 	 * @return bool
 	 */
-    public function attendance_limit_not_reached( $num_registered = 0 )
+    public function attendance_limit_not_reached()
     {
     	$limit_registrations = isset( $this->event_meta['limit_registrations'] ) ? $this->event_meta['limit_registrations'] : false;
 	    if ( $limit_registrations ) {
-	    	$registrations_left = $this->event_meta['max_registrations'] - (int)$num_registered;
-
-		    if ( $registrations_left > 0 ) {
+		    if ( $this->event_meta['registrations_left'] > 0 ) {
 		    	return true;
 		    } else {
 		    	return false;
@@ -338,8 +336,13 @@ class RTEC_Submission
 		$return = 'success';
 		$status = 'n';
 
+
 		$sanitized_data = $this->sanitize_submission( $raw_data );
 		$sanitized_data['action_key'] = sha1( uniqid( '', true ) );
+		$data = $this->get_db_data( $sanitized_data, $status );
+
+		$db->insert_entry( $data, $this->field_attributes );
+
 		$this->submission = $sanitized_data;
 
 		$confirmation_success = false;
@@ -412,9 +415,6 @@ class RTEC_Submission
 
 		}
 
-		$data = $this->get_db_data( $sanitized_data, $status );
-
-		$db->insert_entry( $data, $this->field_attributes );
 
 		if ( ! empty( $data['event_id'] ) ) {
 			$event_meta = rtec_get_event_meta( (int)$data['event_id'] );

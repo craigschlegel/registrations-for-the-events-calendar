@@ -79,25 +79,19 @@ class RTEC_Admin_Registrations {
 		if ( $settings['qtype'] === 'all' ) {
 			$args = array(
 				'posts_per_page' => $this->posts_per_page,
-				'start_date' => date( '2000-1-1 0:0:0' ),
-				'orderby' => 'date',
-				'order' => 'DESC',
+				'start_date' => '2000-10-01 00:01',
 				'offset' => $settings['off']
 			);
 		} elseif ( $settings['qtype'] === 'start' ) {
 			$args = array(
-				'orderby' => '_EventStartDate',
-				'order' => 'ASC',
 				'posts_per_page' => $this->posts_per_page,
 				'start_date' => $settings['start'],
 				'offset' => $settings['off']
 			);
 		} else {
 			$args = array(
-				'orderby' => '_EventStartDate',
-				'order' => 'ASC',
 				'posts_per_page' => $this->posts_per_page,
-				'start_date' => date( 'Y-m-d H:i:s' ),
+				'start_date' => date( 'Y-m-d H:i' ),
 				'offset' => $settings['off']
 			);
 		}
@@ -116,13 +110,11 @@ class RTEC_Admin_Registrations {
 			$posts_per_page = $full ? 100 : $this->posts_per_page;
 			if ( ! empty ( $event_ids ) ) {
 				if ( $settings['qtype'] === 'all' ) {
-					$start_date = date( '2000-1-1 0:0:0' );
+					$start_date = '2000-10-01 00:01';
 				} else {
-					$start_date = date( 'Y-m-d H:i:s', (time() + rtec_get_utc_offset() - 6 *  HOUR_IN_SECONDS) );
+					$start_date = date( 'Y-m-d H:i', (time() + rtec_get_utc_offset() - 6 *  HOUR_IN_SECONDS) );
 				}
 				$args = array(
-					'orderby' => '_EventStartDate',
-					'order' => 'ASC',
 					'posts_per_page' => $posts_per_page,
 					'start_date' => $start_date,
 					'offset' => $settings['off'],
@@ -135,7 +127,6 @@ class RTEC_Admin_Registrations {
 		}
 
 		return tribe_get_events( $args );
-
 	}
 
 	/**

@@ -186,21 +186,20 @@ function rtec_process_form_submission()
 
 	$event_meta = $form->get_event_meta();
 
-		if ( $submission->attendance_limit_not_reached( $event_meta ) ) {
-			$submission->set_field_attributes( $fields_atts );
-			$raw_data = $submission->validate_input( $_POST );
+	$submission->set_field_attributes( $fields_atts );
+	$raw_data = $submission->validate_input( $_POST );
 
-			if ( $submission->has_errors() ) {
-				echo 'form';
-			} else {
-				$status = $submission->process_valid_submission( $raw_data );
-
-				echo $status;
-			}
-
+	if ( $submission->has_errors() ) {
+		echo 'form';
+	} else {
+		if ( $submission->attendance_limit_not_reached() ) {
+			$status = $submission->process_valid_submission( $raw_data );
+			echo $status;
 		} else {
 			echo 'full';
 		}
+	}
+
 
 	die();
 }

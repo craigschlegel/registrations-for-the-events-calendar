@@ -172,6 +172,9 @@ The plugin is not yet fully compatible with a WordPress multisite installation. 
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.4.5 =
+* Fix: Events displaying out of order on "Registrations" tab when using version 4.9 of The Events Calendar.
+
 = 2.4.4 =
 * Fix: Missing code to make some text translatable such as "leave blank for default" and "Notification of Unregistration".
 
