@@ -4,8 +4,8 @@ Contributors: roundupwp
 Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
-Tested up to: 5.1
-Stable tag: 2.4.4
+Tested up to: 5.2
+Stable tag: 2.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,6 +173,8 @@ The plugin is not yet fully compatible with a WordPress multisite installation. 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
 = 2.4.5 =
+* Tweak: Registrations saved in the database before confirmation and notification emails are sent.
+* Fix: Registration limit could be passed if two visitors register at the same time.* Fix: Events displaying out of order on "Registrations" tab when using version 4.9 of The Events Calendar.
 * Fix: Events displaying out of order on "Registrations" tab when using version 4.9 of The Events Calendar.
 
 = 2.4.4 =
