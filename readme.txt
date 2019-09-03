@@ -173,6 +173,10 @@ The plugin is not yet fully compatible with a WordPress multisite installation. 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
 = 2.4.6 =
+* New: Sort events in the "Overview" by current, past, or recent hidden events.
+* New: Added filter "rtec_email_headers" to change email headers before sending.
+* Tweak: Custom JS action priority changed to 20 to prevent conflicts with some themes.
+* Fix: Less than 10 events displaying in the "Overview" on a single page.
 
 = 2.4.5 =
 * Tweak: Registrations saved in the database before confirmation and notification emails are sent.
