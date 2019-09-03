@@ -144,6 +144,12 @@ class RTEC_Admin_Registrations {
 			if ( $this->settings['with'] === 'with' ) {
 				if ( isset( $rtec_options['disable_by_default'] ) && $rtec_options['disable_by_default'] === true ) {
 					$args['meta_query'][] = array(
+						'key' => '_RTECregistrationsDisabled',
+						'value' => '0',
+						'compare' => '='
+					);
+				} else {
+					$args['meta_query'][] = array(
 						'relation' => 'OR',
 						array(
 							'key' => '_RTECregistrationsDisabled',
@@ -154,12 +160,6 @@ class RTEC_Admin_Registrations {
 							'value' => '1',
 							'compare' => '!='
 						)
-					);
-				} else {
-					$args['meta_query'][] = array(
-						'key' => '_RTECregistrationsDisabled',
-						'value' => '1',
-						'compare' => '!='
 					);
 				}
 			}
@@ -190,11 +190,6 @@ class RTEC_Admin_Registrations {
 						'type'    => 'DATE'
 					),
 					array(
-						'key'     => '_RTECregistrationsDisabled',
-						'value'   => '0',
-						'compare' => '='
-					),
-					array(
 						'key'     => '_EventHideFromUpcoming',
 						'value'   => 'yes',
 						'compare' => '='
@@ -220,6 +215,12 @@ class RTEC_Admin_Registrations {
 			if ( $this->settings['with'] === 'with' ) {
 				if ( isset( $rtec_options['disable_by_default'] ) && $rtec_options['disable_by_default'] === true ) {
 					$args['meta_query'][] = array(
+						'key' => '_RTECregistrationsDisabled',
+						'value' => '0',
+						'compare' => '='
+					);
+				} else {
+					$args['meta_query'][] = array(
 						'relation' => 'OR',
 						array(
 							'key' => '_RTECregistrationsDisabled',
@@ -230,12 +231,6 @@ class RTEC_Admin_Registrations {
 							'value' => '1',
 							'compare' => '!='
 						)
-					);
-				} else {
-					$args['meta_query'][] = array(
-						'key' => '_RTECregistrationsDisabled',
-						'value' => '1',
-						'compare' => '!='
 					);
 				}
 			}
@@ -273,6 +268,12 @@ class RTEC_Admin_Registrations {
 		if ( $this->settings['with'] === 'with' ) {
 			if ( isset( $rtec_options['disable_by_default'] ) && $rtec_options['disable_by_default'] === true ) {
 				$args['meta_query'][] = array(
+					'key' => '_RTECregistrationsDisabled',
+					'value' => '0',
+					'compare' => '='
+				);
+			} else {
+				$args['meta_query'][] = array(
 					'relation' => 'OR',
 					array(
 						'key' => '_RTECregistrationsDisabled',
@@ -283,12 +284,6 @@ class RTEC_Admin_Registrations {
 						'value' => '1',
 						'compare' => '!='
 					)
-				);
-			} else {
-				$args['meta_query'][] = array(
-					'key' => '_RTECregistrationsDisabled',
-					'value' => '1',
-					'compare' => '!='
 				);
 			}
 		}
