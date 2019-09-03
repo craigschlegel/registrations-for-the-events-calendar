@@ -18,10 +18,13 @@ $settings = $this->settings;
 			</div>
 			<label for="rtec-registrations-date" class="screen-reader-text"><?php _e( 'Filter by start date', 'registrations-for-the-events-calendar' ); ?></label>
 			<select id="rtec-registrations-date" name="qtype" class="registrations-filters">
-				<option value="upcoming" <?php if ( $settings['qtype'] === 'upcoming' ) echo 'selected'; ?>><?php _e( 'View Upcoming', 'registrations-for-the-events-calendar' ); ?></option>
-				<option value="start" <?php if ( $settings['qtype'] === 'start' ) echo 'selected'; ?>><?php _e( 'Select Start Date', 'registrations-for-the-events-calendar' ); ?></option>
-				<option value="all" <?php if ( $settings['qtype'] === 'all' ) echo 'selected'; ?>><?php _e( 'View All', 'registrations-for-the-events-calendar' ); ?></option>
-			</select>
+                <option value="upcoming" <?php if ( $settings['qtype'] === 'upcoming' ) echo 'selected'; ?>><?php _e( 'View Upcoming', 'registrations-for-the-events-calendar' ); ?></option>
+                <option value="cur" <?php if ( $settings['qtype'] === 'cur' ) echo 'selected'; ?>><?php _e( 'View Current', 'registrations-for-the-events-calendar' ); ?></option>
+                <option value="past" <?php if ( $settings['qtype'] === 'past' ) echo 'selected'; ?>><?php _e( 'View Past', 'registrations-for-the-events-calendar' ); ?></option>
+                <option value="hid" <?php if ( $settings['qtype'] === 'hid' ) echo 'selected'; ?>><?php _e( 'View Recent Hidden', 'registrations-for-the-events-calendar' ); ?></option>
+                <option value="start" <?php if ( $settings['qtype'] === 'start' ) echo 'selected'; ?>><?php _e( 'Select Start Date', 'registrations-for-the-events-calendar' ); ?></option>
+                <option value="all" <?php if ( $settings['qtype'] === 'all' ) echo 'selected'; ?>><?php _e( 'View All', 'registrations-for-the-events-calendar' ); ?></option>
+            </select>
 			<label for="rtec-registrations-start" class="screen-reader-text"><?php _e( 'Filter by event start date', 'registrations-for-the-events-calendar' ); ?></label>
 			<input type="text" id="rtec-date-picker" name="start" value="<?php echo date( "m/d/Y", strtotime( $settings['start'] ) ); ?>" class="rtec-date-picker" style="vertical-align: middle;<?php if ( $settings['qtype'] !== 'start' ) echo 'display: none;'; ?>"/>
 			<label for="rtec-registrations-reg" class="screen-reader-text"><?php _e( 'Filter by registrations', 'registrations-for-the-events-calendar' ); ?></label>

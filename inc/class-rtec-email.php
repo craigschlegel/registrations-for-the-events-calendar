@@ -313,6 +313,8 @@ class RTEC_Email {
 			$headers .= 'Content-Type: text/plain; charset=utf-8' . "\r\n";
 		}
 
+		$headers = apply_filters( 'rtec_email_headers', $headers, $this->template_type, $data );
+
 		$this->headers = $headers;
 	}
 

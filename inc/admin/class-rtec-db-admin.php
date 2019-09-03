@@ -22,11 +22,11 @@ class RTEC_Db_Admin extends RTEC_Db
     {
         global $wpdb;
 
-        $table_name = $wpdb->prefix . RTEC_TABLENAME;
-        $charset_collate = $wpdb->get_charset_collate();
+	        $table_name = $wpdb->prefix . RTEC_TABLENAME;
+	        $charset_collate = $wpdb->get_charset_collate();
 
-        if ( $wpdb->get_var( "show tables like '$table_name'" ) != $table_name ) {
-            $sql = "CREATE TABLE " . $table_name . " (
+	        if ( $wpdb->get_var( "show tables like '$table_name'" ) != $table_name ) {
+		        $sql = "CREATE TABLE " . $table_name . " (
                 id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
                 user_id BIGINT(20) UNSIGNED DEFAULT 0 NOT NULL,
                 event_id BIGINT(20) UNSIGNED NOT NULL,
@@ -41,9 +41,11 @@ class RTEC_Db_Admin extends RTEC_Db
                 custom LONGTEXT DEFAULT '' NOT NULL,
                 status CHAR(1) DEFAULT 'y' NOT NULL,
                 action_key VARCHAR(40) DEFAULT '' NOT NULL,
+                INDEX event_id (event_id),
+                INDEX status (status),
                 UNIQUE KEY id (id)
             ) $charset_collate;";
-	        $wpdb->query( $sql );
+		        $wpdb->query( $sql );
 
 	        add_option( 'rtec_db_version', RTEC_DBVERSION );
 

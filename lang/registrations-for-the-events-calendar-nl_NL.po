@@ -1,80 +1,91 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
-"POT-Creation-Date: 2019-04-24 14:51-0500\n"
-"PO-Revision-Date: 2019-04-24 14:51-0500\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Project-Id-Version: Free registrations Roundup\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-26 08:25+0200\n"
+"PO-Revision-Date: 2019-05-04 15:59-0500\n"
+"Last-Translator: Sjoerd Heskes\n"
+"Language-Team: Dutch (Netherlands)\n"
 "Language: nl_NL\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
-"X-Poedit-Basepath: ..\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-KeywordsList: __;_e;esc_attr_e;esc_html_e;esc_html__\n"
-"X-Poedit-SearchPath-0: .\n"
+"X-Loco-Source-Locale: en-US\n"
+"X-Loco-Project-Id: 67471\n"
+"X-Loco-Api-Version: 1.0.23 20190417-1\n"
 
 #: inc/admin/admin-functions.php:50 inc/admin/class-rtec-admin.php:34
 #: inc/admin/class-rtec-admin.php:56 inc/admin/class-rtec-admin.php:57
-#: inc/admin/templates/main.php:23
+#: inc/admin/templates/main.php:23 loco:5cc2a8f9c38e0f4ab036fc82
 msgid "Registrations"
-msgstr "Inschrijvingen"
+msgstr "Registraties"
 
-#: inc/admin/admin-functions.php:68
+#: inc/admin/admin-functions.php:68 loco:5cc2a8f9c38e0f4ab036fc83
 msgid ""
 "Registration forms are now added to all of your single event pages. Check "
 "out the <a href=\""
 msgstr ""
+"Aanmeld formulieren zijn toegevoegd aan al je individuele event pagina's. "
+"Check de <a href=\""
 
-#: inc/admin/admin-functions.php:69
+#: inc/admin/admin-functions.php:69 loco:5cc2a8f9c38e0f4ab036fc84
 msgid ""
 "You can also view setup directions <a href=\"https://roundupwp.com/products/"
 "registrations-for-the-events-calendar/setup/\" target=\"_blank\">on our "
 "website</a></p>"
 msgstr ""
+"Je kan ook de setup aanwijzingen <a href=\"https://roundupwp.com/products/"
+"registrations-for-the-events-calendar/setup/\" target=\"_blank\"> op onze "
+"website bekijken </a></p>"
 
 #: inc/admin/admin-functions.php:167 inc/admin/admin-functions.php:361
+#: loco:5cc2a8f9c38e0f4ab036fc85
 msgid "Registrations for The Events Calendar"
-msgstr ""
+msgstr "Registraties voor de Evenementen Kalender"
 
-#: inc/admin/admin-functions.php:230
+#: inc/admin/admin-functions.php:230 loco:5cc2a8f9c38e0f4ab036fc86
 msgid "General"
 msgstr "Algemeen"
 
-#: inc/admin/admin-functions.php:239
+#: inc/admin/admin-functions.php:239 loco:5cc2a8f9c38e0f4ab036fc87
 msgid "Disable Registrations:"
-msgstr ""
+msgstr "Schakel inschrijvingen uit:"
 
-#: inc/admin/admin-functions.php:245
+#: inc/admin/admin-functions.php:245 loco:5cc2a8f9c38e0f4ab036fc88
 msgid "Limit Registrations:"
-msgstr ""
+msgstr "Beperk het aantal aanmeldingen"
 
-#: inc/admin/admin-functions.php:251
+#: inc/admin/admin-functions.php:251 loco:5cc2a8f9c38e0f4ab036fc89
 msgid "Maximum Registrations:"
-msgstr ""
+msgstr "Maximum aantal registraties:"
 
-#: inc/admin/admin-functions.php:257
+#: inc/admin/admin-functions.php:257 loco:5cc2a8f9c38e0f4ab036fc8a
 msgid "Deadline Type:"
-msgstr ""
+msgstr "Deadline type:"
 
 #: inc/admin/admin-functions.php:261
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:73
+#: loco:5cc2a8f9c38e0f4ab036fc8b
 msgid "Start Time"
 msgstr "Starttijd"
 
 #: inc/admin/admin-functions.php:265
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:77
+#: loco:5cc2a8f9c38e0f4ab036fc8c
 msgid "End Time"
 msgstr "Eindtijd"
 
 #: inc/admin/admin-functions.php:269
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:81
+#: loco:5cc2a8f9c38e0f4ab036fc8d
 msgid "No deadline"
-msgstr ""
+msgstr "Geen deadline"
 
 #: inc/admin/admin-functions.php:273
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:85
+#: loco:5cc2a8f9c38e0f4ab036fc8e
 msgid "Other:"
 msgstr "Anders:"
 
@@ -85,130 +96,146 @@ msgstr "Anders:"
 #: inc/class-rtec-email.php:174 inc/class-rtec-email.php:178
 #: inc/form/class-rtec-form.php:252 inc/form/class-rtec-form.php:456
 #: inc/form/class-rtec-form.php:457 inc/form/class-rtec-form.php:665
+#: loco:5cc2a8f9c38e0f4ab036fc8f
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
-#: inc/admin/admin-functions.php:295
+#: inc/admin/admin-functions.php:295 loco:5cc2a8f9c38e0f4ab036fc90
 msgid "Notification Email Recipients:"
-msgstr ""
+msgstr "Notificatie e-mail ontvangers:"
 
 #: inc/admin/admin-functions.php:297 inc/admin/admin-functions.php:311
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:94
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:98
+#: loco:5cc2a8f9c38e0f4ab036fc91
 msgid "leave blank for default"
-msgstr ""
+msgstr "laat leeg voor standaard setting"
 
-#: inc/admin/admin-functions.php:309
+#: inc/admin/admin-functions.php:309 loco:5cc2a8f9c38e0f4ab036fc92
 msgid "Confirmation From Address:"
-msgstr ""
+msgstr "Bevestiging afzender adres:"
 
-#: inc/admin/admin-functions.php:321
+#: inc/admin/admin-functions.php:321 loco:5cc2a8f9c38e0f4ab036fc93
 msgid "Shortcodes"
-msgstr ""
+msgstr "Short codes"
 
-#: inc/admin/admin-functions.php:327
+#: inc/admin/admin-functions.php:327 loco:5cc2a8f9c38e0f4ab036fc94
 msgid ""
 "Copy and paste these shortcodes to display the registration form and the "
 "attendee list on a page outside of the single event view."
 msgstr ""
+"Kopieer en plak de short codes om het registratie formulier en de "
+"aanmeldlijst te tonen op een plek buiten de weergavepagina van het evenement"
 
-#: inc/admin/admin-functions.php:332
+#: inc/admin/admin-functions.php:332 loco:5cc2a8f9c38e0f4ab036fc95
 msgid "Registration Form: "
-msgstr ""
+msgstr "Aanmeld formulier:"
 
-#: inc/admin/admin-functions.php:332
+#: inc/admin/admin-functions.php:332 loco:5cc2a8f9c38e0f4ab036fc96
 msgid ""
 "Note that the registration form appears on the single event view "
 "automatically."
 msgstr ""
+"Merk op dat het aanmeld formulier automatisch op de individuele evenement "
+"webpagina verschijnt."
 
 #: inc/admin/admin-functions.php:334 inc/admin/admin-functions.php:346
+#: loco:5cc2a8f9c38e0f4ab036fc97
 msgid "Shortcode Settings:"
-msgstr ""
+msgstr "Short code setting:"
 
-#: inc/admin/admin-functions.php:335
+#: inc/admin/admin-functions.php:335 loco:5cc2a8f9c38e0f4ab036fc98
 msgid "Show registration form by event ID"
-msgstr ""
+msgstr "Toon aanmeld formulier door event ID"
 
-#: inc/admin/admin-functions.php:336
+#: inc/admin/admin-functions.php:336 loco:5cc2a8f9c38e0f4ab036fc99
 msgid "Use \"false\" to show the form initially"
-msgstr ""
+msgstr "Gebruik \"false\" om het formulier als eerste te tonen"
 
-#: inc/admin/admin-functions.php:337
+#: inc/admin/admin-functions.php:337 loco:5cc2a8f9c38e0f4ab036fc9a
 msgid ""
 "Use \"true\" to add the event title and start/end time information above the "
 "form"
 msgstr ""
+"Gebruik \"true\" om de event titel en start en eindtijd informatie boven het "
+"formulier te tonen"
 
-#: inc/admin/admin-functions.php:338
+#: inc/admin/admin-functions.php:338 loco:5cc2a8f9c38e0f4ab036fc9b
 msgid ""
 "Use \"true\" to add the attendee list above the form if enabled for this "
 "event"
 msgstr ""
+"Gebruik \"true\" om de lijst van aanmeldingen boven het formulier te tonen."
 
-#: inc/admin/admin-functions.php:344
+#: inc/admin/admin-functions.php:344 loco:5cc2a8f9c38e0f4ab036fc9c
 msgid "Attendee List: "
-msgstr ""
+msgstr "Aanmeldingen lijst:"
 
-#: inc/admin/admin-functions.php:347
+#: inc/admin/admin-functions.php:347 loco:5cc2a8f9c38e0f4ab036fc9d
 msgid "Show attendee list by event ID"
-msgstr ""
+msgstr "Toon de aanmeldingen lijst per event ID"
 
-#: inc/admin/admin-functions.php:348
+#: inc/admin/admin-functions.php:348 loco:5cc2a8f9c38e0f4ab036fc9e
 msgid ""
 "Use \"true\" to add the event title and start/end time information above the "
 "list"
 msgstr ""
+"Gebruik \"true\" om de event titel en start en eindtijd boven de lijst toe "
+"te voegen"
 
-#: inc/admin/admin-functions.php:355
+#: inc/admin/admin-functions.php:355 loco:5cc2a8f9c38e0f4ab036fc9f
 msgid "More Single Event Options"
-msgstr ""
+msgstr "Meer Individuele Event Opties"
 
-#: inc/admin/admin-functions.php:361
+#: inc/admin/admin-functions.php:361 loco:5cc2a8f9c38e0f4ab036fca0
 msgid ""
 "More single event options like custom confirmation email templates, multiple "
 "venues/tier registration, settings for logged-in users and others in"
 msgstr ""
+"Meer individuele event opties zoals email bevestiging templates, meerdere "
+"locaties/registratie mogelijkheden, settings voor ingelogde gebruikers en "
+"anderen in"
 
 #: inc/admin/admin-functions.php:723 inc/admin/admin-functions.php:726
+#: loco:5cc2a8f9c38e0f4ab036fca1
 msgid "My Events"
 msgstr "Mijn evenementen"
 
-#: inc/admin/admin-functions.php:749
+#: inc/admin/admin-functions.php:749 loco:5cc2a8f9c38e0f4ab036fca2
 #, php-format
 msgid "%1$s to %2$s at %3$s"
-msgstr "%1$s bij %2$s op %3$s"
+msgstr "%1$s tot %2$s bij %3$s"
 
 #: inc/admin/admin-functions.php:773 inc/admin/admin-functions.php:878
-#: inc/admin/class-rtec-admin-event.php:148
+#: inc/admin/class-rtec-admin-event.php:148 loco:5cc2a8f9c38e0f4ab036fca3
 msgid "Registration Date"
-msgstr ""
+msgstr "Registratie datum"
 
 #: inc/admin/admin-functions.php:777 inc/admin/admin-functions.php:1035
 #: inc/admin/class-rtec-admin.php:140 inc/class-rtec-email.php:172
 #: inc/class-rtec-email.php:176 inc/form/class-rtec-form.php:242
 #: inc/form/class-rtec-form.php:444 inc/form/class-rtec-form.php:445
-#: inc/form/class-rtec-form.php:659
+#: inc/form/class-rtec-form.php:659 loco:5cc2a8f9c38e0f4ab036fca4
 msgid "First"
-msgstr "Voornaam"
+msgstr "Eerste"
 
 #: inc/admin/admin-functions.php:779 inc/admin/admin-functions.php:1036
 #: inc/admin/class-rtec-admin.php:141 inc/class-rtec-email.php:173
 #: inc/class-rtec-email.php:177 inc/form/class-rtec-form.php:247
 #: inc/form/class-rtec-form.php:450 inc/form/class-rtec-form.php:451
-#: inc/form/class-rtec-form.php:662
+#: inc/form/class-rtec-form.php:662 loco:5cc2a8f9c38e0f4ab036fca5
 msgid "Last"
-msgstr "Achternaam"
+msgstr "Laatste"
 
-#: inc/admin/admin-functions.php:781
+#: inc/admin/admin-functions.php:781 loco:5cc2a8f9c38e0f4ab036fca6
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: inc/admin/admin-functions.php:790 inc/admin/admin-functions.php:1038
 #: inc/admin/class-rtec-admin.php:143 inc/class-rtec-email.php:116
 #: inc/class-rtec-email.php:203 inc/form/class-rtec-form.php:262
 #: inc/form/class-rtec-form.php:462 inc/form/class-rtec-form.php:463
-#: inc/form/class-rtec-form.php:668
+#: inc/form/class-rtec-form.php:668 loco:5cc2a8f9c38e0f4ab036fca7
 msgid "Phone"
 msgstr "Telefoon"
 
@@ -216,522 +243,558 @@ msgstr "Telefoon"
 #: inc/admin/class-rtec-admin.php:1083 inc/admin/class-rtec-admin.php:1089
 #: inc/class-rtec-email.php:126 inc/class-rtec-email.php:211
 #: inc/form/class-rtec-form.php:257 inc/form/class-rtec-form.php:681
+#: loco:5cc2a8f9c38e0f4ab036fca8
 msgid "Other"
 msgstr "Anders"
 
-#: inc/admin/admin-functions.php:856
+#: inc/admin/admin-functions.php:856 loco:5cc2a8f9c38e0f4ab036fca9
 msgid "click to manage"
-msgstr ""
+msgstr "Klik om te managen"
 
-#: inc/admin/admin-functions.php:882
+#: inc/admin/admin-functions.php:882 loco:5cc2a8f9c38e0f4ab036fcaa
 msgid "Event"
 msgstr "Evenement"
 
 #: inc/admin/admin-functions.php:883
 #: inc/admin/templates/partials/registrations-list-view.php:9
 #: inc/admin/templates/partials/registrations-list-view.php:10
+#: loco:5cc2a8f9c38e0f4ab036fcab
 msgid "Start Date"
-msgstr "Betaaldatum"
+msgstr "Start datum"
 
-#: inc/admin/admin-functions.php:896
+#: inc/admin/admin-functions.php:896 loco:5cc2a8f9c38e0f4ab036fcac
 msgid "new"
-msgstr ""
+msgstr "nieuw"
 
-#: inc/admin/admin-functions.php:910
+#: inc/admin/admin-functions.php:910 loco:5cc2a8f9c38e0f4ab036fcad
 msgid "Delete Single"
-msgstr ""
+msgstr "Verwijder deze"
 
-#: inc/admin/admin-functions.php:911
+#: inc/admin/admin-functions.php:911 loco:5cc2a8f9c38e0f4ab036fcae
 msgid "Delete All"
-msgstr ""
+msgstr "Verwijder allen"
 
 #: inc/admin/admin-functions.php:915 inc/admin/templates/single.php:184
+#: loco:5cc2a8f9c38e0f4ab036fcaf
 msgid "Export (.csv)"
-msgstr ""
+msgstr "Export naar csv bestand"
 
-#: inc/admin/admin-functions.php:934
+#: inc/admin/admin-functions.php:934 loco:5cc2a8f9c38e0f4ab036fcb0
 msgid "No Registrations Found"
-msgstr "Geen record gevonden"
+msgstr "Geen aanmeldingen gevonden"
 
-#: inc/admin/class-rtec-admin.php:42
+#: inc/admin/class-rtec-admin.php:42 loco:5cc2a8f9c38e0f4ab036fcb1
 msgid "New!"
-msgstr ""
+msgstr "Nieuw!"
 
 #: inc/admin/class-rtec-admin.php:135 inc/form/class-rtec-form.php:244
 #: inc/form/class-rtec-form.php:446 inc/form/class-rtec-form.php:447
+#: loco:5cc2a8f9c38e0f4ab036fcb2
 msgid "Please enter your first name"
 msgstr "Gelieve uw voornaam in te vullen"
 
 #: inc/admin/class-rtec-admin.php:136 inc/form/class-rtec-form.php:249
 #: inc/form/class-rtec-form.php:452 inc/form/class-rtec-form.php:453
+#: loco:5cc2a8f9c38e0f4ab036fcb3
 msgid "Please enter your last name"
 msgstr "Gelieve uw achternaam in te voeren"
 
 #: inc/admin/class-rtec-admin.php:137 inc/form/class-rtec-form.php:254
 #: inc/form/class-rtec-form.php:458 inc/form/class-rtec-form.php:459
+#: loco:5cc2a8f9c38e0f4ab036fcb4
 msgid "Please enter a valid email address"
-msgstr "Gelieve een geldig e-mailadres in te geven"
+msgstr "Gelieve een geldig e-mailadres in te voeren"
 
 #: inc/admin/class-rtec-admin.php:138 inc/form/class-rtec-form.php:264
 #: inc/form/class-rtec-form.php:464 inc/form/class-rtec-form.php:465
+#: loco:5cc2a8f9c38e0f4ab036fcb5
 msgid "Please enter a valid phone number"
-msgstr "Voer alstublieft een geldig telefoonnummer in"
+msgstr "Voer a.u.b. een geldig telefoonnummer in"
 
-#: inc/admin/class-rtec-admin.php:160
+#: inc/admin/class-rtec-admin.php:160 loco:5cc2a8f9c38e0f4ab036fcb6
 msgid "Attendee Display"
-msgstr ""
+msgstr "Weergave aanwezigen"
 
-#: inc/admin/class-rtec-admin.php:168
+#: inc/admin/class-rtec-admin.php:168 loco:5cc2a8f9c38e0f4ab036fcb7
 msgid "Show Attendee List Above Form"
-msgstr ""
+msgstr "Toon aanmeldlijst boven het formulier"
 
-#: inc/admin/class-rtec-admin.php:180
+#: inc/admin/class-rtec-admin.php:180 loco:5cc2a8f9c38e0f4ab036fcb8
 msgid "Any registration"
-msgstr ""
+msgstr "Iedere aanmelding"
 
-#: inc/admin/class-rtec-admin.php:181
+#: inc/admin/class-rtec-admin.php:181 loco:5cc2a8f9c38e0f4ab036fcb9
 msgid "Reviewed"
-msgstr ""
+msgstr "Beoordeeld"
 
-#: inc/admin/class-rtec-admin.php:186
+#: inc/admin/class-rtec-admin.php:186 loco:5cc2a8f9c38e0f4ab036fcba
 msgid "What Registrations Will Display"
-msgstr ""
+msgstr "Welke aanmeldingen getoond worden"
 
-#: inc/admin/class-rtec-admin.php:188
+#: inc/admin/class-rtec-admin.php:188 loco:5cc2a8f9c38e0f4ab036fcbb
 msgid ""
 "Choosing \"Reviewed\" will only display registrations after they have been "
 "reviewed in the admin dashboard of your site (do not have a \"new tag\" next "
 "to them)."
 msgstr ""
+"\"Beoordeeld\" kiezen zal alleen aanmeldingen tonen nadat ze zijn beoordeeld "
+"in het admin dashboard van uw website (geen \"nieuwe tag\" ernaast plaatsen)."
 
-#: inc/admin/class-rtec-admin.php:202
+#: inc/admin/class-rtec-admin.php:202 loco:5cc2a8f9c38e0f4ab036fcbc
 msgid "Attendee List Title"
-msgstr ""
+msgstr "Aanmeldingen lijst titel"
 
 #: inc/admin/class-rtec-admin.php:211 inc/form/class-rtec-form.php:1241
 #: inc/form/class-rtec-form.php:1242 inc/helper-functions.php:735
-#: inc/helper-functions.php:736
+#: inc/helper-functions.php:736 loco:5cc2a8f9c38e0f4ab036fcbd
 msgid "Currently Registered"
-msgstr ""
+msgstr "Momenteel aangemeld"
 
-#: inc/admin/class-rtec-admin.php:217
+#: inc/admin/class-rtec-admin.php:217 loco:5cc2a8f9c38e0f4ab036fcbe
 msgid "General Registration Options"
-msgstr ""
+msgstr "Algemene aanmeld opties"
 
 #: inc/admin/class-rtec-admin.php:228 inc/admin/class-rtec-admin.php:234
-#: inc/admin/class-rtec-admin.php:244
+#: inc/admin/class-rtec-admin.php:244 loco:5cc2a8f9c38e0f4ab036fcbf
 msgid "Before the content (near top)"
-msgstr ""
+msgstr "Voor de inhoud (vlakbij de top)"
 
 #: inc/admin/class-rtec-admin.php:229 inc/admin/class-rtec-admin.php:235
-#: inc/admin/class-rtec-admin.php:245
+#: inc/admin/class-rtec-admin.php:245 loco:5cc2a8f9c38e0f4ab036fcc0
 msgid "After the content (middle top)"
-msgstr ""
+msgstr "Na de inhoud (midden boven)"
 
 #: inc/admin/class-rtec-admin.php:230 inc/admin/class-rtec-admin.php:238
-#: inc/admin/class-rtec-admin.php:248
+#: inc/admin/class-rtec-admin.php:248 loco:5cc2a8f9c38e0f4ab036fcc1
 msgid "Shortcode"
-msgstr ""
+msgstr "Short code"
 
 #: inc/admin/class-rtec-admin.php:236 inc/admin/class-rtec-admin.php:246
+#: loco:5cc2a8f9c38e0f4ab036fcc2
 msgid "Before the meta (middle bottom)"
-msgstr ""
+msgstr "Voor de inhoud (midden onder)"
 
 #: inc/admin/class-rtec-admin.php:237 inc/admin/class-rtec-admin.php:247
+#: loco:5cc2a8f9c38e0f4ab036fcc3
 msgid "After the meta (near bottom)"
-msgstr ""
+msgstr "Na de inhoud (onderaan)"
 
-#: inc/admin/class-rtec-admin.php:255
+#: inc/admin/class-rtec-admin.php:255 loco:5cc2a8f9c38e0f4ab036fcc4
 msgid "Form Location"
-msgstr ""
+msgstr "Formulier locatie"
 
-#: inc/admin/class-rtec-admin.php:262
+#: inc/admin/class-rtec-admin.php:262 loco:5cc2a8f9c38e0f4ab036fcc5
 msgid ""
 "Set how the registration form will be added to the single event page. Use "
 "\"Shortcode\" for a custom placement"
 msgstr ""
+"Stel in hoe het registratie formulier zal worden toegevoegd aan de webpagina "
+"van het evenement. Gebruik short code voor een plaatsing op maat"
 
-#: inc/admin/class-rtec-admin.php:268
+#: inc/admin/class-rtec-admin.php:268 loco:5cc2a8f9c38e0f4ab036fcc6
 msgid "Disable Registrations by Default"
-msgstr ""
+msgstr "Schakel inschrijven standaard uit"
 
-#: inc/admin/class-rtec-admin.php:270
+#: inc/admin/class-rtec-admin.php:270 loco:5cc2a8f9c38e0f4ab036fcc7
 msgid ""
 "New events and existing events will not allow registrations until enabled "
 "manually"
 msgstr ""
+"Nieuwe en bestaande evenementen zullen geen aanmeldingen toestaan totdat ze "
+"handmatig worden aangezet."
 
-#: inc/admin/class-rtec-admin.php:281
+#: inc/admin/class-rtec-admin.php:281 loco:5cc2a8f9c38e0f4ab036fcc8
 msgid "Limit Registrations by Default"
-msgstr ""
+msgstr "Beperk standaard de aanmeldingen"
 
-#: inc/admin/class-rtec-admin.php:283
+#: inc/admin/class-rtec-admin.php:283 loco:5cc2a8f9c38e0f4ab036fcc9
 msgid "Only allow a certain amount of registrations for each event"
-msgstr ""
+msgstr "Sta alleen een beperkt aantal aanmeldingen per evenement toe"
 
-#: inc/admin/class-rtec-admin.php:294
+#: inc/admin/class-rtec-admin.php:294 loco:5cc2a8f9c38e0f4ab036fcca
 msgid "Default Max Registrations"
-msgstr ""
+msgstr "Standaard maximaal aantal aanmeldingen"
 
-#: inc/admin/class-rtec-admin.php:296
+#: inc/admin/class-rtec-admin.php:296 loco:5cc2a8f9c38e0f4ab036fccb
 msgid "Maximum allowed registrants for every event (if any limit)"
-msgstr ""
+msgstr "Maximaal aantal aanmeldingen per evenement (indien dat gewenst is)"
 
-#: inc/admin/class-rtec-admin.php:308
+#: inc/admin/class-rtec-admin.php:308 loco:5cc2a8f9c38e0f4ab036fccc
 msgid "Check for Duplicate Emails"
-msgstr ""
+msgstr "Controleer op dubbele e-mails"
 
-#: inc/admin/class-rtec-admin.php:310
+#: inc/admin/class-rtec-admin.php:310 loco:5cc2a8f9c38e0f4ab036fccd
 msgid "Only allow one registration per event per submitted email"
-msgstr ""
+msgstr "Sta maar één registratie per evenement per email toe "
 
-#: inc/admin/class-rtec-admin.php:322
+#: inc/admin/class-rtec-admin.php:322 loco:5cc2a8f9c38e0f4ab036fcce
 msgid "Duplicate Email Error Message"
-msgstr ""
+msgstr "Dubbele e-mail fout bericht"
 
 #: inc/admin/class-rtec-admin.php:324 inc/form/class-rtec-form.php:921
 #: inc/form/class-rtec-form.php:922 inc/form/form-functions.php:231
+#: loco:5cc2a8f9c38e0f4ab036fccf
 msgid "You have already registered for this event"
 msgstr "U bent al geregistreerd voor dit evenement"
 
-#: inc/admin/class-rtec-admin.php:325
+#: inc/admin/class-rtec-admin.php:325 loco:5cc2a8f9c38e0f4ab036fcd0
 msgid "Enter an error message if the visitor has already registered"
-msgstr ""
+msgstr "Toon een foutboodschap als de bezoeker al geregistreerd is"
 
-#: inc/admin/class-rtec-admin.php:335
+#: inc/admin/class-rtec-admin.php:335 loco:5cc2a8f9c38e0f4ab036fcd1
 msgid "Default Deadline for Registration"
-msgstr ""
+msgstr "Standaard deadline voor aanmelding"
 
-#: inc/admin/class-rtec-admin.php:347
+#: inc/admin/class-rtec-admin.php:347 loco:5cc2a8f9c38e0f4ab036fcd2
 msgid "Custom Text/Labels"
-msgstr ""
+msgstr "Aangepaste tekst/labels"
 
-#: inc/admin/class-rtec-admin.php:356
+#: inc/admin/class-rtec-admin.php:356 loco:5cc2a8f9c38e0f4ab036fcd3
 msgid "\"Register\" Button Text"
-msgstr ""
+msgstr "\"Aanmelden\" button tekst"
 
-#: inc/admin/class-rtec-admin.php:358
+#: inc/admin/class-rtec-admin.php:358 loco:5cc2a8f9c38e0f4ab036fcd4
 msgid "The text displayed on the button that reveals the form"
-msgstr ""
+msgstr "De tekst op de  button die het formulier toont"
 
 #: inc/admin/class-rtec-admin.php:364 inc/form/class-rtec-form.php:734
-#: inc/form/class-rtec-form.php:735
+#: inc/form/class-rtec-form.php:735 loco:5cc2a8f9c38e0f4ab036fcd5
 msgid "Register"
-msgstr "Registreren"
+msgstr "Aanmelden"
 
-#: inc/admin/class-rtec-admin.php:370
+#: inc/admin/class-rtec-admin.php:370 loco:5cc2a8f9c38e0f4ab036fcd6
 msgid "Event Attendance Messages"
-msgstr ""
+msgstr "Evenement aanmeld berichten"
 
-#: inc/admin/class-rtec-admin.php:384
+#: inc/admin/class-rtec-admin.php:384 loco:5cc2a8f9c38e0f4ab036fcd7
 msgid "\"Submit\" Button Text"
-msgstr ""
+msgstr "\"Verstuur\" button tekst"
 
-#: inc/admin/class-rtec-admin.php:386
+#: inc/admin/class-rtec-admin.php:386 loco:5cc2a8f9c38e0f4ab036fcd8
 msgid "The text displayed on the button that submits the form"
 msgstr ""
+"De tekst die op de button wordt weergegeven die het formulier verstuurt"
 
 #: inc/admin/class-rtec-admin.php:392 inc/form/class-rtec-form.php:1177
-#: inc/form/class-rtec-form.php:1178
+#: inc/form/class-rtec-form.php:1178 loco:5cc2a8f9c38e0f4ab036fcd9
 msgid "Submit"
-msgstr "Voorleggen"
+msgstr "Verstuur"
 
-#: inc/admin/class-rtec-admin.php:399
+#: inc/admin/class-rtec-admin.php:399 loco:5cc2a8f9c38e0f4ab036fcda
 msgid "Website Success Message"
-msgstr ""
+msgstr "Website succes bericht"
 
 #: inc/admin/class-rtec-admin.php:401 inc/form/class-rtec-form.php:754
 #: inc/form/class-rtec-form.php:755 inc/form/class-rtec-form.php:1158
-#: inc/form/class-rtec-form.php:1161
+#: inc/form/class-rtec-form.php:1161 loco:5cc2a8f9c38e0f4ab036fcdb
 msgid "Success! Please check your email inbox for a confirmation message"
 msgstr "Succes! Controleer uw e-mailinbox voor een bevestigingsbericht"
 
-#: inc/admin/class-rtec-admin.php:402
+#: inc/admin/class-rtec-admin.php:402 loco:5cc2a8f9c38e0f4ab036fcdc
 msgid ""
 "Enter the message you would like to display on your site after a successful "
 "form completion"
 msgstr ""
+"Voer het bericht in dat u zou willen tonen na succesvolle formulier "
+"voltooiing."
 
-#: inc/admin/class-rtec-admin.php:415
+#: inc/admin/class-rtec-admin.php:415 loco:5cc2a8f9c38e0f4ab036fcdd
 msgid "\"Unregister\" Link Text"
-msgstr ""
+msgstr "\"Uitschrijven\" link tekst"
 
-#: inc/admin/class-rtec-admin.php:417
+#: inc/admin/class-rtec-admin.php:417 loco:5cc2a8f9c38e0f4ab036fcde
 msgid "used for link in emails added using the template {unregister-link}"
 msgstr ""
+"gebruikt voor link in e-mails die gebruik maken van de template {unregister-"
+"link}"
 
 #: inc/admin/class-rtec-admin.php:424 inc/class-rtec-email.php:521
 #: inc/class-rtec-email.php:522 inc/form/form-functions.php:415
-#: inc/form/form-functions.php:416
+#: inc/form/form-functions.php:416 loco:5cc2a8f9c38e0f4ab036fcdf
 msgid "Unregister from this event"
-msgstr "Deel je uit voor dit evenement"
+msgstr "Schrijf je uit voor dit evenement"
 
-#: inc/admin/class-rtec-admin.php:431
+#: inc/admin/class-rtec-admin.php:431 loco:5cc2a8f9c38e0f4ab036fce0
 msgid "Website Unregister Success Message"
-msgstr ""
+msgstr "Website succesvolle uitschrijving bericht"
 
 #: inc/admin/class-rtec-admin.php:433 inc/form/form-functions.php:297
-#: inc/form/form-functions.php:298
+#: inc/form/form-functions.php:298 loco:5cc2a8f9c38e0f4ab036fce1
 msgid "You have been unregistered."
-msgstr "U bent niet geregistreerd."
+msgstr "U bent uitgeschreven"
 
-#: inc/admin/class-rtec-admin.php:434
+#: inc/admin/class-rtec-admin.php:434 loco:5cc2a8f9c38e0f4ab036fce2
 msgid ""
 "Enter the message you would like to display on your site after an "
 "unregistration"
 msgstr ""
+"Voer het bericht in dat u op uw website zou willen tonen na succesvolle "
+"uitschrijving."
 
-#: inc/admin/class-rtec-admin.php:453
+#: inc/admin/class-rtec-admin.php:453 loco:5cc2a8f9c38e0f4ab036fce3
 msgid "Add Unregister Tool"
-msgstr ""
+msgstr "Voeg uitschrijven tool toe"
 
-#: inc/admin/class-rtec-admin.php:455
+#: inc/admin/class-rtec-admin.php:455 loco:5cc2a8f9c38e0f4ab036fce4
 msgid ""
 "This will add a button to the event page that will allow attendees to send "
 "an \"unregister\" link by entering the email address they registered with."
 msgstr ""
+"Dit zal een button toevoegen aan de evenement pagina dat zal toestaan een "
+"uitschrijf link te versturen door het e-mail adres in te voeren waarmee men "
+"aangemeld is"
 
-#: inc/admin/class-rtec-admin.php:466
+#: inc/admin/class-rtec-admin.php:466 loco:5cc2a8f9c38e0f4ab036fce5
 msgid "Already Registered Text"
-msgstr ""
+msgstr "Al ingeschreven tekst"
 
 #: inc/admin/class-rtec-admin.php:468 inc/form/class-rtec-form.php:979
-#: inc/form/class-rtec-form.php:980
+#: inc/form/class-rtec-form.php:980 loco:5cc2a8f9c38e0f4ab036fce6
 msgid "Already registered?"
-msgstr "Al geregistreerd?"
+msgstr "Al aangemeld?"
 
-#: inc/admin/class-rtec-admin.php:480
+#: inc/admin/class-rtec-admin.php:480 loco:5cc2a8f9c38e0f4ab036fce7
 msgid "Tool Directions"
-msgstr ""
+msgstr "Aanwijzingen om de tool te gebruiken"
 
 #: inc/admin/class-rtec-admin.php:482 inc/form/class-rtec-form.php:981
-#: inc/form/class-rtec-form.php:982
+#: inc/form/class-rtec-form.php:982 loco:5cc2a8f9c38e0f4ab036fce8
 msgid "Use this tool to manage your registration."
 msgstr "Gebruik deze tool om uw registratie te beheren."
 
-#: inc/admin/class-rtec-admin.php:496
+#: inc/admin/class-rtec-admin.php:496 loco:5cc2a8f9c38e0f4ab036fce9
 msgid "Registered Email Label"
-msgstr ""
+msgstr "Aangemeld e-mail label"
 
 #: inc/admin/class-rtec-admin.php:504 inc/form/class-rtec-form.php:983
-#: inc/form/class-rtec-form.php:984
+#: inc/form/class-rtec-form.php:984 loco:5cc2a8f9c38e0f4ab036fcea
 msgid "Enter your registered email address"
 msgstr "Voer uw geregistreerde e-mailadres in"
 
-#: inc/admin/class-rtec-admin.php:511
+#: inc/admin/class-rtec-admin.php:511 loco:5cc2a8f9c38e0f4ab036fceb
 msgid "\"Send unregister link\" Text"
-msgstr ""
+msgstr "\"Stuur een link om uit te schrijven\" tekst"
 
 #: inc/admin/class-rtec-admin.php:519 inc/form/class-rtec-form.php:985
-#: inc/form/class-rtec-form.php:986
+#: inc/form/class-rtec-form.php:986 loco:5cc2a8f9c38e0f4ab036fcec
 msgid "Send unregister link"
-msgstr "Verstuur registratie link"
+msgstr "Verstuur uitschrijf link"
 
-#: inc/admin/class-rtec-admin.php:535
+#: inc/admin/class-rtec-admin.php:535 loco:5cc2a8f9c38e0f4ab036fced
 msgid "Width of Form"
-msgstr ""
+msgstr "Breedte van het formulier"
 
-#: inc/admin/class-rtec-admin.php:551
+#: inc/admin/class-rtec-admin.php:551 loco:5cc2a8f9c38e0f4ab036fcee
 msgid "Form Background Color"
-msgstr ""
+msgstr "Formulier achtergrond kleur"
 
-#: inc/admin/class-rtec-admin.php:563
+#: inc/admin/class-rtec-admin.php:563 loco:5cc2a8f9c38e0f4ab036fcef
 msgid "Button Background Color"
-msgstr ""
+msgstr "Button achtergrond kleur"
 
-#: inc/admin/class-rtec-admin.php:575
+#: inc/admin/class-rtec-admin.php:575 loco:5cc2a8f9c38e0f4ab036fcf0
 msgid "Button Text Color"
-msgstr ""
+msgstr "Button tekstkleur"
 
-#: inc/admin/class-rtec-admin.php:586
+#: inc/admin/class-rtec-admin.php:586 loco:5cc2a8f9c38e0f4ab036fcf1
 msgid "Custom CSS"
-msgstr ""
+msgstr "Aangepaste CSS"
 
-#: inc/admin/class-rtec-admin.php:592
+#: inc/admin/class-rtec-admin.php:592 loco:5cc2a8f9c38e0f4ab036fcf2
 msgid "Enter your own custom CSS in the box below"
-msgstr ""
+msgstr "Voeg je eigen CSS code toe in het vak beneden"
 
-#: inc/admin/class-rtec-admin.php:598
+#: inc/admin/class-rtec-admin.php:598 loco:5cc2a8f9c38e0f4ab036fcf3
 msgid "Custom JavaScript"
-msgstr ""
+msgstr "Javascript op maat"
 
-#: inc/admin/class-rtec-admin.php:604
+#: inc/admin/class-rtec-admin.php:604 loco:5cc2a8f9c38e0f4ab036fcf4
 msgid "Enter your own custom Javascript/JQuery in the box below"
-msgstr ""
+msgstr "Voeg je eigen Javascript/JQuery in het vak hier beneden in"
 
-#: inc/admin/class-rtec-admin.php:611
+#: inc/admin/class-rtec-admin.php:611 loco:5cc2a8f9c38e0f4ab036fcf5
 msgid "Advanced"
-msgstr ""
+msgstr "Meer opties"
 
-#: inc/admin/class-rtec-admin.php:624
+#: inc/admin/class-rtec-admin.php:624 loco:5cc2a8f9c38e0f4ab036fcf6
 msgid "Messaging Source"
-msgstr ""
+msgstr "Berichtenbron"
 
-#: inc/admin/class-rtec-admin.php:627
+#: inc/admin/class-rtec-admin.php:627 loco:5cc2a8f9c38e0f4ab036fcf7
 msgid ""
 "Select \"Custom\" for text saved in the Settings pages, \"Translate\" to use "
 "strictly language files (French, German, Spanish, Dutch, Italian and Russian "
 "are available. Contact support to offer your translations)"
 msgstr ""
+"Kies \"Aangepast\" voor tekst bewaard in de settings pagina, \"Vertaal\" om "
+"language files te gebruiken (Nederlands, Frans, Duits, Italiaans en "
+"Russisch). Neem contact op met support om vertalingen aan te bieden."
 
-#: inc/admin/class-rtec-admin.php:639
+#: inc/admin/class-rtec-admin.php:639 loco:5cc2a8f9c38e0f4ab036fcf8
 msgid "No Format"
-msgstr ""
+msgstr "Geen format"
 
-#: inc/admin/class-rtec-admin.php:644
+#: inc/admin/class-rtec-admin.php:644 loco:5cc2a8f9c38e0f4ab036fcf9
 msgid "Phone Number Format"
-msgstr ""
+msgstr "Telefoon nummer format"
 
-#: inc/admin/class-rtec-admin.php:651
+#: inc/admin/class-rtec-admin.php:651 loco:5cc2a8f9c38e0f4ab036fcfa
 msgid "Formatting for 10 digit phone numbers"
-msgstr ""
+msgstr "Format voor telefoonnummers voor 10 tekens"
 
-#: inc/admin/class-rtec-admin.php:659
+#: inc/admin/class-rtec-admin.php:659 loco:5cc2a8f9c38e0f4ab036fcfb
 msgid "Preserve registrations on uninstall"
-msgstr ""
+msgstr "Bewaar aanmeldingen bij verwijderen plugin"
 
-#: inc/admin/class-rtec-admin.php:661
+#: inc/admin/class-rtec-admin.php:661 loco:5cc2a8f9c38e0f4ab036fcfc
 msgid ""
 "Keep your registration records preserved in the database when you uninstall "
 "the plugin"
-msgstr ""
+msgstr "Bewaar je aanmeldingen/registraties bij het verwijderen van de plugin"
 
-#: inc/admin/class-rtec-admin.php:673
+#: inc/admin/class-rtec-admin.php:673 loco:5cc2a8f9c38e0f4ab036fcfd
 msgid "Preserve settings on uninstall"
-msgstr ""
+msgstr "Bewaar de instellingen bij uninstall"
 
-#: inc/admin/class-rtec-admin.php:675
+#: inc/admin/class-rtec-admin.php:675 loco:5cc2a8f9c38e0f4ab036fcfe
 msgid ""
 "Keep your form and email settings preserved when you uninstall the plugin"
-msgstr ""
+msgstr "Bewaar je formulieren en e-mail settings als je de plugin verwijdert"
 
-#: inc/admin/class-rtec-admin.php:691
+#: inc/admin/class-rtec-admin.php:691 loco:5cc2a8f9c38e0f4ab036fcff
 msgid "General Email Options"
-msgstr ""
+msgstr "Algemene e-mail instellingen"
 
-#: inc/admin/class-rtec-admin.php:700
+#: inc/admin/class-rtec-admin.php:700 loco:5cc2a8f9c38e0f4ab036fd00
 msgid "Confirmation/Notification From Address"
-msgstr ""
+msgstr "Bevestiging/Notificatie afzender adres"
 
 #: inc/admin/class-rtec-admin.php:701 inc/admin/class-rtec-admin.php:750
 #: inc/admin/class-rtec-admin.php:764 inc/admin/class-rtec-admin.php:778
+#: loco:5cc2a8f9c38e0f4ab036fd01
 msgid "example"
-msgstr ""
+msgstr "voorbeeld"
 
-#: inc/admin/class-rtec-admin.php:702
+#: inc/admin/class-rtec-admin.php:702 loco:5cc2a8f9c38e0f4ab036fd02
 msgid "Enter an email address that you would like emails to be sent from"
-msgstr ""
+msgstr "Voer een e-mail adres in waar de e-mails vandaan verstuurd worden"
 
-#: inc/admin/class-rtec-admin.php:713
+#: inc/admin/class-rtec-admin.php:713 loco:5cc2a8f9c38e0f4ab036fd03
 msgid "Custom Date Format"
-msgstr ""
+msgstr "Aangepaste datum weergave"
 
-#: inc/admin/class-rtec-admin.php:719
+#: inc/admin/class-rtec-admin.php:719 loco:5cc2a8f9c38e0f4ab036fd04
 msgid ""
 "If you would like a custom date format in your messages, enter it here using "
 "the examples as a guide"
 msgstr ""
+"Als je een aangepast datum format in je berichten wil, geef dat dan hier aan "
+"door de voorbeelden te gebruiken"
 
-#: inc/admin/class-rtec-admin.php:735
+#: inc/admin/class-rtec-admin.php:735 loco:5cc2a8f9c38e0f4ab036fd05
 msgid "Disable Notification Email"
-msgstr ""
+msgstr "Schakel notificatiemail uit"
 
-#: inc/admin/class-rtec-admin.php:749
+#: inc/admin/class-rtec-admin.php:749 loco:5cc2a8f9c38e0f4ab036fd06
 msgid "Notification Recipient(s) Email"
-msgstr ""
+msgstr "Notificatie ontvanger(s) e-mail"
 
-#: inc/admin/class-rtec-admin.php:763
+#: inc/admin/class-rtec-admin.php:763 loco:5cc2a8f9c38e0f4ab036fd07
 msgid "Notification From"
-msgstr ""
+msgstr "Notificatie van"
 
-#: inc/admin/class-rtec-admin.php:764
+#: inc/admin/class-rtec-admin.php:764 loco:5cc2a8f9c38e0f4ab036fd08
 msgid "New Registration"
 msgstr "Nieuwe registratie"
 
-#: inc/admin/class-rtec-admin.php:765
+#: inc/admin/class-rtec-admin.php:765 loco:5cc2a8f9c38e0f4ab036fd09
 msgid "Enter the name you would like the notification email to come from"
-msgstr ""
+msgstr "Toon de naam van waar de notificatie e-mail vandaan moet komen"
 
-#: inc/admin/class-rtec-admin.php:777
+#: inc/admin/class-rtec-admin.php:777 loco:5cc2a8f9c38e0f4ab036fd0a
 msgid "Notification Subject"
-msgstr ""
+msgstr "Notificatie onderwerp"
 
 #: inc/admin/class-rtec-admin.php:778 inc/admin/class-rtec-admin.php:784
-#: inc/class-rtec-email.php:373
+#: inc/class-rtec-email.php:373 loco:5cc2a8f9c38e0f4ab036fd0b
 msgid "Registration Notification"
 msgstr "Registratie Melding"
 
-#: inc/admin/class-rtec-admin.php:779
+#: inc/admin/class-rtec-admin.php:779 loco:5cc2a8f9c38e0f4ab036fd0c
 msgid "Enter a subject for the notification email"
-msgstr ""
+msgstr "Voor een onderwerp in voor de notificatie e-mail"
 
-#: inc/admin/class-rtec-admin.php:790
+#: inc/admin/class-rtec-admin.php:790 loco:5cc2a8f9c38e0f4ab036fd0d
 msgid "Use Custom Notification Message"
-msgstr ""
+msgstr "Gebruik aangepast notificatie bericht"
 
-#: inc/admin/class-rtec-admin.php:792
+#: inc/admin/class-rtec-admin.php:792 loco:5cc2a8f9c38e0f4ab036fd0e
 msgid "Click to reveal and use a custom message that you can configure"
-msgstr ""
+msgstr "Klik om een aangepaste boodschap te tonen die je kan aanpassen"
 
-#: inc/admin/class-rtec-admin.php:804
+#: inc/admin/class-rtec-admin.php:804 loco:5cc2a8f9c38e0f4ab036fd0f
 msgid "Notification Message"
-msgstr ""
+msgstr "Notificatie bericht"
 
-#: inc/admin/class-rtec-admin.php:830
+#: inc/admin/class-rtec-admin.php:830 loco:5cc2a8f9c38e0f4ab036fd10
 msgid "Confirmation Email"
-msgstr ""
+msgstr "Bevestigingsmail"
 
-#: inc/admin/class-rtec-admin.php:838
+#: inc/admin/class-rtec-admin.php:838 loco:5cc2a8f9c38e0f4ab036fd11
 msgid "Disable Confirmation Email"
-msgstr ""
+msgstr "Schakel bevestigingsmail uit"
 
-#: inc/admin/class-rtec-admin.php:852
+#: inc/admin/class-rtec-admin.php:852 loco:5cc2a8f9c38e0f4ab036fd12
 msgid "Confirmation From"
-msgstr ""
+msgstr "Bevestiging van"
 
-#: inc/admin/class-rtec-admin.php:853
+#: inc/admin/class-rtec-admin.php:853 loco:5cc2a8f9c38e0f4ab036fd13
 msgid "example: Your Site"
-msgstr ""
+msgstr "voorbeeld: jouw website"
 
-#: inc/admin/class-rtec-admin.php:854
+#: inc/admin/class-rtec-admin.php:854 loco:5cc2a8f9c38e0f4ab036fd14
 msgid "Enter the name you would like visitors to get the email from"
 msgstr ""
+"Vul de naam van de afzender van de e-mail in zoals je wil dat die getoond "
+"wordt"
 
-#: inc/admin/class-rtec-admin.php:866
+#: inc/admin/class-rtec-admin.php:866 loco:5cc2a8f9c38e0f4ab036fd15
 msgid "Confirmation Subject"
-msgstr ""
+msgstr "Bevestigingsbericht onderwerp"
 
-#: inc/admin/class-rtec-admin.php:867
+#: inc/admin/class-rtec-admin.php:867 loco:5cc2a8f9c38e0f4ab036fd16
 msgid "example: Registration Confirmation"
-msgstr ""
+msgstr "voorbeeld: aanmeldbevestiging"
 
-#: inc/admin/class-rtec-admin.php:868
+#: inc/admin/class-rtec-admin.php:868 loco:5cc2a8f9c38e0f4ab036fd17
 msgid "Enter a subject for the confirmation email"
-msgstr ""
+msgstr "Voer een onderwerp in voor de bevestigingsmail"
 
-#: inc/admin/class-rtec-admin.php:880
+#: inc/admin/class-rtec-admin.php:880 loco:5cc2a8f9c38e0f4ab036fd18
 msgid "Confirmation Message"
-msgstr ""
+msgstr "Bevestigingsbericht"
 
-#: inc/admin/class-rtec-admin.php:882
+#: inc/admin/class-rtec-admin.php:882 loco:5cc2a8f9c38e0f4ab036fd19
 msgid ""
 "Hey {first},<br /><br />You are registered for {event-title} at {venue} on "
 "{event-date}. We are looking forward to having you there. The event will be "
 "held at this location:<br /><br />{venue-address}<br />{venue-city}, {venue-"
 "state} {venue-zip}<br /><br />See you there!"
 msgstr ""
+"Beste {first},<br /><br />Je bent aangemeld voor {event-title} in {venue} op "
+"{event-date}. We zien er naar uit u daar te verwelkomen. Het evenement vindt "
+"plaats op dit adres:<br /><br />{venue-address}<br />{venue-city}, {venue-"
+"state} {venue-zip}<br /><br />Tot ziens! "
 
-#: inc/admin/class-rtec-admin.php:961
+#: inc/admin/class-rtec-admin.php:961 loco:5cc2a8f9c38e0f4ab036fd1a
 msgid "I'm using a custom single-event.php file in my theme."
-msgstr ""
+msgstr "Ik gebruik een aangepast single-event.php bestand in mijn thema"
 
-#: inc/admin/class-rtec-admin.php:962
-#, fuzzy
-#| msgid "What is"
+#: inc/admin/class-rtec-admin.php:962 loco:5cc2a8f9c38e0f4ab036fd1b
 msgid "What is this?"
-msgstr "Wat is"
+msgstr "Wat is dit?"
 
-#: inc/admin/class-rtec-admin.php:963
+#: inc/admin/class-rtec-admin.php:963 loco:5cc2a8f9c38e0f4ab036fd1c
 msgid ""
 "This will force the plugin to use the "
 "\"tribe_events_single_event_before_the_content\" or the "
@@ -740,678 +803,742 @@ msgid ""
 "href=\"https://roundupwp.com/faq/registration-form-wont-show-event-page/\" "
 "target=\"blank\">this FAQ</a> for more information."
 msgstr ""
+"Dit zal de plugin dwingen om gebruik te maken van de "
+"\"tribe_events_single_event_before_the_content\" of de "
+"\"tribe_events_single_event_after_the_content\" hooks. Probeer deze setting "
+"als het aanmeld formulier niet getoond wordt op de evenement pagina('s). "
+"Lees <a href=\"https://roundupwp.com/faq/registration-form-wont-show-event-"
+"page/\" target=\"blank\">deze FAQ</a> voor meer informatie."
 
 #: inc/admin/class-rtec-admin.php:1043 inc/admin/class-rtec-admin.php:1091
 #: inc/admin/class-rtec-admin.php:1130 inc/admin/class-rtec-admin.php:1168
-#: inc/admin/class-rtec-admin.php:1219
+#: inc/admin/class-rtec-admin.php:1219 loco:5cc2a8f9c38e0f4ab036fd1d
 msgid "Label"
-msgstr ""
+msgstr "Kaart"
 
 #: inc/admin/class-rtec-admin.php:1047 inc/admin/class-rtec-admin.php:1096
-#: inc/admin/class-rtec-admin.php:1134
+#: inc/admin/class-rtec-admin.php:1134 loco:5cc2a8f9c38e0f4ab036fd1e
 msgid "include"
-msgstr ""
+msgstr "bijvoegen"
 
 #: inc/admin/class-rtec-admin.php:1050 inc/admin/class-rtec-admin.php:1099
-#: inc/admin/class-rtec-admin.php:1137
+#: inc/admin/class-rtec-admin.php:1137 loco:5cc2a8f9c38e0f4ab036fd1f
 msgid "require"
-msgstr ""
+msgstr "vereist"
 
 #: inc/admin/class-rtec-admin.php:1053 inc/admin/class-rtec-admin.php:1102
 #: inc/admin/class-rtec-admin.php:1183 inc/admin/class-rtec-admin.php:1223
+#: loco:5cc2a8f9c38e0f4ab036fd20
 msgid "Error Message:"
-msgstr ""
+msgstr "Fout bericht"
 
-#: inc/admin/class-rtec-admin.php:1058
+#: inc/admin/class-rtec-admin.php:1058 loco:5cc2a8f9c38e0f4ab036fd21
 msgid "Required length for validation:"
-msgstr ""
+msgstr "Vereiste lengte voor goedkeuring"
 
-#: inc/admin/class-rtec-admin.php:1061
+#: inc/admin/class-rtec-admin.php:1061 loco:5cc2a8f9c38e0f4ab036fd22
 msgid ""
 "Enter the length or lengths of the responses that are valid for this field "
 "separated by commas. For example, to accept North American phone numbers "
 "with and without area codes you would enter \"7, 10\". If area code is "
 "required, enter \"10\""
 msgstr ""
+"Voer de lengte van waarden in die geaccepteerd worden. Bijvoorbeeld: het "
+"maximum aantal tekens van een telefoonnummer met en zonder netnummer"
 
 #: inc/admin/class-rtec-admin.php:1064 inc/admin/class-rtec-admin.php:1105
-#: inc/admin/class-rtec-admin.php:1144
+#: inc/admin/class-rtec-admin.php:1144 loco:5cc2a8f9c38e0f4ab036fd23
 msgid "Show Notes"
-msgstr ""
+msgstr "Toon notities"
 
-#: inc/admin/class-rtec-admin.php:1068
+#: inc/admin/class-rtec-admin.php:1068 loco:5cc2a8f9c38e0f4ab036fd24
 msgid "prefilled with user data for logged-in users"
-msgstr ""
+msgstr "gevuld met gebruikersdata voor ingelogde gebruikers"
 
-#: inc/admin/class-rtec-admin.php:1071
+#: inc/admin/class-rtec-admin.php:1071 loco:5cc2a8f9c38e0f4ab036fd25
 msgid "used in attendee list"
-msgstr ""
+msgstr "gebruikt in inschrijvingslijst"
 
 #: inc/admin/class-rtec-admin.php:1075 inc/admin/class-rtec-admin.php:1108
-#: inc/admin/class-rtec-admin.php:1147
+#: inc/admin/class-rtec-admin.php:1147 loco:5cc2a8f9c38e0f4ab036fd26
 msgid "Email template text"
-msgstr ""
+msgstr "E-mail template tekst"
 
 #: inc/admin/class-rtec-admin.php:1086 inc/admin/class-rtec-admin.php:1122
 #: inc/admin/class-rtec-admin.php:1160 inc/form/class-rtec-form.php:145
 #: inc/form/class-rtec-form.php:259 inc/form/class-rtec-form.php:269
 #: inc/form/class-rtec-form.php:469 inc/form/class-rtec-form.php:470
-#: inc/form/class-rtec-form.php:498
+#: inc/form/class-rtec-form.php:498 loco:5cc2a8f9c38e0f4ab036fd27
 msgid "This is required"
 msgstr "Dit is verplicht"
 
-#: inc/admin/class-rtec-admin.php:1089
+#: inc/admin/class-rtec-admin.php:1089 loco:5cc2a8f9c38e0f4ab036fd28
 msgid "will create a plain text field with your label"
-msgstr ""
+msgstr "zal een tekst veld maken met je kaart"
 
-#: inc/admin/class-rtec-admin.php:1128
+#: inc/admin/class-rtec-admin.php:1128 loco:5cc2a8f9c38e0f4ab036fd29
 msgid "Custom Field"
-msgstr ""
+msgstr "Aangepast veld"
 
-#: inc/admin/class-rtec-admin.php:1140
+#: inc/admin/class-rtec-admin.php:1140 loco:5cc2a8f9c38e0f4ab036fd2a
 msgid "Error Message"
-msgstr ""
+msgstr "Fout bericht"
 
-#: inc/admin/class-rtec-admin.php:1154
+#: inc/admin/class-rtec-admin.php:1154 loco:5cc2a8f9c38e0f4ab036fd2b
 msgid "Add Field"
-msgstr ""
+msgstr "Voeg veld toe"
 
 #: inc/admin/class-rtec-admin.php:1158 inc/form/class-rtec-form.php:492
+#: loco:5cc2a8f9c38e0f4ab036fd2c
 msgid "I accept the terms and conditions"
-msgstr ""
+msgstr "Ik accepteer de voorwaarden en condities"
 
 #: inc/admin/class-rtec-admin.php:1162 inc/form/class-rtec-form.php:482
-#: inc/form/class-rtec-form.php:483
+#: inc/form/class-rtec-form.php:483 loco:5cc2a8f9c38e0f4ab036fd2d
 msgid "Terms and Conditions Page"
 msgstr "Algemene voorwaarden pagina"
 
 #: inc/admin/class-rtec-admin.php:1166 inc/form/class-rtec-form.php:485
+#: loco:5cc2a8f9c38e0f4ab036fd2e
 msgid "Terms and Conditions"
-msgstr "Voorwaarden"
+msgstr "Voorwaarden en condities"
 
-#: inc/admin/class-rtec-admin.php:1166
+#: inc/admin/class-rtec-admin.php:1166 loco:5cc2a8f9c38e0f4ab036fd2f
 msgid "Checkbox field useful for GDPR compliance"
-msgstr ""
+msgstr "Checkbox voor AVG compliance (privacy wetgeving)"
 
 #: inc/admin/class-rtec-admin.php:1172 inc/admin/class-rtec-admin.php:1201
+#: loco:5cc2a8f9c38e0f4ab036fd30
 msgid "require and include"
-msgstr ""
+msgstr "vereist en voeg toe"
 
-#: inc/admin/class-rtec-admin.php:1175
+#: inc/admin/class-rtec-admin.php:1175 loco:5cc2a8f9c38e0f4ab036fd31
 msgid "Terms and Conditions Page URL:"
-msgstr ""
+msgstr "Voorwaarden en condities webpagina URL:"
 
-#: inc/admin/class-rtec-admin.php:1179
+#: inc/admin/class-rtec-admin.php:1179 loco:5cc2a8f9c38e0f4ab036fd32
 msgid "Link Text:"
-msgstr ""
+msgstr "Link tekst:"
 
 #: inc/admin/class-rtec-admin.php:1193 inc/form/class-rtec-form.php:206
-#: inc/form/class-rtec-form.php:207
+#: inc/form/class-rtec-form.php:207 loco:5cc2a8f9c38e0f4ab036fd33
 msgid "What is"
 msgstr "Wat is"
 
 #: inc/admin/class-rtec-admin.php:1195 inc/form/class-rtec-form.php:208
-#: inc/form/class-rtec-form.php:209
+#: inc/form/class-rtec-form.php:209 loco:5cc2a8f9c38e0f4ab036fd34
 msgid "Please try again"
 msgstr "Probeer het opnieuw"
 
-#: inc/admin/class-rtec-admin.php:1198
+#: inc/admin/class-rtec-admin.php:1198 loco:5cc2a8f9c38e0f4ab036fd35
 msgid "Recaptcha"
-msgstr ""
+msgstr "Recaptcha"
 
-#: inc/admin/class-rtec-admin.php:1207
+#: inc/admin/class-rtec-admin.php:1207 loco:5cc2a8f9c38e0f4ab036fd36
 msgid "Math Question"
-msgstr ""
+msgstr "Wiskunde vraag"
 
-#: inc/admin/class-rtec-admin.php:1211
+#: inc/admin/class-rtec-admin.php:1211 loco:5cc2a8f9c38e0f4ab036fd37
 msgid "Google reCAPTCHA"
-msgstr ""
+msgstr "Google reCAPTCHA"
 
-#: inc/admin/class-rtec-admin.php:1211
-#, fuzzy
-#| msgid "What is"
+#: inc/admin/class-rtec-admin.php:1211 loco:5cc2a8f9c38e0f4ab036fd38
 msgid "What's this?"
-msgstr "Wat is"
+msgstr "Wat is dit?"
 
-#: inc/admin/class-rtec-admin.php:1217
+#: inc/admin/class-rtec-admin.php:1217 loco:5cc2a8f9c38e0f4ab036fd39
 msgid ""
 "Simple math question to avoid spam entries. Spam \"honey pot\" field is in "
 "the form by default"
 msgstr ""
+"Simpele wiskunde vraag om spam te beletten. Een spam 'honingpot\" veld is "
+"standaard in het formulier."
 
-#: inc/admin/class-rtec-admin.php:1228
+#: inc/admin/class-rtec-admin.php:1228 loco:5cc2a8f9c38e0f4ab036fd3a
 msgid "\"I'm not a robot\" checkbox connected to Google's Recaptcha."
-msgstr ""
+msgstr "Ik ben geen robot checkbox gekoppeld aan Google's Recaptcha"
 
-#: inc/admin/class-rtec-admin.php:1228
-#, fuzzy
-#| msgid "Registrations"
+#: inc/admin/class-rtec-admin.php:1228 loco:5cc2a8f9c38e0f4ab036fd3b
 msgid "Instructions"
-msgstr "Inschrijvingen"
+msgstr "Instructies"
 
-#: inc/admin/class-rtec-admin.php:1230
+#: inc/admin/class-rtec-admin.php:1230 loco:5cc2a8f9c38e0f4ab036fd3c
 msgid "Google Recaptcha Site Key"
-msgstr ""
+msgstr "Google Recaptcha Site key"
 
-#: inc/admin/class-rtec-admin.php:1234
+#: inc/admin/class-rtec-admin.php:1234 loco:5cc2a8f9c38e0f4ab036fd3d
 msgid "Google Recaptcha Secret Key"
-msgstr ""
+msgstr "Google Recaptcha secret key"
 
-#: inc/admin/class-rtec-admin.php:1259
+#: inc/admin/class-rtec-admin.php:1259 loco:5cc2a8f9c38e0f4ab036fd3e
 msgid "Accept registrations up until"
-msgstr ""
+msgstr "Accepteer aanmeldingen tot"
 
-#: inc/admin/class-rtec-admin.php:1262
+#: inc/admin/class-rtec-admin.php:1262 loco:5cc2a8f9c38e0f4ab036fd3f
 msgid "Minutes"
-msgstr ""
+msgstr "Minuten"
 
-#: inc/admin/class-rtec-admin.php:1263
+#: inc/admin/class-rtec-admin.php:1263 loco:5cc2a8f9c38e0f4ab036fd40
 msgid "Hours"
-msgstr ""
+msgstr "Uren"
 
-#: inc/admin/class-rtec-admin.php:1264
+#: inc/admin/class-rtec-admin.php:1264 loco:5cc2a8f9c38e0f4ab036fd41
 msgid "Days"
-msgstr ""
+msgstr "Dagen"
 
-#: inc/admin/class-rtec-admin.php:1266
+#: inc/admin/class-rtec-admin.php:1266 loco:5cc2a8f9c38e0f4ab036fd42
 msgid "before event start time"
-msgstr ""
+msgstr "voor aanvang van het evenement"
 
 #: inc/admin/class-rtec-admin.php:1272 inc/form/class-rtec-form.php:807
-#: inc/form/class-rtec-form.php:808
+#: inc/form/class-rtec-form.php:808 loco:5cc2a8f9c38e0f4ab036fd43
 msgid "Join"
-msgstr "Toetreden"
+msgstr "Deelnemen"
 
 #: inc/admin/class-rtec-admin.php:1273 inc/form/class-rtec-form.php:809
-#: inc/form/class-rtec-form.php:810
+#: inc/form/class-rtec-form.php:810 loco:5cc2a8f9c38e0f4ab036fd44
 msgid "others!"
 msgstr "anderen!"
 
 #: inc/admin/class-rtec-admin.php:1274 inc/form/class-rtec-form.php:819
-#: inc/form/class-rtec-form.php:820
+#: inc/form/class-rtec-form.php:820 loco:5cc2a8f9c38e0f4ab036fd45
 msgid "Join one other person"
-msgstr "Word lid van een andere persoon"
+msgstr "Wordt de tweede deelnemer"
 
 #: inc/admin/class-rtec-admin.php:1275 inc/form/class-rtec-form.php:813
+#: loco:5cc2a8f9c38e0f4ab036fd46
 msgid "Only"
-msgstr "Enkel en alleen"
+msgstr "Nog maa"
 
 #: inc/admin/class-rtec-admin.php:1276 inc/form/class-rtec-form.php:814
+#: loco:5cc2a8f9c38e0f4ab036fd47
 msgid "spots left"
-msgstr "vlekken over"
+msgstr "plaatsen over"
 
 #: inc/admin/class-rtec-admin.php:1277 inc/form/class-rtec-form.php:822
-#: inc/form/class-rtec-form.php:823
+#: inc/form/class-rtec-form.php:823 loco:5cc2a8f9c38e0f4ab036fd48
 msgid "Only one spot left!"
 msgstr "Slechts één plek over!"
 
 #: inc/admin/class-rtec-admin.php:1278 inc/form/class-rtec-form.php:827
 #: inc/form/class-rtec-form.php:828 inc/helper-functions.php:731
-#: inc/helper-functions.php:732
+#: inc/helper-functions.php:732 loco:5cc2a8f9c38e0f4ab036fd49
 msgid "Be the first!"
 msgstr "Wees de eerste!"
 
 #: inc/admin/class-rtec-admin.php:1279 inc/form/class-rtec-form.php:718
-#: inc/form/class-rtec-form.php:719
+#: inc/form/class-rtec-form.php:719 loco:5cc2a8f9c38e0f4ab036fd4a
 msgid "Registrations are closed for this event"
 msgstr "Registraties zijn gesloten voor dit evenement"
 
-#: inc/admin/class-rtec-admin.php:1284
+#: inc/admin/class-rtec-admin.php:1284 loco:5cc2a8f9c38e0f4ab036fd4b
 msgid "include registrations availability message"
-msgstr ""
+msgstr "voeg bericht toe over beschikbare plaatsen"
 
-#: inc/admin/class-rtec-admin.php:1288
+#: inc/admin/class-rtec-admin.php:1288 loco:5cc2a8f9c38e0f4ab036fd4c
 msgid "Message Type"
-msgstr ""
+msgstr "Bericht type"
 
-#: inc/admin/class-rtec-admin.php:1293
+#: inc/admin/class-rtec-admin.php:1293 loco:5cc2a8f9c38e0f4ab036fd4d
 msgid "guests attending (count up)"
-msgstr ""
+msgstr "Aantal aanwezigen (opgeteld)"
 
-#: inc/admin/class-rtec-admin.php:1296
+#: inc/admin/class-rtec-admin.php:1296 loco:5cc2a8f9c38e0f4ab036fd4e
 msgid ""
 "spots remaining (count down, <strong>only for events with limits</strong>)"
 msgstr ""
+"beschikbare plaatsen (count down) ... <strong>alleen voor evenementen met "
+"limitering plaatsen</strong>"
 
-#: inc/admin/class-rtec-admin.php:1307
+#: inc/admin/class-rtec-admin.php:1307 loco:5cc2a8f9c38e0f4ab036fd4f
 msgid "Guests Attending Message Text"
-msgstr ""
+msgstr "Aanmeldingslijst bericht tekst"
 
 #: inc/admin/class-rtec-admin.php:1309 inc/admin/class-rtec-admin.php:1321
+#: loco:5cc2a8f9c38e0f4ab036fd50
 msgid "Text Before: "
-msgstr ""
+msgstr "Tekst voor:"
 
 #: inc/admin/class-rtec-admin.php:1310 inc/admin/class-rtec-admin.php:1322
+#: loco:5cc2a8f9c38e0f4ab036fd51
 msgid "Text After: "
-msgstr ""
+msgstr "Tekst na:"
 
-#: inc/admin/class-rtec-admin.php:1313
+#: inc/admin/class-rtec-admin.php:1313 loco:5cc2a8f9c38e0f4ab036fd52
 msgid "Message if exactly 1 registration: "
-msgstr ""
+msgstr "Bericht bij exact 1 aanmelding:"
 
-#: inc/admin/class-rtec-admin.php:1319
+#: inc/admin/class-rtec-admin.php:1319 loco:5cc2a8f9c38e0f4ab036fd53
 msgid "Spots Remaining Message Text"
-msgstr ""
+msgstr "Plaatsen beschikbaar tekst"
 
-#: inc/admin/class-rtec-admin.php:1325
+#: inc/admin/class-rtec-admin.php:1325 loco:5cc2a8f9c38e0f4ab036fd54
 msgid "Message if exactly 1 spot left: "
-msgstr ""
+msgstr "Bericht als er nog één plek beschikbaar is:"
 
-#: inc/admin/class-rtec-admin.php:1332
+#: inc/admin/class-rtec-admin.php:1332 loco:5cc2a8f9c38e0f4ab036fd55
 msgid "Other Messages"
-msgstr ""
+msgstr "Andere berichten"
 
-#: inc/admin/class-rtec-admin.php:1334
+#: inc/admin/class-rtec-admin.php:1334 loco:5cc2a8f9c38e0f4ab036fd56
 msgid "Message if no registrations yet: "
-msgstr ""
+msgstr "Bericht als er nog geen aanmelding is:"
 
-#: inc/admin/class-rtec-admin.php:1337
+#: inc/admin/class-rtec-admin.php:1337 loco:5cc2a8f9c38e0f4ab036fd57
 msgid "Message if registrations are closed or filled: "
-msgstr ""
+msgstr "Bericht als aanmeldingen gesloten zijn of vol:"
 
 #: inc/admin/class-rtec-admin.php:1358 inc/admin/class-rtec-admin.php:1412
+#: loco:5cc2a8f9c38e0f4ab036fd58
 msgid "Template Text (find and replace)"
-msgstr ""
+msgstr "Template tekst (zoek en vervang)"
 
-#: inc/admin/class-rtec-admin.php:1360
+#: inc/admin/class-rtec-admin.php:1360 loco:5cc2a8f9c38e0f4ab036fd59
 msgid "Event venue/location"
-msgstr ""
+msgstr "Evenement locatie"
 
-#: inc/admin/class-rtec-admin.php:1361
+#: inc/admin/class-rtec-admin.php:1361 loco:5cc2a8f9c38e0f4ab036fd5a
 msgid "Venue street address"
-msgstr ""
+msgstr "Evenement straat adres"
 
-#: inc/admin/class-rtec-admin.php:1362
+#: inc/admin/class-rtec-admin.php:1362 loco:5cc2a8f9c38e0f4ab036fd5b
 msgid "Venue city"
-msgstr ""
+msgstr "Evenement stad"
 
-#: inc/admin/class-rtec-admin.php:1363
+#: inc/admin/class-rtec-admin.php:1363 loco:5cc2a8f9c38e0f4ab036fd5c
 msgid "Venue state/province"
-msgstr ""
+msgstr "Evenement provincie"
 
-#: inc/admin/class-rtec-admin.php:1364
+#: inc/admin/class-rtec-admin.php:1364 loco:5cc2a8f9c38e0f4ab036fd5d
 msgid "Venue zip code"
-msgstr ""
+msgstr "Evenement postcode"
 
-#: inc/admin/class-rtec-admin.php:1365
+#: inc/admin/class-rtec-admin.php:1365 loco:5cc2a8f9c38e0f4ab036fd5e
 msgid "Title of event"
-msgstr ""
+msgstr "Naam van evenement"
 
-#: inc/admin/class-rtec-admin.php:1366
+#: inc/admin/class-rtec-admin.php:1366 loco:5cc2a8f9c38e0f4ab036fd5f
 msgid "Event start date"
-msgstr ""
+msgstr "Evenement start datum"
 
-#: inc/admin/class-rtec-admin.php:1367
+#: inc/admin/class-rtec-admin.php:1367 loco:5cc2a8f9c38e0f4ab036fd60
 msgid "First name of registrant"
-msgstr ""
+msgstr "Voornaam aanmelder"
 
-#: inc/admin/class-rtec-admin.php:1368
+#: inc/admin/class-rtec-admin.php:1368 loco:5cc2a8f9c38e0f4ab036fd61
 msgid "Last name of registrant"
-msgstr ""
+msgstr "Achternaam aanmelder"
 
-#: inc/admin/class-rtec-admin.php:1369
+#: inc/admin/class-rtec-admin.php:1369 loco:5cc2a8f9c38e0f4ab036fd62
 msgid "Email of registrant"
-msgstr ""
+msgstr "E-mail van registrant"
 
-#: inc/admin/class-rtec-admin.php:1370
+#: inc/admin/class-rtec-admin.php:1370 loco:5cc2a8f9c38e0f4ab036fd63
 msgid "Phone number of registrant"
-msgstr ""
+msgstr "Telefoonnummer aanmelder"
 
-#: inc/admin/class-rtec-admin.php:1371
+#: inc/admin/class-rtec-admin.php:1371 loco:5cc2a8f9c38e0f4ab036fd64
 msgid "Value entered in the \"other\" field"
-msgstr ""
+msgstr "Waarde in het \"overige\" veld"
 
-#: inc/admin/class-rtec-admin.php:1372
+#: inc/admin/class-rtec-admin.php:1372 loco:5cc2a8f9c38e0f4ab036fd65
 msgid "Link for user to remove their registration from an event"
-msgstr ""
+msgstr "Link voor een deelnemer om uit te schrijven"
 
-#: inc/admin/class-rtec-admin.php:1474
+#: inc/admin/class-rtec-admin.php:1474 loco:5cc2a8f9c38e0f4ab036fd66
 msgid "Examples"
-msgstr ""
+msgstr "Voorbeelden"
 
-#: inc/admin/templates/email.php:3
+#: inc/admin/templates/email.php:3 loco:5cc2a8f9c38e0f4ab036fd67
 msgid "Email Settings"
-msgstr ""
+msgstr "E-mail settings"
 
 #: inc/admin/templates/email.php:5 inc/admin/templates/form.php:5
+#: loco:5cc2a8f9c38e0f4ab036fd68
 msgid "Can also be set for each event separately on the Events->Edit page"
-msgstr ""
+msgstr "Kan ook apart per evenement ingesteld worden > Edit pagina"
 
-#: inc/admin/templates/email.php:11
+#: inc/admin/templates/email.php:11 loco:5cc2a8f9c38e0f4ab036fd69
 msgid ""
 "For best results with email delivery, check out the related <a href="
 "\"https://roundupwp.com/faq/my-confirmationnotification-emails-are-missing/"
 "\" target=\"_blank\">article</a> on our website"
 msgstr ""
+"Voor beste resultaten met de e-mail afhandeling, lees het <a href=\"https://"
+"roundupwp.com/faq/my-confirmationnotification-emails-are-missing/\" target="
+"\"_blank\">artikel</a> op onze website"
 
 #: inc/admin/templates/email.php:18 inc/admin/templates/email.php:21
 #: inc/admin/templates/email.php:24 inc/admin/templates/form.php:12
 #: inc/admin/templates/form.php:15 inc/admin/templates/form.php:18
 #: inc/admin/templates/form.php:21 inc/admin/templates/form.php:24
 #: inc/admin/templates/form.php:28 inc/admin/templates/form.php:31
+#: loco:5cc2a8f9c38e0f4ab036fd6a
 msgid "Save Changes"
-msgstr ""
+msgstr "Bewaar wijzigingen"
 
-#: inc/admin/templates/form.php:3
+#: inc/admin/templates/form.php:3 loco:5cc2a8f9c38e0f4ab036fd6b
 msgid "Form Settings"
-msgstr ""
+msgstr "Formulier instellingen"
 
-#: inc/admin/templates/main.php:2
+#: inc/admin/templates/main.php:2 loco:5cc2a8f9c38e0f4ab036fd6c
 msgid "Registrations for the Events Calendar"
-msgstr ""
+msgstr "Aanmeldingen voor de evenementen kalender"
 
-#: inc/admin/templates/main.php:24
+#: inc/admin/templates/main.php:24 loco:5cc2a8f9c38e0f4ab036fd6d
 msgid "Form"
-msgstr ""
+msgstr "Formulier"
 
-#: inc/admin/templates/main.php:32
+#: inc/admin/templates/main.php:32 loco:5cc2a8f9c38e0f4ab036fd6e
 msgid "Support"
-msgstr ""
+msgstr "Help"
 
 #: inc/admin/templates/partials/registrations-event-meta.php:11
+#: loco:5cc2a8f9c38e0f4ab036fd6f
 #, php-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s tot %s"
 
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:50
+#: loco:5cc2a8f9c38e0f4ab036fd70
 msgid "Toggle panel: Information"
-msgstr ""
+msgstr "Wijzigingspaneel: informatie"
 
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:51
+#: loco:5cc2a8f9c38e0f4ab036fd71
 msgid "Event Options"
-msgstr ""
+msgstr "Evenement opties"
 
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:59
+#: loco:5cc2a8f9c38e0f4ab036fd72
 msgid "Disable registrations for this event"
-msgstr ""
+msgstr "Schakel inschrijvingen voor dit evenement uit"
 
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:63
+#: loco:5cc2a8f9c38e0f4ab036fd73
 msgid "Limit the number registrations allowed"
-msgstr ""
+msgstr "Beperk het aantal toegestane registraties"
 
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:67
+#: loco:5cc2a8f9c38e0f4ab036fd74
 msgid "Maximum registrations"
-msgstr ""
+msgstr "Maximum aantal registraties"
 
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:93
+#: loco:5cc2a8f9c38e0f4ab036fd75
 msgid "Notification email recipients"
-msgstr ""
+msgstr "Notificatie e-mail ontvangers "
 
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:97
+#: loco:5cc2a8f9c38e0f4ab036fd76
 msgid "Confirmation email from address"
-msgstr ""
+msgstr "Bevestigingsmail afzender adres"
 
 #: inc/admin/templates/partials/registrations-hidden-event-options.php:101
+#: loco:5cc2a8f9c38e0f4ab036fd77
 msgid "Update"
-msgstr ""
+msgstr "Bijwerken"
 
 #: inc/admin/templates/partials/registrations-list-table-body.php:12
+#: loco:5cc2a8f9c38e0f4ab036fd78
 msgid "Details"
-msgstr ""
+msgstr "Gegevens"
 
 #: inc/admin/templates/partials/registrations-list-view.php:8
+#: loco:5cc2a8f9c38e0f4ab036fd79
 msgid "Title"
-msgstr ""
+msgstr "Benaming"
 
 #: inc/admin/templates/partials/registrations-list-view.php:11
+#: loco:5cc2a8f9c38e0f4ab036fd7a
 msgid "Venue"
-msgstr ""
+msgstr "Locatie"
 
 #: inc/admin/templates/partials/registrations-list-view.php:12
+#: loco:5cc2a8f9c38e0f4ab036fd7b
 msgid "Attendance"
-msgstr ""
+msgstr "Opkomst"
 
 #: inc/admin/templates/partials/registrations-list-view.php:13
+#: loco:5cc2a8f9c38e0f4ab036fd7c
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 #: inc/admin/templates/partials/registrations-pagination.php:8
+#: loco:5cc2a8f9c38e0f4ab036fd7d
 msgid "No More Events"
-msgstr ""
+msgstr "Geen evenementen meer"
 
 #: inc/admin/templates/partials/registrations-pagination.php:12
+#: loco:5cc2a8f9c38e0f4ab036fd7e
 msgid "Back"
-msgstr ""
+msgstr "Terug"
 
 #: inc/admin/templates/partials/registrations-pagination.php:16
+#: loco:5cc2a8f9c38e0f4ab036fd7f
 msgid "Next"
-msgstr ""
+msgstr "Volgende"
 
 #: inc/admin/templates/partials/registrations-reg-table.php:37
-#: inc/admin/templates/single.php:170
+#: inc/admin/templates/single.php:170 loco:5cc2a8f9c38e0f4ab036fd80
 msgid "No Registrations Yet"
-msgstr ""
+msgstr "Nog geen inschrijvingen"
 
 #: inc/admin/templates/partials/registrations-reg-table.php:43
+#: loco:5cc2a8f9c38e0f4ab036fd81
 msgid "View all"
-msgstr ""
+msgstr "Zie allen"
 
 #: inc/admin/templates/partials/registrations-reg-table.php:49
+#: loco:5cc2a8f9c38e0f4ab036fd82
 msgid "Detailed View"
-msgstr ""
+msgstr "Gedetailleerd overzicht"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:13
+#: loco:5cc2a8f9c38e0f4ab036fd83
 msgid "List View"
-msgstr ""
+msgstr "Lijstweergave"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:16
+#: loco:5cc2a8f9c38e0f4ab036fd84
 msgid "Grid View"
-msgstr ""
+msgstr "Rasterweergave"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:19
+#: loco:5cc2a8f9c38e0f4ab036fd85
 msgid "Filter by start date"
-msgstr ""
+msgstr "Filter op aanvangsdatum"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:21
+#: loco:5cc2a8f9c38e0f4ab036fd86
 msgid "View Upcoming"
-msgstr ""
+msgstr "Zie komende"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:22
+#: loco:5cc2a8f9c38e0f4ab036fd87
 msgid "Select Start Date"
-msgstr ""
+msgstr "Kies aanvangsdatum"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:23
+#: loco:5cc2a8f9c38e0f4ab036fd88
 msgid "View All"
-msgstr ""
+msgstr "Zie allen"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:25
+#: loco:5cc2a8f9c38e0f4ab036fd89
 msgid "Filter by event start date"
-msgstr ""
+msgstr "Filter op evenement start datum"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:27
+#: loco:5cc2a8f9c38e0f4ab036fd8a
 msgid "Filter by registrations"
-msgstr ""
+msgstr "Filter op aanmeldingen"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:29
+#: loco:5cc2a8f9c38e0f4ab036fd8b
 msgid "With registrations enabled"
-msgstr ""
+msgstr "Met aanmeldingen actief"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:30
+#: loco:5cc2a8f9c38e0f4ab036fd8c
 msgid "With/without registrations"
-msgstr ""
+msgstr "Met/zonder aanmeldingen"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:32
+#: loco:5cc2a8f9c38e0f4ab036fd8d
 msgid "Go"
-msgstr ""
+msgstr "Start"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:35
 #: inc/admin/templates/partials/registrations-toolbar.php:36
+#: loco:5cc2a8f9c38e0f4ab036fd8e
 msgid "Search Registrants"
-msgstr ""
+msgstr "Zoek aanmeldingen"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:40
+#: loco:5cc2a8f9c38e0f4ab036fd8f
 msgid "dismiss new"
-msgstr ""
+msgstr "Nieuwe afwijzen"
 
-#: inc/admin/templates/registrations.php:40
+#: inc/admin/templates/registrations.php:40 loco:5cc2a8f9c38e0f4ab036fd90
 msgid "Overview"
-msgstr ""
+msgstr "Overzicht"
 
-#: inc/admin/templates/single.php:46
+#: inc/admin/templates/single.php:46 loco:5cc2a8f9c38e0f4ab036fd91
 msgid "Single Event Details"
-msgstr ""
+msgstr "Evenement details"
 
-#: inc/admin/templates/single.php:47
+#: inc/admin/templates/single.php:47 loco:5cc2a8f9c38e0f4ab036fd92
 msgid "Back to Overview"
-msgstr ""
+msgstr "Terug naar het overzicht"
 
 #: inc/admin/templates/single.php:60 inc/admin/templates/single.php:123
+#: loco:5cc2a8f9c38e0f4ab036fd93
 msgid "Select All"
-msgstr ""
+msgstr "Kies allen"
 
-#: inc/admin/templates/single.php:177
+#: inc/admin/templates/single.php:177 loco:5cc2a8f9c38e0f4ab036fd94
 msgid "Delete Selected"
-msgstr ""
+msgstr "Verwijder geselecteerde"
 
-#: inc/admin/templates/single.php:178
+#: inc/admin/templates/single.php:178 loco:5cc2a8f9c38e0f4ab036fd95
 msgid "Edit Selected"
-msgstr ""
+msgstr "Bewerk geselecteerde"
 
-#: inc/admin/templates/single.php:179
+#: inc/admin/templates/single.php:179 loco:5cc2a8f9c38e0f4ab036fd96
 msgid "Add New"
-msgstr ""
+msgstr "Voeg nieuwe aanmelding toe"
 
-#: inc/admin/templates/support.php:1
+#: inc/admin/templates/support.php:1 loco:5cc2a8f9c38e0f4ab036fd97
 msgid "Need Help?"
-msgstr ""
+msgstr "Hulp nodig?"
 
-#: inc/admin/templates/support.php:73
+#: inc/admin/templates/support.php:73 loco:5cc2a8f9c38e0f4ab036fd98
 msgid "Setup Directions"
-msgstr ""
+msgstr "Configuratie aanwijzingen"
 
-#: inc/admin/templates/support.php:74
+#: inc/admin/templates/support.php:74 loco:5cc2a8f9c38e0f4ab036fd99
 msgid "A step-by-step guide on how to setup and use the plugin."
-msgstr ""
+msgstr "Een stappenplan hoe de plugin in te stellen en te gebruiken"
 
-#: inc/admin/templates/support.php:77
+#: inc/admin/templates/support.php:77 loco:5cc2a8f9c38e0f4ab036fd9a
 msgid "FAQs and Documentation"
-msgstr ""
+msgstr "FAQ's en documentatie"
 
-#: inc/admin/templates/support.php:78
+#: inc/admin/templates/support.php:78 loco:5cc2a8f9c38e0f4ab036fd9b
 msgid "You might find some help with our FAQs and troubleshooting guides."
 msgstr ""
+"Je kan hulp krijgen met behulp van onze FAQ's en probleemoplossingsgidsen"
 
-#: inc/admin/templates/support.php:81
+#: inc/admin/templates/support.php:81 loco:5cc2a8f9c38e0f4ab036fd9c
 msgid "Request Support"
-msgstr ""
+msgstr "Vraag ondersteuning"
 
-#: inc/admin/templates/support.php:82
+#: inc/admin/templates/support.php:82 loco:5cc2a8f9c38e0f4ab036fd9d
 msgid ""
 "Have a problem? Submit a support ticket on our website. Please include your "
 "<strong>System Info</strong> below with support requests."
 msgstr ""
+"Probleem? Dien een support ticket in op onze website. Voeg a.u,b. uw "
+"<strong> systeem informatie </strong> hieronder bij de support verzoeken."
 
-#: inc/admin/templates/support.php:86
+#: inc/admin/templates/support.php:86 loco:5cc2a8f9c38e0f4ab036fd9e
 msgid "System Info"
-msgstr ""
+msgstr "Systeem informatie"
 
-#: inc/admin/templates/support.php:87
+#: inc/admin/templates/support.php:87 loco:5cc2a8f9c38e0f4ab036fd9f
 msgid "Click the text below to select all"
-msgstr ""
+msgstr "Klik de tekst beneden om alles te selecteren."
 
-#: inc/class-rtec-email.php:85
+#: inc/class-rtec-email.php:85 loco:5cc2a8f9c38e0f4ab036fda0
 msgid "There was a problem sending the email"
 msgstr "Er is een probleem opgetreden bij het verzenden van de e-mail"
 
-#: inc/class-rtec-email.php:107
+#: inc/class-rtec-email.php:107 loco:5cc2a8f9c38e0f4ab036fda1
 msgid "You are registered!"
 msgstr "Je bent geregistreerd!"
 
-#: inc/class-rtec-email.php:108
+#: inc/class-rtec-email.php:108 loco:5cc2a8f9c38e0f4ab036fda2
 #, php-format
 msgid "Event: %1$s at %2$s on %3$s"
 msgstr "Evenement: %1$s bij %2$s op %3$s"
 
-#: inc/class-rtec-email.php:112
+#: inc/class-rtec-email.php:112 loco:5cc2a8f9c38e0f4ab036fda3
 msgid "Name"
 msgstr "Naam"
 
 #: inc/class-rtec-email.php:121 inc/form/class-rtec-form.php:267
+#: loco:5cc2a8f9c38e0f4ab036fda4
 msgid "Guests"
 msgstr "Gasten"
 
-#: inc/class-rtec-email.php:146
+#: inc/class-rtec-email.php:146 loco:5cc2a8f9c38e0f4ab036fda5
 msgid "The event will be held at this location"
 msgstr "Het evenement wordt op deze locatie gehouden"
 
-#: inc/class-rtec-email.php:151
+#: inc/class-rtec-email.php:151 loco:5cc2a8f9c38e0f4ab036fda6
 msgid "Thank You!"
 msgstr "Dank je!"
 
-#: inc/class-rtec-email.php:179
+#: inc/class-rtec-email.php:179 loco:5cc2a8f9c38e0f4ab036fda7
 #, php-format
 msgid "The following submission was made for: %1$s at %2$s on %3$s"
 msgstr "De volgende inzending is gedaan voor: %1$s bij %2$s op %3$s"
 
-#: inc/class-rtec-email.php:369
+#: inc/class-rtec-email.php:369 loco:5cc2a8f9c38e0f4ab036fda8
 msgid "Your Registration"
 msgstr "Uw registratie"
 
-#: inc/class-rtec-email.php:374
+#: inc/class-rtec-email.php:374 loco:5cc2a8f9c38e0f4ab036fda9
 msgid "Registration email"
-msgstr ""
+msgstr "Registratie e-mail"
 
-#: inc/form/class-rtec-form.php:195
+#: inc/form/class-rtec-form.php:195 loco:5cc2a8f9c38e0f4ab036fdaa
 msgid "Please verify that you are not a robot"
-msgstr ""
+msgstr "A.u.b, verifieer dat u geen robot bent"
 
 #: inc/form/class-rtec-form.php:512 inc/form/class-rtec-form.php:655
-#: inc/form/class-rtec-form.php:680
+#: inc/form/class-rtec-form.php:680 loco:5cc2a8f9c38e0f4ab036fdab
 msgid "Error"
 msgstr "Fout"
 
-#: inc/form/class-rtec-form.php:774
+#: inc/form/class-rtec-form.php:774 loco:5cc2a8f9c38e0f4ab036fdac
 msgid "There were errors with your submission. Please try again."
-msgstr "Er zijn fouten opgetreden bij je inzending. Probeer het opnieuw."
+msgstr "Er zijn fouten opgetreden bij het verzenden. Probeer het opnieuw."
 
-#: inc/form/class-rtec-form.php:997
+#: inc/form/class-rtec-form.php:997 loco:5cc2a8f9c38e0f4ab036fdad
 msgid "required"
 msgstr "verplicht"
 
-#: inc/form/class-rtec-form.php:1194
+#: inc/form/class-rtec-form.php:1194 loco:5cc2a8f9c38e0f4ab036fdae
 msgid "If you are a human, do not fill in this field"
-msgstr ""
+msgstr "Als u een mens bent, vul dan niet dit veld in"
 
-#: inc/form/form-functions.php:307
+#: inc/form/form-functions.php:307 loco:5cc2a8f9c38e0f4ab036fdaf
 msgid "No record found."
-msgstr "Geen record gevonden."
+msgstr "Geen gegevens gevonden."
 
-#: inc/form/form-functions.php:362
+#: inc/form/form-functions.php:362 loco:5cc2a8f9c38e0f4ab036fdb0
 #, php-format
 msgid "A registrant %s has unregistered from this event %s."
-msgstr "Een registrant %s is niet geregistreerd van dit evenement %s."
+msgstr "Een registrant %s is uitgeschreven van dit evenement %s."
 
-#: inc/form/form-functions.php:368
+#: inc/form/form-functions.php:368 loco:5cc2a8f9c38e0f4ab036fdb1
 msgid "Notification of Unregistration"
-msgstr ""
+msgstr "Notificatie van uitschrijving"
 
 #: inc/form/form-functions.php:397 inc/form/form-functions.php:449
+#: loco:5cc2a8f9c38e0f4ab036fdb2
 msgid "Please enter the email you registered with."
-msgstr ""
+msgstr "A.u.b. vul de e-mail in waarmee u bent ingeschreven"
 
-#: inc/form/form-functions.php:443
+#: inc/form/form-functions.php:443 loco:5cc2a8f9c38e0f4ab036fdb3
 msgid "Check your email inbox for an unregister link."
-msgstr ""
+msgstr "Check uw e-mail inbox voor een uitschrijf link."
 
-#: inc/helper-functions.php:748
+#: inc/helper-functions.php:748 loco:5cc2a8f9c38e0f4ab036fdb4
 msgid "Please enter an Event ID to view the attendee list"
-msgstr ""
+msgstr "Vul a.u.b. de Evenement ID in om de deelnemerslijst te zien"
 
-#: registrations-for-the-events-calendar.php:48
+#: registrations-for-the-events-calendar.php:48 loco:5cc2a8f9c38e0f4ab036fdb5
 msgid "It looks like The Events Calendar plugin is not currently active."
 msgstr ""
+"Het ziet er naar uit dat de Evenementen Kalender plugin op het ogenblik niet "
+"actief is"
 
-#: registrations-for-the-events-calendar.php:49
+#: registrations-for-the-events-calendar.php:49 loco:5cc2a8f9c38e0f4ab036fdb6
 msgid ""
 "Please install The Events Calendar by Modern Tribe to get started with your "
 "registrations."
 msgstr ""
+"Installeer a.u.b. de Evenementen Kalender van Modern Tribe om te beginnen "
+"met uw aanmeldingen"
 
-#: registrations-for-the-events-calendar.php:50
+#: registrations-for-the-events-calendar.php:50 loco:5cc2a8f9c38e0f4ab036fdb7
 msgid "Setup Instructions"
-msgstr ""
+msgstr "Configuratie instructies"
 
 #: registrations-for-the-events-calendar.php:129
-#: registrations-for-the-events-calendar.php:141
+#: registrations-for-the-events-calendar.php:141 loco:5cc2a8f9c38e0f4ab036fdb8
 msgid "Cheatin&#8217; huh?"
-msgstr ""
+msgstr "Valsspelen hè?"

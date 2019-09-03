@@ -484,7 +484,7 @@ function rtec_custom_js() {
 <?php
 	}
 }
-add_action( 'wp_footer', 'rtec_custom_js', 50 );
+add_action( 'wp_footer', 'rtec_custom_js', 20 );
 
 /**
  * outputs the custom css from the "Customize" tab on the Settings page
