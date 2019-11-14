@@ -4,14 +4,14 @@ Contributors: roundupwp
 Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
-Tested up to: 5.2
+Tested up to: 5.3
 Stable tag: 2.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-Collect and manage event registrations with a customizable form and email template. Whether you're holding a meetup, class, workshop, tournament, or any other kind of event, you need a way to handle registration. Our plugin makes managing this process easy and simple. Even nontechnical users can setup the plugin and start collecting registrations within minutes.
+Collect and manage event registrations with a customizable form and email template. Whether you're holding a meetup, class, workshop, tournament, or any other kind of event, you need a way to handle registration. Our plugin makes managing event registration easy and simple. Even nontechnical users can setup the plugin and start collecting registrations within minutes.
 
 = Parent Plugin =
 
@@ -19,11 +19,22 @@ In order for the Registrations for the Events Calendar to work properly, you nee
 
 = Quick to Set Up and Easy to Get Started =
 
-As soon as you install and activate the plugin, you can begin collecting registrations on the single event page for all of your events. You can also customize the placement of the form with a shortcode.
+As soon as you install and activate the plugin, you can begin collecting event registrations on the single event page for all of your events. You can also customize the placement of the form on the single event page or on any other page using a shortcode.
+
+= Uses =
+
+The plugin can be used for more than event registration. Here are other things the plugin is currently being used for.
+
+* RSVP for meetings
+* Class registration or simple class management
+* Sports club registration
+* Venue booking
+* Webinar sign-ups
+* Private instructor booking
 
 = User-Friendly Features =
 
-* Reduce incomplete registrations by limiting the entire process to a single page (AJAX form submit).
+* Reduce incomplete event registrations by limiting the entire process to a single page (AJAX form submit).
 * Keep your event page uncluttered (your registration form is hidden initially and revealed by clicking a customizable "Register" button).
 * Follow-up with your attendees with a customizable confirmation email.
 * Save entries in a database table for easy event management.
@@ -31,23 +42,23 @@ As soon as you install and activate the plugin, you can begin collecting registr
 
 = Highly Customizable =
 
-* Add as many text fields as you'd like to the registration form.
-* Add the registration form to one of several parts of the page your event is displayed on.
+* Add as many text fields as you'd like to the event registration form.
+* Add the event registration form to one of several parts of the page your event is displayed on.
 * Display the registration form anywhere on your site with shortcodes.
 * Customize the labels, error messages, directions for your attendees, and which fields are required.
-* Customize both the email templates sent to your attendees and the notification email sent to the event holder.
+* Customize both the email templates sent to your attendees and the notification email sent to the event manager.
 * Limit the number of registrations per event.
 * Display a list of current registered attendees.
 * Specify a registration deadline (both date and time).
 
-= Powerful Backend Features for Easy Management =
+= Powerful Backend Features for Easy Event Management =
 
 * Registrations are saved in the WordPress database, where you can manually add, edit, and delete them.
 * Email addresses can be checked for duplicates (this prevents duplicate registrations).
 * Get notifications when new registrations need to be reviewed.
 * View a breakdown of registrations by event, and browse them quickly in an overview.
-* Export your registrations to a CSV spreadsheet.
-* Search registrations by name, phone, or email.
+* Export your event registrations to a CSV spreadsheet.
+* Search event registrations by name, phone, or email.
 
 = Tools for GDPR Compliance =
 
@@ -62,7 +73,7 @@ As soon as you install and activate the plugin, you can begin collecting registr
 * Simple workflow frees up your time.
 * Customizations allow you to add a personal touch.
 * Optional display of a registered attendee list builds community.
-* Straightforward registration process provides a world-class user experience.
+* Straightforward event registration process provides a world-class user experience.
 
 = Featured Reviews =
 
@@ -75,13 +86,13 @@ As soon as you install and activate the plugin, you can begin collecting registr
 Do you need even more customization and control? Check out [Registrations for the Events Calendar Pro](https://roundupwp.com/products/registrations-for-the-events-calendar-pro/). Pro features include:
 
 * Multiple forms specific to each event.
-* Drop-down, checkbox, radio, and paragraph fields.
-* Online payments for events using PayPal.
+* Drop-down, checkbox, radio, file upload and paragraph fields.
+* Online payments for events using PayPal. (Stripe extension available)
 * Add multiple costs to events.
 * Guest registrations (register for more than one person at a time).
 * Multiple confirmation email templates.
 * Multiple registration venues and tiers.
-* Automatic email message sending.
+* Automatic/reminder email message sending.
 * Connect multiple events to a single registration.
 * Easy event management for membership sites.
 
@@ -119,7 +130,7 @@ Special thanks to Henrik (hjald) for fixing a bug in the .csv exporter!
 
 == Screenshots ==
 
-1. View of the registration form revealed on "click"
+1. View of the event registration form revealed on "click"
 2. Default position and look of the Register button in an event page
 3. The Registrations tab in at-a-glance view
 4. Detailed view of a single event's registrations. Buttons to delete, edit, add and export registrations
@@ -134,9 +145,13 @@ Special thanks to Henrik (hjald) for fixing a bug in the .csv exporter!
 
 = Can I limit the number of registrations for an event? =
 
-Yes. You can set up the maximum number of registrants on the "Form" tab or set this for each event individually.
+Yes. You can set up the maximum number of registrations on the "Form" tab or set this for each event individually.
 
 = Can I add more fields to the form? =
+
+Yes. There is a button to add custom text input fields on the "Form" tab.
+
+= I'm not receiving a notification email or attendees are not receiving  =
 
 Yes. There is a button to add custom text input fields on the "Form" tab.
 
@@ -166,7 +181,7 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 = Is this plugin compatible with WordPress multisite? =
 
-The plugin is not yet fully compatible with a WordPress multisite installation. It will be soon! Please contact us if you are interested in using the plugin with multisite.
+Yes. There is a custom database table added to each sib-site's database to separate registrations.
 
 = What do I do if I have a request or need help? =
 
