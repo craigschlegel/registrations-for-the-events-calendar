@@ -546,18 +546,63 @@ function rtec_sanitize_outputted_html( $input ) {
 
 function rtec_get_notification_email_recipients( $event_id, $blank = false ) {
 	global $rtec_options;
+	$always_include_organizer = isset( $rtec_options['notify_organizer'] ) ? $rtec_options['notify_organizer'] : false;
+	$notification_recipients_for_event = get_post_meta( $event_id, '_RTECnotificationEmailRecipient' );
 
-	$notification_recipients = get_post_meta( $event_id, '_RTECnotificationEmailRecipient' );
-
-	if ( !empty( $notification_recipients[0] ) ) {
-		return $notification_recipients[0];
-	} elseif( $blank ) {
-		return '';
+	if ( ! empty( $notification_recipients_for_event[0] ) ) {
+		$notification_recipients = explode(',', str_replace( ' ', '', $notification_recipients_for_event[0] ) );
 	} else {
-		$notification_recipients = isset( $rtec_options['recipients'] ) ? $rtec_options['recipients'] : get_option( 'admin_email' );
-		return $notification_recipients;
+		$notification_recipients = isset( $rtec_options['recipients'] ) ? explode(',', str_replace( ' ', '', $rtec_options['recipients'] ) ) : array( get_option( 'admin_email' ) );
 	}
 
+	if ( $always_include_organizer ) {
+
+		$organizer_ids = tribe_get_organizer_ids( $event_id );
+
+		$multiple = count( $organizer_ids ) > 1;
+
+		if ( ! $multiple ) {
+			$organizer_email = tribe_get_organizer_email( $event_id, false );
+
+
+			if ( $organizer_email !== '' && ! in_array( $organizer_email, $notification_recipients, true ) ) {
+				$notification_recipients[] = $organizer_email;
+			}
+
+		} else {
+
+			$found_email = false;
+
+			foreach ( $organizer_ids as $organizer ) {
+				$organizer_email = get_post_meta( $organizer, '_OrganizerEmail', true );
+				if ( is_email( $organizer_email ) && ! in_array( $organizer_email, $notification_recipients, true ) ) {
+					$notification_recipients[] = $organizer_email;
+					$found_email = true;
+				}
+			}
+
+			if ( $multiple && ! $found_email ) {
+				$organizer_email = tribe_get_organizer_email( $event_id, false );
+
+				if ( $organizer_email !== '' && ! in_array( $organizer_email, $notification_recipients, true ) ) {
+					$notification_recipients[] = $organizer_email;
+				}
+			}
+
+		}
+
+
+	}
+
+	$non_blank_recipients = array();
+
+	foreach ( $notification_recipients as $recipient ) {
+		if ( ! empty ( $recipient ) ) {
+			$non_blank_recipients[] = $recipient;
+		}
+	}
+
+	return $non_blank_recipients;
 }
 
 function rtec_get_confirmation_from_address( $event_id, $blank = false ) {

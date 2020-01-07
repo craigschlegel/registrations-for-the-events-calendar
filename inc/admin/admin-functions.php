@@ -190,7 +190,15 @@ function rtec_meta_boxes_html(){
 	$deadline_disabled_class = '';
 	$deadline_other_disabled_class = '';
 
-	$notification_email = rtec_get_notification_email_recipients( $post->ID, true );
+	$notification_recipients_for_event = get_post_meta( $event_meta['post_id'], '_RTECnotificationEmailRecipient' );
+
+	if ( ! empty( $notification_recipients_for_event[0] ) ) {
+		$notification_recipients = explode(',', str_replace( ' ', '', $notification_recipients_for_event[0] ) );
+	} else {
+		$notification_recipients = array();
+	}
+
+	$notification_email = implode( ', ', $notification_recipients );
 	$confirmation_from = rtec_get_confirmation_from_address( $post->ID, true );
 	$deadline_time = isset( $event_meta['deadline_other_timestamp'] ) ? $event_meta['deadline_other_timestamp'] : strtotime( $event_meta['start_date'] );
 	if ( $deadline_time == 0 ) {

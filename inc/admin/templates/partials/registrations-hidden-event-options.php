@@ -14,7 +14,15 @@ $deadline_disabled_class = '';
 $deadline_other_disabled_class = '';
 $attendee_who_disabled_att = '';
 $attendee_who_disabled_class = '';
-$notification_email = rtec_get_notification_email_recipients( $event_meta['post_id'], true );
+$notification_recipients_for_event = get_post_meta( $event_meta['post_id'], '_RTECnotificationEmailRecipient' );
+
+if ( ! empty( $notification_recipients_for_event[0] ) ) {
+	$notification_recipients = explode(',', str_replace( ' ', '', $notification_recipients_for_event[0] ) );
+} else {
+	$notification_recipients = array();
+}
+
+$notification_email = implode( ', ', $notification_recipients );
 $conf_email = rtec_get_confirmation_from_address( $event_meta['post_id'], true );
 $deadline_time = isset( $event_meta['deadline_other_timestamp'] ) ? $event_meta['deadline_other_timestamp'] : strtotime( $event_meta['start_date'] );
 if ( $deadline_time == 0 ) {

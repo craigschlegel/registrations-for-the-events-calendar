@@ -63,7 +63,11 @@ class RTEC_Email {
 		$this->need_templating = $need_templating;
 		$this->set_template_type( $args['template_type'] );
 		$this->set_content_type( $args['content_type'] );
-		$this->set_recipients( $args['recipients'] );
+
+		$recipients = is_array( $args['recipients'] ) ? $args['recipients'] : explode(',' , $args['recipients'] );
+		$recipients = apply_filters( 'rtec_email_recipients', $recipients, $args['template_type'], $args['body']['data'] );
+
+		$this->set_recipients( $recipients );
 		$this->set_subject( $args['subject'] );
 		$this->set_header( $event_id, $submission_email, $args['body']['data'] );
 		$this->set_message_body( $args['body'] );
@@ -324,7 +328,7 @@ class RTEC_Email {
 	protected function set_recipients( $emails )
 	{
 		$recipients = array();
-		if ( is_email( $emails ) ) {
+		if ( ! is_array( $emails ) && is_email( $emails ) ) {
 			$recipients = $emails;
 		} elseif ( is_array( $emails ) ) {
 

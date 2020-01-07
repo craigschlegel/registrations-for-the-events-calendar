@@ -756,6 +756,20 @@ class RTEC_Admin
             'default' => get_option( 'admin_email' )
         ));
 
+	    // notify organizer
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'notify_organizer',
+		    'title' => '<label for="rtec_notify_organizer">' . __( 'Always Notify Organizer', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'description' => 'Organizers can be created on the "Edit" page for an event',
+		    'callback'  => 'default_checkbox',
+		    'class' => '',
+		    'page' => 'rtec_email_notification',
+		    'section' => 'rtec_email_notification',
+		    'default' => false
+	    ));
+
         // notification from
         $this->create_settings_field( array(
             'option' => 'rtec_options',
@@ -1615,7 +1629,7 @@ class RTEC_Admin
             $leave_spaces = array( 'custom_js', 'custom_css', 'notification_message' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $rich_editor_settings = array( 'confirmation_message', 'notification_message' );
-            $checkbox_settings = array( 'disable_notification', 'disable_confirmation', 'use_custom_notification' );
+            $checkbox_settings = array( 'disable_notification', 'disable_confirmation', 'use_custom_notification', 'notify_organizer' );
         }
 
         if ( isset( $input['custom_field_names'] ) ) {
