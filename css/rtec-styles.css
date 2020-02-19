@@ -278,3 +278,8 @@ h3.rtec-header, .entry-content h3.rtec-header { margin: 1em 0 1.5em; }
     border: 1px solid #eee;
     margin: 30px 0;
 }
+
+/** Log-in **/
+.rtec-login-wrap {
+    padding: 4% 4% 0;
+}

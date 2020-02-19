@@ -1440,6 +1440,35 @@ class RTEC_Form
 		return $html;
 	}
 
+	public function current_user_can_register() {
+	    if ( is_user_logged_in() ) {
+	        return true;
+        } else {
+	        return ($this->event_meta['who_can_register'] === 'any');
+        }
+    }
+
+	public function please_log_in_html() {
+		global $rtec_options;
+
+		$message = isset( $rtec_options['please_log_in_message'] ) ? $rtec_options['please_log_in_message'] : __( 'Log in to register.', 'registrations-for-the-events-calendar' );
+		$message = rtec_get_text( $message, __( 'Log in to register.', 'registrations-for-the-events-calendar' ) );
+
+		$html = '<p class="rtec-success-message tribe-events-notices">' . $message . '</p>';
+
+		$show_log_in_form = isset( $rtec_options['show_log_in_form'] ) ? $rtec_options['show_log_in_form'] : true;
+		if ( $show_log_in_form ) {
+			$args = array(
+				'echo' => false,
+				'redirect' => get_the_permalink( $this->event_id )
+			);
+			$html .= '<div class="tribe-events-event-meta rtec-event-meta"><div class="rtec-login-wrap">' . wp_login_form( $args ) . '</div></div>';
+		}
+
+		$return = apply_filters( 'rtec_please_log_in_html', $html );
+
+		return $return;
+	}
 
 	public static function get_template( $template ) {
         switch ( $template ) {

@@ -519,6 +519,58 @@ class RTEC_Admin
 		    'default' => __( 'Send unregister link', 'registrations-for-the-events-calendar' ),
 	    ));
 
+	    /* Logged-in Users */
+	    add_settings_section(
+		    'rtec_form_users_options',
+		    'Logged-In Users',
+		    array( $this, 'blank' ),
+		    'rtec_form_users_options'
+	    );
+
+	    // allow users to edit their entries
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'only_logged_in',
+		    'title' => '<label for="rtec_only_logged_in">' . __( 'Registrations Available Only to Logged-in Users by Default', 'registrations-for-the-events-calendar' ) . '<span class="rtec-individual-available">&#42;</span></label>',
+		    'example' => '',
+		    'description' => '',
+		    'callback'  => 'default_checkbox',
+		    'class' => '',
+		    'page' => 'rtec_form_users_options',
+		    'section' => 'rtec_form_users_options',
+		    'default' => false
+	    ));
+
+	    // edit success message
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'please_log_in_message',
+		    'title' => '<label>' . __( 'Website "Users Only" Message', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'default' => __( 'Log in to register', 'registrations-for-the-events-calendar' ),
+		    'description' => __( 'This message will appear if the user is not logged-in and the event is only available to logged-in users', 'registrations-for-the-events-calendar' ),
+		    'callback'  => 'message_text_area',
+		    'rows' => '3',
+		    'class' => '',
+		    'page' => 'rtec_form_users_options',
+		    'section' => 'rtec_form_users_options',
+		    'legend' => false
+	    ));
+
+	    // allow users to edit their entries
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'show_log_in_form',
+		    'title' => '<label for="rtec_show_log_in_form">' . __( 'Show Log-in Form', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'description' => 'A log-in form will appear in place of the form if a user is logged-out and registration is for logged-in users only.',
+		    'callback'  => 'default_checkbox',
+		    'class' => '',
+		    'page' => 'rtec_form_users_options',
+		    'section' => 'rtec_form_users_options',
+		    'default' => true
+	    ));
+
         /* Form Styling */
 
         add_settings_section(
@@ -1625,7 +1677,7 @@ class RTEC_Admin
         $rich_editor_settings = array();
 
         if ( isset( $input['default_max_registrations'] ) ) {
-            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'terms_conditions_require', 'recaptcha_require', 'disable_by_default', 'visitors_can_edit_what_status', 'show_registrants_data', 'limit_registrations', 'include_attendance_message', 'using_custom_template', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
+            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'terms_conditions_require', 'recaptcha_require', 'disable_by_default', 'visitors_can_edit_what_status', 'show_registrants_data', 'limit_registrations', 'only_logged_in', 'show_log_in_form', 'include_attendance_message', 'using_custom_template', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
             $leave_spaces = array( 'custom_js', 'custom_css', 'notification_message' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $rich_editor_settings = array( 'confirmation_message', 'notification_message' );

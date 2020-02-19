@@ -44,7 +44,7 @@ function rtec_the_registration_form( $atts = array() )
 
 		$raw_data = $submission->validate_input( $_POST );
 
-		if ( $submission->has_errors() ) {
+		if ( $submission->has_errors() || ! $form->current_user_can_register() ) {
 			$form->set_errors( $submission->get_errors() );
 			$form->set_submission_data( $raw_data );
 			$form->set_max_registrations();
@@ -70,16 +70,34 @@ function rtec_the_registration_form( $atts = array() )
 
 	} elseif ( ! $form->registrations_are_disabled() ) {
 
-		if ( $form->registrations_available() && ! $form->registration_deadline_has_passed() ) {
-			$form->set_max_registrations();
+		if ( $form->registrations_available()
+             && ! $form->registration_deadline_has_passed() ) {
 
-			if ( $doing_shortcode || $should_return_html_not_echo ) {
-				$return_html .= $form->get_form_html( $fields_atts, $atts );
+		    if ( $form->current_user_can_register() ) {
+			    $form->set_max_registrations();
 
-				return $return_html;
-			} else {
-				echo $form->get_form_html( $fields_atts, $atts );
-			}
+			    if ( $doing_shortcode || $should_return_html_not_echo ) {
+				    $return_html .= $form->get_form_html( $fields_atts, $atts );
+
+				    return $return_html;
+			    } else {
+				    echo $form->get_form_html( $fields_atts, $atts );
+			    }
+            } else {
+			    $return_html .= '<div id="rtec" class="rtec">';
+
+			    $return_html .= $form->please_log_in_html();
+
+			    $return_html .= '</div>';
+
+			    if ( $doing_shortcode === true || $should_return_html_not_echo ) {
+				    return $return_html;
+			    } else {
+				    echo $return_html;
+			    }
+
+            }
+
 
 		} else {
 			$return_html .= '<div id="rtec" class="rtec">';
@@ -159,7 +177,7 @@ function rtec_process_form_submission()
 	if ( $submission->has_errors() ) {
 		echo 'form';
 	} else {
-		if ( $submission->attendance_limit_not_reached() ) {
+		if ( $submission->attendance_limit_not_reached() && $form->current_user_can_register() ) {
 			$status = $submission->process_valid_submission( $raw_data );
 			echo $status;
 		} else {
