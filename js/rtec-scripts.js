@@ -46,14 +46,23 @@ jQuery(document).ready(function($) {
                 }
             }
 
-            $('.rtec-form-toggle-button').on('click', function () {
+            $('.rtec-form-toggle-button').on('click', function() {
                 $rtecEl = $(this).closest('.rtec');
-                $rtecEl.find('.rtec-toggle-on-click').toggle('slow');
-                if ($(this).hasClass('tribe-bar-filters-open')) {
-                    $(this).removeClass('tribe-bar-filters-open');
+                var useModal = typeof $rtecEl.attr('data-modal') !== 'undefined';
+                if ( useModal ) {
+                    $rtecEl.wrap('<div class="rtec-modal-placeholder"></div>');
+                    $rtecEl.find('.rtec-form-wrapper').show();
+                    $('.rtec-modal-content').empty().prepend($rtecEl);
+                    rtecToggleModal();
                 } else {
-                    $(this).addClass('tribe-bar-filters-open');
+                    $rtecEl.find('.rtec-toggle-on-click').toggle('slow');
+                    if ($(this).hasClass('tribe-bar-filters-open')) {
+                        $(this).removeClass('tribe-bar-filters-open');
+                    } else {
+                        $(this).addClass('tribe-bar-filters-open');
+                    }
                 }
+
             });
 
             var RtecForm = {
@@ -358,7 +367,7 @@ jQuery(document).ready(function($) {
                         type: 'post',
                         data: submittedData,
                         success: function (data) {
-
+/*
                             $rtecEl.find('.rtec-spinner, #rtec-form-toggle-button').hide();
                             $rtecEl.find('.rtec-form-wrapper').slideUp();
                             $('html, body').animate({
@@ -376,6 +385,35 @@ jQuery(document).ready(function($) {
                             }
                             if (typeof rtecAfterSubmit === 'function') {
                                 rtecAfterSubmit();
+                            }
+                            */
+
+                            $rtecEl.find('.rtec-spinner, #rtec-form-toggle-button').remove();
+                            $rtecEl.find('.rtec-form-wrapper').slideUp(400,function() {
+                                $rtecEl.find('.rtec-form-wrapper').remove();
+                            });
+                            $('html, body').animate({
+                                scrollTop: $rtecEl.offset().top - 200
+                            }, 750);
+
+                            if (data !== '') {
+                                $rtecEl.prepend(data);
+                                $('.rtec-already-registered-reveal, .rtec-already-registered-options').remove();
+                                if ($rtecEl.find('.rtec-can-wait-link').length) {
+                                    $rtecEl.find('.rtec-can-wait-link').click(function(event){
+                                        event.preventDefault();
+                                        rtecProcessManualPaymentSelection($rtecEl);
+                                    });
+                                }
+                                if (typeof rtecAfterSubmit === 'function') {
+                                    rtecAfterSubmit();
+                                }
+                                var evt = $.Event('rtecsubmissionajax');
+                                evt.el = $rtecEl;
+
+                                $(window).trigger(evt);
+                            } else {
+                                console.log('no data');
                             }
 
                         }
@@ -407,6 +445,19 @@ jQuery(document).ready(function($) {
                     $rtecOptions.slideDown();
                 }
             });
+
+            function rtecToggleModal() {
+                $('body').toggleClass('rtec-modal-is-open');
+
+                $('.rtec-modal-backdrop, .rtec-media-modal-close').click(function () {
+                    var $modalRtec = $('.rtec-modal-content').find('.rtec');
+                    $modalRtec.find('.rtec-form-wrapper').hide();
+                    $('.rtec-modal-placeholder').replaceWith($modalRtec);
+                    $('.rtec-register-button').show();
+
+                    $('body').removeClass('rtec-modal-is-open');
+                });
+            }
         }
     }
 

@@ -262,6 +262,25 @@ class RTEC_Admin
 		    'description' => __( "Set how the registration form will be added to the single event page. Use \"Shortcode\" for a custom placement", 'registrations-for-the-events-calendar' ) // what is this? text
 	    ) );
 
+	    $d_types = array(
+		    array( 'click_reveal', __( 'Reveal on button click', 'registrations-for-the-events-calendar' ) ),
+		    array( 'always_visible', __( 'Always visible', 'registrations-for-the-events-calendar' ) ),
+		    array( 'popup_modal', __( 'Pop-up modal window', 'registrations-for-the-events-calendar' ) )
+	    );
+
+	    // Template Location
+	    $this->create_settings_field( array(
+		    'name' => 'display_type',
+		    'title' => '<label for="rtec_display_type">' . __( 'Display Type', 'registrations-for-the-events-calendar' ) . '</label>', // label for the input field
+		    'callback'  => 'default_select', // name of the function that outputs the html
+		    'page' => 'rtec_form_registration_availability', // matches the section name
+		    'section' => 'rtec_form_registration_availability', // matches the section name
+		    'option' => 'rtec_options', // matches the options name
+		    'class' => 'default-text', // class for the wrapper and input field
+		    'fields' => $d_types,
+		    'description' => __( "How the form will be displayed on the page.", 'registrations-for-the-events-calendar' ) // what is this? text
+	    ) );
+
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'disable_by_default',

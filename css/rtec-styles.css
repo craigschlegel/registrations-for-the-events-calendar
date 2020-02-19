@@ -80,10 +80,15 @@
     position: relative;
     vertical-align: middle;
     margin-bottom: 30px;
-    padding: 12px 40px 12px 16px;
-    padding-right: 40px !important;
+    padding: 12px 16px 12px 16px;
     font-size: 16px;
     cursor: pointer;
+}
+#rtec:not(.rtec-use-modal) .rtec-register-button {
+    padding-right: 40px !important;
+}
+#rtec.rtec-use-modal .rtec-register-button > span {
+    display: none;
 }
 #rtec input[type="submit"]{
     float: none;
@@ -282,4 +287,99 @@ h3.rtec-header, .entry-content h3.rtec-header { margin: 1em 0 1.5em; }
 /** Log-in **/
 .rtec-login-wrap {
     padding: 4% 4% 0;
+}
+
+/* Modal */
+.rtec-modal-is-open {
+    overflow: hidden;
+}
+.rtec-modal {
+    position: fixed;
+    width: 700px;
+    top: 5%;
+    left: 50%;
+    right: 50%;
+    max-height: 90%;
+    margin-left: -350px;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.7);
+    box-shadow: 0 5px 15px rgba(0,0,0,.7);
+    background: #fcfcfc;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+.rtec-modal .rtec-button-link.rtec-media-modal-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 38px;
+    height: 38px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid transparent;
+    color: #444;
+    z-index: 1000;
+    cursor: pointer;
+    outline: none;
+    background: #fff;
+    box-shadow: none;
+    border-radius: 0;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 24px;
+    font-family: sans-serif;
+    transition-property: border, background;
+    transition-duration: .05s;
+    transition-timing-function: ease-in-out;
+}
+.rtec-modal .rtec-button-link.rtec-media-modal-close:hover {
+    border: 1px solid #ccc;
+}
+.rtec-modal-content .rtec-already-registered-reveal {
+    display: none;
+}
+.rtec-media-modal-icon {
+    display: block;
+}
+.rtec-modal .rtec-button-link {
+    text-align: center;
+    color: inherit;
+    text-decoration: none;
+}
+@media all and (max-width: 725px){
+    .rtec-modal {
+        width: 100%;
+        margin-left: -50%;
+    }
+}
+.rtec-modal-is-open .rtec-modal {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 160000;
+}
+.rtec-modal-is-open .rtec-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 360px;
+    background: #000;
+    opacity: .7;
+    z-index: 159900;
+}
+.rtec-modal #rtec .rtec-already-registered-options,
+.rtec-modal #rtec .rtec-form-toggle-button {
+    display: none !important;
+}
+.rtec-modal #rtec .rtec-form-wrapper {
+    margin: 0;
+}
+.rtec-modal .tribe-events-event-meta.rtec-event-meta,
+.rtec-modal .rtec-scrollto.tribe-events-notices{
+    margin: 50px 0 0;
 }

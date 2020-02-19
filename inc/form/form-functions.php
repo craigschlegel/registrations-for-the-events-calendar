@@ -175,21 +175,59 @@ function rtec_process_form_submission()
 	$raw_data = $submission->validate_input( $_POST );
 
 	if ( $submission->has_errors() ) {
-		echo 'form';
+		$status = 'form';
 	} else {
 		if ( $submission->attendance_limit_not_reached() && $form->current_user_can_register() ) {
 			$status = $submission->process_valid_submission( $raw_data );
-			echo $status;
 		} else {
-			echo 'full';
+			$status = 'full';
 		}
 	}
 
+	$status = apply_filters( 'rtec_the_submission_status', $status, $submission );
+
+	rtec_output_message_after_submit( $status, $submission );
 
 	die();
 }
 add_action( 'wp_ajax_nopriv_rtec_process_form_submission', 'rtec_process_form_submission' );
 add_action( 'wp_ajax_rtec_process_form_submission', 'rtec_process_form_submission' );
+
+function rtec_output_message_after_submit( $status, $submission ) {
+	global $rtec_options;
+
+	$message_html = '';
+
+	if ( $status === 'form' ) {
+		$message_text = isset( $rtec_options['ajax_submission_error'] ) ? $rtec_options['ajax_submission_error'] : __( 'There was a problem with one or more of the entries you submitted. Please try again.', 'registrations-for-the-events-calendar' );
+		$message_html .= '<p class="rtec-success-message tribe-events-notices rtec-scrollto">' . esc_html( $message_text ) . '</p>';
+
+		$message_html .= '<pre id="rtec_sub_errors" style="display: none;">';
+		$errors = $submission->get_errors();
+
+		foreach ( $errors as $error ) {
+			$message_html .=  esc_html( $error ) . '</br>';
+		}
+
+		$message_html .=  '</pre>';
+	} elseif ( $status === 'filled' ) {
+		$filled_text = isset( $rtec_options['event_has_filled_during_submit'] ) ? $rtec_options['event_has_filled_during_submit'] : __( 'Sorry! Registrations just filled up for this event. You are not registered.', 'registrations-for-the-events-calendar' );
+		$message_text = rtec_get_text( $filled_text,  __( 'Sorry! Registrations just filled up for this event. You are not registered.', 'registrations-for-the-events-calendar' ) );
+		$message_html .= '<p class="rtec-success-message tribe-events-notices rtec-scrollto">' . $message_text . '</p>';
+
+	} elseif ( $status === 'success' ) {
+	    $success_text = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' );
+	    $message_text = rtec_get_text( $success_text,  __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' ) );
+
+		$message_html .= '<p class="rtec-success-message tribe-events-notices rtec-scrollto">' . $message_text . '</p>';
+
+		$message_html = apply_filters( 'rtec_successful_submission_message', $message_html, $submission, $status );
+	} else {
+		$message_html = apply_filters( 'rtec_submission_' . $status, $message_html, $submission, $status );
+	}
+
+	echo $message_html;
+}
 
 /**
  * Checks for duplicate emails if the option is enabled
@@ -310,6 +348,17 @@ function rtec_use_footer_to_add_form() {
 	if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() && ! $using_custom_template ) {
 		rtec_the_registration_form();
 	}
+
+	if ( isset( $rtec_options['display_type'] ) && $rtec_options['display_type'] === 'popup_modal' ) :
+		?>
+        <div class="rtec-modal-backdrop rtec-form-modal"></div>
+        <div class="rtec-modal rtec-form-modal">
+            <button type="button" class="rtec-button-link rtec-media-modal-close">x<span class="rtec-media-modal-icon"><span class="screen-reader-text">Close</span></span></button>
+            <div class="rtec-modal-content">
+            </div>
+        </div>
+	<?php
+	endif;
 }
 add_action( 'wp_footer', 'rtec_use_footer_to_add_form', 1 );
 

@@ -1237,7 +1237,8 @@ class RTEC_Form
 		$rtec = RTEC();
 	    $event_meta = $this->event_meta;
 		$doing_shortcode = isset( $shortcode_atts['doing_shortcode'] ) ? $shortcode_atts['doing_shortcode'] : false;
-		$hidden_initially = isset( $shortcode_atts['hidden'] ) ? $shortcode_atts['hidden'] === 'true' : true;
+		$display_type_hidden_initially = isset( $rtec_options['display_type'] ) ? $rtec_options['display_type'] !== 'always_visible' : true;
+		$hidden_initially = isset( $shortcode_atts['hidden'] ) && $doing_shortcode ? $shortcode_atts['hidden'] === 'true' : $display_type_hidden_initially;
 
 		// form template
 		$event_form = $this;
@@ -1278,8 +1279,16 @@ class RTEC_Form
 		$data = ' data-rtec-success-message="' . esc_attr( rtec_get_text( $success_message , __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) ) ) . '"';
 		$data .= ' data-event="' . esc_attr( $this->event_meta['post_id'] ) . '"';
 
+		if ( isset( $rtec_options['display_type'] ) && $rtec_options['display_type'] === 'popup_modal' ) {
+			$data .= ' data-modal="1"';
+		}
+
 		$data_string = $data;
 		$classes_string =  ' rtec-form-' . $event_meta['form_id'] . $classes;
+
+		if ( isset( $rtec_options['display_type'] ) && $rtec_options['display_type'] === 'popup_modal' ) {
+			$classes_string .= ' ' . esc_attr( 'rtec-use-modal' );
+		}
 
 		// form styles
 		$styles = array(
