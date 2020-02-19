@@ -84,11 +84,35 @@ function rtec_the_registration_form( $atts = array() )
 				    echo $form->get_form_html( $fields_atts, $atts );
 			    }
             } else {
+			    $attendee_list_html = '';
+			    $shortcode_attendee_disable = isset( $shortcode_atts['attendeelist'] ) ? ($atts['attendeelist'] !== 'true') : true;
+			    if ( $event_meta['show_registrants_data'] && ( ! $doing_shortcode || ! $shortcode_attendee_disable ) ) {
+
+				    $attendee_list_fields = array();
+				    $attendee_list_fields = apply_filters( 'rtec_attendee_list_fields', $attendee_list_fields );
+
+				    $registrants_data = $rtec->db_frontend->get_registrants_data( $event_meta, $attendee_list_fields );
+				    $attendee_list_html = rtec_attendee_list( $registrants_data );
+			    }
+
+			    $outer_wrap_classes = '';
+			    $location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'tribe_events_single_event_before_the_content';
+			    if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
+				    $outer_wrap_classes .= ' rtec-js-placement';
+			    }
+
+			    $return_html .= '<div class="rtec-outer-wrap'.$outer_wrap_classes.'">';
+
+			    $return_html .= $attendee_list_html;
+
 			    $return_html .= '<div id="rtec" class="rtec">';
 
 			    $return_html .= $form->please_log_in_html();
 
 			    $return_html .= '</div>';
+
+			    $return_html .= '</div>';
+
 
 			    if ( $doing_shortcode === true || $should_return_html_not_echo ) {
 				    return $return_html;
@@ -100,6 +124,27 @@ function rtec_the_registration_form( $atts = array() )
 
 
 		} else {
+			$attendee_list_html = '';
+			$shortcode_attendee_disable = isset( $shortcode_atts['attendeelist'] ) ? ($atts['attendeelist'] !== 'true') : true;
+			if ( $event_meta['show_registrants_data'] && ( ! $doing_shortcode || ! $shortcode_attendee_disable ) ) {
+
+				$attendee_list_fields = array();
+				$attendee_list_fields = apply_filters( 'rtec_attendee_list_fields', $attendee_list_fields );
+
+				$registrants_data = $rtec->db_frontend->get_registrants_data( $event_meta, $attendee_list_fields );
+				$attendee_list_html = rtec_attendee_list( $registrants_data );
+			}
+
+			$outer_wrap_classes = '';
+			$location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'tribe_events_single_event_before_the_content';
+			if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
+				$outer_wrap_classes .= ' rtec-js-placement';
+			}
+
+			$return_html .= '<div class="rtec-outer-wrap'.$outer_wrap_classes.'">';
+
+			$return_html .= $attendee_list_html;
+
 			$return_html .= '<div id="rtec" class="rtec">';
 
 			$return_html .= $form->registrations_closed_message();
@@ -112,6 +157,8 @@ function rtec_the_registration_form( $atts = array() )
 				$return_html .= ob_get_contents();
 				ob_get_clean();
             }
+
+			$return_html .= '</div>';
 
 			$return_html .= '</div>';
 
@@ -262,6 +309,33 @@ function rtec_registrant_check_for_duplicate_email() {
 }
 add_action( 'wp_ajax_nopriv_rtec_registrant_check_for_duplicate_email', 'rtec_registrant_check_for_duplicate_email' );
 add_action( 'wp_ajax_rtec_registrant_check_for_duplicate_email', 'rtec_registrant_check_for_duplicate_email' );
+
+function rtec_refresh_event_info() {
+
+	$rtec = RTEC();
+	$event_id = (int)$_POST['event_id'];
+
+	$event_meta = rtec_get_event_meta( $event_id );
+
+	$to_include = array(
+		'first',
+		'last',
+		'user_id'
+	);
+	$attendee_list_fields = apply_filters( 'rtec_attendee_list_fields', $to_include );
+	$registrants_data = $rtec->db_frontend->get_registrants_data( $event_meta, $attendee_list_fields );
+
+	ob_start();
+	do_action( 'rtec_the_attendee_list', $registrants_data );
+	$html = ob_get_contents();
+	ob_get_clean();
+
+	echo $html;
+
+	die();
+}
+add_action( 'wp_ajax_nopriv_rtec_refresh_event_info', 'rtec_refresh_event_info' );
+add_action( 'wp_ajax_rtec_refresh_event_info', 'rtec_refresh_event_info' );
 
 /**
  * Set the form location right away

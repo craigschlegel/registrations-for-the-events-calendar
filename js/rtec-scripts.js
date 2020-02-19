@@ -399,12 +399,6 @@ jQuery(document).ready(function($) {
                             if (data !== '') {
                                 $rtecEl.prepend(data);
                                 $('.rtec-already-registered-reveal, .rtec-already-registered-options').remove();
-                                if ($rtecEl.find('.rtec-can-wait-link').length) {
-                                    $rtecEl.find('.rtec-can-wait-link').click(function(event){
-                                        event.preventDefault();
-                                        rtecProcessManualPaymentSelection($rtecEl);
-                                    });
-                                }
                                 if (typeof rtecAfterSubmit === 'function') {
                                     rtecAfterSubmit();
                                 }
@@ -458,6 +452,36 @@ jQuery(document).ready(function($) {
                     $('body').removeClass('rtec-modal-is-open');
                 });
             }
+
+            $(window).on('rtecsubmissionajax', function (event) {
+                var $rtecEl = event.el.closest('.rtec-outer-wrap').length ? event.el.closest('.rtec-outer-wrap') : event.el;
+
+                if ($rtecEl.find('.rtec-attendee-list-meta').length || $('.rtec-attendee-list-meta').length === 1) {
+                    var $attendeeList = $rtecEl.find('.rtec-attendee-list-meta').length ? $rtecEl.find('.rtec-attendee-list-meta') : $('.rtec-attendee-list-meta');
+                    $attendeeList.prepend($rtecEl.find('.rtec-spinner')).find('.rtec-spinner').show();
+                    $attendeeList.fadeTo(500,.1);
+
+                    var eventId = typeof $attendeeList.closest('.rtec-outer-wrap').find('.rtec').attr('data-event') !== 'undefined' ? $attendeeList.closest('.rtec-outer-wrap').find('.rtec').attr('data-event') : event.el.attr('data-event');
+
+                    $.ajax({
+                        url : rtec.ajaxUrl,
+                        type : 'post',
+                        data : {
+                            'action': 'rtec_refresh_event_info',
+                            'event_id' : eventId
+                        },
+                        success : function(data) {
+                            $attendeeList.find('.rtec-spinner').hide();
+                            $attendeeList.fadeTo(500,1);
+                            if (data.trim().indexOf('<div') === 0) {
+                                $attendeeList.replaceWith(data);
+                            }
+
+                        }
+                    }); // ajax
+                }
+
+            });
         }
     }
 
