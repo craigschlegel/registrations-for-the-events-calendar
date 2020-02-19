@@ -66,6 +66,10 @@ if ( ! $event_meta['show_registrants_data'] ) {
 			<input type="checkbox" id="rtec-disable-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECregistrationsDisabled" <?php if ( $event_meta['registrations_disabled'] ) { echo 'checked'; } ?> value="1"/>
 			<label for="rtec-disable-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Disable registrations for this event', 'registrations-for-the-events-calendar' ); ?></label>
 		</div>
+        <div class="rtec-hidden-option-wrap<?php echo $users_only_disabled_class; ?>">
+            <input type="checkbox" id="rtec-users-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTECwhoCanRegister" value="users" <?php if( $event_meta['who_can_register'] === 'users' ) { echo 'checked'; } ?> <?php echo $users_only_disabled_att; ?>/>
+            <label for="rtec-users-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Logged in users only', 'registrations-for-the-events-calendar' ); ?></label>
+        </div>
 		<div class="rtec-hidden-option-wrap<?php echo $limit_disabled_class; ?>">
 			<input type="checkbox" id="rtec-limit-<?php echo esc_attr( $event_meta['post_id'] ); ?>" name="_RTEClimitRegistrations" <?php if( $event_meta['limit_registrations'] ) { echo 'checked'; } ?> value="1"<?php echo $limit_disabled_att; ?>/>
 			<label for="rtec-limit-<?php echo esc_attr( $event_meta['post_id'] ); ?>"><?php _e( 'Limit the number registrations allowed', 'registrations-for-the-events-calendar' ); ?></label>

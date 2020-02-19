@@ -91,6 +91,7 @@ function rtec_update_event_options() {
 	}
 
 	$event_id = $cleaned_array['rtec_event_id'];
+	$who_can_register = 'any';
 	$registrations_disabled_status = 0;
 	$use_limit_status = 0;
 	$registrations_deadline_type = 'start';
@@ -114,6 +115,10 @@ function rtec_update_event_options() {
 				update_post_meta( $event_id, '_RTECdeadlineTimeStamp', $deadline_time_stamp );
 			}
 		}
+	}
+
+	if ( isset( $cleaned_array['_RTECwhoCanRegister'] ) ){
+		$who_can_register = $cleaned_array['_RTECwhoCanRegister'];
 	}
 
 	if ( isset( $cleaned_array['_RTEClimitRegistrations'] ) ){
@@ -141,6 +146,7 @@ function rtec_update_event_options() {
 	if ( isset( $event_id ) ) {
 		update_post_meta( $event_id, '_RTECregistrationsDisabled', $registrations_disabled_status );
 		update_post_meta( $event_id, '_RTECdeadlineType', $registrations_deadline_type );
+		update_post_meta( $event_id, '_RTECwhoCanRegister', $who_can_register );
 		update_post_meta( $event_id, '_RTEClimitRegistrations', $use_limit_status );
 		update_post_meta( $event_id, '_RTECmaxRegistrations', $max_reg );
 	}
@@ -184,6 +190,8 @@ function rtec_meta_boxes_html(){
 	$event_meta = rtec_get_event_meta( $post->ID );
 	$limit_disabled_att = '';
 	$limit_disabled_class = '';
+	$users_only_disabled_att = '';
+	$users_only_disabled_class = '';
 	$max_disabled_att = '';
 	$max_disabled_class = '';
 	$deadline_disabled_att = '';
@@ -206,6 +214,8 @@ function rtec_meta_boxes_html(){
 	}
 
 	if ( $event_meta['registrations_disabled'] ) {
+		$users_only_disabled_att = ' disabled="true"';
+		$users_only_disabled_class = ' rtec-fade';
 		$limit_disabled_att = ' disabled="true"';
 		$limit_disabled_class = ' rtec-fade';
 		$deadline_disabled_att = ' disabled="true"';
@@ -249,6 +259,12 @@ function rtec_meta_boxes_html(){
 									<input type="checkbox" id="rtec-disable-checkbox" name="_RTECregistrationsDisabled" <?php if ( $event_meta['registrations_disabled'] ) { echo 'checked'; } ?> value="1"/>
 								</td>
 							</tr>
+                            <tr class="rtec-hidden-option-wrap<?php echo $users_only_disabled_class;?>">
+                                <td class="tribe-table-field-label"><?php _e( 'Logged-in Users Only:', 'registrations-for-the-events-calendar' ); ?></td>
+                                <td>
+                                    <input type="checkbox" id="rtec-who-checkbox" name="_RTECwhoCanRegister" <?php if ( 'any' !== $event_meta['who_can_register'] ) { echo 'checked'; } ?> value="users" <?php echo $users_only_disabled_att; ?>/>
+                                </td>
+                            </tr>
 							<tr class="rtec-hidden-option-wrap<?php echo $limit_disabled_class; ?>">
 								<td class="tribe-table-field-label"><?php _e( 'Limit Registrations:', 'registrations-for-the-events-calendar' ); ?></td>
 								<td>
@@ -390,6 +406,7 @@ function rtec_save_meta(){
 	global $post;
 
 	$registrations_disabled_status = 0;
+	$who_can_register = 'any';
 	$use_limit_status = 0;
 	$max_reg = 30;
 	$registrations_deadline_type = 'start';
@@ -412,6 +429,10 @@ function rtec_save_meta(){
 				update_post_meta( $post->ID, '_RTECdeadlineTimeStamp', $deadline_time_stamp );
 			}
 		}
+	}
+
+	if ( isset( $_POST['_RTECwhoCanRegister'] ) ){
+		$who_can_register = sanitize_text_field( $_POST['_RTECwhoCanRegister'] );
 	}
 
 	if ( isset( $_POST['_RTEClimitRegistrations'] ) ){
@@ -439,6 +460,7 @@ function rtec_save_meta(){
 	if ( isset( $post->ID ) ) {
 		update_post_meta( $post->ID, '_RTECregistrationsDisabled', $registrations_disabled_status );
 		update_post_meta( $post->ID, '_RTECdeadlineType', $registrations_deadline_type );
+		update_post_meta( $post->ID, '_RTECwhoCanRegister', $who_can_register );
 		update_post_meta( $post->ID, '_RTEClimitRegistrations', $use_limit_status );
 		update_post_meta( $post->ID, '_RTECmaxRegistrations', $max_reg );
 	}

@@ -18,7 +18,6 @@ function rtec_the_registration_form( $atts = array() )
 	$rtec = RTEC();
 	global $rtec_options;
 	$form = $rtec->form->instance();
-	$db = $rtec->db_frontend->instance();
 
 	$doing_shortcode = isset( $atts['doing_shortcode'] ) ? $atts['doing_shortcode'] : false;
 	$should_return_html_not_echo = isset( $atts['return_html'] ) ? $atts['return_html'] : false;
@@ -37,38 +36,6 @@ function rtec_the_registration_form( $atts = array() )
 	$fields_atts = $form->get_field_attributes();
 	$event_meta = $form->get_event_meta();
 
-	$args = array(
-		'event_meta' => $event_meta,
-		'user' => array()
-	);
-	do_action( 'rtec_before_display_form', $args );
-
-	if ( $doing_shortcode ) {
-		$return_html .= isset( $atts['showheader'] ) && $atts['showheader'] === 'true' ? $form->get_event_header_html() : '';
-	}
-
-	$form->set_display_type( $atts );
-
-	$shortcode_attendee_disable = isset( $atts['attendeelist'] ) ? ($atts['attendeelist'] !== 'true') : true;
-
-	if ( $event_meta['show_registrants_data'] && ( ! $doing_shortcode || ! $shortcode_attendee_disable ) && ! $form->registrations_are_disabled() ) {
-
-		$attendee_list_fields = array();
-		$attendee_list_fields = apply_filters( 'rtec_attendee_list_fields', $attendee_list_fields );
-
-		$registrants_data = $db->get_registrants_data( $event_meta, $attendee_list_fields );
-		ob_start();
-		do_action( 'rtec_the_attendee_list', $registrants_data );
-		$attendee_html = ob_get_contents();
-		ob_get_clean();
-
-		if ( $doing_shortcode || $should_return_html_not_echo ) {
-			$return_html .= $attendee_html;
-		} else {
-		    echo $attendee_html;
-        }
-	}
-
 	if ( $rtec->submission != NULL && $event_meta['post_id'] === (int)$_POST['rtec_event_id'] ) {
 
 		$submission = $rtec->submission->instance();
@@ -83,10 +50,10 @@ function rtec_the_registration_form( $atts = array() )
 			$form->set_max_registrations();
 
 			if ( $doing_shortcode || $should_return_html_not_echo ) {
-				$return_html .= $form->get_form_html( $fields_atts );
+				$return_html .= $form->get_form_html( $fields_atts, $atts );
 				return $return_html;
 			} else {
-				echo $form->get_form_html( $fields_atts );
+				echo $form->get_form_html( $fields_atts, $atts );
 			}
 		} else {
 			$submission->custom_fields_label_name_pairs = $form->get_custom_fields_label_name_pairs();
@@ -107,11 +74,11 @@ function rtec_the_registration_form( $atts = array() )
 			$form->set_max_registrations();
 
 			if ( $doing_shortcode || $should_return_html_not_echo ) {
-				$return_html .= $form->get_form_html( $fields_atts );
+				$return_html .= $form->get_form_html( $fields_atts, $atts );
 
 				return $return_html;
 			} else {
-				echo $form->get_form_html( $fields_atts );
+				echo $form->get_form_html( $fields_atts, $atts );
 			}
 
 		} else {
@@ -453,6 +420,15 @@ function rtec_visitor_send_action_link() {
 	}
 
 	return '';
+}
+
+function rtec_attendee_list( $registrants_data ) {
+	ob_start();
+	do_action( 'rtec_the_attendee_list', $registrants_data );
+	$attendee_html = ob_get_contents();
+	ob_get_clean();
+
+	return $attendee_html;
 }
 
 function rtec_the_default_attendee_list( $registrants_data )

@@ -6,13 +6,15 @@ jQuery(document).ready(function($) {
             $('.rtec-js-hide').hide();
 
             // move the form for backwards compatibility
-            if ($('#rtec-js-move-flag').length) {
+            if ($('#rtec-js-move-flag').length
+                || $('footer').find('.rtec').length
+                || $('footer').find('.rtec-outer-wrap').length
+                || $('footer').find('.rtec-success-message').length) {
 
                 var $moveEl = $('#rtec-js-move-flag'),
-                    location = typeof $('#rtec-js-move-flag').attr('data-location') !== 'undefined' ? $('#rtec-js-move-flag').attr('data-location') : 'tribe_events_single_event_before_the_content',
-                    $attendee_list = $('.rtec-event-meta.rtec-attendee-list-meta').length ? $('.rtec-event-meta.rtec-attendee-list-meta') : false;
-                if ($('.rtec-outer-wrap').length) {
-                    $moveEl = $('.rtec-outer-wrap');
+                    rtecLocation = typeof $('#rtec-js-move-flag').attr('data-location') !== 'undefined' ? $('#rtec-js-move-flag').attr('data-location') : 'tribe_events_single_event_before_the_content';
+                if ($('.rtec-outer-wrap.rtec-js-placement').length) {
+                    $moveEl = $('.rtec-outer-wrap.rtec-js-placement');
                 } else if ($('.rtec').length) {
                     $moveEl = $('.rtec');
                 } else if ($('.rtec-success-message').length) {
@@ -21,7 +23,7 @@ jQuery(document).ready(function($) {
 
                 // move the element that needs to be moved jQuery('.tribe-events-single-event-description')
                 if ($('.tribe-events-single-event-description').length) {
-                    if (location === 'tribe_events_single_event_after_the_content') {
+                    if (rtecLocation === 'tribe_events_single_event_after_the_content') {
                         $('.tribe-events-single-event-description').first().after($moveEl);
                     } else {
                         $('.tribe-events-single-event-description').first().before($moveEl);
@@ -30,10 +32,17 @@ jQuery(document).ready(function($) {
                     $('.tribe-events-schedule').first().after($moveEl);
                 } else if ($('.tribe-events-single .tribe_events').length) {
                     $('.tribe-events-single .tribe_events').first().prepend($moveEl);
+                } else if ($('.tribe-events-single h1').length) {
+                    $('.tribe-events-single h1').first().after($moveEl);
+                } else if ($('.tribe-events-single h2').length) {
+                    $('.tribe-events-single h2').first().after($moveEl);
                 }
 
-                if ($attendee_list !== false) {
-                    $moveEl.before($attendee_list);
+                if ($('.rtec-login-wrap').length) {
+                    $('.rtec-login-wrap').each(function() {
+                        var $context = $(this).closest($('.tribe-events-single'));
+                        $context.find('.rtec-success-message').first().after($('.rtec-login-wrap').closest('.tribe-events-event-meta.rtec-event-meta'));
+                    });
                 }
             }
 

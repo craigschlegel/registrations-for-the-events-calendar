@@ -970,6 +970,11 @@ class RTEC_Form
 		return $html;
 	}
 
+	public function the_field_html( $field_name, $field_attributes, $errors, $submission_data, $registrations_left ) {
+	    echo $this->get_field_html( $field_name, $field_attributes, $errors, $submission_data, $registrations_left );
+    }
+
+
 	public function already_registered_visitor_html() {
 		global $rtec_options;
 
@@ -1131,6 +1136,8 @@ class RTEC_Form
 	 * @since 1.5   will set first, last, and email fields if user is logged-in and data is available
 	 * @since 2.0   added fields_atts, uses template
 	 * @return string
+     *
+     * @deprecated deprecated since version 2.5
 	 */
 
 	public function get_regular_fields_html( $fields_atts )
@@ -1169,6 +1176,8 @@ class RTEC_Form
 	 *
 	 * @since 1.0
 	 * @return string
+     *
+     * @deprecated deprecated since version 2.5
 	 */
     public function get_ending_html()
     {
@@ -1219,16 +1228,151 @@ class RTEC_Form
 	 *
 	 * @since 1.0
 	 * @since 2.0       added $fields_atts
+     * @since 2.5       redone to use templates
 	 */
-	public function get_form_html( $fields_atts )
+	public function get_form_html( $fields_atts, $shortcode_atts = array() )
 	{
-		$html = '';
-		$html .= $this->get_beginning_html();
-		$html .= $this->get_hidden_fields_html();
-		$html .= $this->get_regular_fields_html( $fields_atts );
-		$html .= $this->get_ending_html();
+	    // main
+		global $rtec_options;
+		$rtec = RTEC();
+	    $event_meta = $this->event_meta;
+		$doing_shortcode = isset( $shortcode_atts['doing_shortcode'] ) ? $shortcode_atts['doing_shortcode'] : false;
+		$hidden_initially = isset( $shortcode_atts['hidden'] ) ? $shortcode_atts['hidden'] === 'true' : true;
 
-		return $html;
+		// form template
+		$event_form = $this;
+		$event_user = '';
+		$fields = $event_form;
+
+	    // before display form hook
+		$before_display_args = array(
+			'event_meta' => $event_meta,
+			'user' => array()
+		);
+
+		// header
+	    $show_header = (isset( $shortcode_atts['showheader'] ) && $shortcode_atts['showheader'] === 'true');
+	    $event_header_html = $show_header ? $this->get_event_header_html() : '';
+
+	    // attendee list
+		$attendee_list_html = '';
+		$shortcode_attendee_disable = isset( $shortcode_atts['attendeelist'] ) ? ($shortcode_atts['attendeelist'] !== 'true') : true;
+		if ( $event_meta['show_registrants_data'] && ( ! $doing_shortcode || ! $shortcode_attendee_disable ) && ! $this->registrations_are_disabled() ) {
+
+			$attendee_list_fields = array();
+			$attendee_list_fields = apply_filters( 'rtec_attendee_list_fields', $attendee_list_fields );
+
+			$registrants_data = $rtec->db_frontend->get_registrants_data( $event_meta, $attendee_list_fields );
+			$attendee_list_html = rtec_attendee_list( $registrants_data );
+		}
+
+		// rtec classes and data
+		$classes = '';
+		$outer_wrap_classes = '';
+		$location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'tribe_events_single_event_before_the_content';
+		if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
+			$outer_wrap_classes .= ' rtec-js-placement';
+		}
+
+		$success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' );
+		$data = ' data-rtec-success-message="' . esc_attr( rtec_get_text( $success_message , __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) ) ) . '"';
+		$data .= ' data-event="' . esc_attr( $this->event_meta['post_id'] ) . '"';
+
+		$data_string = $data;
+		$classes_string =  ' rtec-form-' . $event_meta['form_id'] . $classes;
+
+		// form styles
+		$styles = array(
+			'button_style_att' => '',
+			'button_class_att' => '',
+			'form_style_att' => '',
+			'form_class_att' => '',
+			'add_button_style_att' => '',
+			'add_button_class_att'
+		);
+
+		$button_bg_color = isset( $rtec_options['button_bg_color'] ) && $rtec_options['button_bg_color'] !== '#' ? esc_attr( $rtec_options['button_bg_color'] ) : '';
+		$styles['button_style_att'] .= isset( $button_bg_color ) && ! empty( $button_bg_color ) ? 'background-color: ' . $button_bg_color . ';' : '';
+
+		$button_text_color = isset( $rtec_options['button_text_color'] ) && $rtec_options['button_text_color'] !== '#' ? esc_attr( $rtec_options['button_text_color'] ) : '';
+		if ( !empty( $button_text_color ) ) {
+			$styles['button_style_att'] .= ' color: ' . $button_text_color . ';';
+		}
+
+		$button_hover_class = ! empty( $button_bg_color ) ? ' rtec-custom-hover' : '';
+		$styles['button_class_att'] = ! empty( $button_hover_class ) ? $button_hover_class : '';
+		$styles['form_style_att'] = isset( $rtec_options['form_bg_color'] ) && ! empty( $rtec_options['form_bg_color'] ) ? 'background-color: ' . esc_attr( $rtec_options['form_bg_color'] ) . ';' : '';
+		$width_unit = isset( $rtec_options['width_unit'] ) ? esc_attr( $rtec_options['width_unit'] ) : '%';
+		$styles['form_style_att'] .= isset( $rtec_options['width'] ) ? 'width: ' . esc_attr( $rtec_options['width'] ) . $width_unit . ';' : '';
+
+		// button
+		$register_button_text = isset( $rtec_options['register_text'] ) ? $rtec_options['register_text'] : __( 'Register', 'registrations-for-the-events-calendar' );
+		$register_button_text = rtec_get_text( $register_button_text, __( 'Register', 'registrations-for-the-events-calendar' ) );
+		$register_button_text = apply_filters( 'rtec_register_button_text', $register_button_text );
+		$register_button_html = '';
+		if ( $hidden_initially ) {
+			$register_button_html .= '<button type="button" id="rtec-form-toggle-button" class="rtec-register-button rtec-form-toggle-button rtec-js-show' . $styles['button_class_att'] . '" style="' . $styles['button_style_att'] . '">' . esc_html( $register_button_text ). '<span class="tribe-bar-toggle-arrow"></span></button>';
+			$register_button_html .= '<h3 class="rtec-js-hide">' . esc_html( $register_button_text ) . '</h3>';
+		}
+
+		if ( $hidden_initially ) {
+			$styles['form_class_att'] .= ' rtec-js-hide';
+		}
+		$form_styles = $styles;
+
+		$submit_button_text = isset( $rtec_options['submit_text'] ) ? $rtec_options['submit_text'] : __( 'Submit', 'registrations-for-the-events-calendar' );
+		$submit_button_text = rtec_get_text( $submit_button_text, __( 'Submit', 'registrations-for-the-events-calendar' ) );
+		$submit_button_text = apply_filters( 'rtec_submit_button_text', $submit_button_text );
+		$submit_button_class = apply_filters( 'rtec_submit_button_class', '' );
+
+		$submit_button_html = '';
+		if ( $hidden_initially ) {
+			$submit_button_html .= '<input type="submit" class="rtec-submit-button' . $styles['button_class_att'] . '" name="rtec_submit" value="' . $submit_button_text . '" style="' . $styles['button_style_att'] . '"/>';
+		}
+
+		// max atts
+		$max_guests = 1000;
+		$include_attendance_message = isset( $rtec_options['include_attendance_message'] ) ? $rtec_options['include_attendance_message'] : true;
+		$attendance_message_html = $include_attendance_message ? $this->get_attendance_html() : '';
+
+		// WPML
+		$lang_field_html = '';
+		if ( ! empty( $GLOBALS['sitepress'] ) && $GLOBALS['sitepress'] instanceof SitePress ) {
+			ob_start();
+			do_action( 'wpml_add_language_form_field' );
+			$lang_field_html = ob_get_contents();
+			ob_get_clean();
+		}
+		$additional_hidden_fields_html = $lang_field_html;
+
+		// field group
+		$submission_data = $this->submission_data;
+		$errors = $this->errors;
+
+		// loading gif
+        //esc_url( get_admin_url( null, '/images/spinner.gif' ) )
+        $loading_gif_url = is_callable( 'tribe_events_resource_url' ) ? tribe_events_resource_url( 'images/tribe-loading.gif' ) : get_admin_url( null, '/images/spinner.gif' );
+        $loading_gif_html = '<img title="Tribe Loading Animation Image" class="tribe-events-spinner-medium" src="' . esc_url( $loading_gif_url ) . '" alt="'.__( 'Loading gif', 'registrations-for-the-events-calendar' ). '">';
+
+        // already registered tool
+		$already_registered_tools_html = '';
+		$show_unregister_link = isset( $rtec_options['visitors_can_edit_what_status'] ) ? $rtec_options['visitors_can_edit_what_status'] : true;
+
+		if ( $show_unregister_link ) {
+			ob_start();
+			$this->already_registered_visitor_html();
+			$already_registered_tools_html = ob_get_contents();
+			ob_get_clean();
+		}
+
+        ob_start();
+
+		include RTEC_PLUGIN_DIR . 'templates/form/rtec.php';
+		$form_html = ob_get_contents();
+
+		ob_get_clean();
+
+		return $form_html;
 	}
 
 	/**
@@ -1280,12 +1424,7 @@ class RTEC_Form
 
 	public function the_event_header()
 	{
-		$html = '<h2 class="rtec-header">'.$this->event_meta['title'].'</h2>';
-		if ( function_exists( 'tribe_events_event_schedule_details' ) ) {
-			$html .= tribe_events_event_schedule_details( $this->event_meta['post_id'], '<h3 class="rtec-header">', '</h3>' );
-		}
-
-		echo $html;
+		echo $this->get_event_header_html();
 	}
 
 	/**
@@ -1299,6 +1438,18 @@ class RTEC_Form
 		}
 
 		return $html;
+	}
+
+
+	public static function get_template( $template ) {
+        switch ( $template ) {
+            case 'form' :
+	            $custom_form_template = locate_template( 'rtec/form/form.php', false, false );
+	            $form_template = $custom_form_template ? $custom_form_template : RTEC_PLUGIN_DIR . 'templates/form/form.php';
+	            return $form_template;
+            default:
+                return '';
+        }
 	}
 }
 RTEC_Form::instance();
