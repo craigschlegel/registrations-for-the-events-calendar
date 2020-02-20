@@ -105,6 +105,9 @@
     text-align: center;
     margin: 0;
 }
+.rtec-outer-wrap .rtec-attendance-display {
+    margin-bottom: 1em;
+}
 #rtec .rtec-form-field {
     margin-bottom: 30px;
 }

@@ -383,6 +383,19 @@ class RTEC_Admin
             'default' => __( 'Register', 'registrations-for-the-events-calendar' )
         ));
 
+	    $this->create_settings_field( array(
+		    'option' => 'rtec_options',
+		    'name' => 'attendance_count_message',
+		    'title' => '<label>' . __( 'Attendance Count', 'registrations-for-the-events-calendar' ) . '</label>',
+		    'example' => '',
+		    'default' => '',
+		    'description' => '',
+		    'callback'  => 'attendance_count_message',
+		    'class' => '',
+		    'page' => 'rtec_form_custom_text',
+		    'section' => 'rtec_form_custom_text'
+	    ));
+
         $this->create_settings_field( array(
             'option' => 'rtec_options',
             'name' => 'num_registrations_messages',
@@ -1351,6 +1364,41 @@ class RTEC_Admin
         <span><?php _e( 'before event start time', 'registrations-for-the-events-calendar' ); ?></span>
      <?php
     }
+
+	public function attendance_count_message( $args ) {
+		$options = get_option( $args['option'] );
+		$option_checked = ( isset( $options[ 'include_'.$args['name'] ] ) ) ? $options[ 'include_'.$args['name'] ] : false;
+		$locations = isset( $options[ $args['name'].'_location' ] ) ? $options[ $args['name'].'_location' ] : array( 'above_button', 'above_description_list' );
+		$template = ( isset( $options[ $args['name'].'_template' ] ) ) ? $options[ $args['name'].'_template' ] : __( 'Attendance: {num} / {max}', 'registrations-for-the-events-calendar' );
+		?>
+        <input name="<?php echo $args['option'].'[include_'.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="checkbox" <?php if ( $option_checked ) echo "checked"; ?> />
+        <label for="rtec_include_attendance_message"><?php _e( 'include attendance count message', 'registrations-for-the-events-calendar' ); ?></label>
+        <div class="rtec-message-group-wrap">
+            <div class="rtec-availability-options-wrapper" id="rtec-message-type-wrapper">
+                <h4><?php _e( 'Display', 'registrations-for-the-events-calendar' ); ?></h4>
+                <div class="rtec-input-group">
+                    <span><?php _e( 'Locations', 'registrations-for-the-events-calendar' ); ?>:</span>
+                    <br>
+                    <input name="<?php echo $args['option'].'['.$args['name'].'_location][]'; ?>" type="checkbox" value="above_button" id="rtec_above_button" <?php if ( in_array( 'above_button', $locations, true ) ) echo 'checked'; ?>><label for="rtec_above_button"><?php _e( 'Above Register Button', 'registrations-for-the-events-calendar' ); ?></label><br>
+                    <input name="<?php echo $args['option'].'['.$args['name'].'_location][]'; ?>" type="checkbox" value="above_description_list" id="rtec_above_description_list" <?php if ( in_array( 'above_description_list', $locations, true ) ) echo 'checked'; ?>><label for="rtec_above_description_list"><?php _e( 'Above Description in "List" View', 'registrations-for-the-events-calendar' ); ?></label>
+                </div>
+
+                <div class="rtec-input-group">
+                    <label><?php _e( 'Template', 'registrations-for-the-events-calendar' ); ?>:</label>
+                    <br>
+                    <input name="<?php echo $args['option'].'['.$args['name'].'_template]'; ?>" type="text" class="regular-text" value="<?php echo $template; ?>">
+                    <br/><a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'Templates' ); ?></a>
+                    <span class="rtec-tooltip-table rtec-tooltip">
+                        <span class="rtec-col-1">{num}</span><span class="rtec-col-2"><?php _e( 'Number of attendees', 'registrations-for-the-events-calendar' ); ?></span>
+                        <span class="rtec-col-1">{max}</span><span class="rtec-col-2"><?php _e( 'Maximum number of attendees', 'registrations-for-the-events-calendar' ); ?></span>
+                        <span class="rtec-col-1">{remaining}</span><span class="rtec-col-2"><?php _e( 'Remaining registrations', 'registrations-for-the-events-calendar' ); ?></span>
+                    </span>
+                    <br><?php $this->the_description( $args['description'] ); ?>
+                </div>
+            </div>
+        </div>
+		<?php
+	}
     
     public function num_registrations_messages( $args ) {
         $options = get_option( $args['option'] );
@@ -1694,10 +1742,13 @@ class RTEC_Admin
         $leave_spaces = array();
         $allowed_tags = $this->get_allowed_tags();
         $rich_editor_settings = array();
+	    $array_settings = array();
 
         if ( isset( $input['default_max_registrations'] ) ) {
-            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'terms_conditions_require', 'recaptcha_require', 'disable_by_default', 'visitors_can_edit_what_status', 'show_registrants_data', 'limit_registrations', 'only_logged_in', 'show_log_in_form', 'include_attendance_message', 'using_custom_template', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
+            $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'terms_conditions_require', 'recaptcha_require', 'disable_by_default', 'visitors_can_edit_what_status', 'show_registrants_data', 'limit_registrations', 'only_logged_in', 'show_log_in_form', 'include_attendance_count_message', 'include_attendance_message', 'using_custom_template', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
             $leave_spaces = array( 'custom_js', 'custom_css', 'notification_message' );
+	        $array_settings = array( 'attendance_count_message_location' );
+	        $rich_editor_settings = array( 'attendance_count_message_template' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $rich_editor_settings = array( 'confirmation_message', 'notification_message' );
             $checkbox_settings = array( 'disable_notification', 'disable_confirmation', 'use_custom_notification', 'notify_organizer' );
@@ -1713,6 +1764,10 @@ class RTEC_Admin
             $updated_options[$checkbox_setting] = false;
         }
 
+	    foreach ( $array_settings as $array_setting ) {
+		    $updated_options[ $array_setting ] = array();
+	    }
+
         if ( isset( $updated_options['visitors_can_edit_what_status'] ) && $updated_options['visitors_can_edit_what_status'] ) {
 	        $updated_options['add_registration_management_tool'] = true;
         } else {
@@ -1720,7 +1775,12 @@ class RTEC_Admin
         }
 
         foreach ( $input as $key => $val ) {
-            if ( in_array( $key, $checkbox_settings ) ) {
+	        if ( is_array( $val ) ) {
+		        $updated_options[ $key ] = array();
+		        foreach ( $val as $sub_val ) {
+			        $updated_options[$key][] = sanitize_text_field( $sub_val );
+		        }
+	        } elseif ( in_array( $key, $checkbox_settings ) ) {
                 if ( $val == 'on' ) {
                     $updated_options[$key] = true;
                 }

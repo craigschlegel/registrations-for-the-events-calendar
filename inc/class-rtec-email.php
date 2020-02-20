@@ -45,9 +45,14 @@ class RTEC_Email {
 	private $custom_template_pairs = array();
 
 	/**
-	 * @var
+	 * @var boolean
 	 */
 	private $need_templating;
+
+	/**
+	 * @var string
+	 */
+	private $find_and_replace_message;
 
 	/**
 	 * @param array $args
@@ -78,8 +83,28 @@ class RTEC_Email {
 	 */
 	public function send_email()
 	{
-		return wp_mail( $this->recipients, html_entity_decode( $this->subject, ENT_QUOTES, 'UTF-8' ), $this->message_body, $this->headers );
-	}
+		$attachments = isset( $this->attachments ) ? $this->attachments : array();
+		$sent = wp_mail( $this->recipients, html_entity_decode( $this->subject, ENT_QUOTES, 'UTF-8' ), $this->message_body, $this->headers, $attachments );
+
+		if ( $sent ) {
+			return true;
+		} else {
+			$report = array(
+				'recipients' => $this->recipients,
+				'subject' => html_entity_decode( $this->subject, ENT_QUOTES, 'UTF-8' ),
+				'body' => $this->find_and_replace_message,
+				'headers' => $this->headers,
+			);
+			if ( ! empty( $errors ) ) {
+				$report_errors = get_option( 'rtec_error_log', array() );
+
+				$report_errors['email'] = $report;
+
+				update_option( 'rtec_error_log', $report_errors, false );
+			}
+
+			return false;
+		}	}
 
 	/**
 	 * @return string|void
@@ -408,6 +433,8 @@ class RTEC_Email {
 		} else {
 			$body = stripslashes( $args['message'] );
 		}
+
+		$this->find_and_replace_message = $body;
 
 		if ( $this->content_type === 'html' ) {
 

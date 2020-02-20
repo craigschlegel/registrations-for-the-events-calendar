@@ -32,7 +32,12 @@ function rtec_the_registration_form( $atts = array() )
 		$event_id = get_the_ID();
 	}
 
-	$form->build_form( $event_id );
+	if ( post_password_required( $event_id ) ) {
+	    echo '<span style="display:none" data-rtec-password="1"></span>';
+	    return '';
+	}
+
+		$form->build_form( $event_id );
 	$fields_atts = $form->get_field_attributes();
 	$event_meta = $form->get_event_meta();
 
@@ -84,8 +89,12 @@ function rtec_the_registration_form( $atts = array() )
 				    echo $form->get_form_html( $fields_atts, $atts );
 			    }
             } else {
+			    // header
+			    $show_header = (isset( $atts['showheader'] ) && $atts['showheader'] === 'true');
+			    $event_header_html = $show_header ? $form->get_event_header_html() : '';
+
 			    $attendee_list_html = '';
-			    $shortcode_attendee_disable = isset( $shortcode_atts['attendeelist'] ) ? ($atts['attendeelist'] !== 'true') : true;
+			    $shortcode_attendee_disable = isset( $atts['attendeelist'] ) ? ($atts['attendeelist'] !== 'true') : true;
 			    if ( $event_meta['show_registrants_data'] && ( ! $doing_shortcode || ! $shortcode_attendee_disable ) ) {
 
 				    $attendee_list_fields = array();
@@ -93,6 +102,16 @@ function rtec_the_registration_form( $atts = array() )
 
 				    $registrants_data = $rtec->db_frontend->get_registrants_data( $event_meta, $attendee_list_fields );
 				    $attendee_list_html = rtec_attendee_list( $registrants_data );
+			    }
+
+			    // attendance counts
+			    $include_message = isset( $rtec_options['include_attendance_count_message'] ) ? $rtec_options['include_attendance_count_message'] : false;
+			    $locations = isset( $rtec_options['attendance_count_message_location'] ) ? $rtec_options['attendance_count_message_location'] : array( 'above_button', 'above_description_list' );
+			    $attendance_count_html = '';
+			    if ( $include_message && in_array( 'above_button', $locations, true ) ) {
+				    $template = isset( $rtec_options['attendance_count_message_template'] ) ? $rtec_options['attendance_count_message_template'] : __( 'Attendance: {num} / {max}', 'registrations-for-the-events-calendar' );
+				    $template = rtec_get_text( $template, __( 'Attendance: {num} / {max}', 'registrations-for-the-events-calendar' ) );
+				    $attendance_count_html = rtec_attendance_count_display( $event_meta['post_id'], $template );
 			    }
 
 			    $outer_wrap_classes = '';
@@ -103,9 +122,13 @@ function rtec_the_registration_form( $atts = array() )
 
 			    $return_html .= '<div class="rtec-outer-wrap'.$outer_wrap_classes.'">';
 
+			    $return_html .= $event_header_html;
+
 			    $return_html .= $attendee_list_html;
 
-			    $return_html .= '<div id="rtec" class="rtec">';
+			    $return_html .= $attendance_count_html;
+
+			    $return_html .= '<div id="rtec" class="rtec" data-event="' . esc_attr( $event_meta['post_id'] ) . '">';
 
 			    $return_html .= $form->please_log_in_html();
 
@@ -124,8 +147,12 @@ function rtec_the_registration_form( $atts = array() )
 
 
 		} else {
+			// header
+			$show_header = (isset( $atts['showheader'] ) && $atts['showheader'] === 'true');
+			$event_header_html = $show_header ? $form->get_event_header_html() : '';
+
 			$attendee_list_html = '';
-			$shortcode_attendee_disable = isset( $shortcode_atts['attendeelist'] ) ? ($atts['attendeelist'] !== 'true') : true;
+			$shortcode_attendee_disable = isset( $atts['attendeelist'] ) ? ($atts['attendeelist'] !== 'true') : true;
 			if ( $event_meta['show_registrants_data'] && ( ! $doing_shortcode || ! $shortcode_attendee_disable ) ) {
 
 				$attendee_list_fields = array();
@@ -133,6 +160,16 @@ function rtec_the_registration_form( $atts = array() )
 
 				$registrants_data = $rtec->db_frontend->get_registrants_data( $event_meta, $attendee_list_fields );
 				$attendee_list_html = rtec_attendee_list( $registrants_data );
+			}
+
+			// attendance counts
+			$include_message = isset( $rtec_options['include_attendance_count_message'] ) ? $rtec_options['include_attendance_count_message'] : false;
+			$locations = isset( $rtec_options['attendance_count_message_location'] ) ? $rtec_options['attendance_count_message_location'] : array( 'above_button', 'above_description_list' );
+			$attendance_count_html = '';
+			if ( $include_message && in_array( 'above_button', $locations, true ) ) {
+				$template = isset( $rtec_options['attendance_count_message_template'] ) ? $rtec_options['attendance_count_message_template'] : __( 'Attendance: {num} / {max}', 'registrations-for-the-events-calendar' );
+				$template = rtec_get_text( $template, __( 'Attendance: {num} / {max}', 'registrations-for-the-events-calendar' ) );
+				$attendance_count_html = rtec_attendance_count_display( $event_meta['post_id'], $template );
 			}
 
 			$outer_wrap_classes = '';
@@ -143,9 +180,14 @@ function rtec_the_registration_form( $atts = array() )
 
 			$return_html .= '<div class="rtec-outer-wrap'.$outer_wrap_classes.'">';
 
+			$return_html .= $event_header_html;
+
 			$return_html .= $attendee_list_html;
 
-			$return_html .= '<div id="rtec" class="rtec">';
+			$return_html .= $attendance_count_html;
+
+
+			$return_html .= '<div id="rtec" class="rtec" data-event="' . esc_attr( $event_meta['post_id'] ) . '">';
 
 			$return_html .= $form->registrations_closed_message();
 
@@ -580,6 +622,59 @@ function rtec_the_default_attendee_list( $registrants_data )
 	$form->get_registrants_data_html( $registrants_data );
 }
 add_action( 'rtec_the_attendee_list', 'rtec_the_default_attendee_list', 10, 1 );
+
+
+function rtec_attendance_count_display_find_replace( $text, $search_replace ) {
+	$working_text = $text;
+
+	foreach ( $search_replace as $search => $replace ) {
+		$working_text = str_replace( $search, $replace, $working_text );
+	}
+
+	return $working_text;
+}
+
+function rtec_attendance_count_display( $event_id, $template, $classes = '' ) {
+	$event_meta = rtec_get_event_meta( $event_id );
+
+	if ( $event_meta['registrations_disabled'] ) {
+		return;
+	}
+
+	$max = $event_meta['limit_registrations'] ? $event_meta['max_registrations'] : '∞';
+	$remaining = $event_meta['limit_registrations'] ? max( 0, (int)$max - (int)$event_meta['num_registered'] ) : '∞';
+
+	$find_replace = array(
+		'{num}' => $event_meta['num_registered'],
+		'{max}' => $max,
+		'{remaining}' => $remaining
+	);
+	$template_html = rtec_sanitize_outputted_html( rtec_attendance_count_display_find_replace( $template, $find_replace ) );
+
+	$html = '';
+	if ( ! empty( $event_id ) ) {
+        $html .= '<div class="rtec-attendance-display'.$classes.'">';
+		$html .= '<span>' . $template_html . '</span>';
+		$html .= '</div>';
+	}
+
+	return $html;
+}
+
+add_action( 'tribe_events_after_the_meta', 'rtec_attendance_count_above_description_list' );
+add_action( 'tribe_template_before_include:events/list/event/description', 'rtec_attendance_count_above_description_list' );
+function rtec_attendance_count_above_description_list() {
+	global $rtec_options;
+
+	$include_message = isset( $rtec_options['include_attendance_count_message'] ) ? $rtec_options['include_attendance_count_message'] : false;
+	$locations = isset( $rtec_options['attendance_count_message_location'] ) ? $rtec_options['attendance_count_message_location'] : array( 'above_button', 'above_description_list' );
+	if ( $include_message && in_array( 'above_description_list', $locations, true ) ) {
+		$template = isset( $rtec_options['attendance_count_message_template'] ) ? $rtec_options['attendance_count_message_template'] : __( 'Attendance: {num} / {max}', 'registrations-for-the-events-calendar' );
+		$template = rtec_get_text( $template, __( 'Attendance: {num} / {max}', 'registrations-for-the-events-calendar' ) );
+		echo rtec_attendance_count_display( get_the_id(), $template, ' tribe-common-b2' );
+	}
+}
+
 
 /**
 * outputs the custom js from the "Customize" tab on the Settings page

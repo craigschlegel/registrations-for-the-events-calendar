@@ -1267,6 +1267,16 @@ class RTEC_Form
 			$attendee_list_html = rtec_attendee_list( $registrants_data );
 		}
 
+		// attendance counts
+		$include_message = isset( $rtec_options['include_attendance_count_message'] ) ? $rtec_options['include_attendance_count_message'] : false;
+		$locations = isset( $rtec_options['attendance_count_message_location'] ) ? $rtec_options['attendance_count_message_location'] : array( 'above_button', 'above_description_list' );
+		$attendance_count_html = '';
+		if ( $include_message && in_array( 'above_button', $locations, true ) ) {
+			$template = isset( $rtec_options['attendance_count_message_template'] ) ? $rtec_options['attendance_count_message_template'] : __( 'Attendance: {num} / {max}', 'registrations-for-the-events-calendar' );
+			$template = rtec_get_text( $template, __( 'Attendance: {num} / {max}', 'registrations-for-the-events-calendar' ) );
+			$attendance_count_html = rtec_attendance_count_display( $event_meta['post_id'], $template );
+		}
+
 		// rtec classes and data
 		$classes = '';
 		$outer_wrap_classes = '';

@@ -21,6 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     echo $attendee_list_html;
 
+    echo $attendance_count_html;
+
     do_action( 'rtec_before_the_register_button' );
 
     ?>
