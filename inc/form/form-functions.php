@@ -541,10 +541,13 @@ function rtec_action_check_after_post() {
 function rtec_visitor_send_action_link() {
 	global $rtec_options;
 
-	if ( ! is_email( $_POST['rtec-visitor_email'] ) || ! wp_verify_nonce( $_POST['rtec_nonce'], 'rtec_visitor_submit' ) ) {
+	$email_error_message = isset( $rtec_options['email_error_message'] ) ? esc_html( $rtec_options['email_error_message'] ) : __( 'Please enter the email you registered with.', 'registrations-for-the-events-calendar' );
+	$email_error_message = rtec_get_text( $email_error_message, __( 'Please enter the email you registered with.', 'registrations-for-the-events-calendar' ) );
+
+	if ( ! is_email( $_POST['rtec-visitor_email'] ) ) {
 
 		if ( method_exists ( 'Tribe__Notices' , 'set_notice' ) ) {
-			Tribe__Notices::set_notice( 'tool_status', __( 'Please enter the email you registered with.', 'registrations-for-the-events-calendar' ) );
+			Tribe__Notices::set_notice( 'tool_status', $email_error_message );
 		}
 
 	} else {
@@ -589,14 +592,17 @@ function rtec_visitor_send_action_link() {
 
             $success = $unregister_email->send_email();
 
+	        $email_success_message = isset( $rtec_options['success_send_message'] ) ? esc_html( $rtec_options['success_send_message'] ) : __( 'Check your email inbox for an unregister link.', 'registrations-for-the-events-calendar' );
+	        $email_success_message = rtec_get_text( $email_success_message, __( 'Check your email inbox for an unregister link.', 'registrations-for-the-events-calendar' ) );
+
             if ( $success && method_exists ( 'Tribe__Notices' , 'set_notice' ) ) {
-                Tribe__Notices::set_notice( 'tool_status', __( 'Check your email inbox for an unregister link.', 'registrations-for-the-events-calendar' ) );
+                Tribe__Notices::set_notice( 'tool_status', $email_success_message );
             }
 
         } else {
 
             if ( method_exists ( 'Tribe__Notices' , 'set_notice' ) ) {
-                Tribe__Notices::set_notice( 'tool_status', __( 'Please enter the email you registered with.', 'registrations-for-the-events-calendar' ) );
+                Tribe__Notices::set_notice( 'tool_status', $email_error_message );
             }
 
         }
