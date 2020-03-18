@@ -4,8 +4,8 @@ Contributors: roundupwp
 Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
-Tested up to: 5.3
-Stable tag: 2.4.6
+Tested up to: 5.4
+Stable tag: 2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,10 +44,12 @@ The plugin can be used for more than event registration. Here are other things t
 
 * Add as many text fields as you'd like to the event registration form.
 * Add the event registration form to one of several parts of the page your event is displayed on.
+* Choose how the form displays. Reveal on click, pop-up modal window, or displayed fully.
 * Display the registration form anywhere on your site with shortcodes.
 * Customize the labels, error messages, directions for your attendees, and which fields are required.
 * Customize both the email templates sent to your attendees and the notification email sent to the event manager.
 * Limit the number of registrations per event.
+* Make event registration for logged-in users only.
 * Display a list of current registered attendees.
 * Specify a registration deadline (both date and time).
 
@@ -85,16 +87,21 @@ The plugin can be used for more than event registration. Here are other things t
 
 Do you need even more customization and control? Check out [Registrations for the Events Calendar Pro](https://roundupwp.com/products/registrations-for-the-events-calendar-pro/). Pro features include:
 
-* Multiple forms specific to each event.
-* Drop-down, checkbox, radio, file upload and paragraph fields.
+* Multiple registration forms specific to each event.
+* Drop-down, checkbox, radio, date, file upload and paragraph fields.
 * Online payments for events using PayPal. (Stripe extension available)
-* Add multiple costs to events.
+* Offline payment management.
+* Add multiple costs to events or add costs based on form field responses.
 * Guest registrations (register for more than one person at a time).
 * Multiple confirmation email templates.
 * Multiple registration venues and tiers.
 * Automatic/reminder email message sending.
 * Connect multiple events to a single registration.
+* Convenient event check in system.
+* Customizable event reports.
+* Registrants can edit their own registrations.
 * Easy event management for membership sites.
+* Logged-in users can view a list of events they registered for.
 
 == Feedback or Support ==
 
@@ -187,6 +194,20 @@ Yes. There is a custom database table added to each sib-site's database to separ
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.5 =
+* IMPORTANT: Major changes to the form HTML templates and some CSS styling. If you have customizations they may be affected.
+* New: Setting to limit event registration to logged-in users.
+* New: Attendee lists automatically refreshed after a successful registration.
+* New: Setting to enable attendance counts above the registration form or for each event listing.
+* New: Notification emails can now be sent to all organizers of the event. Enable this on the "Email" tab.
+* New: Attendee lists automatically refreshed after a successful registration.
+* New: Option to display your registration forms in three ways - reveal on click, open in a pop-up modal window, or make the form always visible on the page. Change this setting on the "Form" tab.
+* Tweak: Message after registration now controlled server side instead of being in the HTML of the form.
+* Tweak: Unregister tool available with shortcode placed event registration forms.
+* Tweak: Single event settings removed from the "Overview" in favor of a link to edit them on the event post edit page.
+* Fix: Attendee list, unregister tool, and other messages will still display even if attendance limit reached.
+* Fix: Registration disabled if event is password protected and the password hasn't been entered yet.
+
 = 2.4.6 =
 * New: Sort events in the "Overview" by current, past, or recent hidden events.
 * New: Added filter "rtec_email_headers" to change email headers before sending.
