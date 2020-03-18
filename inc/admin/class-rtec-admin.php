@@ -227,7 +227,7 @@ class RTEC_Admin
 			    $locations = array(
 				    array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
 				    array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
-				    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
+				    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ). ' [rtec-registration-form]' )
 			    );
 		    } else {
 			    $locations = array(
@@ -235,7 +235,7 @@ class RTEC_Admin
 				    array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
 				    array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
 				    array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) ),
-				    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
+				    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ). ' [rtec-registration-form]' )
 			    );
 		    }
 
@@ -245,7 +245,7 @@ class RTEC_Admin
 			    array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
 			    array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
 			    array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) ),
-			    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ) )
+			    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ). ' [rtec-registration-form]' )
 		    );
 	    }
 

@@ -998,7 +998,7 @@ class RTEC_Form
                 <p><?php echo esc_html( $already_registered_directions ); ?></p>
                 <div class="tribe-events-event-meta rtec-event-meta">
 
-                    <form id="rtec-options-form" action="" method="post">
+                    <form id="rtec-options-form" action="<?php echo esc_url( get_the_permalink( $this->event_meta['post_id'] ) ); ?>" method="post">
                         <div class="rtec-form-field rtec-field-text" data-rtec-error-message="<?php esc_attr_e( 'required', 'registrations-for-the-events-calendar' ); ?>" data-rtec-type="text">
                             <label for="rtec-visitor_email" class="rtec-field-label" aria-label="<?php echo esc_html( $enter_your_email_text ); ?>"><?php echo esc_html( $enter_your_email_text ); ?>*</label>
                             <div class="rtec-input-wrapper">

@@ -21,7 +21,7 @@ $settings = $this->settings;
                 <option value="upcoming" <?php if ( $settings['qtype'] === 'upcoming' ) echo 'selected'; ?>><?php _e( 'View Upcoming', 'registrations-for-the-events-calendar' ); ?></option>
                 <option value="cur" <?php if ( $settings['qtype'] === 'cur' ) echo 'selected'; ?>><?php _e( 'View Current', 'registrations-for-the-events-calendar' ); ?></option>
                 <option value="past" <?php if ( $settings['qtype'] === 'past' ) echo 'selected'; ?>><?php _e( 'View Past', 'registrations-for-the-events-calendar' ); ?></option>
-                <option value="hid" <?php if ( $settings['qtype'] === 'hid' ) echo 'selected'; ?>><?php _e( 'View Recent Hidden', 'registrations-for-the-events-calendar' ); ?></option>
+                <option value="hid" <?php if ( $settings['qtype'] === 'hid' ) echo 'selected'; ?>><?php _e( 'View Hidden from Listing', 'registrations-for-the-events-calendar' ); ?></option>
                 <option value="start" <?php if ( $settings['qtype'] === 'start' ) echo 'selected'; ?>><?php _e( 'Select Start Date', 'registrations-for-the-events-calendar' ); ?></option>
                 <option value="all" <?php if ( $settings['qtype'] === 'all' ) echo 'selected'; ?>><?php _e( 'View All', 'registrations-for-the-events-calendar' ); ?></option>
             </select>

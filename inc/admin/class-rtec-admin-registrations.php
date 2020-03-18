@@ -392,7 +392,7 @@ class RTEC_Admin_Registrations {
 	 * @param $event_obj
 	 */
 	public function the_hidden_event_options( $event_obj ) {
-		include RTEC_PLUGIN_DIR . 'inc/admin/templates/partials/registrations-hidden-event-options.php';
+		//include RTEC_PLUGIN_DIR . 'inc/admin/templates/partials/registrations-hidden-event-options.php';
 	}
 
 	/**

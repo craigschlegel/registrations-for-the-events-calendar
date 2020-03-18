@@ -712,6 +712,27 @@ span.rtec-is-user{
     display: none;
 }
 
+/* Overview Actions */
+.rtec-overview .rtec-event-actions {
+    text-align: right;
+}
+.rtec-event-actions {
+    text-align: left;
+}
+.rtec-overview .rtec-admin-secondary-button {
+    padding: 3px 5px;
+    height: auto;
+    margin: 3px 10px 3px 0;
+    min-height: 1px;
+    line-height: 1;
+}
+.rtec-overview .rtec-admin-secondary-button .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+}
+
 /* ad */
 .rtec-pro-ad-wrap {
     display: block;

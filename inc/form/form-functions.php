@@ -27,7 +27,6 @@ function rtec_the_registration_form( $atts = array() )
 	if ( $doing_shortcode ) {
 		$event_id = isset( $atts['event'] ) ? (int)$atts['event'] : '';
 		$return_html = '';
-		$rtec_options['visitors_can_edit_what_status'] = false;
 	} else {
 		$event_id = get_the_ID();
 	}

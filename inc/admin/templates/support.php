@@ -119,8 +119,12 @@ $options = get_option( 'rtec_options' );
 
 foreach ( $options as $key => $val ) {
     $label = esc_html( $key ) . ':';
-    $value = isset( $val ) ? esc_html( $val ) : 'unset';
-    echo str_pad( $label, 28 ) . $value ."\n";
+    if ( is_array( $val ) ) {
+        var_export( $val );
+    } else {
+	    $value = isset( $val ) ? esc_html( $val ) : 'unset';
+	    echo str_pad( $label, 28 ) . $value ."\n";
+    }
 }
 
 // DB troubleshooting

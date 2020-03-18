@@ -45,6 +45,3 @@
 
 	</tbody>
 </table>
-<div class="rtec-event-actions rtec-clear">
-	<a href="<?php $this->the_detailed_view_href( $event->ID, '' ); ?>" class="rtec-admin-secondary-button button action"><i class="fa fa-list" aria-hidden="true"></i> <?php _e( 'Detailed View', 'registrations-for-the-events-calendar' ); ?></a>
-</div>
