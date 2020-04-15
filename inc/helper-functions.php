@@ -684,10 +684,16 @@ function rtec_the_registration_form_shortcode( $atts ) {
 
     $shortcode_only = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] === 'shortcode' : false;
 
-    $atts['doing_shortcode'] = true;
+	$atts['doing_shortcode'] = true;
 
 	$can_always_use_shortcode = false;
-	if ( $shortcode_only && tribe_is_event() && is_single() ) {
+    if ( isset( $atts['tribe_flag'] ) ) {
+	    $shortcode_only = false;
+	    $can_always_use_shortcode = true;
+    }
+
+	if ( ($shortcode_only && tribe_is_event() && is_single())
+            || $can_always_use_shortcode) {
 		$atts['event'] = get_the_ID();
 		$atts['doing_shortcode'] = false;
 		$atts['return_html'] = true;
