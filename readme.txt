@@ -193,6 +193,7 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 * Tweaks: Added tweaks to the instructions for the "Form Location" setting found on the "Form" tab.
 * Tweaks: Link to unregister now sent using an AJAX call instead of a page refresh.
 * Fix: Better compatibility with WordPress Multisite.
+* Fix: Terms and conditions field was not translatable when using "Translations" as the message source.
 
 = 2.5 =
 * IMPORTANT: Major changes to the form HTML templates and some CSS styling. If you have customizations they may be affected.

@@ -393,6 +393,7 @@ a.rtec-wide {
 }
 /* Form Settings */
 .rtec-admin-wrap .rtec-box{
+    max-width: 600px;
     padding: 10px;
     background: #fff;
     border-radius: 5px;
