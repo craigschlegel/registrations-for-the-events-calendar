@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
 Tested up to: 5.4
-Stable tag: 2.5
+Stable tag: 2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -194,6 +194,11 @@ Yes. There is a custom database table added to each sib-site's database to separ
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 == Changelog ==
+= 2.6 =
+* New: Added "Registrations" Gutenberg block for adding the form to a post, page, or single event.
+* Tweaks: Added tweaks to the instructions for the "Form Location" setting found on the "Form" tab.
+* Fix: Better compatibility with WordPress Multisite.
+
 = 2.5 =
 * IMPORTANT: Major changes to the form HTML templates and some CSS styling. If you have customizations they may be affected.
 * New: Setting to limit event registration to logged-in users.
