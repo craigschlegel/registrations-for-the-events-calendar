@@ -129,12 +129,6 @@ Follow these steps:
 6. See a quick overview of your events and registrations on the "Registrations" tab.
 7. Add, edit, and remove registrations manually by navigating to the "Registrations" tab and clicking "Detailed View" for an event. You can also export or view submission details here.
 
-== Special Thanks ==
-
-Special thanks to Marco (demontechx) for his valuable input on the plugin!
-
-Special thanks to Henrik (hjald) for fixing a bug in the .csv exporter!
-
 == Screenshots ==
 
 1. View of the event registration form revealed on "click"
@@ -188,7 +182,7 @@ It's likely that you have a javascript error somewhere on that page. Try disabli
 
 = Is this plugin compatible with WordPress multisite? =
 
-Yes. There is a custom database table added to each sib-site's database to separate registrations.
+Yes. There is a custom database table added to each sub-site's database to separate registrations.
 
 = What do I do if I have a request or need help? =
 
@@ -197,6 +191,7 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 = 2.6 =
 * New: Added "Registrations" Gutenberg block for adding the form to a post, page, or single event.
 * Tweaks: Added tweaks to the instructions for the "Form Location" setting found on the "Form" tab.
+* Tweaks: Link to unregister now sent using an AJAX call instead of a page refresh.
 * Fix: Better compatibility with WordPress Multisite.
 
 = 2.5 =
@@ -306,7 +301,7 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 * New: Read an explanation of what's new [here](https://roundupwp.com/rtec-2-0/)
 * New: Much of the codebase has changed. Custom code may no longer work. See [documentation](https://roundupwp.com/docs/codex) for new hooks for developers.
 * New: Redesigned "Registrations" tab now offers more filtering options for events, list view of events, and ability to search through registrations
-* New: Notification and Confirmation emails are now HTML emails. You can use the tiny mce editor for your email templates on the "Email" tab.
+* New: Notification and Confirmation emails are now HTML emails. You can use the tiny MCD editor for your email templates on the "Email" tab.
 * New: Several styling/UI improvements for the settings pages. Some options reordered for a more logical flow. Asterisks added by settings that can be set for each event.
 * New: Field added to set specific date and times for deadlines for each event. Find this on the "edit event" screen or in the event options drop-down menu on the "Register" tab.
 * Tweak: If the form is filled out incorrectly, the registrant will be scrolled to the field with the first error automatically
@@ -327,11 +322,11 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 * New: Users with the "edit posts" privilege can now manage registrations in the backend. Only administrators can change options still.
 * New: Attendee list can now be viewed above the form. Enable this through the option on the "Form" tab. Only first and last names of registrations that have been viewed in the backend (no longer have the "new" bubble by them) will appear in the list.
 * New: Optional header to show event title and start/end times above the form when generated from a shortcode.
-* Fix: There was an extra slash in certain file paths when css and javascript files were included on a page.
+* Fix: There was an extra slash in certain file paths when CSS and JavaScript files were included on a page.
 
 = 1.5.2 =
 * Tweak: Several email defaults were changed like the confirmation subject, confirmation from name, and date format
-* Fix: Multiple registrations would be submitted if there was more than one registration form on a page and ajax was disabled.
+* Fix: Multiple registrations would be submitted if there was more than one registration form on a page and AJAX was disabled.
 
 = 1.5.1 =
 * Tweak: If the number of registrations saved in the event meta is inaccurate, this is updated with a count from the database when visiting the registrations tab and viewing that event.

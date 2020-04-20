@@ -666,8 +666,6 @@ function rtec_send_unregister_link() {
 
 		$sanitized_data = array_merge( $event_meta, $registration );
 
-		$custom_template_pairs = $db->get_custom_field_label_array( $custom_columns );
-
 		if ( $event_meta['mvt_enabled'] ) {
 			$sanitized_data['mvt_label'] = isset( $event_meta['mvt_fields'][ $sanitized_data['venue'] ]['label'] ) ? $event_meta['mvt_fields'][ $sanitized_data['venue'] ]['label'] : '';
 		}
@@ -683,7 +681,7 @@ function rtec_send_unregister_link() {
 		$args = array(
 			'template_type'         => 'confirmation',
 			'content_type'          => 'html',
-			'custom_template_pairs' => $custom_template_pairs,
+			'custom_template_pairs' => array(),
 			'recipients'            => $email,
 			'subject'               => array(
 				'text' => get_the_title( $event_id ),
