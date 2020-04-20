@@ -312,7 +312,7 @@ class RTEC_Email {
 		if ( $event_id !== '' ) {
 			$from_address = rtec_get_confirmation_from_address( $event_id );
 		} else {
-			$from_address = is_email( $rtec_options['confirmation_from_address'] ) ? $rtec_options['confirmation_from_address'] : get_option( 'admin_email' );
+			$from_address = isset( $rtec_options['confirmation_from_address'] ) && is_email( $rtec_options['confirmation_from_address'] ) ? $rtec_options['confirmation_from_address'] : get_option( 'admin_email' );
 		}
 
 		$reply_to = $from_address;
