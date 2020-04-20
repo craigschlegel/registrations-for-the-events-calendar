@@ -478,6 +478,7 @@ class RTEC_Form
 			// terms_conditions checkbox
 			if ( isset( $rtec_options['terms_conditions_require'] ) && $rtec_options['terms_conditions_require'] )  {
 				$i++;
+				$field_label = rtec_get_text( $rtec_options['terms_conditions_label'], __( 'I accept the terms and conditions', 'registrations-for-the-events-calendar' ) );
 				$link = isset( $rtec_options[ 'terms_conditions_link' ] ) ? $rtec_options[ 'terms_conditions_link' ] :  '';
 				$link_label = isset( $rtec_options[ 'terms_conditions_link_label' ] ) ? $rtec_options[ 'terms_conditions_link_label' ] :  __( 'Terms and Conditions Page', 'registrations-for-the-events-calendar' );
                 $html = ! empty( $link ) ? '<a href="'.esc_url( $link ).'" target="_blank">'.esc_html( rtec_get_text( $link_label, __( 'Terms and Conditions Page', 'registrations-for-the-events-calendar' ) ) ) . '</a>' : '';
@@ -489,7 +490,7 @@ class RTEC_Form
 				$fields_data[ $i ]['placeholder'] = '';
 				$fields_data[ $i ]['meta'] = array(
 				        'options' => array(
-				                array( $rtec_options['terms_conditions_label'] . '&#42;', __( 'I accept the terms and conditions', 'registrations-for-the-events-calendar' ), false )
+				                array( $field_label . '&#42;', $field_label, false )
                         ),
                         'html' => $html
                 );

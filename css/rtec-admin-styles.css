@@ -391,6 +391,21 @@ a.rtec-wide {
     padding: 0 1em;
     margin-bottom: 10px;
 }
+/* Form Settings */
+.rtec-admin-wrap .rtec-box{
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+}
+.rtec-admin-wrap .rtec-form-location-example img {
+    float: left;
+    margin-right: 10px;
+    background: #fff;
+}
+.rtec-form-location-example p > span {
+    font-style: italic;
+}
+
 .rtec-admin-wrap .rtec-field-options-wrapper label {
     font-weight: 600;
 }
@@ -468,6 +483,10 @@ a.rtec-wide {
 }
 .rtec-mvt-field-remove i {
     font-size: 16px;
+}
+/* Tooltip */
+.rtec-tooltip {
+    margin-top: 5px;
 }
 
 /* Tooltip table */

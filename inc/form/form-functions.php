@@ -610,6 +610,124 @@ function rtec_visitor_send_action_link() {
 	return '';
 }
 
+function rtec_send_unregister_link() {
+	global $rtec_options;
+	$event_id = sanitize_text_field( $_POST['event_id'] );
+	$email = sanitize_text_field( $_POST['email'] );
+//email_error_message
+	$email_error_message = isset( $rtec_options['email_error_message'] ) ? esc_html( $rtec_options['email_error_message'] ) : __( 'Please enter the email you registered with.', 'registrations-for-the-events-calendar' );
+	$email_error_message = rtec_get_text( $email_error_message, __( 'Please enter the email you registered with.', 'registrations-for-the-events-calendar' ) );
+	if ( ! is_email( $email ) ) {
+		$return = array(
+			'error' => __( $email_error_message, 'registrations-for-the-events-calendar' )
+		);
+
+		echo wp_json_encode( $return );
+		die();
+	}
+
+	$rtec = RTEC();
+	$args = array(
+		'fields' => array(
+			'id',
+			'first',
+			'last',
+			'email',
+			'venue',
+			'phone',
+			'other',
+			'event_id',
+			'custom',
+			'action_key',
+		),
+		'where' => array(
+			array( 'email', $email, '=', 'string' ),
+			array( 'event_id', $event_id, '=', 'int' ),
+		)
+	);
+	$matches = $rtec->db_frontend->retrieve_entries( $args, false, 1 );
+
+	if ( isset( $matches[0]['action_key'] ) ) {
+		$registration = $matches[0];
+
+		$db = $rtec->db_frontend->instance();
+		$form = new RTEC_Form();
+
+		$form->build_form( $registration['event_id'] );
+		$fields_atts = $form->get_field_attributes();
+		$event_meta = $form->get_event_meta();
+
+		$custom_columns = $form->get_custom_column_keys();
+
+        if ( isset( $registration['custom'] ) ) {
+            $registration['first'] = isset( $registration['first_name'] ) ? $registration['first_name'] : '';
+            $registration['last']  = isset( $registration['last_name'] ) ? $registration['last_name'] : '';
+        }
+
+		$sanitized_data = array_merge( $event_meta, $registration );
+
+		$custom_template_pairs = $db->get_custom_field_label_array( $custom_columns );
+
+		if ( $event_meta['mvt_enabled'] ) {
+			$sanitized_data['mvt_label'] = isset( $event_meta['mvt_fields'][ $sanitized_data['venue'] ]['label'] ) ? $event_meta['mvt_fields'][ $sanitized_data['venue'] ]['label'] : '';
+		}
+
+		$sanitized_data['date'] = $event_meta['start_date'];
+
+		$unregister_link_text = isset( $rtec_options['unregister_link_text'] ) ? esc_html( $rtec_options['unregister_link_text'] ) : __( 'Unregister from this event', 'registrations-for-the-events-calendar' );
+		$unregister_link_text = rtec_get_text( $unregister_link_text, __( 'Unregister from this event', 'registrations-for-the-events-calendar' ) );
+
+		$unregister_message_template = isset( $rtec_options['unregister_message'] ) ? $rtec_options['unregister_message'] : rtec_generate_unregister_link( (int)$event_id, $matches[0]['action_key'], $email, $unregister_link_text );
+		$header_image = isset( $rtec_options['html_email_header_img'] ) ? $rtec_options['html_email_header_img'] : false;
+
+		$args = array(
+			'template_type'         => 'confirmation',
+			'content_type'          => 'html',
+			'custom_template_pairs' => $custom_template_pairs,
+			'recipients'            => $email,
+			'subject'               => array(
+				'text' => get_the_title( $event_id ),
+				'data' => $sanitized_data
+			),
+			'body'                  => array(
+				'message'      => $unregister_message_template,
+				'data'         => $sanitized_data,
+				'header_image' => $header_image
+			)
+		);
+		require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-email.php';
+		$unregister_email = new RTEC_Email();
+		$unregister_email->build_email( $args, true, $event_id );
+
+		$success = $unregister_email->send_email();
+
+		$email_success_message = isset( $rtec_options['success_send_message'] ) ? esc_html( $rtec_options['success_send_message'] ) : __( 'Check your email inbox for an unregister link.', 'registrations-for-the-events-calendar' );
+		$email_success_message = rtec_get_text( $email_success_message, __( 'Check your email inbox for an unregister link.', 'registrations-for-the-events-calendar' ) );
+
+		$return = array(
+			'success' => '<p class="rtec-success-message tribe-events-notices rtec-scrollto">' . __( $email_success_message, 'registrations-for-the-events-calendar' ) . '</p>'
+		);
+
+		echo wp_json_encode( $return );
+		die();
+
+	} else {
+
+		$return = array(
+			'error' => __( $email_error_message, 'registrations-for-the-events-calendar' )
+		);
+
+		echo wp_json_encode( $return );
+		die();
+
+	}
+
+
+	die();
+}
+add_action( 'wp_ajax_rtec_send_unregister_link', 'rtec_send_unregister_link' );
+add_action( 'wp_ajax_nopriv_rtec_send_unregister_link', 'rtec_send_unregister_link' );
+
 function rtec_attendee_list( $registrants_data ) {
 	ob_start();
 	do_action( 'rtec_the_attendee_list', $registrants_data );

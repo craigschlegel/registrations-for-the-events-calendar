@@ -46,6 +46,70 @@ jQuery(document).ready(function($) {
                 }
             }
 
+            $('.rtec').each(function(index) {
+
+                if ($(this).closest('.rtec-outer-wrap').length && $(this).closest('.rtec-outer-wrap').find('.rtec-already-registered-options').length) {
+                    var $outerWrap = $(this).closest('.rtec-outer-wrap'),
+                        $form = $(this).closest('.rtec-outer-wrap').find('.rtec-already-registered-options form'),
+                        sendUnregisterText = '';
+                    $form.find('input[type=submit]').each(function() {
+                        sendUnregisterText = $(this).val();
+                    });
+                    $form.submit(function(event) {
+                        var val = $(this).find("input[type=submit][clicked=true]").val();
+                        if (sendUnregisterText === val) {
+                            event.preventDefault();
+
+                            var action = 'rtec_send_unregister_link';
+
+                            $form.after($('.rtec-spinner').clone());
+                            $form.next('.rtec-spinner').show();
+                            $form.fadeTo(500,.1);
+                            $form.find('input[type=submit]').attr('disabled',true).css('opacity', .1);
+
+                            var submittedData = {
+                                'action': action,
+                                'event_id': $outerWrap.find('.rtec').attr('data-event'),
+                                'email': $form.find('input[name=rtec-visitor_email]').val()
+                            };
+
+                            $.ajax({
+                                url: rtec.ajaxUrl,
+                                type: 'post',
+                                data: submittedData,
+                                success: function (data) {
+                                    $form.next('.rtec-spinner').remove();
+                                    $form.fadeTo(500,1);
+                                    $form.find('input[type=submit]').removeAttr('disabled').css('opacity', 1);
+                                    if (data.trim().indexOf('{') > -1) {
+                                        var response = JSON.parse(data.trim());
+
+                                        if (typeof response.success !== 'undefined') {
+                                            $form.replaceWith(response.success);
+                                        } else if (typeof response.error !== 'undefined') {
+                                            var $formField = $form.find('input[name=rtec-visitor_email]').closest('.rtec-input-wrapper');
+                                            if (!$formField.find('.rtec-error-message').length) {
+                                                $formField.append('<p class="rtec-error-message" role="alert">'+response.error+'</p>');
+                                            }
+                                            $form.find('input[name=rtec-visitor_email]').attr('aria-invalid','true');
+                                        }
+                                    }
+
+                                }
+                            }); // ajax
+
+                        }
+                    });
+                    $form.find('input[type=submit]').click(function() {
+                        $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+                        $(this).attr("clicked", "true");
+                    });
+
+                }
+
+                //rtec-outer-wrap
+            });
+
             $('.rtec-form-toggle-button').on('click', function() {
                 $rtecEl = $(this).closest('.rtec');
                 var useModal = typeof $rtecEl.attr('data-modal') !== 'undefined';

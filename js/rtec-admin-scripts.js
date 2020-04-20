@@ -175,6 +175,12 @@ jQuery(document).ready(function($){
         }
     });
 
+    function rtecLocationToggle() {
+        $('.rtec-form-location-example').hide();
+        $('.rtec-form-location-'+$('#rtec_template_location').val()).show();
+    }rtecLocationToggle();
+    $('#rtec_template_location').change(rtecLocationToggle);
+
     // REGISTRATIONS overview tab
     // View selector tool
     $('#rtec-filter-go').click(function() {

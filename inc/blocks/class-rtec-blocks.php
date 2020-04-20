@@ -34,6 +34,7 @@ class RTEC_Blocks {
 	protected function hooks() {
 		add_action( 'init', array( $this, 'register_block' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
+		add_filter( 'rtec_event_meta', array( $this, 'block_editor_event_meta_changes' ), 99, 1 );
 	}
 
 	/**
@@ -203,6 +204,16 @@ class RTEC_Blocks {
 
 		return $return;
 
+	}
+
+	public function block_editor_event_meta_changes( $event_meta ) {
+		if ( ! RTEC_Blocks::is_gb_editor() ) {
+			return $event_meta;
+		}
+
+		$event_meta['registration_deadline'] = time() + 2000;
+
+		return $event_meta;
 	}
 
 	/**

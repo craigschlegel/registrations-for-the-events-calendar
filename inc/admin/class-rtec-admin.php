@@ -225,9 +225,9 @@ class RTEC_Admin
 		    if ( ! isset( $rtec_options['template_location'] ) ||
 		         isset( $rtec_options['template_location'] ) && ($rtec_options['template_location'] === 'shortcode' || $rtec_options['template_location'] === 'tribe_events_single_event_before_the_content' || $rtec_options['template_location'] === 'tribe_events_single_event_after_the_content' ) ) {
 			    $locations = array(
-				    array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
-				    array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
-				    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ). ' [rtec-registration-form]' )
+				    array( 'tribe_events_single_event_before_the_content', __( 'Before the event description', 'registrations-for-the-events-calendar' ) ),
+				    array( 'tribe_events_single_event_after_the_content', __( 'After the event description', 'registrations-for-the-events-calendar' ) ),
+				    array( 'shortcode', __( 'Shortcode or Gutenberg Block', 'registrations-for-the-events-calendar' ) )
 			    );
 		    } else {
 			    $locations = array(
@@ -235,18 +235,18 @@ class RTEC_Admin
 				    array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
 				    array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
 				    array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) ),
-				    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ). ' [rtec-registration-form]' )
-			    );
+				    array( 'shortcode', __( 'Shortcode or Gutenberg Block', 'registrations-for-the-events-calendar' ) )
+				    );
 		    }
 
 	    } else {
 		    $locations = array(
-			    array( 'tribe_events_single_event_before_the_content', __( 'Before the content (near top)', 'registrations-for-the-events-calendar' ) ),
-			    array( 'tribe_events_single_event_after_the_content', __( 'After the content (middle top)', 'registrations-for-the-events-calendar' ) ),
+			    array( 'tribe_events_single_event_before_the_content', __( 'Before the event description', 'registrations-for-the-events-calendar' ) ),
+			    array( 'tribe_events_single_event_after_the_content', __( 'After the event description', 'registrations-for-the-events-calendar' ) ),
 			    array( 'tribe_events_single_event_before_the_meta', __( 'Before the meta (middle bottom)', 'registrations-for-the-events-calendar' ) ),
 			    array( 'tribe_events_single_event_after_the_meta', __( 'After the meta (near bottom)', 'registrations-for-the-events-calendar' ) ),
-			    array( 'shortcode', __( 'Shortcode', 'registrations-for-the-events-calendar' ). ' [rtec-registration-form]' )
-		    );
+			    array( 'shortcode', __( 'Shortcode or Gutenberg Block', 'registrations-for-the-events-calendar' ) )
+			    );
 	    }
 
 	    // Template Location
@@ -259,7 +259,7 @@ class RTEC_Admin
 		    'option' => 'rtec_options', // matches the options name
 		    'class' => 'default-text', // class for the wrapper and input field
 		    'fields' => $locations,
-		    'description' => __( "Set how the registration form will be added to the single event page. Use \"Shortcode\" for a custom placement", 'registrations-for-the-events-calendar' ) // what is this? text
+		    'description' =>  __( 'Where on the event page should the registration form display?', 'registrations-for-the-events-calendar' ) // what is this? text
 	    ) );
 
 	    $d_types = array(
@@ -1073,25 +1073,71 @@ class RTEC_Admin
 		$selected = ( isset( $options[ $args['name'] ] ) ) ? esc_attr( $options[ $args['name'] ] ) : '';
 		$using_custom_template = isset( $options[ 'using_custom_template' ] ) ? $options[ 'using_custom_template' ] : false;
 		?>
+		<?php $this->the_description( $args['description'] ); ?>
         <select name="<?php echo $args['option'].'['.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>">
 			<?php foreach ( $args['fields'] as $field ) : ?>
                 <option value="<?php echo $field[0]; ?>" id="rtec-<?php echo $args['name']; ?>" class="<?php echo $args['class']; ?>"<?php if( $selected == $field[0] ) { echo ' selected'; } ?>><?php _e( $field[1], 'registrations-for-the-events-calendar' ); ?></option>
 			<?php endforeach; ?>
         </select>
 
+        <p>
+            <?php
+            RTEC_Admin::location_instructions( $selected );
+            ?>
+        </p>
+
 		<?php
 		if ( isset( $args['after'] ) ) {
 			echo $args['after'];
 		}
 		?>
-        <br><?php $this->the_description( $args['description'] ); ?>
         <p>
             <input type="checkbox" name="<?php echo $args['option'] ?>[using_custom_template]" id="rtec_using_custom_template" <?php if ( $using_custom_template ) { echo ' checked'; } ?>><label for="rtec_using_custom_template"><?php _e( 'I\'m using a custom single-event.php file in my theme.', 'registrations-for-the-events-calendar' ); ?></label>
             <a class="rtec-tooltip-link" href="JavaScript:void(0);"><?php _e( 'What is this?' ); ?></a>
-            <span class="rtec-tooltip rtec-availability-options-wrapper" style="padding: 5px;"><?php _e( 'This will force the plugin to use the "tribe_events_single_event_before_the_content" or the "tribe_events_single_event_after_the_content" hooks. Try this setting if the registration form isn\'t showing up on the single event page. Read <a href="https://roundupwp.com/faq/registration-form-wont-show-event-page/" target="blank">this FAQ</a> for more information.', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-tooltip rtec-box"><?php _e( 'This will force the plugin to use the "tribe_events_single_event_before_the_content" or the "tribe_events_single_event_after_the_content" hooks. Try this setting if the registration form isn\'t showing up on the single event page. Read <a href="https://roundupwp.com/faq/registration-form-wont-show-event-page/" target="blank">this FAQ</a> for more information.', 'registrations-for-the-events-calendar' ); ?></span>
         </p>
 		<?php
 	}
+
+	public static function location_instructions( $selected, $show_all = true ) {
+
+		$locations = array(
+			array(
+			    'value' => 'tribe_events_single_event_before_the_content',
+                'instructions' => __( 'Registration form is automatically placed before the event description when an event is created.', 'registrations-for-the-events-calendar' ),
+			    'trouble' => sprintf( __( 'Form not showing or at the bottom of the page? See %sthis page%s to resolve this issue.', 'registrations-for-the-events-calendar' ), '<a href="https://roundupwp.com/faq/registration-form-missing-footer/" target="blank" rel="noopener">', '</a>' ),
+			    'img' => RTEC_PLUGIN_URL . 'img/form-above.png'
+            ),
+			array(
+				'value' => 'tribe_events_single_event_after_the_content',
+				'instructions' => __( 'Registration form is automatically placed after the event description when an event is created.', 'registrations-for-the-events-calendar' ),
+				'trouble' => sprintf( __( 'Form not showing or at the bottom of the page? See %sthis page%s to resolve this issue.', 'registrations-for-the-events-calendar' ), '<a href="https://roundupwp.com/faq/registration-form-missing-footer/" target="blank" rel="noopener">', '</a>' ),
+				'img' => RTEC_PLUGIN_URL . 'img/form-below.png'
+			),
+			array(
+				'value' => 'shortcode',
+				'instructions' => __( 'Place the registration form using the shortcode [rtec-registration-form] in the event description or use the "Registration" Gutenberg Block if using the block editor.', 'registrations-for-the-events-calendar' ),
+				'img' => RTEC_PLUGIN_URL . 'img/form-shortcode.png'
+			),
+		);
+		foreach ( $locations as $location ) :
+            $should_show = $show_all ? true  : $selected === $location['value'];
+		    if ( $should_show ) :
+        ?>
+            <div class="rtec-form-location-example rtec-box rtec-clear rtec-form-location-<?php echo esc_attr( $location['value'] ); ?>" style="display: none;">
+                <img src="<?php echo esc_url( $location['img'] ); ?>" alt="Form location example">
+                <p>
+                    <?php echo esc_html( $location['instructions'] ); ?>
+                <?php if (isset( $location['trouble'] )) : ?>
+                    <br>
+                    <span>
+                    <?php echo $location['trouble']; ?>
+                    </span>
+                <?php endif; ?>
+                </p>
+            </div>
+                <?php endif; endforeach ;
+    }
 
     public function default_checkbox( $args )
     {
