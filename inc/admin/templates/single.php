@@ -172,6 +172,10 @@ $custom_fields_name_label_pairs = array_flip ( $custom_fields_label_name_pairs )
             </tbody>
         <?php endif; // registrations not empty?>
         </table>
+        <?php
+        $cap = apply_filters( 'rtec_registration_actions_capability', 'edit_posts' );
+        if ( current_user_can( $cap ) ) :
+        ?>
         <div class="rtec-event-actions rtec-clear">
             <div class="tablenav">
                 <button class="button action rtec-action rtec-admin-secondary-button" data-rtec-action="delete"><i class="fa fa-minus" aria-hidden="true"></i> <?php _e( 'Delete Selected', 'registrations-for-the-events-calendar'  ); ?></button>
@@ -186,6 +190,7 @@ $custom_fields_name_label_pairs = array_flip ( $custom_fields_label_name_pairs )
 
             </div>
         </div>
+	    <?php endif; ?>
     </div> <!-- rtec-single-event -->
 
 </div> <!-- rtec-single-wrapper -->

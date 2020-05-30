@@ -27,7 +27,7 @@ class RTEC_Admin_Event {
 	/**
 	 * @var int
 	 */
-	private $records_to_retrieve = 300;
+	private $records_to_retrieve = 2000;
 
 	/**
 	 * @var bool
@@ -93,10 +93,10 @@ class RTEC_Admin_Event {
 				$this->pagination_needed = false;
 			}
 		} elseif ( $view_type === 'single' ) {
-			$this->records_to_retrieve = 600;
+			$this->records_to_retrieve = 2000;
 			$this->registrants_data = $this->get_registrations( 'normal' );
 		} elseif ( $view_type === 'csv' ) {
-			$this->records_to_retrieve = 600;
+			$this->records_to_retrieve = 2000;
 			$this->registrants_data = $this->get_registrations( 'normal' );
 		}
 

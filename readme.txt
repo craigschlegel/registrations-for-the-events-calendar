@@ -187,6 +187,7 @@ Yes. There is a custom database table added to each sub-site's database to separ
 = What do I do if I have a request or need help? =
 
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
+
 == Changelog ==
 = 2.6 =
 * New: Added "Registrations" Gutenberg block for adding the form to a post, page, or single event.

@@ -31,6 +31,10 @@ class RTEC_Admin_Registrations {
 
 	private $events_user_is_attending = array();
 
+	private $current_user;
+
+	private $current_user_is_author;
+
 	/**
 	 * @param $tab
 	 * @param array $settings
@@ -38,6 +42,9 @@ class RTEC_Admin_Registrations {
 	public function build_admin_registrations( $tab, $settings = array() ) {
 		$this->tab = $tab;
 		$this->settings = $settings;
+		$this->current_user = wp_get_current_user();
+
+		$this->current_user_is_author = in_array( 'author', (array) $this->current_user->roles );
 		$capability = 'edit_posts';
 
 		if ( $this->tab === 'my-registrations' && current_user_can( $capability ) && isset( $_POST['rtec_email'] ) ) {
@@ -287,6 +294,8 @@ class RTEC_Admin_Registrations {
 				);
 			}
 		}
+
+		$args = apply_filters( 'rtec_registration_overview_query_args', $args, $this->settings );
 
 		return tribe_get_events( $args );
 	}
