@@ -171,6 +171,8 @@ class RTEC_Admin_Registrations {
 				}
 			}
 
+			$args = apply_filters( 'rtec_registration_overview_query_args', $args, $this->settings );
+
 			return get_posts( $args );
 		}  elseif ( $settings['qtype'] === 'hid' ) {
 
@@ -241,6 +243,8 @@ class RTEC_Admin_Registrations {
 					);
 				}
 			}
+
+			$args = apply_filters( 'rtec_registration_overview_query_args', $args, $this->settings );
 
 			return get_posts( $args );
 		} else {
