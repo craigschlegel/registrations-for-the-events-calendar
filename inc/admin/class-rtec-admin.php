@@ -430,7 +430,7 @@ class RTEC_Admin
             'name' => 'success_message',
             'title' => '<label>' . __( 'Website Success Message', 'registrations-for-the-events-calendar' ) . '</label>',
             'example' => '',
-            'default' => __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ),
+            'default' => __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' ),
             'description' => __( 'Enter the message you would like to display on your site after a successful form completion', 'registrations-for-the-events-calendar' ),
             'callback'  => 'message_text_area',
             'rows' => '3',

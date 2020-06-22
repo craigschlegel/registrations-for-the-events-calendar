@@ -752,8 +752,8 @@ class RTEC_Form
             $classes .= ' rtec-js-placement';
         }
 
-	    $success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' );
-	    $data = ' data-rtec-success-message="' . esc_attr( rtec_get_text( $success_message , __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) ) ) . '"';
+	    $success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' );
+	    $data = ' data-rtec-success-message="' . esc_attr( rtec_get_text( $success_message , __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' ) ) ) . '"';
 	    $data .= ' data-event="' . esc_attr( $this->event_meta['post_id'] ) . '"';
 
 		    $html = '<div id="rtec" class="rtec rtec-form-' . $this->event_meta['form_id'] . $classes .  '"' . $data . '>';
@@ -1163,10 +1163,10 @@ class RTEC_Form
 	 */
     public static function get_success_message_html() {
 		global $rtec_options;
-	    $success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' );
+	    $success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' );
 
         $success_html = '<p class="rtec-success-message tribe-events-notices">';
-        $success_html .= rtec_get_text( $success_message, __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) );
+        $success_html .= rtec_get_text( $success_message, __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' ) );
         $success_html .= '</p>';
 
 	    return $success_html;
@@ -1286,8 +1286,8 @@ class RTEC_Form
 			$outer_wrap_classes .= ' rtec-js-placement';
 		}
 
-		$success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' );
-		$data = ' data-rtec-success-message="' . esc_attr( rtec_get_text( $success_message , __( 'Success! Please check your email inbox for a confirmation message', 'registrations-for-the-events-calendar' ) ) ) . '"';
+		$success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' );
+		$data = ' data-rtec-success-message="' . esc_attr( rtec_get_text( $success_message , __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' ) ) ) . '"';
 		$data .= ' data-event="' . esc_attr( $this->event_meta['post_id'] ) . '"';
 
 		if ( isset( $rtec_options['display_type'] ) && $rtec_options['display_type'] === 'popup_modal' ) {
