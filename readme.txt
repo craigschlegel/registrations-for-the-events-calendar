@@ -193,6 +193,7 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 = 2.6.1 =
 * New: Added PHP filters for restricting what is seen by certain users when managing registrations.
 * Tweak: Non Registrations for the Events Calendar admin notices are removed when viewing settings pages for Registrations for the Events Calendar.
+* Tweak: Raised the maximum number of registrations retrieved on a single page to 2000 when manging registrations in the admin area.
 * Fix: Made the "Successful registration" message consistent to fix translation file error.
 
 = 2.6 =

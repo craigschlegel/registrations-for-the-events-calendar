@@ -79,11 +79,8 @@
 	    '<span class="rtec-bold">More ways to follow up with your attendees.</span><span>Send event-wide emails right from the WordPress dashboard.</span>',
 	    '<span class="rtec-bold">Tailor your settings for each event.</span><span>Custom forms, custom confirmation messages, custom response categories.</span>'
     );
-    $random_ad_key = array_rand( $ad_text );
+    array_rand( $ad_text, 1 );
     $random_num = rand(0, 1);
-    //    color: #009788;
-    // #777
-    //background: #f0f0f0;
     ?>
     <hr />
     <div id="rtec-admin-footer">
