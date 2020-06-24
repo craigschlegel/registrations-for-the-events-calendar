@@ -1,4 +1,15 @@
 <div class="wrap rtec-admin-wrap">
+	<?php
+	$lite_notice_dismissed = get_transient( 'registrations_tec_dismiss_lite' );
+
+	if ( ! $lite_notice_dismissed ) :
+		?>
+        <div id="rtec-notice-bar" style="display:none">
+            <span class="rtec-notice-bar-message"><?php _e( 'You\'re using Registrations for the Events Calendar Lite. To unlock more features consider <a href="https://roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank" rel="noopener noreferrer">upgrading to Pro</a>.', 'registrations-for-the-events-calendar'); ?></span>
+            <button type="button" class="dismiss" title="<?php _e( 'Dismiss this message.', 'registrations-for-the-events-calendar' ); ?>" data-page="overview">
+            </button>
+        </div>
+	<?php endif; ?>
     <h1><?php _e( 'Registrations for the Events Calendar', 'registrations-for-the-events-calendar' ); ?></h1>
     <?php
     if ( ! defined( 'ABSPATH' ) ) {
@@ -68,9 +79,15 @@
 	    '<span class="rtec-bold">More ways to follow up with your attendees.</span><span>Send event-wide emails right from the WordPress dashboard.</span>',
 	    '<span class="rtec-bold">Tailor your settings for each event.</span><span>Custom forms, custom confirmation messages, custom response categories.</span>'
     );
-    $random_ad_key = array_rand( $ad_text, 1 );
+    $random_ad_key = array_rand( $ad_text );
+    $random_num = rand(0, 1);
+    //    color: #009788;
+    // #777
+    //background: #f0f0f0;
     ?>
     <hr />
+    <div id="rtec-admin-footer">
+    <?php if ( $random_num === 1 ) : ?>
     <a href="https://roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank" class="rtec-pro-ad-wrap">
         <div class="rtec-pro-ad">
             <img src="<?php echo RTEC_PLUGIN_URL . 'img/RTEC-Pro-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar Pro">
@@ -79,4 +96,36 @@
             </div>
         </div>
     </a>
+    <?php else : ?>
+        <a href="https://roundupwp.com/products/registrations-for-the-events-calendar-pro/" target="_blank" class="rtec-pro-ad-wrap">
+            <div class="rtec-pro-features">
+                <div class="rtec-pro-features-list">
+                    <h3 class="rtec-pro-heading">Registrations for the Events Calendar <span>Pro</span></h3>
+                    <div class="rtec-pro-features-list-items">
+                        <?php
+                        $features = array(
+                            __( 'Create Multiple Forms', 'registrations-for-the-events-calendar' ),
+	                        __( 'Collect Online Payments', 'registrations-for-the-events-calendar' ),
+	                        __( 'Custom Email Templates', 'registrations-for-the-events-calendar' ),
+	                        __( 'Flexible Event Costs', 'registrations-for-the-events-calendar' ),
+	                        __( 'Send Automatic Messages', 'registrations-for-the-events-calendar' ),
+	                        __( 'Check Attendees In', 'registrations-for-the-events-calendar' ),
+	                        __( "List Member's Events", 'registrations-for-the-events-calendar' ),
+	                        __( "Customizable Attendee Lists", 'registrations-for-the-events-calendar' ),
+	                        __( "Edit Registration Entries", 'registrations-for-the-events-calendar' ),
+	                        __( "Waiting Lists", 'registrations-for-the-events-calendar' ),
+                        );
+                        foreach( $features as $feature ) :
+                        ?>
+                            <div class="feature-feature-list-item"><span class="featured-feature-check"><i class="dashicons dashicons-yes"></i></span><span class="featured-feature-item"><?php echo esc_html( $feature ); ?></span></div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="rtec-pro-cta-wrap">
+                        <span class="rtec-pro-cta"><?php _e( 'Upgrade to Pro to Unlock These Features', 'registrations-for-the-events-calendar' ); ?></span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    <?php endif; ?>
+    </div>
 </div>

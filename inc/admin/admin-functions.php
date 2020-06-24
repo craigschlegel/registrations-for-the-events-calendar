@@ -1154,3 +1154,70 @@ function rtec_db_update_check() {
 }
 add_action( 'plugins_loaded', 'rtec_db_update_check' );
 
+function rtec_lite_dismiss() {
+    if ( ! is_user_logged_in() ) {
+        die();
+    }
+
+	set_transient( 'registrations_tec_dismiss_lite', 'dismiss', 2 * WEEK_IN_SECONDS );
+
+	die();
+}
+add_action( 'wp_ajax_rtec_lite_dismiss', 'rtec_lite_dismiss' );
+
+function rtec_is_admin_page() {
+	if ( ! isset( $_GET['page'] ) ) {
+		return false;
+	} elseif ( $_GET['page'] === 'registrations-for-the-events-calendar' ) {
+		return true;
+	}
+	return false;
+}
+
+function rtec_admin_hide_unrelated_notices() {
+
+	// Bail if we're not on a Sby screen or page.
+	if ( ! rtec_is_admin_page() ) {
+		return;
+	}
+
+	// Extra banned classes and callbacks from third-party plugins.
+	$blacklist = array(
+		'classes'   => array(),
+		'callbacks' => array(),
+	);
+
+	global $wp_filter;
+
+	foreach ( array( 'user_admin_notices', 'admin_notices', 'all_admin_notices' ) as $notices_type ) {
+		if ( empty( $wp_filter[ $notices_type ]->callbacks ) || ! is_array( $wp_filter[ $notices_type ]->callbacks ) ) {
+			continue;
+		}
+		foreach ( $wp_filter[ $notices_type ]->callbacks as $priority => $hooks ) {
+			foreach ( $hooks as $name => $arr ) {
+				if ( is_object( $arr['function'] ) && $arr['function'] instanceof Closure ) {
+					unset( $wp_filter[ $notices_type ]->callbacks[ $priority ][ $name ] );
+					continue;
+				}
+				$class = ! empty( $arr['function'][0] ) && is_object( $arr['function'][0] ) ? strtolower( get_class( $arr['function'][0] ) ) : '';
+				if (
+					! empty( $class ) &&
+					strpos( $class, 'rtec' ) !== false &&
+					! in_array( $class, $blacklist['classes'], true )
+				) {
+					continue;
+				}
+				if (
+					! empty( $name ) && (
+						strpos( $name, 'rtec' ) === false ||
+						in_array( $class, $blacklist['classes'], true ) ||
+						in_array( $name, $blacklist['callbacks'], true )
+					)
+				) {
+					unset( $wp_filter[ $notices_type ]->callbacks[ $priority ][ $name ] );
+				}
+			}
+		}
+	}
+}
+add_action( 'admin_print_scripts', 'rtec_admin_hide_unrelated_notices' );

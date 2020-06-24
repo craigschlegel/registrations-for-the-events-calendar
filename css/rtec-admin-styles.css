@@ -487,6 +487,7 @@ a.rtec-wide {
 }
 /* Tooltip */
 .rtec-tooltip {
+    display: block;
     margin-top: 5px;
 }
 
@@ -753,31 +754,92 @@ span.rtec-is-user{
     vertical-align: text-bottom;
 }
 
+/* Lite Notice */
+@media screen and (max-width: 900px) {
+    #rtec-notice-bar {
+        display:none !important
+    }
+}
+
+#rtec-notice-bar {
+    background-color: #DDDDDD;
+    color: #777777;
+    text-align: center;
+    position: relative;
+    padding: 7px;
+    margin-bottom: 0;
+    opacity: 1;
+    transition: all .3s ease-in-out;
+    max-height: 100px;
+    overflow: hidden
+}
+
+#rtec-notice-bar.out {
+    opacity: .5;
+    max-height: 0
+}
+
+#rtec-notice-bar a {
+    color: #009688;
+}
+
+#rtec-notice-bar a:hover {
+    opacity: .7;
+}
+
+#rtec-notice-bar .dismiss {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    padding: 5px;
+    margin-top: 1px;
+    background: 0 0;
+    color: #72777c;
+    cursor: pointer
+}
+
+#rtec-notice-bar .dismiss:before {
+    background: 0 0;
+    color: #72777c;
+    content: "\f335";
+    display: block;
+    font: normal 20px/20px dashicons;
+    speak: none;
+    height: 20px;
+    text-align: center;
+    width: 20px;
+    -webkit-font-smoothing: antialiased
+}
+
 /* ad */
-.rtec-pro-ad-wrap {
+#rtec-admin-footer .rtec-pro-ad-wrap {
     display: block;
     max-width: 700px;
     text-decoration: none;
 }
-.rtec-pro-ad {
+#rtec-admin-footer .rtec-pro-ad,
+#rtec-admin-footer .rtec-pro-features {
     width: 100%;
-    max-width: 400px;
-    background: #CDF7F3;
     -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
-.rtec-pro-ad img,
-.rtec-pro-copy {
+#rtec-admin-footer .rtec-pro-ad {
+    background: #CDF7F3;
+    max-width: 400px;
+}
+#rtec-admin-footer .rtec-pro-ad img,
+#rtec-admin-footer .rtec-pro-copy {
     display: block;
     margin: auto;
     padding: 10px;
 }
-.rtec-pro-copy span {
+#rtec-admin-footer .rtec-pro-copy span {
     font-size: 14px;
     color: #777;
 }
-.rtec-pro-copy span.rtec-bold {
+#rtec-admin-footer .rtec-pro-copy span.rtec-bold {
     display: block;
     font-weight: 700;
     margin-bottom: 10px;
@@ -785,14 +847,43 @@ span.rtec-is-user{
     color: #444;
     line-height: 1.2;
 }
+
+#rtec-admin-footer .rtec-pro-features {
+    width: 95%;
+    padding: 12px;
+    background: #fff;
+}
+#rtec-admin-footer .rtec-pro-features h3 {
+    color: #009788;
+    font-size: 24px;
+    text-align: center;
+    line-height: 1.2;
+}
+#rtec-admin-footer .rtec-pro-features h3 span {
+    color: #777;
+    font-weight: normal;
+}
+
+#rtec-admin-footer .rtec-pro-features-list-items {
+    max-width: 600px;
+    margin: auto;
+    width: 300px;
+}
+#rtec-admin-footer .feature-feature-list-item {
+    display: inline-block;
+    position: relative;
+    color: #333;
+    line-height: 1.2;
+    width: 100%;
+}
 @media all and (min-width: 620px){
-    .rtec-pro-ad {
+    #rtec-admin-footer .rtec-pro-ad {
         max-width: 700px;
     }
-    .rtec-pro-ad img{
+    #rtec-admin-footer .rtec-pro-ad img{
         display: inline-block;
     }
-    .rtec-pro-copy {
+    #rtec-admin-footer .rtec-pro-copy {
         display: inline-block;
         width: 70%;
         max-width: 490px;
@@ -800,4 +891,53 @@ span.rtec-is-user{
         margin-top: 50px;
         padding: 0;
     }
+    #rtec-admin-footer .feature-feature-list-item {
+        width: 49%;
+    }
+    #rtec-admin-footer .rtec-pro-features-list-items {
+        width: 100%;
+        margin: auto;
+    }
+}
+
+#rtec-admin-footer .feature-feature-list-item .featured-feature-check {
+    position: absolute;
+    top: -2px;
+}
+
+#rtec-admin-footer .feature-feature-list-item .featured-feature-item {
+    display: block;
+    margin-left: 30px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+#rtec-admin-footer .featured-feature-check {
+    display: inline-block;
+    position: relative;
+    width: 22px;
+    height: 22px;
+    background: #009788;
+    border-radius: 50%
+}
+
+#rtec-admin-footer .featured-feature-check .dashicons {
+    position: absolute;
+    top: 1px;
+    bottom: 0;
+    right: 1px;
+    left: 0;
+    color: #fff
+}
+.rtec-pro-cta-wrap {
+    text-align: center;
+}
+#rtec-admin-footer .rtec-pro-cta {
+    color: #fff;
+    width: auto;
+    display: inline-block;
+    background: #eb5a49;
+    border: 1px solid #DA301E;
+    padding: 10px;
+    margin: 20px auto;
+    font-size: 16px;
 }

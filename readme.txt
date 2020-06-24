@@ -1,11 +1,11 @@
-=== Registrations for The Events Calendar ===
+=== Registrations for The Events Calendar - Event Registration Plugin ===
 
 Contributors: roundupwp
 Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
 Tested up to: 5.4
-Stable tag: 2.6
+Stable tag: 2.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,13 +31,14 @@ The plugin can be used for more than event registration. Here are other things t
 * Venue booking
 * Webinar sign-ups
 * Private instructor booking
+* Virtual events
 
 = User-Friendly Features =
 
 * Reduce incomplete event registrations by limiting the entire process to a single page (AJAX form submit).
-* Keep your event page uncluttered (your registration form is hidden initially and revealed by clicking a customizable "Register" button).
+* Keep your event page uncluttered (your event registration form is hidden initially and revealed by clicking a customizable "Register" button).
 * Follow-up with your attendees with a customizable confirmation email.
-* Save entries in a database table for easy event management.
+* Save entries in a database table for easy event registration management.
 * Attendees can unregister (cancel registration) using a link sent in an email.
 
 = Highly Customizable =
@@ -45,7 +46,7 @@ The plugin can be used for more than event registration. Here are other things t
 * Add as many text fields as you'd like to the event registration form.
 * Add the event registration form to one of several parts of the page your event is displayed on.
 * Choose how the form displays. Reveal on click, pop-up modal window, or displayed fully.
-* Display the registration form anywhere on your site with shortcodes.
+* Display the event registration form anywhere on your site with shortcodes or our event registration Gutenberg block.
 * Customize the labels, error messages, directions for your attendees, and which fields are required.
 * Customize both the email templates sent to your attendees and the notification email sent to the event manager.
 * Limit the number of registrations per event.
@@ -65,9 +66,9 @@ The plugin can be used for more than event registration. Here are other things t
 = Tools for GDPR Compliance =
 
 * [View a breakdown of the tools with screenshots here](https://roundupwp.com/gdpr-compliance-with-registration/#free)
-* Search for registrations filtered by email address.
+* Search for event registrations filtered by email address.
 * Export all collected data attached to an email address whether connected to a user or not.
-* Delete individual registrations or permanently delete all data attached to an email address.
+* Delete individual event registrations or permanently delete all data attached to an email address.
 * Require attendees to agree to terms and conditions before registering. Include a link to a terms and conditions page.
 
 = Benefits =
@@ -152,9 +153,9 @@ Yes. You can set up the maximum number of registrations on the "Form" tab or set
 
 Yes. There is a button to add custom text input fields on the "Form" tab.
 
-= I'm not receiving a notification email or attendees are not receiving  =
+= I'm not receiving a notification email or attendees are not receiving a confirmation email  =
 
-Yes. There is a button to add custom text input fields on the "Form" tab.
+Take a look at [our FAQ](https://roundupwp.com/faq/my-confirmationnotification-emails-are-missing/) on troubleshooting this issue as well as instructions for installing an SMTP plugin.
 
 = How do I disable registrations for a specific event? =
 
@@ -164,15 +165,15 @@ By default, registrations are enabled for every event. You can disable registrat
 
 You can configure an offset for how long registrations will be available relative to the event start time or set a specific deadline for each event.
 
-= Can I edit registrations and export them for an event? =
+= Can I edit registrations and export them for an event for event management purposes? =
 
-Yes. Click on the button "Detailed View" for the event in which you'd like to edit or export registrations for.
+Yes. Click on the button "Detailed View" for the event in which you'd like to edit or export event registrations for.
 
 = Can I display a list of event attendees on the front-end? =
 
-Yes. There is an option on the "Form" tab to display a list of attendees above the registration form. A guest's first and last name will only appear after you have had a chance to review it in the backend of the site.
+Yes. There is an option on the "Form" tab to display a list of event attendees above the registration form. A guest's first and last name will only appear after you have had a chance to review it in the backend of the site.
 
-= Can I display the registration form on another page or post? =
+= Can I display the event registration form on another page or post? =
 
 Yes. You would need to use the post ID for that event in the shortcode. Example: [rtec-registration-form event=743]
 
@@ -189,10 +190,15 @@ Yes. There is a custom database table added to each sub-site's database to separ
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 
 == Changelog ==
+= 2.6.1 =
+* New: Added PHP filters for restricting what is seen by certain users when managing registrations.
+* Tweak: Non Registrations for the Events Calendar admin notices are removed when viewing settings pages for Registrations for the Events Calendar.
+* Fix: Made the "Successful registration" message consistent to fix translation file error.
+
 = 2.6 =
 * New: Added "Registrations" Gutenberg block for adding the form to a post, page, or single event.
-* Tweaks: Added tweaks to the instructions for the "Form Location" setting found on the "Form" tab.
-* Tweaks: Link to unregister now sent using an AJAX call instead of a page refresh.
+* Tweak: Added tweaks to the instructions for the "Form Location" setting found on the "Form" tab.
+* Tweak: Link to unregister now sent using an AJAX call instead of a page refresh.
 * Fix: Better compatibility with WordPress Multisite.
 * Fix: Terms and conditions field was not translatable when using "Translations" as the message source.
 
@@ -217,63 +223,63 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 * Fix: Less than 10 events displaying in the "Overview" on a single page.
 
 = 2.4.5 =
-* Tweak: Registrations saved in the database before confirmation and notification emails are sent.
-* Fix: Registration limit could be passed if two visitors register at the same time.* Fix: Events displaying out of order on "Registrations" tab when using version 4.9 of The Events Calendar.
-* Fix: Events displaying out of order on "Registrations" tab when using version 4.9 of The Events Calendar.
+* Tweak: Event registrations are now saved in the database before confirmation and notification emails are sent.
+* Fix: Registration limit could be exceeded if two visitors register at the same time.
+* Fix: Events were displaying out of order on "Registrations" tab when using version 4.9 of The Events Calendar.
 
 = 2.4.4 =
-* Fix: Missing code to make some text translatable such as "leave blank for default" and "Notification of Unregistration".
+* Fix: There was missing code to make some text translatable such as "leave blank for default" and "Notification of Unregistration".
 
 = 2.4.3 =
 * New: Added another option to apply no formatting to phone numbers. Phone numbers would then display as the attendee entered them on the form.
-* Tweak: JavaScript for the form is wrapped in a function for better portability. Use rtecInit() to initialize forms.
-* Fix: Multiple forms would display on the single event page when multiple elements had the class "tribe-events-single-event-description"
+* Tweak: JavaScript for the form is wrapped in a function for better portability. Use rtecInit() to initialize registration forms.
+* Fix: Multiple event registration forms would display on the single event page when multiple elements had the class "tribe-events-single-event-description"
 * Fix: Timezone offset was incorrect when timezone for site was UTC+0 (GMT)
 
 = 2.4.2 =
-* Tweak: More precise automatic placement of the form to fit better with most themes in The Events Calendar 4.7+.
+* Tweak: More precise automatic placement of the registration form to fit better with most themes in The Events Calendar 4.7+.
 * Tweak: Form styling tweaks to add space between checkbox fields and labels as well as fix display issues for buttons in certain themes.
-* Tweak: Tool to send an unregister link will be available even if the event is full as long as the registration deadline hasn't passed.
+* Tweak: Tool to send an unregister link will be available even if the event is full as long as the event registration deadline hasn't passed.
 * Fix: Added support for older versions of the single-event.php customizations. If the registration button is not displaying for an event, try enabling the setting "I'm using a custom single-event.php file in my theme" on the form tab.
 
 = 2.4.1 =
 * Fix: Changed the name of the action according to differences between beta version of The Events Calendar 4.7 and official release.
 
 = 2.4 =
-* New: Added the option of using a shortcode, [rtec-registration-form], to place the registration form anywhere on the single event page. Change the "Form Location" setting on the "Form" tab to "Shortcode" to use this feature.
+* New: Added the option of using a shortcode, [rtec-registration-form], to place the event registration form anywhere on the single event page. Change the "Form Location" setting on the "Form" tab to "Shortcode" to use this feature.
 * New: Changed how the form is placed on the single event page to work with The Events Calendar 4.7 and WordPress 5.0.
 
 = 2.3 =
 * New: Support for Google's Recaptcha Version 2 spam prevention. Follow [these directions](https://roundupwp.com/faq/get-google-recaptcha-api-key/) to retrieve and use Google's API keys and start using this feature.
 * New: Files that generate html for emails can now be overridden by adding new files to your theme. Follow [these instructions](https://roundupwp.com/faq/change-html-email-templates/)
 * Tweak: When using the "check for duplicate emails" feature, attendees entering their email addresses will not be prevented from changing the email while the duplicate check is processing.
-* Tweak: Selecting the "List" view while on the Registrations tab will save this view to be the default for each user.
+* Tweak: Selecting the "List" view while on the "Registrations" tab will save this view to be the default for each user.
 * Tweak: Maximum number of records exported in a single csv file raised to 600 registrations.
 * Fix: Spaces in submitted email addresses causing it to be invalid when checked again server-side.
 
 = 2.2 =
 * [Helpful tools for GDPR compliance](https://roundupwp.com/gdpr-compliance-with-registration/#free)
 * New: "Terms and Conditions" opt-in checkbox can be added to the form. Include a link to a relevant terms and conditions page.
-* New: Delete registrations attached to an email address in bulk. This can be done whether or not the email address is from a user of your site.
+* New: Delete event registrations attached to an email address in bulk. This can be done whether or not the email address is from a user of your site.
 * New: Export personal data attached to an email address included with information about the event the registration was made for.
 * New: Add a tool to each event page to allow attendees to send themselves an email link to unregister. Enable this on the "Form" tab.
-* New: Better compatibility with WPML (free version only).
+* New: Better compatibility with WPML (free version only) for multi-language event management.
 * Fix: Manually adding a registration would assign the user id as the person adding the registration.
 
 = 2.1.1 =
-* New: Shortcode support for displaying the attendee list elsewhere on your site. Use the shortcode [rtec-attendee-list event="123"].
+* New: Shortcode support for displaying the event attendee list elsewhere on your site. Use the shortcode [rtec-attendee-list event="123"].
 * New: Support for including the attendee list when using the registration form shortcode. Use the shortcode [rtec-registration-form event="123" attendeelist=true].
 * Tweak: Changed email validation regular expression to recognize real email addresses that were being marked as invalid.
 * Fix: Changed name of spam honeypot field to avoid browsers automatically filling in a value.
 
 = 2.1 =
-* New: Generate a unique link for attendees to "unregister" from an event by adding the template {unregister-link} in the confirmation email.
+* New: Generate a unique link for event attendees to "unregister" from an event by adding the template {unregister-link} in the confirmation email.
 * New: Setting (and hook) for custom formatting of phone numbers. Change format of 10 digit numbers at the bottom of the "Form" tab. Read about further customization [here](https://roundupwp.com/faq/format-phone-numbers/).
 * New: Translations for front-end text added for Dutch (nl_NL) and Italian (it_IT).
 * New: Added columns to the rtec_registrations table in the database to record user id and create a unique key for attendees to unregister.
 * New: Added button to dismiss all new notices. Appears in the toolbar on the "Registrations" tab when a "new" notice exists.
-* Tweak: By default, all new registrations will appear right away in the attendee list. You can enable an option to review a submission before they appear on the "Form" tab.
-* Fix: Better filtering of events in the "Overview" when registrations are disabled by default.
+* Tweak: By default, all new event registrations will appear right away in the attendee list. You can enable an option to review a submission before they appear on the "Form" tab.
+* Fix: Better filtering of events in the "Overview" when event registrations are disabled by default.
 
 = 2.0.4 =
 * Tweak: Menu slug changed for admin pages to accommodate custom uses. You may need to close and reopen your browser window if seeing message "You do not have sufficient permissions to access this page".

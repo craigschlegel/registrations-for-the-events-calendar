@@ -165,6 +165,25 @@ jQuery(document).ready(function($){
         typingTimer = setTimeout(updateText, doneTypingInterval);
     });
 
+    // notices
+
+    if (jQuery('#rtec-notice-bar').length) {
+        jQuery('#wpadminbar').after(jQuery('#rtec-notice-bar'));
+        jQuery('#wpcontent').css('padding-left', 0);
+        jQuery('#wpbody').css('padding-left', '20px');
+        jQuery('#rtec-notice-bar').show();
+    }
+
+    jQuery('#rtec-notice-bar .dismiss').click(function(e) {
+        e.preventDefault();
+        jQuery('#rtec-notice-bar').remove();
+        var submitData = {
+            action : 'rtec_lite_dismiss',
+        };
+        var successFunc = function(data){};
+        rtecRegistrationAjax(submitData,successFunc);
+    });
+
     // Tooltip
     $('.rtec-tooltip').hide();
     $('.rtec-tooltip-link').click( function() {
