@@ -107,7 +107,7 @@ class RTEC_Email {
 		}	}
 
 	/**
-	 * @return string|void
+	 * @return string
 	 */
 	public function get_error_message()
 	{

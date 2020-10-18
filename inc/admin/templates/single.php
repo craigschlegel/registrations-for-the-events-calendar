@@ -187,7 +187,7 @@ $custom_fields_name_label_pairs = array_flip ( $custom_fields_label_name_pairs )
                     <input type="hidden" name="rtec_id" value="<?php echo esc_attr( $event_id ); ?>" />
                     <input type="submit" name="rtec_event_csv" class="button action rtec-admin-secondary-button" value="<?php _e( 'Export (.csv)', 'registrations-for-the-events-calendar' ); ?>" />
                 </form>
-
+	            <?php do_action( 'rtec_registrations_tab_event_actions', $event_id ); ?>
             </div>
         </div>
 	    <?php endif; ?>
