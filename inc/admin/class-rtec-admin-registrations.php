@@ -171,9 +171,6 @@ class RTEC_Admin_Registrations {
 				}
 			}
 
-			$args = apply_filters( 'rtec_registration_overview_query_args', $args, $this->settings );
-
-			return get_posts( $args );
 		}  elseif ( $settings['qtype'] === 'hid' ) {
 
 			$post_type = defined( 'Tribe__Events__Main::POSTTYPE' ) ? Tribe__Events__Main::POSTTYPE : 'tribe_events';
@@ -244,9 +241,6 @@ class RTEC_Admin_Registrations {
 				}
 			}
 
-			$args = apply_filters( 'rtec_registration_overview_query_args', $args, $this->settings );
-
-			return get_posts( $args );
 		} else {
 			$args = array(
 				'posts_per_page' => $this->posts_per_page,
@@ -300,6 +294,10 @@ class RTEC_Admin_Registrations {
 		}
 
 		$args = apply_filters( 'rtec_registration_overview_query_args', $args, $this->settings );
+
+		if ( isset( $args['post_type'] ) ) {
+			return get_posts( $args );
+		}
 
 		return tribe_get_events( $args );
 	}
