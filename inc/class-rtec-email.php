@@ -483,6 +483,12 @@ class RTEC_Email {
 		}
 
 		$date_str = isset( $sanitized_data['date'] ) ? date_i18n( rtec_get_date_time_format(), strtotime( $sanitized_data['date'] ) ) : '';
+		$start_date = '';
+		$start_time = '';
+		$end_date = '';
+		$end_time = '';
+		$event_link = '';
+		$event_cost = function_exists( 'tribe_get_cost' ) ? tribe_get_cost( $sanitized_data['event_id'] ) : '';
 		$first = isset( $sanitized_data['first'] ) ? $sanitized_data['first'] : '';
 		$last = isset( $sanitized_data['last'] ) ? $sanitized_data['last'] : '';
 		$email = isset( $sanitized_data['email'] ) ? $sanitized_data['email'] : '';
@@ -494,6 +500,14 @@ class RTEC_Email {
 			$event_link = get_the_permalink( $sanitized_data['event_id'] );
 			$ical_link = add_query_arg( 'ical', 1, $event_link );
 		}
+		if ( is_callable( 'tribe_get_start_date' ) && is_callable( 'tribe_get_end_date' ) ) {
+			$time_format = rtec_get_time_format();
+
+			$start_date = tribe_get_start_date( $sanitized_data['event_id'], false );
+			$start_time = tribe_get_start_date( $sanitized_data['event_id'], false, $time_format );
+			$end_date = tribe_get_end_date( $sanitized_data['event_id'], false );
+			$end_time = tribe_get_end_date( $sanitized_data['event_id'], false, $time_format );
+		}
 
 		if ( ! empty( $sanitized_data ) ) {
 			$search_replace = array(
@@ -504,6 +518,12 @@ class RTEC_Email {
 				'{venue-zip}' => $sanitized_data['venue_zip'],
 				'{event-title}' => $sanitized_data['title'],
 				'{event-date}' => $date_str,
+				'{start-date}' => $start_date,
+				'{start-time}' => $start_time,
+				'{end-date}' => $end_date,
+				'{end-time}' => $end_time,
+				'{event-url}' => $event_link,
+				'{event-cost}' => $event_cost,
 				'{first}' => $first,
 				'{last}' => $last,
 				'{email}' => $email,

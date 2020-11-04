@@ -1572,7 +1572,12 @@ class RTEC_Admin
             <span class="rtec-col-1">{venue-state}</span><span class="rtec-col-2"><?php _e( 'Venue state/province', 'registrations-for-the-events-calendar' ); ?></span>
             <span class="rtec-col-1">{venue-zip}</span><span class="rtec-col-2"><?php _e( 'Venue zip code', 'registrations-for-the-events-calendar' ); ?></span>
             <span class="rtec-col-1">{event-title}</span><span class="rtec-col-2"><?php _e( 'Title of event', 'registrations-for-the-events-calendar' ); ?></span>
-            <span class="rtec-col-1">{event-date}</span><span class="rtec-col-2"><?php _e( 'Event start date', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-col-1">{event-url}</span><span class="rtec-col-2"><?php _e( 'Plain text web address of event page', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-col-1">{event-cost}</span><span class="rtec-col-2"><?php _e( 'Cost of the event', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-col-1">{start-date}</span><span class="rtec-col-2"><?php _e( 'Event start date', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-col-1">{start-time}</span><span class="rtec-col-2"><?php _e( 'Event start time', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-col-1">{end-date}</span><span class="rtec-col-2"><?php _e( 'Event end date', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-col-1">{end-time}</span><span class="rtec-col-2"><?php _e( 'Event end time', 'registrations-for-the-events-calendar' ); ?></span>
             <span class="rtec-col-1">{first}</span><span class="rtec-col-2"><?php _e( 'First name of registrant', 'registrations-for-the-events-calendar' ); ?></span>
             <span class="rtec-col-1">{last}</span><span class="rtec-col-2"><?php _e( 'Last name of registrant', 'registrations-for-the-events-calendar' ); ?></span>
             <span class="rtec-col-1">{email}</span><span class="rtec-col-2"><?php _e( 'Email of registrant', 'registrations-for-the-events-calendar' ); ?></span>
@@ -1626,7 +1631,12 @@ class RTEC_Admin
             <span class="rtec-col-1">{venue-state}</span><span class="rtec-col-2">Venue state/province</span>
             <span class="rtec-col-1">{venue-zip}</span><span class="rtec-col-2">Venue zip code</span>
             <span class="rtec-col-1">{event-title}</span><span class="rtec-col-2">Title of event</span>
-            <span class="rtec-col-1">{event-date}</span><span class="rtec-col-2">Event start date</span>
+            <span class="rtec-col-1">{event-url}</span><span class="rtec-col-2"><?php _e( 'Plain text web address of event page', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-col-1">{event-cost}</span><span class="rtec-col-2"><?php _e( 'Cost of the event', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-col-1">{start-date}</span><span class="rtec-col-2"><?php _e( 'Event start date', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-col-1">{start-time}</span><span class="rtec-col-2"><?php _e( 'Event start time', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-col-1">{end-date}</span><span class="rtec-col-2"><?php _e( 'Event end date', 'registrations-for-the-events-calendar' ); ?></span>
+            <span class="rtec-col-1">{end-time}</span><span class="rtec-col-2"><?php _e( 'Event end time', 'registrations-for-the-events-calendar' ); ?></span>
             <span class="rtec-col-1">{first}</span><span class="rtec-col-2">First name of registrant</span>
             <span class="rtec-col-1">{last}</span><span class="rtec-col-2">Last name of registrant</span>
             <span class="rtec-col-1">{email}</span><span class="rtec-col-2">Email of registrant</span>
