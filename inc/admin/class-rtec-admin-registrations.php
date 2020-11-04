@@ -567,7 +567,7 @@ class RTEC_Admin_Registrations {
 				$html .= '';
 		}
 
-		if ( $is_user && $status !== 'p' ) {
+		if ( $is_user && $status !== 'n' ) {
 			$html .= '<span class="rtec-notice-new rtec-is-user"><i class="fa fa-user" aria-hidden="true"></i></span>';
 		}
 

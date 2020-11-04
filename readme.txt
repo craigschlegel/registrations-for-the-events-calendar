@@ -4,8 +4,8 @@ Contributors: roundupwp
 Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
-Tested up to: 5.4
-Stable tag: 2.6.1
+Tested up to: 5.5
+Stable tag: 2.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -190,6 +190,11 @@ Yes. There is a custom database table added to each sub-site's database to separ
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 
 == Changelog ==
+= 2.6.2 =
+* Tweak: Added support for several new email placeholders including start date {start-date}, start time {start-time}, end date {end-date}, end time {end-time}, cost {event-cost}, and a link to the event page {event-url}.
+* Tweak: Changed how the code collects events while on the "Registrations" tab to allow for more customization using the PHP hook "rtec_registration_overview_query_args".
+* Tweak: Users that register for an event will show the "new" tag on the "Registrations" tab next to the record until dismissed.
+
 = 2.6.1 =
 * New: Added PHP filters for restricting what is seen by certain users when managing registrations.
 * Tweak: Non Registrations for the Events Calendar admin notices are removed when viewing settings pages for Registrations for the Events Calendar.

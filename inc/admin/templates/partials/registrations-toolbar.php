@@ -40,6 +40,6 @@ $settings = $this->settings;
 	</div>
 	<?php if ( $dismiss_new_needed ) : ?>
         <div class="rtec-clear"></div>
-        <a id="rtec-new-dismiss" href="JavaScript:void(0);" class="rtec-email-creator-send"><span class="rtec-notice-new"><i class="fa fa-tag" aria-hidden="true"></i></span> <?php _e( 'dismiss new', 'registrations-for-the-events-calendar' ); ?></a>
+        <a id="rtec-new-dismiss" href="JavaScript:void(0);" class="rtec-email-creator-send"><span class="rtec-notice-new"><i class="fa fa-tag" aria-hidden="true"></i></span> <?php _e( 'dismiss notices', 'registrations-for-the-events-calendar' ); ?></a>
 	<?php endif; ?>
 </div>
