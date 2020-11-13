@@ -190,6 +190,9 @@ Yes. There is a custom database table added to each sub-site's database to separ
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 
 == Changelog ==
+= UNRELEASED =
+* New: Added PHP hook "rtec_email_approved_for_registration" to allow customizations in what email addresses can register for an event.
+
 = 2.6.2 =
 * Tweak: Added support for several new email placeholders including start date {start-date}, start time {start-time}, end date {end-date}, end time {end-time}, cost {event-cost}, and a link to the event page {event-url}.
 * Tweak: Changed how the code collects events while on the "Registrations" tab to allow for more customization using the PHP hook "rtec_registration_overview_query_args".

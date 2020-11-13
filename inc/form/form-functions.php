@@ -328,14 +328,17 @@ function rtec_registrant_check_for_duplicate_email() {
 	$email = is_email( $_POST['email'] ) ? sanitize_text_field( $_POST['email'] ) : false;
 	$event_id = (int)$_POST['event_id'];
 
-	$is_duplicate = 'not';
+	$is_duplicate = true;
 
-	if ( false !== $email ) {
+	if ( is_email( $email ) ) {
 		$db = New RTEC_Db();
 		$is_duplicate = $db->check_for_duplicate_email( $email, $event_id );
 	}
 
-	if ( $is_duplicate == '1' ) {
+	$approved = ! $is_duplicate;
+	$approved = apply_filters( 'rtec_email_approved_for_registration', $approved, $email, $event_id );
+
+	if ( ! $approved ) {
 		$options = get_option( 'rtec_options' );
 
 		$message = isset( $options['error_duplicate_message'] ) ? $options['error_duplicate_message'] : 'You have already registered for this event';
