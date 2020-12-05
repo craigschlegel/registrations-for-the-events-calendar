@@ -32,7 +32,6 @@ function rtec_the_registration_form( $atts = array() )
 	}
 
 	if ( post_password_required( $event_id ) ) {
-	    echo '<span style="display:none" data-rtec-password="1"></span>';
 	    return '';
 	}
 
