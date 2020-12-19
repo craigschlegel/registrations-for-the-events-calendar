@@ -161,6 +161,14 @@
 #rtec .rtec-error {
     border: 1px solid rgb(255, 92, 51) !important;
 }
+.rtec-honeypot-clear {
+    display: block;
+    background: rgb(255, 92, 51);
+    color: #fff;
+    padding: 5px 10px;
+    margin: 0 auto 15px;
+    border-radius: 5px;
+}
 #rtec .rtec-email-spinner img{
     position: absolute;
     top: 11px;
