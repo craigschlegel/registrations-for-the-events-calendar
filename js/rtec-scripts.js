@@ -47,6 +47,9 @@ jQuery(document).ready(function($) {
             }
 
             $('.rtec').each(function(index) {
+                var $rtec = $(this);
+
+                rtecCheckHoneypot($rtec);
 
                 if ($(this).closest('.rtec-outer-wrap').length && $(this).closest('.rtec-outer-wrap').find('.rtec-already-registered-options').length) {
                     var $outerWrap = $(this).closest('.rtec-outer-wrap'),
@@ -128,6 +131,26 @@ jQuery(document).ready(function($) {
                 }
 
             });
+
+            function rtecCheckHoneypot($rtecEl) {
+                if ($rtecEl.find('input[name=rtec_user_comments]').length &&
+                    $rtecEl.find('input[name=rtec_user_comments]').val() !== '') {
+                    if (!$rtecEl.find('.rtec-honeypot-clear-wrap').length) {
+                        var errorText = 'I am not a robot';
+                        if (typeof rtec.translations !== 'undefined') {
+                            errorText = rtec.translations.honeypotClear;
+                        }
+                        $rtecEl.find('#rtec-form .rtec-form-field').last().after('<div class="rtec-honeypot-clear-wrap">' +
+                            '<button class="rtec-honeypot-clear rtec-error">'+errorText+'</button>' +
+                            '</div>');
+                        $rtecEl.find('.rtec-honeypot-clear').click(function() {
+                            $(this).closest('.rtec-error').remove();
+                            $rtecEl.find('input[name=rtec_user_comments]').val('');
+                        });
+                    }
+
+                }
+            }
 
             var RtecForm = {
 
@@ -374,7 +397,9 @@ jQuery(document).ready(function($) {
             $('.rtec-form').submit(function (event) {
                 event.preventDefault();
 
-                $rtecEl = $(this).closest('.rtec');
+                var $form = $(this),
+                    $rtecEl = $(this).closest('.rtec');
+                rtecCheckHoneypot($rtecEl);
                 $rtecEl.find('input[name=rtec_submit]').attr('disabled', true);
 
                 if ($rtecEl.find('.rtec-screen-reader-error').length) {

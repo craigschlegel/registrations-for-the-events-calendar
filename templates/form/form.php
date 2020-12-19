@@ -29,8 +29,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php include RTEC_PLUGIN_DIR . 'templates/form/field-group.php'; ?>
 		</div>
 
-		<div class="rtec-form-field rtec-user-address" style="display: none;">
-			<label for="rtec_user_comments" class="rtec_text_label">Address</label>
+		<div class="rtec-form-field rtec-user-comments" style="display: none;">
+			<label for="rtec_user_comments" class="rtec_text_label">Comments</label>
 			<div class="rtec-input-wrapper">
 				<input type="text" name="rtec_user_comments" value="" id="rtec_user_comments" />
 				<p><?php _e( 'If you are a human, do not fill in this field', 'registrations-for-the-events-calendar' ); ?></p>

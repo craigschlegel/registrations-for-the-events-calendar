@@ -35,7 +35,7 @@ function rtec_the_registration_form( $atts = array() )
 	    return '';
 	}
 
-		$form->build_form( $event_id );
+	$form->build_form( $event_id );
 	$fields_atts = $form->get_field_attributes();
 	$event_meta = $form->get_event_meta();
 
@@ -857,6 +857,9 @@ function rtec_scripts_and_styles() {
 	wp_localize_script( 'rtec_scripts', 'rtec', array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'checkForDuplicates' => $check_for_duplicates,
+            'translations' => array(
+                    'honeypotClear' => __( 'I am not a robot', 'registrations-for-the-events-calendar' )
+            )
 		)
 	);
 }

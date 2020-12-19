@@ -4,7 +4,7 @@ Contributors: roundupwp
 Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
-Tested up to: 5.5
+Tested up to: 5.6
 Stable tag: 2.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
