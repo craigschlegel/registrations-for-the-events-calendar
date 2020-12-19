@@ -192,6 +192,8 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 == Changelog ==
 = UNRELEASED =
 * New: Added PHP hook "rtec_email_approved_for_registration" to allow customizations in what email addresses can register for an event.
+* Tweak: If a browser auto fill adds input to the spam honeypot field, the person filling out the form will see a button to confirm that they are not a spam bot.
+* Fix: Label and HTML class of the spam honeypot elements in the form were changed from "Address" to "Comments" to help prevent browsers from auto filling it.
 
 = 2.6.2 =
 * Tweak: Added support for several new email placeholders including start date {start-date}, start time {start-time}, end date {end-date}, end time {end-time}, cost {event-cost}, and a link to the event page {event-url}.
