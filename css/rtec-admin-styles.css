@@ -344,6 +344,12 @@ a.rtec-wide {
 .rtec-checkbox {
     position: relative;
 }
+.rtec-status-icon-wrap {
+    position: absolute;
+    left: -12px;
+    top: 0;
+    width: 23px;
+}
 .rtec-notice-new {
     position: absolute;
     left: -15px;
@@ -354,6 +360,25 @@ a.rtec-wide {
     background: #ff6600;
     color: #fff;
     font-size: 10px;
+}
+.rtec-status-icon-wrap .rtec-notice-new {
+    left: 0;
+    top: 0;
+}
+.rtec-status-explanation {
+    display: none;
+    position: absolute;
+    z-index: 200;
+    padding: 4px 8px;
+    width: 150px;
+    line-height: 1.2;
+    right: -166px;
+    top: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+}
+.rtec-status-icon-wrap:hover .rtec-status-explanation {
+    display: block;
 }
 #rtec-new-dismiss {
     padding-bottom: 5px;

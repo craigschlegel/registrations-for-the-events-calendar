@@ -568,7 +568,10 @@ class RTEC_Admin_Registrations {
 		}
 
 		if ( $is_user && $status !== 'n' ) {
+			$html .= '<div class="rtec-status-icon-wrap">';
 			$html .= '<span class="rtec-notice-new rtec-is-user"><i class="fa fa-user" aria-hidden="true"></i></span>';
+			$html .= '<span class="rtec-status-explanation">' . __( 'Logged-in user', 'registrations-for-the-events-calendar' ) . '</span>';
+			$html .= '</div>';
 		}
 
 		return $html;
