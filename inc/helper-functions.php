@@ -417,6 +417,12 @@ function rtec_get_start_date( $event_id, $date_format = 'Y-m-d H:i:s' ) {
 	}
 }
 
+function rtec_get_capability() {
+    $capability = 'edit_posts';
+
+	return $capability;
+}
+
 /**
  * Returns the appropriate translation/custom/default text
  *

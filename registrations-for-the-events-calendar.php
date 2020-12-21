@@ -47,23 +47,6 @@ if ( ! defined( 'RTEC_PLUGIN_URL' ) ) {
 }
 // Check for The Events Calendar to be active
 function rtec_TEC_check() {
-	if ( ! class_exists( 'Tribe__Events__Main' ) ) {
-		add_action( 'admin_notices', 'rtec_no_tec_notice' );
-		function rtec_no_tec_notice() {
-			?>
-            <div class="rtec-notice-all-admin rtec-all-admin-error">
-                <div class="rtec-img-wrap">
-                    <img src="<?php echo plugin_dir_url( __FILE__ ) . 'img/RTEC-Logo-150x150.png'; ?>" alt="Registrations for the Events Calendar">
-                </div>
-                <div class="rtec-msg-wrap">
-                    <p><?php _e( 'It looks like The Events Calendar plugin is not currently active.', 'registrations-for-the-events-calendar' ); ?></p>
-                    <p class="rtec-instructions"><?php _e( 'Please install The Events Calendar by Modern Tribe to get started with your registrations.', 'registrations-for-the-events-calendar' ); ?></p>
-                    <p><a href="https://roundupwp.com/products/registrations-for-the-events-calendar/setup/" target="_blank"><?php _e( 'Setup Instructions', 'registrations-for-the-events-calendar' ); ?></a></p>
-                </div>
-            </div>
-			<?php
-		}
-	}
 }
 add_action( 'plugins_loaded', 'rtec_TEC_check' );
 

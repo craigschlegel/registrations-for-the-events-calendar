@@ -987,6 +987,178 @@ function rtec_dismiss_new() {
 add_action( 'wp_ajax_rtec_dismiss_new', 'rtec_dismiss_new' );
 
 /**
+ * Deactivate addon.
+ *
+ * @since 1.0.0
+ */
+function rtec_deactivate_addon() {
+
+	// Run a security check.
+	check_ajax_referer( 'rtec-admin', 'nonce' );
+
+	// Check for permissions.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error();
+	}
+
+	$type = 'addon';
+	if ( ! empty( $_POST['type'] ) ) {
+		$type = sanitize_key( $_POST['type'] );
+	}
+
+	if ( isset( $_POST['plugin'] ) ) {
+		deactivate_plugins( $_POST['plugin'] );
+
+		if ( 'plugin' === $type ) {
+			wp_send_json_success( esc_html__( 'Plugin deactivated.', 'registrations-for-the-events-calendar' ) );
+		} else {
+			wp_send_json_success( esc_html__( 'Addon deactivated.', 'registrations-for-the-events-calendar' ) );
+		}
+	}
+
+	wp_send_json_error( esc_html__( 'Could not deactivate the addon. Please deactivate from the Plugins page.', 'registrations-for-the-events-calendar' ) );
+}
+add_action( 'wp_ajax_rtec_deactivate_addon', 'rtec_deactivate_addon' );
+
+/**
+ * Activate addon.
+ *
+ * @since 1.0.0
+ */
+function rtec_activate_addon() {
+	// Run a security check.
+	check_ajax_referer( 'rtec-admin', 'nonce' );
+
+	// Check for permissions.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error();
+	}
+
+	if ( isset( $_POST['plugin'] ) ) {
+
+		$type = 'addon';
+		if ( ! empty( $_POST['type'] ) ) {
+			$type = sanitize_key( $_POST['type'] );
+		}
+
+		$activate = activate_plugins( $_POST['plugin'] );
+
+		if ( ! is_wp_error( $activate ) ) {
+			if ( 'plugin' === $type ) {
+				wp_send_json_success( esc_html__( 'Plugin activated.', 'registrations-for-the-events-calendar' ) );
+			} else {
+				wp_send_json_success( esc_html__( 'Addon activated.', 'registrations-for-the-events-calendar' ) );
+			}
+		}
+	}
+
+	wp_send_json_error( esc_html__( 'Could not activate addon. Please activate from the Plugins page.', 'registrations-for-the-events-calendar' ) );
+}
+add_action( 'wp_ajax_rtec_activate_addon', 'rtec_activate_addon' );
+
+/**
+ * Install addon.
+ *
+ * @since 1.0.0
+ */
+function rtec_install_addon() {
+
+	// Run a security check.
+	check_ajax_referer( 'rtec-admin', 'nonce' );
+
+	// Check for permissions.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error();
+	}
+
+	$error = esc_html__( 'Could not install addon. Please download from wpforms.com and install manually.', 'registrations-for-the-events-calendar' );
+
+	if ( empty( $_POST['plugin'] ) ) {
+		wp_send_json_error( $error );
+	}
+
+	// Set the current screen to avoid undefined notices.
+	set_current_screen( 'registrations-for-the-events-calendar' );
+
+	// Prepare variables.
+	$url = esc_url_raw(
+		add_query_arg(
+			array(
+				'page' => 'registrations-for-the-events-calendar',
+			),
+			admin_url( 'admin.php' )
+		)
+	);
+
+	$creds = request_filesystem_credentials( $url, '', false, false, null );
+
+	// Check for file system permissions.
+	if ( false === $creds ) {
+		wp_send_json_error( $error );
+	}
+
+	if ( ! WP_Filesystem( $creds ) ) {
+		wp_send_json_error( $error );
+	}
+
+	/*
+	 * We do not need any extra credentials if we have gotten this far, so let's install the plugin.
+	 */
+
+	require_once RTEC_PLUGIN_DIR . 'inc/admin/class-install-skin.php';
+
+	// Do not allow WordPress to search/download translations, as this will break JS output.
+	remove_action( 'upgrader_process_complete', array( 'Language_Pack_Upgrader', 'async_upgrade' ), 20 );
+
+	// Create the plugin upgrader with our custom skin.
+	$installer = new RTEC\Helpers\PluginSilentUpgrader( new Rtec_Install_Skin() );
+
+	// Error check.
+	if ( ! method_exists( $installer, 'install' ) || empty( $_POST['plugin'] ) ) {
+		wp_send_json_error( $error );
+	}
+
+	$installer->install( $_POST['plugin'] ); // phpcs:ignore
+
+	// Flush the cache and return the newly installed plugin basename.
+	wp_cache_flush();
+
+	$plugin_basename = $installer->plugin_info();
+
+	if ( $plugin_basename ) {
+
+		$type = 'addon';
+		if ( ! empty( $_POST['type'] ) ) {
+			$type = sanitize_key( $_POST['type'] );
+		}
+
+		// Activate the plugin silently.
+		$activated = activate_plugin( $plugin_basename );
+
+		if ( ! is_wp_error( $activated ) ) {
+			wp_send_json_success(
+				array(
+					'msg'          => 'plugin' === $type ? esc_html__( 'Plugin installed & activated.', 'registrations-for-the-events-calendar' ) : esc_html__( 'Addon installed & activated.', 'registrations-for-the-events-calendar' ),
+					'is_activated' => true,
+					'basename'     => $plugin_basename,
+				)
+			);
+		} else {
+			wp_send_json_success(
+				array(
+					'msg'          => 'plugin' === $type ? esc_html__( 'Plugin installed.', 'registrations-for-the-events-calendar' ) : esc_html__( 'Addon installed.', 'registrations-for-the-events-calendar' ),
+					'is_activated' => false,
+					'basename'     => $plugin_basename,
+				)
+			);
+		}
+	}
+
+	wp_send_json_error( $error );
+}
+add_action( 'wp_ajax_rtec_install_addon', 'rtec_install_addon' );
+
+/**
  * Some CSS and JS needed in the admin area as well
  *
  * @since 1.0
@@ -994,31 +1166,64 @@ add_action( 'wp_ajax_rtec_dismiss_new', 'rtec_dismiss_new' );
 function rtec_admin_scripts_and_styles() {
 	wp_enqueue_style( 'rtec_admin_styles', trailingslashit( RTEC_PLUGIN_URL ) . 'css/rtec-admin-styles.css', array(), RTEC_VERSION );
 
-	if ( isset( $_GET['page'] ) && ($_GET['page'] === RTEC_MENU_SLUG || $_GET['page'] === 'registrations-for-the-events-calendar/_settings' ) ) {
-
-		wp_enqueue_script( 'rtec_admin_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-scripts.js', array( 'jquery', 'jquery-ui-datepicker','tribe-jquery-timepicker' ), RTEC_VERSION, false );
-		wp_localize_script( 'rtec_admin_scripts', 'rtecAdminScript',
-			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'rtec_nonce' => wp_create_nonce( 'rtec_nonce' )
-			)
+	if ( ! class_exists( 'Tribe__Main' ) ) {
+		wp_enqueue_script( 'rtec_installer_script', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-installer.js', array( 'jquery' ), RTEC_VERSION, true );
+		$strings = array(
+			'addon_activate'                  => esc_html__( 'Activate', 'registrations-for-the-events-calendar' ),
+			'addon_activated'                 => esc_html__( 'Activated', 'registrations-for-the-events-calendar' ),
+			'addon_active'                    => esc_html__( 'Active', 'registrations-for-the-events-calendar' ),
+			'addon_deactivate'                => esc_html__( 'Deactivate', 'registrations-for-the-events-calendar' ),
+			'addon_inactive'                  => esc_html__( 'Inactive', 'registrations-for-the-events-calendar' ),
+			'addon_install'                   => esc_html__( 'Install Addon', 'registrations-for-the-events-calendar' ),
+			'addon_error'                     => esc_html__( 'Could not install addon. Please download from roundupwp.com and install manually.', 'registrations-for-the-events-calendar' ),
+			'plugin_error'                    => esc_html__( 'Could not install a plugin. Please download from WordPress.org and install manually.', 'registrations-for-the-events-calendar' ),
+			'addon_search'                    => esc_html__( 'Searching Addons', 'registrations-for-the-events-calendar' ),
+			'ajax_url'                        => admin_url( 'admin-ajax.php' ),
+			'cancel'                          => esc_html__( 'Cancel', 'registrations-for-the-events-calendar' ),
+			'close'                           => esc_html__( 'Close', 'registrations-for-the-events-calendar' ),
+			'nonce'                           => wp_create_nonce( 'rtec-admin' ),
+			'almost_done'                     => esc_html__( 'Almost Done', 'registrations-for-the-events-calendar' ),
+			'oops'                            => esc_html__( 'Oops!', 'registrations-for-the-events-calendar' ),
+			'ok'                              => esc_html__( 'OK', 'registrations-for-the-events-calendar' ),
+			'plugin_install_activate_btn'     => esc_html__( 'Install and Activate', 'registrations-for-the-events-calendar' ),
+			'plugin_install_activate_confirm' => esc_html__( 'needs to be installed and activated to import its forms. Would you like us to install and activate it for you?', 'registrations-for-the-events-calendar' ),
+			'plugin_activate_btn'             => esc_html__( 'Activate', 'registrations-for-the-events-calendar' ),
 		);
-		wp_enqueue_style( 'rtec_font_awesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), '4.6.3' );
-		wp_enqueue_style( 'wp-color-picker' );
-		wp_enqueue_script( 'wp-color-picker' );
-		wp_enqueue_script( 'jquery-ui-core ');
-		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_enqueue_style( 'jquery-ui-datepicker' );
-		wp_enqueue_script( 'tribe-jquery-timepicker' );
-		wp_enqueue_style( 'tribe-jquery-timepicker-css' );
+		$strings = apply_filters( 'rtec_admin_strings', $strings );
 
-	} else {
-		wp_enqueue_script( 'rtec_admin_edit_event_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-edit-event-scripts.js', array( 'jquery' ), RTEC_VERSION, false );
-		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_enqueue_style( 'jquery-ui-datepicker' );
-		wp_enqueue_script( 'tribe-jquery-timepicker' );
-		wp_enqueue_style( 'tribe-jquery-timepicker-css' );
-	}
+		wp_localize_script(
+			'rtec_installer_script',
+			'rtec_admin',
+			$strings
+		);
+    } else {
+		if ( isset( $_GET['page'] ) && ($_GET['page'] === RTEC_MENU_SLUG || $_GET['page'] === 'registrations-for-the-events-calendar/_settings' ) ) {
+
+			wp_enqueue_script( 'rtec_admin_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-scripts.js', array( 'jquery', 'jquery-ui-datepicker','tribe-jquery-timepicker' ), RTEC_VERSION, false );
+			wp_localize_script( 'rtec_admin_scripts', 'rtecAdminScript',
+				array(
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+					'rtec_nonce' => wp_create_nonce( 'rtec_nonce' )
+				)
+			);
+			wp_enqueue_style( 'rtec_font_awesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), '4.6.3' );
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'wp-color-picker' );
+			wp_enqueue_script( 'jquery-ui-core ');
+			wp_enqueue_script( 'jquery-ui-datepicker' );
+			wp_enqueue_style( 'jquery-ui-datepicker' );
+			wp_enqueue_script( 'tribe-jquery-timepicker' );
+			wp_enqueue_style( 'tribe-jquery-timepicker-css' );
+
+		} else {
+			wp_enqueue_script( 'rtec_admin_edit_event_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-edit-event-scripts.js', array( 'jquery' ), RTEC_VERSION, false );
+			wp_enqueue_script( 'jquery-ui-datepicker' );
+			wp_enqueue_style( 'jquery-ui-datepicker' );
+			wp_enqueue_script( 'tribe-jquery-timepicker' );
+			wp_enqueue_style( 'tribe-jquery-timepicker-css' );
+		}
+    }
+
 }
 add_action( 'admin_enqueue_scripts', 'rtec_admin_scripts_and_styles' );
 
