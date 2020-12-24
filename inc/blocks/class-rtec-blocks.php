@@ -14,7 +14,7 @@ class RTEC_Blocks {
 	 * @return bool
 	 */
 	public function allow_load() {
-		return function_exists( 'register_block_type' );
+		return function_exists( 'register_block_type' ) && class_exists( 'Tribe__Main' );
 	}
 
 	/**

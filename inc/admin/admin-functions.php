@@ -1071,7 +1071,7 @@ function rtec_install_addon() {
 		wp_send_json_error();
 	}
 
-	$error = esc_html__( 'Could not install addon. Please download from wpforms.com and install manually.', 'registrations-for-the-events-calendar' );
+	$error = esc_html__( 'Could not install a plugin. Please visit the Plugins page and search for The Events Calendar to install.', 'registrations-for-the-events-calendar' );
 
 	if ( empty( $_POST['plugin'] ) ) {
 		wp_send_json_error( $error );
@@ -1101,11 +1101,14 @@ function rtec_install_addon() {
 		wp_send_json_error( $error );
 	}
 
+
 	/*
 	 * We do not need any extra credentials if we have gotten this far, so let's install the plugin.
 	 */
+	require_once trailingslashit( RTEC_PLUGIN_DIR ) . 'inc/helpers/PluginSilentUpgrader.php';
 
-	require_once RTEC_PLUGIN_DIR . 'inc/admin/class-install-skin.php';
+	require_once trailingslashit( RTEC_PLUGIN_DIR ) . 'inc/helpers/PluginSilentUpgraderSkin.php';
+	require_once trailingslashit( RTEC_PLUGIN_DIR ) . 'inc/admin/class-install-skin.php';
 
 	// Do not allow WordPress to search/download translations, as this will break JS output.
 	remove_action( 'upgrader_process_complete', array( 'Language_Pack_Upgrader', 'async_upgrade' ), 20 );
@@ -1176,7 +1179,7 @@ function rtec_admin_scripts_and_styles() {
 			'addon_inactive'                  => esc_html__( 'Inactive', 'registrations-for-the-events-calendar' ),
 			'addon_install'                   => esc_html__( 'Install Addon', 'registrations-for-the-events-calendar' ),
 			'addon_error'                     => esc_html__( 'Could not install addon. Please download from roundupwp.com and install manually.', 'registrations-for-the-events-calendar' ),
-			'plugin_error'                    => esc_html__( 'Could not install a plugin. Please download from WordPress.org and install manually.', 'registrations-for-the-events-calendar' ),
+			'plugin_error'                    => esc_html__( 'Could not install a plugin. Please visit the Plugins page and search for The Events Calendar to install.', 'registrations-for-the-events-calendar' ),
 			'addon_search'                    => esc_html__( 'Searching Addons', 'registrations-for-the-events-calendar' ),
 			'ajax_url'                        => admin_url( 'admin-ajax.php' ),
 			'cancel'                          => esc_html__( 'Cancel', 'registrations-for-the-events-calendar' ),
@@ -1188,6 +1191,7 @@ function rtec_admin_scripts_and_styles() {
 			'plugin_install_activate_btn'     => esc_html__( 'Install and Activate', 'registrations-for-the-events-calendar' ),
 			'plugin_install_activate_confirm' => esc_html__( 'needs to be installed and activated to import its forms. Would you like us to install and activate it for you?', 'registrations-for-the-events-calendar' ),
 			'plugin_activate_btn'             => esc_html__( 'Activate', 'registrations-for-the-events-calendar' ),
+			'success_reloading'             => esc_html__( 'Success! Reloading page.', 'registrations-for-the-events-calendar' ),
 		);
 		$strings = apply_filters( 'rtec_admin_strings', $strings );
 
@@ -1197,7 +1201,8 @@ function rtec_admin_scripts_and_styles() {
 			$strings
 		);
     } else {
-		if ( isset( $_GET['page'] ) && ($_GET['page'] === RTEC_MENU_SLUG || $_GET['page'] === 'registrations-for-the-events-calendar/_settings' ) ) {
+		if ( isset( $_GET['page'] )
+             && (strpos( $_GET['page'], RTEC_MENU_SLUG ) !== false || strpos( $_GET['page'], 'rtec' ) !== false) ) {
 
 			wp_enqueue_script( 'rtec_admin_scripts', trailingslashit( RTEC_PLUGIN_URL ) . 'js/rtec-admin-scripts.js', array( 'jquery', 'jquery-ui-datepicker','tribe-jquery-timepicker' ), RTEC_VERSION, false );
 			wp_localize_script( 'rtec_admin_scripts', 'rtecAdminScript',

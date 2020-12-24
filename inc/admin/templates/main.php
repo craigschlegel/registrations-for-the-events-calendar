@@ -1,4 +1,4 @@
-<div class="wrap rtec-admin-wrap">
+<div class="wrap rtec-admin-wrap" id="rtec-admin-wrap">
 	<?php
 	$lite_notice_dismissed = get_transient( 'registrations_tec_dismiss_lite' );
 
@@ -18,17 +18,21 @@
     if ( ! is_callable( 'tribe_get_events' ) ) {
 
         ?>
+
         <div id="rtec-admin-addons">
-            <div class="addons-container">
+            <div class="rtec-notice">
                 <h3><?php echo __( 'Thank You for Installing Our Plugin!', 'registrations-for-the-events-calendar' ); ?></h3>
-                <p><?php echo __( 'Registrations for the Events Calendar requires The Events Calendar to be installed and active.', 'registrations-for-the-events-calendar' ); ?></p>
+                <p><?php _e( 'Registrations for the Events Calendar requires The Events Calendar to be installed and active.', 'registrations-for-the-events-calendar' ); ?></p>
+            </div>
+            <div class="addons-container">
+
 			    <?php
 
                 $plugin = array(
                     'icon' => RTEC_PLUGIN_URL .  '/img/tec-icon.png',
                     'name' => esc_html__( 'The Events Calendar', 'registrations-for-the-events-calendar' ),
                     'desc' => esc_html__( 'A fully featured, immensely popular calendar solution from Modern Tribe. Registrations for The Events Calendar by Roundup WP adds registration features to The Events Calendar.', 'registrations-for-the-events-calendar' ),
-                    'url'  => 'https://downloads.wordpress.org/plugin/the-events-calendar.zip',
+                    'url'  => 'https://downloads.wordpress.org/plugin/the-events-calendar'.RTEC_TEC_VER_STRING.'.zip',
                 );
 			    $all_plugins = get_plugins();
 

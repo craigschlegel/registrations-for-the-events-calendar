@@ -45,6 +45,11 @@ if ( ! defined( 'RTEC_PLUGIN_DIR' ) ) {
 if ( ! defined( 'RTEC_PLUGIN_URL' ) ) {
 	define( 'RTEC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
+
+if ( ! defined( 'RTEC_TEC_VER_STRING' ) ) {
+	define( 'RTEC_TEC_VER_STRING','.5.3.1' );
+}
+
 // Check for The Events Calendar to be active
 function rtec_TEC_check() {
 }

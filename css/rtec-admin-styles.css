@@ -49,6 +49,9 @@
     background: #CFF7F3;
     border: 1px solid #9EE6DE;
 }
+#rtec-admin-addons .rtec-notice {
+    margin-bottom: 10px;
+}
 .rtec-admin-wrap .rtec-notice {
     margin-bottom: 0;
 }
@@ -968,11 +971,11 @@ span.rtec-is-user{
 }
 
 /* Installer */
-.rtec-admin-wrap #rtec-admin-addons .addon-item .details {
+#rtec-admin-wrap #rtec-admin-addons .addon-item .details {
     padding: 20px
 }
 
-.rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button {
+#rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button {
     display: inline-block;
     text-decoration: none;
     font-size: 13px;
@@ -989,50 +992,51 @@ span.rtec-is-user{
     font-weight: normal
 }
 
-.rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button:hover,.rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button:focus {
+#rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button:hover,#rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button:focus {
     background: #fafafa;
     border-color: #999;
     color: #23282d
 }
 
-.rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-primary {
-    background: #0085ba;
-    border-color: #0073aa #006799 #006799;
-    box-shadow: 0 1px 0 #006799;
+#rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-primary,
+.wp-core-ui #rtec-admin-wrap #rtec-admin-addons .button[disabled]{
+    background: #0085ba !important;
+    border-color: #0073aa #006799 #006799 !important;;
+    box-shadow: 0 1px 0 #006799 !important;;
     color: #fff;
     text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799
 }
 
-.rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-primary:hover,.rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-primary:focus {
+#rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-primary:hover,#rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-primary:focus {
     background: #008ec2;
     border-color: #006799;
     color: #fff
 }
 
-.rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-primary .fa-spinner {
+#rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-primary .fa-spinner {
     color: #fff
 }
 
-.rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-secondary {
+#rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-secondary {
     color: #555;
     border-color: #cccccc;
     background: #f7f7f7;
     box-shadow: 0 1px 0 #cccccc
 }
 
-.rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-secondary:hover,.rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-secondary:focus {
+#rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-secondary:hover,#rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.button-secondary:focus {
     background: #fafafa;
     border-color: #999;
     color: #23282d
 }
 
-.rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.disabled {
+#rtec-admin-wrap #rtec-admin-addons .addon-item .action-button .button.disabled {
     cursor: default
 }
 
 #rtec-admin-addons .addon-container {
     width:100%;
-    max-width: 800px;
+    max-width: 600px;
 }
 
 #rtec-admin-addons h4 {

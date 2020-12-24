@@ -1,6 +1,6 @@
 <?php
 
-use Sbi\Helpers\PluginSilentUpgraderSkin;
+use RTEC\Helpers\PluginSilentUpgraderSkin;
 
 /**
  * Skin for on-the-fly addon installations.
@@ -8,7 +8,7 @@ use Sbi\Helpers\PluginSilentUpgraderSkin;
  * @since 1.0.0
  * @since 1.5.6.1 Extend PluginSilentUpgraderSkin and clean up the class.
  */
-class Sbi_Install_Skin extends PluginSilentUpgraderSkin {
+class Rtec_Install_Skin extends PluginSilentUpgraderSkin {
 
 	/**
 	 * Instead of outputting HTML for errors, json_encode the errors and send them

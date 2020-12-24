@@ -32,28 +32,8 @@ class RTEC_Admin
      */
     public function add_tribe_submenu()
     {
-        $menu_title = __( 'Registrations', 'registrations-for-the-events-calendar' );
-
-        $new_registrations_count = rtec_get_existing_new_reg_count();
-
-        if ( $new_registrations_count > 0 ) {
-            $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . esc_html( $new_registrations_count ) . '</span></span>';
-        } else {
-            if ( get_transient( 'rtec_new_messages' ) === 'yes' ) {
-                $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . __( 'New!', 'registrations-for-the-events-calendar' ) . '</span></span>';
-            }
-        }
-
-        add_submenu_page(
-	        'edit.php?post_type=' . RTEC_TRIBE_EVENTS_POST_TYPE,
-            'Registrations',
-            $menu_title,
-            'edit_posts',
-	        RTEC_MENU_SLUG,
-            array( $this, 'create_options_page' )
-        );
 	    add_submenu_page(
-		    '',
+		    'edit.php?post_type=' . RTEC_TRIBE_EVENTS_POST_TYPE,
 		    esc_html__( 'Registrations', 'registrations-for-the-events-calendar' ),
 		    esc_html__( 'Registrations', 'registrations-for-the-events-calendar' ),
 		    'edit_posts',

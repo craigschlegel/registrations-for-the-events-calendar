@@ -186,8 +186,8 @@
                 plugin: plugin,
                 type  : plugin_type
             };
-            $.post( rtec_admin.ajax_url, data, function( res ) {
 
+            $.post( rtec_admin.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     if ( 'rtec_install_addon' === action ) {
                         $btn.attr( 'data-plugin', res.data.basename );
@@ -213,6 +213,8 @@
                         .removeClass( 'status-active status-inactive status-download' )
                         .removeClass( 'button button-primary button-secondary disabled' )
                         .addClass( cssClass ).html( buttonText );
+
+                    window.location.reload();
                 } else {
                     if ( 'download_failed' === res.data[0].code ) {
                         if ( plugin_type === 'addon' ) {
