@@ -44,7 +44,7 @@
         ready: function() {
 
             // Action available for each binding.
-            $( document ).trigger( 'smashReady' );
+            $( document ).trigger( 'rtecReady' );
         },
 
         //--------------------------------------------------------------------//
@@ -59,7 +59,7 @@
         initAddons: function() {
 
             // Some actions have to be delayed to document.ready.
-            $( document ).on( 'smashReady', function() {
+            $( document ).on( 'rtecReady', function() {
 
                 // Only run on the addons page.
                 if ( ! $( '#rtec-admin-addons' ).length ) {
