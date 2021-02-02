@@ -1084,6 +1084,9 @@ span.rtec-is-user{
 }
 
 #rtec-admin-addons .addon-item .actions .msg {
+    box-sizing: border-box;
+    border: none;
+    margin: 0;
     background-color: #f7f7f7;
     position: absolute;
     text-align: center;
