@@ -1182,6 +1182,7 @@ function rtec_admin_scripts_and_styles() {
 			'plugin_install_activate_confirm' => esc_html__( 'needs to be installed and activated to import its forms. Would you like us to install and activate it for you?', 'registrations-for-the-events-calendar' ),
 			'plugin_activate_btn'             => esc_html__( 'Activate', 'registrations-for-the-events-calendar' ),
 			'success_reloading'             => esc_html__( 'Success! Reloading page.', 'registrations-for-the-events-calendar' ),
+			'thanks_patience'             => esc_html__( 'This may take a minute or two. Thanks for your patience.', 'registrations-for-the-events-calendar' ),
 		);
 		$strings = apply_filters( 'rtec_admin_strings', $strings );
 

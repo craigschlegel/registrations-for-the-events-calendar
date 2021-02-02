@@ -175,6 +175,14 @@
                     buttonText = s.iconActivate + rtec_admin.addon_deactivate;
                 }
                 errorText = s.iconInstall + rtec_admin.addon_activate;
+                var noticeHtml = '<div class="rtec-addon-patience" style="' +
+                    '    background-color: #f7f7f7;' +
+                    '    padding: 20px;' +
+                    '    position: relative;' +
+                    '">' +
+                    rtec_admin.thanks_patience + ' :)' +
+                    '</div>';
+                $addon.append(noticeHtml);
 
             } else {
                 return;
@@ -188,6 +196,7 @@
             };
 
             $.post( rtec_admin.ajax_url, data, function( res ) {
+                $addon.find( '.rtec-addon-patience' ).remove();
                 if ( res.success ) {
                     if ( 'rtec_install_addon' === action ) {
                         $btn.attr( 'data-plugin', res.data.basename );
