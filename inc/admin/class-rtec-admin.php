@@ -1477,8 +1477,8 @@ class RTEC_Admin
 		$locations = isset( $options[ $args['name'].'_location' ] ) ? $options[ $args['name'].'_location' ] : array( 'above_button', 'above_description_list' );
 		$template = ( isset( $options[ $args['name'].'_template' ] ) ) ? $options[ $args['name'].'_template' ] : __( 'Attendance: {num} / {max}', 'registrations-for-the-events-calendar' );
 		?>
-        <input name="<?php echo $args['option'].'[include_'.$args['name'].']'; ?>" id="rtec_<?php echo $args['name']; ?>" type="checkbox" <?php if ( $option_checked ) echo "checked"; ?> />
-        <label for="rtec_include_attendance_message"><?php _e( 'include attendance count message', 'registrations-for-the-events-calendar' ); ?></label>
+        <input name="<?php echo $args['option'].'[include_'.$args['name'].']'; ?>" id="rtec_cinclude_attendance_message" type="checkbox" <?php if ( $option_checked ) echo "checked"; ?> />
+        <label for="rtec_cinclude_attendance_message"><?php _e( 'include attendance count message', 'registrations-for-the-events-calendar' ); ?></label>
         <div class="rtec-message-group-wrap">
             <div class="rtec-availability-options-wrapper" id="rtec-message-type-wrapper">
                 <h4><?php _e( 'Display', 'registrations-for-the-events-calendar' ); ?></h4>
