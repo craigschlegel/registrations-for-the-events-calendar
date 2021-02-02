@@ -7,6 +7,7 @@ jQuery(document).ready(function($) {
 
             // move the form for backwards compatibility
             if ($('#rtec-js-move-flag').length
+                || $('.rtec-js-placement').length
                 || $('footer').find('.rtec').length
                 || $('footer').find('.rtec-outer-wrap').length
                 || $('footer').find('.rtec-success-message').length) {

@@ -42,19 +42,9 @@ function rtec_registrations_bubble() {
 				return;
 			}
 		}
-	} elseif ( get_transient( 'rtec_new_messages' ) === 'yes' ) {
-		global $menu;
-
-		foreach ( $menu as $key => $value ) {
-			if ( $menu[$key][2] === RTEC_TRIBE_MENU_PAGE ) {
-				$menu[$key][0] .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . __( 'Registrations', 'registrations-for-the-events-calendar' ) . '</span></span>';
-				return;
-			}
-		}
 	}
 
 }
-add_action( 'admin_menu', 'rtec_registrations_bubble' );
 
 function rtec_the_admin_notices() {
 	global $rtec_options;

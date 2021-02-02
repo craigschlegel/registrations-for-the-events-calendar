@@ -191,10 +191,13 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 
 == Changelog ==
 = UNRELEASED =
+* New: Added "Registrations" menu item in addition to the submenu under "Events".
 * New: Added PHP hook "rtec_email_approved_for_registration" to allow customizations in what email addresses can register for an event.
+* New: If The Events Calendar is either not installed or not active, visiting the Registrations menu page will prompt users to install or activate The Events Calendar.
 * Tweak: If a browser auto fill adds input to the spam honeypot field, the person filling out the form will see a button to confirm that they are not a spam bot.
 * Tweak: Hovering over the green user icon on the registrations tab will explain that the registration was from a logged-in user.
 * Fix: Label and HTML class of the spam honeypot elements in the form were changed from "Address" to "Comments" to help prevent browsers from auto filling it.
+* Fix: Automatic placement of form with the block editor was not always working correctly.
 
 = 2.6.2 =
 * Tweak: Added support for several new email placeholders including start date {start-date}, start time {start-time}, end date {end-date}, end time {end-time}, cost {event-cost}, and a link to the event page {event-url}.
