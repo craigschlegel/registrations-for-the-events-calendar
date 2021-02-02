@@ -75,6 +75,10 @@ class RTEC_Admin_Registrations {
 		return $this->ids_on_page;
 	}
 
+	public function get_settings() {
+	    return $this->settings;
+    }
+
 	/**
 	 * @return array
 	 */

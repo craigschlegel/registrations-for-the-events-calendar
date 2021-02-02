@@ -17,63 +17,72 @@
     }
     if ( ! is_callable( 'tribe_get_events' ) ) {
 
-        ?>
+	        ?>
 
-        <div id="rtec-admin-addons">
-            <div class="rtec-notice">
-                <h3><?php echo __( 'Thank You for Installing Our Plugin!', 'registrations-for-the-events-calendar' ); ?></h3>
-                <p><?php _e( 'Registrations for the Events Calendar requires The Events Calendar to be installed and active.', 'registrations-for-the-events-calendar' ); ?></p>
-            </div>
-            <div class="addons-container">
+            <div id="rtec-admin-addons">
+                <div class="rtec-notice">
+                    <h3><?php echo __( 'Thank You for Installing Our Plugin!', 'registrations-for-the-events-calendar' ); ?></h3>
+                    <p><?php _e( 'Registrations for the Events Calendar requires The Events Calendar to be installed and active.', 'registrations-for-the-events-calendar' ); ?></p>
+                </div>
+                <div class="addons-container">
 
-			    <?php
+			        <?php
+                    if ( version_compare( PHP_VERSION,  '5.3.0', '<=' )
+                         || version_compare( get_bloginfo( 'version' ), '4.6' , '<=' ) ) : ?>
+                        <a href="plugin-install.php?tab=plugin-information&plugin=the-events-calendar&TB_iframe=true" class="button button-primary" title="<?php echo esc_html__( 'The Events Calendar', 'registrations-for-the-events-calendar' ); ?>"><?php echo esc_html__( 'Click here to install the latest version of', 'registrations-for-the-events-calendar' ); ?> <?php echo esc_html__( 'The Events Calendar', 'registrations-for-the-events-calendar' ); ?></a>
+                    <?php
+                    else :
 
-                $plugin = array(
-                    'icon' => RTEC_PLUGIN_URL .  '/img/tec-icon.png',
-                    'name' => esc_html__( 'The Events Calendar', 'registrations-for-the-events-calendar' ),
-                    'desc' => esc_html__( 'A fully featured, immensely popular calendar solution from Modern Tribe. Registrations for The Events Calendar by Roundup WP adds registration features to The Events Calendar.', 'registrations-for-the-events-calendar' ),
-                    'url'  => 'https://downloads.wordpress.org/plugin/the-events-calendar'.RTEC_TEC_VER_STRING.'.zip',
-                );
-			    $all_plugins = get_plugins();
+			        $plugin      = array(
+				        'icon' => RTEC_PLUGIN_URL . '/img/tec-icon.png',
+				        'name' => esc_html__( 'The Events Calendar', 'registrations-for-the-events-calendar' ),
+				        'desc' => esc_html__( 'A fully featured, immensely popular calendar solution from Modern Tribe. Registrations for The Events Calendar by Roundup WP adds registration features to The Events Calendar.', 'registrations-for-the-events-calendar' ),
+				        'url'  => 'https://downloads.wordpress.org/plugin/the-events-calendar' . RTEC_TEC_VER_STRING . '.zip',
+			        );
+			        $all_plugins = get_plugins();
 
-				    $plugin_data = RTEC_Admin::get_plugin_data( 'the-events-calendar/the-events-calendar.php', $plugin, $all_plugins );
+			        $plugin_data = RTEC_Admin::get_plugin_data( 'the-events-calendar/the-events-calendar.php', $plugin, $all_plugins );
 
-				    ?>
+			        ?>
                     <div class="addon-container">
                         <div class="addon-item">
                             <div class="details rtec-clear">
                                 <img src="<?php echo esc_url( $plugin_data['details']['icon'] ); ?>">
                                 <h5 class="addon-name">
-								    <?php echo esc_html( $plugin_data['details']['name'] ); ?>
+							        <?php echo esc_html( $plugin_data['details']['name'] ); ?>
                                 </h5>
                                 <p class="addon-desc">
-								    <?php echo wp_kses_post( $plugin_data['details']['desc'] ); ?>
-                                    <a href="https://wordpress.org/plugins/the-events-calendar/" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Plugin Homepage', 'registrations-for-the-events-calendar' ); ?></a>
+							        <?php echo wp_kses_post( $plugin_data['details']['desc'] ); ?>
+                                    <a href="https://wordpress.org/plugins/the-events-calendar/" target="_blank"
+                                       rel="noopener noreferrer"><?php esc_html_e( 'Plugin Homepage', 'registrations-for-the-events-calendar' ); ?></a>
                                 </p>
                             </div>
                             <div class="actions rtec-clear">
                                 <div class="status">
                                     <strong>
-									    <?php
-									    printf(
-									    /* translators: %s - addon status label. */
-										    esc_html__( 'Status: %s', 'registrations-for-the-events-calendar' ),
-										    '<span class="status-label ' . esc_attr( $plugin_data['status_class'] ) . '">' . wp_kses_post( $plugin_data['status_text'] ) . '</span>'
-									    );
-									    ?>
+								        <?php
+								        printf(
+								        /* translators: %s - addon status label. */
+									        esc_html__( 'Status: %s', 'registrations-for-the-events-calendar' ),
+									        '<span class="status-label ' . esc_attr( $plugin_data['status_class'] ) . '">' . wp_kses_post( $plugin_data['status_text'] ) . '</span>'
+								        );
+								        ?>
                                     </strong>
                                 </div>
                                 <div class="action-button">
-                                    <button class="<?php echo esc_attr( $plugin_data['action_class'] ); ?>" data-plugin="<?php echo esc_attr( $plugin_data['plugin_src'] ); ?>" data-type="plugin">
-									    <?php echo wp_kses_post( $plugin_data['action_text'] ); ?>
+                                    <button class="<?php echo esc_attr( $plugin_data['action_class'] ); ?>"
+                                            data-plugin="<?php echo esc_attr( $plugin_data['plugin_src'] ); ?>"
+                                            data-type="plugin">
+								        <?php echo wp_kses_post( $plugin_data['action_text'] ); ?>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <?php endif; ?>
+                </div>
             </div>
-        </div>
-    <?php
+	        <?php
 	    return false;
     }
     // this controls which view is included based on the selected tab

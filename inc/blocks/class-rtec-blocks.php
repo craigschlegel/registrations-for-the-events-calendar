@@ -2,25 +2,25 @@
 /**
  * Registration form block with live preview.
  *
- * @since 2.6
+ * @since 2.14
  */
 class RTEC_Blocks {
 
 	/**
 	 * Indicates if current integration is allowed to load.
 	 *
-	 * @since 2.6
+	 * @since 2.14
 	 *
 	 * @return bool
 	 */
 	public function allow_load() {
-		return function_exists( 'register_block_type' ) && class_exists( 'Tribe__Main' );
+		return function_exists( 'register_block_type' );
 	}
 
 	/**
 	 * Loads an integration.
 	 *
-	 * @since 2.6
+	 * @since 2.14
 	 */
 	public function load() {
 		$this->hooks();
@@ -29,7 +29,7 @@ class RTEC_Blocks {
 	/**
 	 * Integration hooks.
 	 *
-	 * @since 2.6
+	 * @since 2.14
 	 */
 	protected function hooks() {
 		add_action( 'init', array( $this, 'register_block' ) );
@@ -40,9 +40,12 @@ class RTEC_Blocks {
 	/**
 	 * Register Registrations for the Events Calendar Gutenberg block on the backend.
 	 *
-	 * @since 2.6
+	 * @since 2.14
 	 */
 	public function register_block() {
+		if ( ! class_exists( 'Tribe__Main' ) ) {
+			return;
+		}
 
 		wp_register_style(
 			'rtec-blocks-styles',
@@ -81,9 +84,12 @@ class RTEC_Blocks {
 	/**
 	 * Load Registrations for the Events Calendar Gutenberg block scripts.
 	 *
-	 * @since 2.6
+	 * @since 2.14
 	 */
 	public function enqueue_block_editor_assets() {
+		if ( ! function_exists( 'tribe_get_start_date' ) ) {
+			return;
+		}
 		rtec_scripts_and_styles( true );
 
 		wp_enqueue_style( 'rtec-blocks-styles' );
@@ -157,7 +163,7 @@ class RTEC_Blocks {
 			'shortcodeSettings'   => esc_html__( 'Shortcode Settings', 'registrations-for-the-events-calendar' ),
 			'example'             => esc_html__( 'Example', 'registrations-for-the-events-calendar' ),
 			'preview'             => esc_html__( 'Apply Changes', 'registrations-for-the-events-calendar' ),
-			'whichevent'          => esc_html__( 'Which event are attendees registering for?', 'registrations-for-the-events-calendar' ),
+			'whichevent'          => esc_html__( 'Choose an event', 'registrations-for-the-events-calendar' ),
 		);
 
 		wp_localize_script(
@@ -178,7 +184,7 @@ class RTEC_Blocks {
 	 *
 	 * @param array $attr Attributes passed by Registrations for the Events Calendar Gutenberg block.
 	 *
-	 * @since 2.6
+	 * @since 2.14
 	 *
 	 * @return string
 	 */
@@ -190,6 +196,11 @@ class RTEC_Blocks {
 		$is_tribe_event = isset( $attr['isTribeEvent'] ) ? $attr['isTribeEvent'] : false;
 		$event_id = ! empty( $attr['eventID'] ) ? $attr['eventID'] : false;
 
+		if ( empty( $event_id ) ) {
+			global $post;
+			$event_id = $post->ID;
+		}
+
 		if ( $is_tribe_event ) {
 			$shortcode_settings = 'tribe_flag=true ' . $shortcode_settings;
 		}
@@ -197,6 +208,7 @@ class RTEC_Blocks {
 		if ( $event_id ) {
 			$shortcode_settings = 'event='.$event_id. ' '. $shortcode_settings;
 		}
+
 
 		$shortcode_settings = str_replace(array( '[rtec-registration-form', ']' ), '', $shortcode_settings );
 
@@ -212,6 +224,7 @@ class RTEC_Blocks {
 		}
 
 		$event_meta['registration_deadline'] = time() + 2000;
+		$event_meta['registrations_disabled'] = false;
 
 		return $event_meta;
 	}
@@ -219,7 +232,7 @@ class RTEC_Blocks {
 	/**
 	 * Checking if is Gutenberg REST API call.
 	 *
-	 * @since 2.6
+	 * @since 2.14
 	 *
 	 * @return bool True if is Gutenberg REST API call.
 	 */
