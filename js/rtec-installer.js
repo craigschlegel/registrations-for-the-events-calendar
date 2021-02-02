@@ -253,6 +253,6 @@
 
     RtecAdmin.init();
 
-    window.SmashAdmin = SmashAdmin;
+    window.RtecAdmin = RtecAdmin;
 
 })( jQuery );
