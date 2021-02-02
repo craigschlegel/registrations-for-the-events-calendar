@@ -75,6 +75,10 @@ class RTEC_Admin_Registrations {
 		return $this->ids_on_page;
 	}
 
+	public function get_settings() {
+	    return $this->settings;
+    }
+
 	/**
 	 * @return array
 	 */
@@ -376,20 +380,46 @@ class RTEC_Admin_Registrations {
 		$settings = $this->settings;
 		$events   = $this->get_events();
 
-		foreach ( $events as $event ) {
-			$event_meta = rtec_get_event_meta( $event->ID );
-			$this->add_event_id_on_page( $event->ID );
+		$should_show_create_event_prompt = (empty( $events ) && $settings['qtype'] === 'upcoming' && $settings['with'] === 'with');
 
-			if ( rtec_should_show( $settings['with'], $event_meta['registrations_disabled'] ) ) {
-				$event_obj = new RTEC_Admin_Event();
-				$event_obj->build_admin_event( $event->ID, 'grid', '' );
-				if ( ! empty( $event_obj->mvt_fields ) ) {
-					echo '<div class="rtec-single-mvt-pair-wrapper rtec-clear">';
-				}
-				include RTEC_PLUGIN_DIR . 'inc/admin/templates/partials/registrations-overview-view.php';
-			}
+		if ( $should_show_create_event_prompt ) {
+			?>
+			<div class="rtec-notice">
+				<p><?php echo sprintf( __( "Looks like you there weren't any upcoming events allowing registration found. %sCreate an event%s to get started!", 'registrations-for-the-events-calendar' ), '<a href="' . admin_url( 'post-new.php?post_type=tribe_events' ) .'" class="button button-primary">', '</a>'); ?></p>
+			</div>
+			<?php
+			$args = array(
+				'posts_per_page' => $this->posts_per_page,
+				'start_date' => '2000-10-01 00:01',
+				'offset' => 0
+			);
+			$events = tribe_get_events( $args );
+			if ( ! empty( $events ) ) :
+			?>
+                <p><?php _e( "Here are some events that didn't fit your filters:", 'registrations-for-the-events-calendar' ); ?></p>
+            <?php
+            endif;
 
 		}
+
+		if ( ! empty( $events ) ) {
+			foreach ( $events as $event ) {
+				$event_meta = rtec_get_event_meta( $event->ID );
+				$this->add_event_id_on_page( $event->ID );
+
+				if ( rtec_should_show( $settings['with'], $event_meta['registrations_disabled'] ) ) {
+					$event_obj = new RTEC_Admin_Event();
+					$event_obj->build_admin_event( $event->ID, 'grid', '' );
+					if ( ! empty( $event_obj->mvt_fields ) ) {
+						echo '<div class="rtec-single-mvt-pair-wrapper rtec-clear">';
+					}
+					include RTEC_PLUGIN_DIR . 'inc/admin/templates/partials/registrations-overview-view.php';
+				}
+
+			}
+        }
+
+
 	}
 
 	/**

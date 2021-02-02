@@ -21,7 +21,8 @@ class RTEC_Admin
     public function __construct()
     {
         add_action( 'admin_menu', array( $this, 'add_tribe_submenu' ) );
-        add_action( 'admin_init', array( $this, 'options_page_init' ) );
+	    add_action( 'admin_menu', array( $this, 'add_rtec_menu' ) );
+	    add_action( 'admin_init', array( $this, 'options_page_init' ) );
     }
 
     /**
@@ -31,28 +32,8 @@ class RTEC_Admin
      */
     public function add_tribe_submenu()
     {
-        $menu_title = __( 'Registrations', 'registrations-for-the-events-calendar' );
-
-        $new_registrations_count = rtec_get_existing_new_reg_count();
-
-        if ( $new_registrations_count > 0 ) {
-            $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . esc_html( $new_registrations_count ) . '</span></span>';
-        } else {
-            if ( get_transient( 'rtec_new_messages' ) === 'yes' ) {
-                $menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . __( 'New!', 'registrations-for-the-events-calendar' ) . '</span></span>';
-            }
-        }
-
-        add_submenu_page(
-	        'edit.php?post_type=' . RTEC_TRIBE_EVENTS_POST_TYPE,
-            'Registrations',
-            $menu_title,
-            'edit_posts',
-	        RTEC_MENU_SLUG,
-            array( $this, 'create_options_page' )
-        );
 	    add_submenu_page(
-		    '',
+		    'edit.php?post_type=' . RTEC_TRIBE_EVENTS_POST_TYPE,
 		    esc_html__( 'Registrations', 'registrations-for-the-events-calendar' ),
 		    esc_html__( 'Registrations', 'registrations-for-the-events-calendar' ),
 		    'edit_posts',
@@ -60,6 +41,55 @@ class RTEC_Admin
 		    array( $this, 'create_options_page' )
 	    );
     }
+
+	function add_rtec_menu() {
+		$menu_title = __( 'Registrations', 'registrations-for-the-events-calendar' );
+
+		$new_registrations_count = rtec_get_existing_new_reg_count();
+
+		if ( $new_registrations_count > 0 ) {
+			$menu_title .= ' <span class="update-plugins rtec-notice-admin-reg-count"><span>' . esc_html( $new_registrations_count ) . '</span></span>';
+		}
+
+		$capability = rtec_get_capability();
+
+		add_menu_page(
+			__( 'Registrations', 'registrations-for-the-events-calendar' ),
+			__( $menu_title, 'registrations-for-the-events-calendar' ),
+			$capability,
+			RTEC_MENU_SLUG,
+			array( $this, 'create_options_page' ),
+			'dashicons-calendar',
+			7
+		);
+
+		add_submenu_page(
+			'registrations-for-the-events-calendar',
+			esc_html__( 'Form Settings', 'registrations-for-the-events-calendar' ),
+			esc_html__( 'Form Settings', 'registrations-for-the-events-calendar' ),
+			'manage_options',
+			'rtec-form',
+			array( $this, 'create_options_page' )
+		);
+
+		add_submenu_page(
+			'registrations-for-the-events-calendar',
+			esc_html__( 'Email Settings', 'registrations-for-the-events-calendar' ),
+			esc_html__( 'Email Settings', 'registrations-for-the-events-calendar' ),
+			'manage_options',
+			'rtec-email',
+			array( $this, 'create_options_page' )
+		);
+
+		add_submenu_page(
+			'registrations-for-the-events-calendar',
+			esc_html__( 'Support', 'registrations-for-the-events-calendar' ),
+			esc_html__( 'Support', 'registrations-for-the-events-calendar' ),
+			'manage_options',
+			'rtec-support',
+			array( $this, 'create_options_page' )
+		);
+	}
     
     /**
      * Validates the $_GET field with tab information
@@ -1933,6 +1963,65 @@ class RTEC_Admin
         $value = str_replace( array( '%0a', '%0d' ), ' ' , $value );
         return trim( $value );
     }
+
+	public static function get_plugin_data( $plugin, $details, $all_plugins ) {
+
+		$have_pro = ( ! empty( $details['pro'] ) && ! empty( $details['pro']['plug'] ) );
+		$show_pro = false;
+
+		$plugin_data = array();
+
+		if ( $have_pro ) {
+			if ( array_key_exists( $plugin, $all_plugins ) ) {
+				if ( is_plugin_active( $plugin ) ) {
+					$show_pro = true;
+				}
+			}
+			if ( array_key_exists( $details['pro']['plug'], $all_plugins ) ) {
+				$show_pro = true;
+			}
+			if ( $show_pro ) {
+				$plugin  = $details['pro']['plug'];
+				$details = $details['pro'];
+			}
+		}
+
+		if ( array_key_exists( $plugin, $all_plugins ) ) {
+			if ( is_plugin_active( $plugin ) ) {
+				// Status text/status.
+				$plugin_data['status_class'] = 'status-active';
+				$plugin_data['status_text']  = esc_html__( 'Active', 'instagram-feed' );
+				// Button text/status.
+				$plugin_data['action_class'] = $plugin_data['status_class'] . ' button button-secondary disabled';
+				$plugin_data['action_text']  = esc_html__( 'Activated', 'instagram-feed' );
+				$plugin_data['plugin_src']   = esc_attr( $plugin );
+			} else {
+				// Status text/status.
+				$plugin_data['status_class'] = 'status-inactive';
+				$plugin_data['status_text']  = esc_html__( 'Inactive', 'instagram-feed' );
+				// Button text/status.
+				$plugin_data['action_class'] = $plugin_data['status_class'] . ' button button-secondary';
+				$plugin_data['action_text']  = esc_html__( 'Activate', 'instagram-feed' );
+				$plugin_data['plugin_src']   = esc_attr( $plugin );
+			}
+		} else {
+			// Doesn't exist, install.
+			// Status text/status.
+			$plugin_data['status_class'] = 'status-download';
+			if ( isset( $details['act'] ) && 'go-to-url' === $details['act'] ) {
+				$plugin_data['status_class'] = 'status-go-to-url';
+			}
+			$plugin_data['status_text'] = esc_html__( 'Not Installed', 'instagram-feed' );
+			// Button text/status.
+			$plugin_data['action_class'] = $plugin_data['status_class'] . ' button button-primary';
+			$plugin_data['action_text']  = esc_html__( 'Install Plugin', 'instagram-feed' );
+			$plugin_data['plugin_src']   = esc_url( $details['url'] );
+		}
+
+		$plugin_data['details'] = $details;
+
+		return $plugin_data;
+	}
 }
 
 /**
