@@ -798,6 +798,202 @@ function rtec_attendance_count_above_description_list() {
 	}
 }
 
+/**
+ * Load the critical notice for logged in users.
+ */
+function rtec_new_user_notice() {
+	//set_transient( 'rtec_new_messages', 'yes', 1* WEEK_IN_SECONDS );
+	if ( ! function_exists( 'tribe_is_event') ) {
+		return;
+	}
+
+    if ( ! tribe_is_event() || ! is_single() ) {
+        return;
+    }
+	// Don't do anything for guests.
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	// Only show this to users who are not tracked.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	// Don't show if already dismissed.
+	$new_status = get_transient( 'rtec_new_messages' );
+	if ( $new_status !== 'yes' ) {
+        return;
+	}
+
+	$rtec_statuses = get_option( 'rtec_statuses', array() );
+
+	if ( isset( $rtec_statuses['new_user_dismiss'] ) ) {
+		return;
+	}
+
+	?>
+    <div class="rtec-new-user-notice rtec-new-user-notice-hide">
+        <div class="rtec-new-user-notice-icon">
+            <img src="<?php echo esc_url( RTEC_PLUGIN_URL . 'img/RTEC-Logo-150x150.png' ); ?>" width="45" alt="RTEC icon" />
+        </div>
+        <div class="rtec-new-user-notice-text">
+            <h3><?php esc_html_e( 'Questions About Registration?', 'registrations-for-the-events-calendar' ); ?></h3>
+            <p>
+				<?php
+				// Translators: %s is the link to the article where more details about critical are listed.
+				esc_html_e( 'Since you are logged-in, the first, last, and email fields are filled in with your user information. Also, the recaptcha field is only required for logged-out visitors.', 'registrations-for-the-events-calendar' );
+				?>
+            </p>
+            <p>
+		        <?php
+		        // Translators: %s is the link to the article where more details about critical are listed.
+		        $doc_url = admin_url() . 'admin.php?page=rtec-support';
+		        echo sprintf( esc_html__( 'Visit the %ssupport page%s in your WordPress dashboard if you have questions.', 'registrations-for-the-events-calendar' ), '<a href="' . esc_url( $doc_url ) . '" target="_blank">', '</a>' );
+		        ?>
+            </p>
+        </div>
+        <div class="rtec-new-user-notice-close">&times;</div>
+    </div>
+    <style type="text/css">
+        .rtec-new-user-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 15px;
+            background: #fff;
+            box-shadow: 0 0 10px 0 #dedede;
+            padding: 10px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 425px;
+            max-width: calc( 100% - 30px );
+            border-radius: 6px;
+            transition: bottom 700ms ease;
+            z-index: 10000;
+        }
+
+        .rtec-new-user-notice h3 {
+            font-size: 13px;
+            color: #222;
+            font-weight: 700;
+            margin: 0 0 7px;
+            padding: 0;
+            line-height: 1;
+            border: none;
+        }
+
+        .rtec-new-user-notice p {
+            font-size: 12px;
+            color: #7f7f7f;
+            font-weight: 400;
+            margin: 0 0 7px;
+            padding: 0;
+            line-height: 1.2;
+            border: none;
+        }
+
+        .rtec-new-user-notice p a {
+            color: #7f7f7f;
+            font-size: 12px;
+            line-height: 1.2;
+            margin: 0;
+            padding: 0;
+            text-decoration: underline;
+            font-weight: 400;
+        }
+
+        .rtec-new-user-notice p a:hover {
+            color: #666;
+        }
+
+        .rtec-new-user-notice-icon img {
+            height: auto;
+            display: block;
+            margin: 0;
+        }
+
+        .rtec-new-user-notice-icon {
+            padding: 0;
+            border-radius: 4px;
+            flex-grow: 0;
+            flex-shrink: 0;
+            margin-right: 12px;
+            overflow: hidden;
+        }
+
+        .rtec-new-user-notice-close {
+            padding: 10px;
+            margin: -12px -9px 0 0;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            color: #7f7f7f;
+            background: transparent;
+            line-height: 1;
+            align-self: flex-start;
+            cursor: pointer;
+            font-weight: 400;
+        }
+        .rtec-new-user-notice-close:hover,
+        .rtec-new-user-notice-close:focus{
+            color: #111;
+        }
+
+        .rtec-new-user-notice.rtec-new-user-notice-hide {
+            bottom: -200px;
+        }
+    </style>
+	<?php
+
+	if ( ! wp_script_is( 'jquery', 'queue' ) ) {
+		wp_enqueue_script( 'jquery' );
+	}
+	?>
+    <script>
+        if ( 'undefined' !== typeof jQuery ) {
+            jQuery( document ).ready( function ( $ ) {
+                /* Don't show the notice if we don't have a way to hide it (no js, no jQuery). */
+                $( document.querySelector( '.rtec-new-user-notice' ) ).removeClass( 'rtec-new-user-notice-hide' );
+                $( document.querySelector( '.rtec-new-user-notice-close' ) ).on( 'click', function ( e ) {
+                    e.preventDefault();
+                    $( this ).closest( '.rtec-new-user-notice' ).addClass( 'rtec-new-user-notice-hide' );
+                    $.ajax( {
+                        url: '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>',
+                        method: 'POST',
+                        data: {
+                            action: 'rtec_dismiss_new_user_notice',
+                            nonce: '<?php echo esc_js( wp_create_nonce( 'rtec-new-user-notice' ) ); ?>',
+                        }
+                    } );
+                } );
+            } );
+        }
+    </script>
+	<?php
+}
+
+add_action( 'wp_footer', 'rtec_new_user_notice', 300 );
+
+function rtec_dismiss_new_user_notice() {
+
+	check_ajax_referer( 'rtec-new-user-notice', 'nonce' );
+
+	$rtec_statuses = get_option( 'rtec_statuses', array() );
+
+	if ( ! is_array( $rtec_statuses ) ) {
+		$rtec_statuses = array();
+    }
+
+	$rtec_statuses['new_user_dismiss'] = true;
+
+	update_option( 'rtec_statuses', $rtec_statuses, false );
+
+	wp_die();
+
+}
+
+add_action( 'wp_ajax_rtec_dismiss_new_user_notice', 'rtec_dismiss_new_user_notice' );
 
 /**
 * outputs the custom js from the "Customize" tab on the Settings page

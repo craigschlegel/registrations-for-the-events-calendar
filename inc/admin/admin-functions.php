@@ -228,7 +228,14 @@ function rtec_meta_boxes_html(){
     <div class="rtec-notice">
         <span><?php _e( sprintf( 'Add the shortcode %s using the editor above to display a registration form on this page.', '<code>[rtec-registration-form]</code>' ), 'registrations-for-the-events-calendar' ); ?></span>
     </div>
-    <?php endif; ?>
+    <?php else:
+        $new_status = get_transient( 'rtec_new_messages' );
+        if ( ! $event_meta['registrations_disabled'] && $new_status === 'yes' ) : ?>
+        <div class="rtec-notice">
+            <?php _e( 'A registration form will be automatically added to the event content.', 'registrations-for-the-events-calendar' ); ?>
+        </div>
+        <?php endif; ?>
+	<?php endif; ?>
 	<div id="eventDetails" class="inside eventForm">
 		<table cellspacing="0" cellpadding="0" id="EventInfo">
 			<tbody>

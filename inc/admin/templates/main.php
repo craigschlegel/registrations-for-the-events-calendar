@@ -33,11 +33,13 @@
                     <?php
                     else :
 
+                    $version_string = version_compare( PHP_VERSION,  '5.6.0', '<' ) ? '.4.6.23' : RTEC_TEC_VER_STRING;
+
 			        $plugin      = array(
 				        'icon' => RTEC_PLUGIN_URL . '/img/tec-icon.png',
 				        'name' => esc_html__( 'The Events Calendar', 'registrations-for-the-events-calendar' ),
 				        'desc' => esc_html__( 'A fully featured, immensely popular calendar solution from Modern Tribe. Registrations for The Events Calendar by Roundup WP adds registration features to The Events Calendar.', 'registrations-for-the-events-calendar' ),
-				        'url'  => 'https://downloads.wordpress.org/plugin/the-events-calendar' . RTEC_TEC_VER_STRING . '.zip',
+				        'url'  => 'https://downloads.wordpress.org/plugin/the-events-calendar' . $version_string . '.zip',
 			        );
 			        $all_plugins = get_plugins();
 
