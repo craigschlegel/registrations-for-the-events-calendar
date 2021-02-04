@@ -684,6 +684,9 @@ function rtec_get_no_backend_column_fields() {
  */
 add_shortcode( 'rtec-registration-form', 'rtec_the_registration_form_shortcode' );
 function rtec_the_registration_form_shortcode( $atts ) {
+    if ( ! function_exists( 'tribe_is_event' ) ) {
+        return '';
+    }
     global $rtec_options;
 
     $atts = is_array( $atts ) ? $atts : array();

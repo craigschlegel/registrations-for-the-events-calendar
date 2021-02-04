@@ -145,7 +145,10 @@ class RTEC_Blocks {
 		}
 
 		$upcoming_posts = get_posts( $args );
-		$upcoming_event_array = array();
+		$upcoming_event_array = array( array(
+			'id' => 0,
+			'title' => __( 'Click here', 'registrations-for-the-events-calendar' ),
+		));
 		if ( ! empty( $upcoming_posts ) ) {
 			foreach ( $upcoming_posts as $post ) {
 				$upcoming_event_array[] = array(
