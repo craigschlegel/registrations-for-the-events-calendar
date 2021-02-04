@@ -748,8 +748,10 @@ class RTEC_Form
 	    $classes = '';
 
 	    $location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'tribe_events_single_event_before_the_content';
-        if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
+        $data_atts = '';
+	    if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
             $classes .= ' rtec-js-placement';
+		    $data_atts = ' data-placement="' . esc_attr( $location ) . '"';
         }
 
 	    $success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' );
@@ -1281,9 +1283,11 @@ class RTEC_Form
 		// rtec classes and data
 		$classes = '';
 		$outer_wrap_classes = '';
+		$data_atts = '';
 		$location = isset( $rtec_options['template_location'] ) ? $rtec_options['template_location'] : 'tribe_events_single_event_before_the_content';
 		if ( $location !== 'shortcode' && class_exists( 'Tribe__Editor__Blocks__Abstract' ) && tribe_is_event() && is_single() ) {
 			$outer_wrap_classes .= ' rtec-js-placement';
+			$data_atts = ' data-location="' . esc_attr( $location ) . '"';
 		}
 
 		$success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' );

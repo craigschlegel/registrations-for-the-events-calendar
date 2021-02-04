@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 ?>
-<div class="rtec-outer-wrap<?php echo $outer_wrap_classes; ?>">
+<div class="rtec-outer-wrap<?php echo $outer_wrap_classes; ?>"<?php echo $data_atts; ?>>
     <?php
 
     do_action( 'rtec_before_display_form', $before_display_args );

@@ -13,8 +13,11 @@ jQuery(document).ready(function($) {
                 || $('footer').find('.rtec-success-message').length) {
 
                 var $moveEl = $('#rtec-js-move-flag'),
-                    rtecLocation = typeof $('#rtec-js-move-flag').attr('data-location') !== 'undefined' ? $('#rtec-js-move-flag').attr('data-location') : 'tribe_events_single_event_before_the_content';
-                if ($('.rtec-outer-wrap.rtec-js-placement').length) {
+                    rtecLocation = typeof $('.rtec-outer-wrap').attr('data-location') !== 'undefined' ? $('.rtec-outer-wrap').attr('data-location') : false;
+                    if ( ! rtecLocation ) {
+                        rtecLocation = typeof $('#rtec-js-move-flag').attr('data-location') !== 'undefined' ? $('#rtec-js-move-flag').attr('data-location') : 'tribe_events_single_event_before_the_content';
+                    }
+                    if ($('.rtec-outer-wrap.rtec-js-placement').length) {
                     $moveEl = $('.rtec-outer-wrap.rtec-js-placement');
                 } else if ($('.rtec').length) {
                     $moveEl = $('.rtec');
@@ -29,8 +32,23 @@ jQuery(document).ready(function($) {
                     } else {
                         $('.tribe-events-single-event-description').first().before($moveEl);
                     }
+                } else if ($('.tribe-events-single-section.tribe-events-event-meta').length
+                    && rtecLocation === 'tribe_events_single_event_after_the_content') {
+                    $('.tribe-events-single-section.tribe-events-event-meta').first().before($moveEl);
                 } else if ($('.tribe-events-schedule').length) {
-                    $('.tribe-events-schedule').first().after($moveEl);
+                    if (rtecLocation === 'tribe_events_single_event_after_the_content') {
+                        if ($('.tribe-block.tribe-block__event-price').prev('p').length) {
+                            $('.tribe-block.tribe-block__event-price').prev('p').after($moveEl);
+                        } else if ($('.tribe-block.tribe-block__organizer__details').prev('p').length) {
+                            $('.tribe-block.tribe-block__organizer__details').prev('p').after($moveEl);
+                        } else if ($('.tribe-block.tribe-block__venue').prev('p').length) {
+                            $('.tribe-block.tribe-block__venue').prev('p').after($moveEl);
+                        } else {
+                            $('.tribe-events-schedule').first().after($moveEl);
+                        }
+                    } else {
+                        $('.tribe-events-schedule').first().after($moveEl);
+                    }
                 } else if ($('.tribe-events-single .tribe_events').length) {
                     $('.tribe-events-single .tribe_events').first().prepend($moveEl);
                 } else if ($('.tribe-events-single h1').length) {

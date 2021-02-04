@@ -616,7 +616,7 @@ function rtec_send_unregister_link() {
 	global $rtec_options;
 	$event_id = sanitize_text_field( $_POST['event_id'] );
 	$email = sanitize_text_field( $_POST['email'] );
-//email_error_message
+
 	$email_error_message = isset( $rtec_options['email_error_message'] ) ? esc_html( $rtec_options['email_error_message'] ) : __( 'Please enter the email you registered with.', 'registrations-for-the-events-calendar' );
 	$email_error_message = rtec_get_text( $email_error_message, __( 'Please enter the email you registered with.', 'registrations-for-the-events-calendar' ) );
 	if ( ! is_email( $email ) ) {
@@ -667,10 +667,6 @@ function rtec_send_unregister_link() {
         }
 
 		$sanitized_data = array_merge( $event_meta, $registration );
-
-		if ( $event_meta['mvt_enabled'] ) {
-			$sanitized_data['mvt_label'] = isset( $event_meta['mvt_fields'][ $sanitized_data['venue'] ]['label'] ) ? $event_meta['mvt_fields'][ $sanitized_data['venue'] ]['label'] : '';
-		}
 
 		$sanitized_data['date'] = $event_meta['start_date'];
 
