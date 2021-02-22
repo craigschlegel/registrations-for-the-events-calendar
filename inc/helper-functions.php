@@ -217,6 +217,19 @@ function rtec_get_venue( $event_id = NULL ) {
 		return '';
 	}
 }
+
+function rtec_get_events( $args, $show_hidden = true ) {
+
+	if ( ! function_exists( 'tribe_get_events' ) ) {
+		// TODO: Add workaround when events calendar is inactive
+		return array();
+	}
+	if ( $show_hidden ) {
+		$args['hide_upcoming'] = false;
+	}
+	return tribe_get_events( $args );
+}
+
 function rtec_get_parsed_custom_field_data( $raw_data ) {
 	global $rtec_options;
 

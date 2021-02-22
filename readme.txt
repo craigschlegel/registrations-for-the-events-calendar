@@ -5,7 +5,7 @@ Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
 Tested up to: 5.6
-Stable tag: 2.7
+Stable tag: 2.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -190,6 +190,11 @@ Yes. There is a custom database table added to each sub-site's database to separ
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 
 == Changelog ==
+= 2.7.1 =
+* Fix: The code that checks for duplicate emails when someone registers was firing before a valid email was entered and causing a confusing error message.
+* Fix: When using the overview of the Registrations tab, suggested events that would display if no upcoming events were found would not use the PHP filter for the associated WP Query.
+* Fix: Added support for including events that are hidden from event listings in all places where events are displayed.
+
 = 2.7 =
 * New: Added "Registrations" menu item in addition to the submenu under "Events".
 * New: Added PHP hook "rtec_email_approved_for_registration" to allow customizations in what email addresses can register for an event.

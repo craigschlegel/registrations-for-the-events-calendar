@@ -398,9 +398,9 @@ jQuery(document).ready(function($) {
                     clearTimeout(typingTimer);
                     typingTimer = setTimeout(function () {
                         var $eventID = $context.find('input[name=rtec_event_id]').val();
-                        RtecForm.enableSubmitButton(function () {
+                        if (RtecForm.isValidEmail($this.val())) {
                             RtecForm.isDuplicateEmail($this.val(), $eventID, $context);
-                        }, $context);
+                        }
                     }, doneTypingInterval);
                 });
                 $rtecEmailField.each(function () {

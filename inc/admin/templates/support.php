@@ -164,7 +164,7 @@ if ( $reg_table_exists ) {
 }
 
 if ( function_exists( 'tribe_get_events' ) ) {
-	$event = tribe_get_events( array(
+	$event = rtec_get_events( array(
 		'posts_per_page' => 1,
 		'start_date' => date( '2000-1-1 0:0:0' ),
 		'orderby' => 'date',

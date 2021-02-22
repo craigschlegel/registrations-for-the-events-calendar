@@ -303,7 +303,7 @@ class RTEC_Admin_Registrations {
 			return get_posts( $args );
 		}
 
-		return tribe_get_events( $args );
+		return rtec_get_events( $args );
 	}
 
 	/**
@@ -393,7 +393,9 @@ class RTEC_Admin_Registrations {
 				'start_date' => '2000-10-01 00:01',
 				'offset' => 0
 			);
-			$events = tribe_get_events( $args );
+			$args = apply_filters( 'rtec_registration_overview_query_args', $args, $this->settings );
+
+			$events = rtec_get_events( $args );
 			if ( ! empty( $events ) ) :
 			?>
                 <p><?php _e( "Here are some events that didn't fit your filters:", 'registrations-for-the-events-calendar' ); ?></p>
