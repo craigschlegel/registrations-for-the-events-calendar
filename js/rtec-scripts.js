@@ -77,7 +77,7 @@ jQuery(document).ready(function($) {
                     $form.find('input[type=submit]').each(function() {
                         sendUnregisterText = $(this).val();
                     });
-                    $form.submit(function(event) {
+                    $form.on('submit',function(event) {
                         var val = $(this).find("input[type=submit][clicked=true]").val();
                         if (sendUnregisterText === val) {
                             event.preventDefault();
@@ -87,7 +87,7 @@ jQuery(document).ready(function($) {
                             $form.after($('.rtec-spinner').clone());
                             $form.next('.rtec-spinner').show();
                             $form.fadeTo(500,.1);
-                            $form.find('input[type=submit]').attr('disabled',true).css('opacity', .1);
+                            $form.find('input[type=submit]').prop('disabled',true).css('opacity', .1);
 
                             var submittedData = {
                                 'action': action,
@@ -102,7 +102,7 @@ jQuery(document).ready(function($) {
                                 success: function (data) {
                                     $form.next('.rtec-spinner').remove();
                                     $form.fadeTo(500,1);
-                                    $form.find('input[type=submit]').removeAttr('disabled').css('opacity', 1);
+                                    $form.find('input[type=submit]').prop('disabled',false).css('opacity', 1);
                                     if (data.trim().indexOf('{') > -1) {
                                         var response = JSON.parse(data.trim());
 
@@ -122,9 +122,9 @@ jQuery(document).ready(function($) {
 
                         }
                     });
-                    $form.find('input[type=submit]').click(function() {
-                        $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
-                        $(this).attr("clicked", "true");
+                    $form.find('input[type=submit]').on('click',function() {
+                        $("input[type=submit]", $(this).parents("form")).prop("clicked",false);
+                        $(this).prop("clicked", "true");
                     });
 
                 }
@@ -162,7 +162,7 @@ jQuery(document).ready(function($) {
                         $rtecEl.find('#rtec-form .rtec-form-field').last().after('<div class="rtec-honeypot-clear-wrap">' +
                             '<button class="rtec-honeypot-clear rtec-error">'+errorText+'</button>' +
                             '</div>');
-                        $rtecEl.find('.rtec-honeypot-clear').click(function() {
+                        $rtecEl.find('.rtec-honeypot-clear').on('click',function() {
                             $(this).closest('.rtec-error').remove();
                             $rtecEl.find('input[name=rtec_user_comments]').val('');
                         });
@@ -329,7 +329,7 @@ jQuery(document).ready(function($) {
 
                 enableSubmitButton: function (_callback, $context) {
                     if (_callback()) {
-                        $context.find('input[name=rtec_submit]').removeAttr('disabled').css('opacity', 1);
+                        $context.find('input[name=rtec_submit]').prop('disabled',false).css('opacity', 1);
                     }
                 },
 
@@ -377,7 +377,7 @@ jQuery(document).ready(function($) {
                                 $emailEl.addClass(RtecForm.validClass);
                                 RtecForm.removeErrorMessage($emailEl);
                             }
-                            $context.find('input[name=rtec_submit]').removeAttr('disabled').css('opacity', 1);
+                            $context.find('input[name=rtec_submit]').prop('disabled',false).css('opacity', 1);
                             $context.find('.rtec-email-spinner').remove();
 
                         }
@@ -394,7 +394,7 @@ jQuery(document).ready(function($) {
                 $rtecEmailField.on('input', function () {
                     var $this = $(this),
                         $context = $this.closest('.rtec');
-                    $context.find('input[name=rtec_submit]').attr('disabled', true).css('opacity', '.5');
+                    $context.find('input[name=rtec_submit]').prop('disabled', true).css('opacity', '.5');
                     clearTimeout(typingTimer);
                     typingTimer = setTimeout(function () {
                         var $eventID = $context.find('input[name=rtec_event_id]').val();
@@ -413,13 +413,13 @@ jQuery(document).ready(function($) {
                 });
             }
 
-            $('.rtec-form').submit(function (event) {
+            $('.rtec-form').on('submit',function (event) {
                 event.preventDefault();
 
                 var $form = $(this),
                     $rtecEl = $(this).closest('.rtec');
                 rtecCheckHoneypot($rtecEl);
-                $rtecEl.find('input[name=rtec_submit]').attr('disabled', true);
+                $rtecEl.find('input[name=rtec_submit]').prop('disabled', true);
 
                 if ($rtecEl.find('.rtec-screen-reader-error').length) {
                     $rtecEl.find('.rtec-screen-reader-error').remove();
@@ -521,7 +521,7 @@ jQuery(document).ready(function($) {
                         }
                     }); // ajax
                 } else { // if not .rtec-error
-                    $rtecEl.find('input[name=rtec_submit]').removeAttr('disabled').css('opacity', 1);
+                    $rtecEl.find('input[name=rtec_submit]').prop('disabled',false).css('opacity', 1);
                     RtecForm.addScreenReaderError();
 
                     if ($('.rtec-error-message').length) {
@@ -540,7 +540,7 @@ jQuery(document).ready(function($) {
             $rtecReveal.show();
             $rtecOptions.hide();
             $rtecOptionsRemove.remove();
-            $rtecReveal.click(function () {
+            $rtecReveal.on('click',function () {
                 if ($rtecOptions.is(':visible')) {
                     $rtecOptions.slideUp();
                 } else {
@@ -551,7 +551,7 @@ jQuery(document).ready(function($) {
             function rtecToggleModal() {
                 $('body').toggleClass('rtec-modal-is-open');
 
-                $('.rtec-modal-backdrop, .rtec-media-modal-close').click(function () {
+                $('.rtec-modal-backdrop, .rtec-media-modal-close').on('click',function () {
                     var $modalRtec = $('.rtec-modal-content').find('.rtec');
                     $modalRtec.find('.rtec-form-wrapper').hide();
                     $('.rtec-modal-placeholder').replaceWith($modalRtec);

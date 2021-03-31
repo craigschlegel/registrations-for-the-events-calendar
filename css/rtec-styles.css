@@ -33,6 +33,7 @@
 #rtec {
     overflow: auto;
     max-width: 700px;
+    border-top: 0;
 }
 #rtec .rtec-spinner {
     display: none;
@@ -224,6 +225,7 @@
 .single-tribe_events .tribe-events-event-meta .rtec-section-title,
 .rtec-event-meta .rtec-section-title {
     padding: 0 4%;
+    width: 100%;
     font-size: 1.4em;
     font-weight: 700;
     margin: 20px 0 10px;
@@ -236,6 +238,7 @@
 }
 .rtec-event-meta .rtec-attendee {
     display: block;
+    word-break: break-word;
 }
 /** Visitor Tools **/
 .rtec .rtec-already-registered-options .rtec-event-meta {

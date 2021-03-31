@@ -19,7 +19,7 @@ jQuery(document).ready(function($){
         $self.next().slideToggle();
     });
 
-    $('.rtec-field-wrapper-email .rtec_include_checkbox').click(function() {
+    $('.rtec-field-wrapper-email .rtec_include_checkbox').on('click',function() {
         var $self = $(this);
 
         if (!$self.is(':checked')) {
@@ -37,7 +37,7 @@ jQuery(document).ready(function($){
         }, 1);
     }
     rtecGoogleType();
-    $('.rtec-recaptcha-type-radio').change(rtecGoogleType);
+    $('.rtec-recaptcha-type-radio').on('change',rtecGoogleType);
 
     var $rtecAttendanceMessageType = $('.rtec_attendance_message_type');
     function rtecToggleMessageTypeOptions(val) {
@@ -49,7 +49,7 @@ jQuery(document).ready(function($){
             $('#rtec-message-text-wrapper-down').css('opacity', '.7').find('input').prop('disabled', 'true');
         }
     }
-    $rtecAttendanceMessageType.change(function(){
+    $rtecAttendanceMessageType.on('change',function(){
         rtecToggleMessageTypeOptions($(this).val());
     });
     $rtecAttendanceMessageType.each(function(){
@@ -68,7 +68,7 @@ jQuery(document).ready(function($){
     }
 
 
-    $('.rtec-add-field').click(function(event) {
+    $('.rtec-add-field').on('click',function(event) {
         event.preventDefault();
 
         var rtecFieldIndex = 1;
@@ -124,7 +124,7 @@ jQuery(document).ready(function($){
     }
     toggleCustomNotificationTextArea.apply($('#rtec_use_custom_notification'));
 
-    $('#rtec_use_custom_notification').click(function() {
+    $('#rtec_use_custom_notification').on('click',function() {
         toggleCustomNotificationTextArea.apply($(this));
     });
 
@@ -160,7 +160,7 @@ jQuery(document).ready(function($){
     if ( $rtecConfirmationTextarea.length){
         updateText();
     }
-    $rtecConfirmationTextarea.keyup(function(){
+    $rtecConfirmationTextarea.on('keyup',function(){
         clearTimeout(typingTimer);
         typingTimer = setTimeout(updateText, doneTypingInterval);
     });
@@ -174,7 +174,7 @@ jQuery(document).ready(function($){
         jQuery('#rtec-notice-bar').show();
     }
 
-    jQuery('#rtec-notice-bar .dismiss').click(function(e) {
+    jQuery('#rtec-notice-bar .dismiss').on('click',function(e) {
         e.preventDefault();
         jQuery('#rtec-notice-bar').remove();
         var submitData = {
@@ -186,7 +186,7 @@ jQuery(document).ready(function($){
 
     // Tooltip
     $('.rtec-tooltip').hide();
-    $('.rtec-tooltip-link').click( function() {
+    $('.rtec-tooltip-link').on('click', function() {
         if ($(this).next('.rtec-tooltip').is(':visible')) {
             $(this).next('.rtec-tooltip').slideUp();
         } else {
@@ -198,11 +198,11 @@ jQuery(document).ready(function($){
         $('.rtec-form-location-example').hide();
         $('.rtec-form-location-'+$('#rtec_template_location').val()).show();
     }rtecLocationToggle();
-    $('#rtec_template_location').change(rtecLocationToggle);
+    $('#rtec_template_location').on('change',rtecLocationToggle);
 
     // REGISTRATIONS overview tab
     // View selector tool
-    $('#rtec-filter-go').click(function() {
+    $('#rtec-filter-go').on('click',function() {
         $('#rtec-toolbar-form').submit();
     });
 
@@ -247,7 +247,7 @@ jQuery(document).ready(function($){
 
     function rtecGetSearchResults() {
         if($rtecSearchInput.val() !== ''){
-            $rtecSearchInput.attr('disabled', true);
+            $rtecSearchInput.prop('disabled', true);
             var submitData = {
                     action: 'rtec_get_search_results',
                     term: $rtecSearchInput.val(),
@@ -255,9 +255,9 @@ jQuery(document).ready(function($){
                 },
                 successFunc = function (data) {
                     $('.rtec-overview').html(data);
-                    $rtecSearchInput.removeAttr('disabled');
+                    $rtecSearchInput.prop('disabled',false);
 
-                    $('.rtec-manage-match').click(function(event) {
+                    $('.rtec-manage-match').on('click',function(event) {
                         event.preventDefault();
                         if ($(this).next('.rtec-manage-match-actions').is(':visible')) {
                             $(this).next('.rtec-manage-match-actions').slideUp();
@@ -265,7 +265,7 @@ jQuery(document).ready(function($){
                             $(this).next('.rtec-manage-match-actions').slideDown();
                         }
                     });
-                    $('.rtec-manage-match-actions button').click(function(event){
+                    $('.rtec-manage-match-actions button').on('click',function(event){
                         var $self = $(this),
                             $context = $self.closest('.rtec-manage-match-actions'),
                             entry_id = $context.attr('data-entry-id'),
@@ -278,7 +278,7 @@ jQuery(document).ready(function($){
                             if (confirm(message)) {
                                 $self
                                     .after('<div class="rtec-table-changing spinner is-active"></div>')
-                                    .fadeTo("slow", .5).attr('disabled',true);
+                                    .fadeTo("slow", .5).prop('disabled',true);
 
                                 var edit_action = 'delete';
                                 if ( action === 'delete-all' ) {
@@ -320,24 +320,24 @@ jQuery(document).ready(function($){
                     });
                     // remove spinner
                     //$targetForm.find('.rtec-table-changing').remove();
-                    //$targetForm.find('.rtec-update-event-options').removeAttr('disabled');
+                    //$targetForm.find('.rtec-update-event-options').prop('disabled',false);
                 };
             rtecRegistrationAjax(submitData,successFunc);
         }
 
     }
 
-    $rtecSearchInput.keyup(function(){
+    $rtecSearchInput.on('keyup',function(){
         clearTimeout(typingTimer);
         typingTimer = setTimeout(rtecGetSearchResults, doneTypingInterval);
     });
 
-    $rtecSearchInput.keydown(function() {
+    $rtecSearchInput.on('keydown',function() {
         clearTimeout(typingTimer);
     });
 
     // dismiss new
-    $('#rtec-new-dismiss').click(function(event) {
+    $('#rtec-new-dismiss').on('click',function(event) {
         event.preventDefault();
         $('#rtec-new-dismiss,.rtec-notice-admin-reg-count').remove();
 
@@ -356,7 +356,7 @@ jQuery(document).ready(function($){
 
     var $rtecOptionsHandle = $('.rtec-event-options .handlediv');
 
-    $rtecOptionsHandle.click(function() {
+    $rtecOptionsHandle.on('click',function() {
         var $rtecEventOptions = $(this).closest('.rtec-event-options')
         $rtecEventOptions.next().slideToggle();
         if ($rtecEventOptions.hasClass('open')) {
@@ -373,16 +373,16 @@ jQuery(document).ready(function($){
             $deadlineType = $wrapEl.find('input[name="_RTECdeadlineType"]');
 
         if ($disableReg.is(':checked')) {
-            $limitReg.attr('disabled','true');
-            $maxReg.attr('disabled','true');
-            $deadlineType.attr('disabled','true');
+            $limitReg.prop('disabled','true');
+            $maxReg.prop('disabled','true');
+            $deadlineType.prop('disabled','true');
         } else {
-            $limitReg.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
-            $deadlineType.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
+            $limitReg.prop('disabled',false).closest('.rtec-fade').removeClass('rtec-fade');
+            $deadlineType.prop('disabled',false).closest('.rtec-fade').removeClass('rtec-fade');
             if ($limitReg.is(':checked')) {
-                $maxReg.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
+                $maxReg.prop('disabled',false).closest('.rtec-fade').removeClass('rtec-fade');
             } else {
-                $maxReg.attr('disabled','true');
+                $maxReg.prop('disabled','true');
             }
         }
 
@@ -400,10 +400,10 @@ jQuery(document).ready(function($){
         rtecDisabledToggle($(this).closest('.rtec-hidden-options'));
     });
 
-    $('.rtec-update-event-options').click(function(event) {
+    $('.rtec-update-event-options').on('click',function(event) {
         event.preventDefault();
         $(this).after('<div class="rtec-table-changing spinner is-active"></div>')
-            .attr('disabled', true);
+            .prop('disabled', true);
 
         var $targetForm = $(this).closest('.rtec-event-options-form'),
             eventOptionsData = $targetForm.serializeArray(),
@@ -415,7 +415,7 @@ jQuery(document).ready(function($){
             successFunc = function () {
                 // remove spinner
                 $targetForm.find('.rtec-table-changing').remove();
-                $targetForm.find('.rtec-update-event-options').removeAttr('disabled');
+                $targetForm.find('.rtec-update-event-options').prop('disabled',false);
                 location.reload();
             };
         rtecRegistrationAjax(submitData,successFunc);
@@ -586,7 +586,7 @@ jQuery(document).ready(function($){
         });
     }
 
-    $('.rtec-action').click(function() {
+    $('.rtec-action').on('click',function() {
 
         if ($(this).attr('data-rtec-action') === 'delete') {
             var idsToRemove = RtecRecordsEditor.getChecked();

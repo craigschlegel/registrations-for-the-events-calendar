@@ -29,7 +29,7 @@ jQuery(document).ready(function($){
         });
     }
 
-    $('.rtec-reveal-mvt').click(function(event) {
+    $('.rtec-reveal-mvt').on('click',function(event) {
         event.preventDefault();
 
         var mvtNames = $('#rtec_mvt_names').val().split(','),
@@ -70,28 +70,28 @@ jQuery(document).ready(function($){
             $attendeeLoggedOnly = $wrapEl.find('input[name="_RTECattendeeListLoggedInOnly"]');
 
         if ($disableReg.is(':checked')) {
-            $eventForm.attr('disabled','true');
-            $limitReg.attr('disabled','true');
-            $whoCan.attr('disabled','true');
-            $maxReg.attr('disabled','true');
-            $deadlineType.attr('disabled','true');
+            $eventForm.prop('disabled',true);
+            $limitReg.prop('disabled',true);
+            $whoCan.prop('disabled',true);
+            $maxReg.prop('disabled',true);
+            $deadlineType.prop('disabled',true);
         } else {
-            $eventForm.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
-            $whoCan.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
-            $limitReg.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
-            $deadlineType.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
-            $attendeeList.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
+            $eventForm.prop('disabled',false).closest('.rtec-fade').removeClass('rtec-fade');
+            $whoCan.prop('disabled',false).closest('.rtec-fade').removeClass('rtec-fade');
+            $limitReg.prop('disabled',false).closest('.rtec-fade').removeClass('rtec-fade');
+            $deadlineType.prop('disabled',false).closest('.rtec-fade').removeClass('rtec-fade');
+            $attendeeList.prop('disabled',false).closest('.rtec-fade').removeClass('rtec-fade');
             if ($limitReg.is(':checked')) {
-                $maxReg.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
+                $maxReg.prop('disabled',false).closest('.rtec-fade').removeClass('rtec-fade');
             } else {
-                $maxReg.attr('disabled','true');
+                $maxReg.prop('disabled',true);
             }
             if ($attendeeList.is(':checked')) {
-                $attendeeWho.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
-                $attendeeLoggedOnly.removeAttr('disabled').closest('.rtec-fade').removeClass('rtec-fade');
+                $attendeeWho.prop('disabled',false).closest('.rtec-fade').removeClass('rtec-fade');
+                $attendeeLoggedOnly.prop('disabled',false).closest('.rtec-fade').removeClass('rtec-fade');
             } else {
-                $attendeeWho.attr('disabled','true');
-                $attendeeLoggedOnly.attr('disabled','true');
+                $attendeeWho.prop('disabled',true);
+                $attendeeLoggedOnly.prop('disabled',true);
             }
         }
 
@@ -128,7 +128,7 @@ jQuery(document).ready(function($){
         $('#rtec_mvt_names').val(mvtNames.join(','))
     });
 
-    $('.rtec-mvt-use-custom-checkbox').click(function() {
+    $('.rtec-mvt-use-custom-checkbox').on('click',function() {
         if ($(this).is(':checked')) {
             $(this).closest('.rtec-event-options').find('.rtec-hidden-mvt').slideDown();
         } else {
@@ -136,7 +136,7 @@ jQuery(document).ready(function($){
         }
     });
 
-    $('#rtec-use_custom_confirmation-checkbox').click(function() {
+    $('#rtec-use_custom_confirmation-checkbox').on('click',function() {
         if ($(this).is(':checked')) {
             $('.rtec-hidden-conf-email').slideDown();
         } else {
