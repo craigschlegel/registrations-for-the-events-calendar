@@ -60,7 +60,7 @@ jQuery(document).ready(function($) {
                 if ($('.rtec-login-wrap').length) {
                     $('.rtec-login-wrap').each(function() {
                         var $context = $(this).closest($('.tribe-events-single'));
-                        $context.find('.rtec-success-message').first().after($('.rtec-login-wrap').closest('.tribe-events-event-meta.rtec-event-meta'));
+                        $context.find('.rtec-success-message').first().after($('.rtec-login-wrap').closest('.rtec-event-meta'));
                     });
                 }
             }

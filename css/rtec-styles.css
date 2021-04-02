@@ -108,6 +108,7 @@
 }
 .rtec-outer-wrap .rtec-attendance-display {
     margin-bottom: 1em;
+    padding-top: 1em;
 }
 #rtec .rtec-form-field {
     margin-bottom: 30px;
@@ -201,20 +202,23 @@
     text-align: center;
 }
 /* Attendee list */
+.rtec-event-meta.rtec-attendee-list-meta {
+    padding-top: 24px;
+}
+.rtec-shortcode .rtec-event-meta.rtec-attendee-list-meta {
+    padding-top: 0;
+    margin-bottom: 20px;
+}
 .rtec-event-meta:after {
     content: "";
     visibility: hidden;
     display: table;
     clear: both;
 }
-.rtec-event-meta {
-    padding-bottom: 4%;
-}
 .rtec-event-meta .rtec-attendee-list {
     box-sizing: border-box;
     display: inline-block;
     float: left;
-    padding: 0 4%;
 }
 .rtec-event-meta .rtec-list-column-2 {
     width: 50%;
@@ -224,11 +228,10 @@
 }
 .single-tribe_events .tribe-events-event-meta .rtec-section-title,
 .rtec-event-meta .rtec-section-title {
-    padding: 0 4%;
     width: 100%;
     font-size: 1.4em;
     font-weight: 700;
-    margin: 20px 0 10px;
+    margin: 0 0 8px;
 }
 .single-tribe_events .tribe-events-event-meta .rtec-section-subtitle,
 .rtec-event-meta .rtec-section-subtitle {
@@ -239,11 +242,18 @@
 .rtec-event-meta .rtec-attendee {
     display: block;
     word-break: break-word;
+    margin-right: 4%;
+}
+@media (min-width: 768px) {
+    .rtec-shortcode .tribe-events-meta-group {
+        padding-bottom: 16px;
+        width: 100%;
+    }
+    .rtec-event-meta.rtec-attendee-list-meta {
+        padding-top: 0;
+    }
 }
 /** Visitor Tools **/
-.rtec .rtec-already-registered-options .rtec-event-meta {
-    padding: 4%;
-}
 #rtec-options-form input {
     max-width: 400px;
 }
@@ -280,12 +290,15 @@ h3.rtec-header, .entry-content h3.rtec-header { margin: 1em 0 1.5em; }
 }
 
 /* Attendee List Shortcode */
-
 .rtec-attendee-list-wrap .rtec-section-title {
     padding: 0 4%;
     font-size: 1.4em;
     font-weight: 700;
     margin: 20px 0 10px;
+}
+.rtec-attendee-list-wrap .rtec-attendee-list {
+    padding: 0 4%;
+    margin-bottom: 20px;
 }
 .rtec-attendee-list-wrap .tribe-events-single-section-title.rtec-section-subtitle {
     font-size: 1.2em;
@@ -296,11 +309,6 @@ h3.rtec-header, .entry-content h3.rtec-header { margin: 1em 0 1.5em; }
     background: #fafafa;
     border: 1px solid #eee;
     margin: 30px 0;
-}
-
-/** Log-in **/
-.rtec-login-wrap {
-    padding: 4% 4% 0;
 }
 
 /* Modal */

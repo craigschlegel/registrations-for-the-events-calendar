@@ -781,7 +781,7 @@ function rtec_attendance_count_display( $event_id, $template, $classes = '' ) {
 }
 
 add_action( 'tribe_events_after_the_meta', 'rtec_attendance_count_above_description_list' );
-add_action( 'tribe_template_before_include:events/list/event/description', 'rtec_attendance_count_above_description_list' );
+add_action( 'tribe_template_before_include:events/v2/list/event/description', 'rtec_attendance_count_above_description_list' );
 function rtec_attendance_count_above_description_list() {
 	global $rtec_options;
 

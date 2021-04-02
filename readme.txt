@@ -4,8 +4,8 @@ Contributors: roundupwp
 Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
-Tested up to: 5.6
-Stable tag: 2.7.1
+Tested up to: 5.7
+Stable tag: 2.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -190,6 +190,11 @@ Yes. There is a custom database table added to each sub-site's database to separ
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 
 == Changelog ==
+= 2.7.2 =
+* IMPORTANT: Significant changes to the HTML and CSS of the attendee list, log-in form, and unregister link tool were made due to changes in The Events Calendar 5.5.
+* Fix: Fixed missing attendance count message in the event list view after updating to The Events Calendar 5.5.
+* Fix: Updated jQuery methods for compatibility with WordPress 5.8.
+
 = 2.7.1 =
 * Fix: The code that checks for duplicate emails when someone registers was firing before a valid email was entered and causing a confusing error message.
 * Fix: When using the overview of the Registrations tab, suggested events that would display if no upcoming events were found would not use the PHP filter for the associated WP Query.

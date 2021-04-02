@@ -999,7 +999,7 @@ class RTEC_Form
 
             <div class="rtec-already-registered-options rtec-is-visitor">
                 <p><?php echo esc_html( $already_registered_directions ); ?></p>
-                <div class="tribe-events-event-meta rtec-event-meta">
+                <div class="rtec-event-meta">
 
                     <form id="rtec-options-form" action="<?php echo esc_url( get_the_permalink( $this->event_meta['post_id'] ) ); ?>" method="post">
                         <div class="rtec-form-field rtec-field-text" data-rtec-error-message="<?php esc_attr_e( 'required', 'registrations-for-the-events-calendar' ); ?>" data-rtec-type="text">
@@ -1290,6 +1290,10 @@ class RTEC_Form
 			$data_atts = ' data-location="' . esc_attr( $location ) . '"';
 		}
 
+		if ( $doing_shortcode ) {
+			$outer_wrap_classes .= ' rtec-shortcode';
+		}
+
 		$success_message = isset( $rtec_options['success_message'] ) ? $rtec_options['success_message'] : __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' );
 		$data = ' data-rtec-success-message="' . esc_attr( rtec_get_text( $success_message , __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' ) ) ) . '"';
 		$data .= ' data-event="' . esc_attr( $this->event_meta['post_id'] ) . '"';
@@ -1408,7 +1412,7 @@ class RTEC_Form
 
 		$title = isset( $rtec_options['attendee_list_title'] ) ? $rtec_options['attendee_list_title'] : __( 'Currently Registered', 'registrations-for-the-events-calendar' );
 		$title = rtec_get_text( $title, __( 'Currently Registered', 'registrations-for-the-events-calendar' ) );
-		$return_html = '<div class="tribe-events-event-meta rtec-event-meta rtec-attendee-list-meta"><h3 class="rtec-section-title">' . esc_html( $title ) . '</h3>';
+		$return_html = '<div class="tribe-events-event-meta rtec-event-meta rtec-attendee-list-meta"><div class="tribe-events-meta-group"><h3 class="rtec-section-title">' . esc_html( $title ) . '</h3>';
 
 		// to prevent looping through the data twice, two columns are created by alternating appending of qualified registrations
 		$column_1_html = '<div class="rtec-attendee-list rtec-list-column-2">';
@@ -1441,7 +1445,7 @@ class RTEC_Form
 		$column_2_html .= '</div>';
 		$return_html .= $column_1_html . $column_2_html;
 
-		$return_html .= '</div>'; // rtec-event-meta
+		$return_html .= '</div></div>'; // rtec-event-meta
 
 		echo $return_html;
 	}
@@ -1486,7 +1490,7 @@ class RTEC_Form
 				'echo' => false,
 				'redirect' => get_the_permalink( $this->event_id )
 			);
-			$html .= '<div class="tribe-events-event-meta rtec-event-meta"><div class="rtec-login-wrap">' . wp_login_form( $args ) . '</div></div>';
+			$html .= '<div class="rtec-event-meta"><div class="rtec-login-wrap">' . wp_login_form( $args ) . '</div></div>';
 		}
 
 		$return = apply_filters( 'rtec_please_log_in_html', $html );

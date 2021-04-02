@@ -824,7 +824,7 @@ function rtec_the_attendee_list_shortcode( $atts ) {
 		$attendee_list_fields = apply_filters( 'rtec_attendee_list_fields', $to_include );
 		$registrants_data = $rtec->db_frontend->get_registrants_data( $event_meta, $attendee_list_fields );
 		ob_start();
-		echo '<div class="rtec-attendee-list-wrap">';
+		echo '<div class="rtec-attendee-list-wrap rtec-shortcode-attendee-list">';
 		if ( isset( $atts['showheader'] ) && $atts['showheader'] === 'true' ) {
 			$rtec->form->the_event_header();
 		}
