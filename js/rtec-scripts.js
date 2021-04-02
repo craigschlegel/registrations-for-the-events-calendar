@@ -14,10 +14,10 @@ jQuery(document).ready(function($) {
 
                 var $moveEl = $('#rtec-js-move-flag'),
                     rtecLocation = typeof $('.rtec-outer-wrap').attr('data-location') !== 'undefined' ? $('.rtec-outer-wrap').attr('data-location') : false;
-                    if ( ! rtecLocation ) {
-                        rtecLocation = typeof $('#rtec-js-move-flag').attr('data-location') !== 'undefined' ? $('#rtec-js-move-flag').attr('data-location') : 'tribe_events_single_event_before_the_content';
-                    }
-                    if ($('.rtec-outer-wrap.rtec-js-placement').length) {
+                if ( ! rtecLocation ) {
+                    rtecLocation = typeof $('#rtec-js-move-flag').attr('data-location') !== 'undefined' ? $('#rtec-js-move-flag').attr('data-location') : 'tribe_events_single_event_before_the_content';
+                }
+                if ($('.rtec-outer-wrap.rtec-js-placement').length) {
                     $moveEl = $('.rtec-outer-wrap.rtec-js-placement');
                 } else if ($('.rtec').length) {
                     $moveEl = $('.rtec');
@@ -78,49 +78,45 @@ jQuery(document).ready(function($) {
                         sendUnregisterText = $(this).val();
                     });
                     $form.on('submit',function(event) {
-                        var val = $(this).find("input[type=submit][clicked=true]").val();
-                        if (sendUnregisterText === val) {
-                            event.preventDefault();
+                        event.preventDefault();
 
-                            var action = 'rtec_send_unregister_link';
+                        var action = 'rtec_send_unregister_link';
 
-                            $form.after($('.rtec-spinner').clone());
-                            $form.next('.rtec-spinner').show();
-                            $form.fadeTo(500,.1);
-                            $form.find('input[type=submit]').prop('disabled',true).css('opacity', .1);
+                        $form.after($('.rtec-spinner').clone());
+                        $form.next('.rtec-spinner').show();
+                        $form.fadeTo(500,.1);
+                        $form.find('input[type=submit]').prop('disabled',true).css('opacity', .1);
 
-                            var submittedData = {
-                                'action': action,
-                                'event_id': $outerWrap.find('.rtec').attr('data-event'),
-                                'email': $form.find('input[name=rtec-visitor_email]').val()
-                            };
+                        var submittedData = {
+                            'action': action,
+                            'event_id': $outerWrap.find('.rtec').attr('data-event'),
+                            'email': $form.find('input[name=rtec-visitor_email]').val()
+                        };
 
-                            $.ajax({
-                                url: rtec.ajaxUrl,
-                                type: 'post',
-                                data: submittedData,
-                                success: function (data) {
-                                    $form.next('.rtec-spinner').remove();
-                                    $form.fadeTo(500,1);
-                                    $form.find('input[type=submit]').prop('disabled',false).css('opacity', 1);
-                                    if (data.trim().indexOf('{') > -1) {
-                                        var response = JSON.parse(data.trim());
+                        $.ajax({
+                            url: rtec.ajaxUrl,
+                            type: 'post',
+                            data: submittedData,
+                            success: function (data) {
+                                $form.next('.rtec-spinner').remove();
+                                $form.fadeTo(500,1);
+                                $form.find('input[type=submit]').prop('disabled',false).css('opacity', 1);
+                                if (data.trim().indexOf('{') > -1) {
+                                    var response = JSON.parse(data.trim());
 
-                                        if (typeof response.success !== 'undefined') {
-                                            $form.replaceWith(response.success);
-                                        } else if (typeof response.error !== 'undefined') {
-                                            var $formField = $form.find('input[name=rtec-visitor_email]').closest('.rtec-input-wrapper');
-                                            if (!$formField.find('.rtec-error-message').length) {
-                                                $formField.append('<p class="rtec-error-message" role="alert">'+response.error+'</p>');
-                                            }
-                                            $form.find('input[name=rtec-visitor_email]').attr('aria-invalid','true');
+                                    if (typeof response.success !== 'undefined') {
+                                        $form.replaceWith(response.success);
+                                    } else if (typeof response.error !== 'undefined') {
+                                        var $formField = $form.find('input[name=rtec-visitor_email]').closest('.rtec-input-wrapper');
+                                        if (!$formField.find('.rtec-error-message').length) {
+                                            $formField.append('<p class="rtec-error-message" role="alert">'+response.error+'</p>');
                                         }
+                                        $form.find('input[name=rtec-visitor_email]').attr('aria-invalid','true');
                                     }
-
                                 }
-                            }); // ajax
 
-                        }
+                            }
+                        }); // ajax
                     });
                     $form.find('input[type=submit]').on('click',function() {
                         $("input[type=submit]", $(this).parents("form")).prop("clicked",false);
@@ -475,26 +471,26 @@ jQuery(document).ready(function($) {
                         type: 'post',
                         data: submittedData,
                         success: function (data) {
-/*
-                            $rtecEl.find('.rtec-spinner, #rtec-form-toggle-button').hide();
-                            $rtecEl.find('.rtec-form-wrapper').slideUp();
-                            $('html, body').animate({
-                                scrollTop: $rtecEl.offset().top - 200
-                            }, 750);
+                            /*
+                                                        $rtecEl.find('.rtec-spinner, #rtec-form-toggle-button').hide();
+                                                        $rtecEl.find('.rtec-form-wrapper').slideUp();
+                                                        $('html, body').animate({
+                                                            scrollTop: $rtecEl.offset().top - 200
+                                                        }, 750);
 
-                            if (data === 'full') {
-                                $rtecEl.prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">Sorry! Registrations just filled up for this event. You are not registered</p>');
-                            } else if (data === 'email') {
-                                $rtecEl.prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">There was a problem sending the email confirmation. Please contact the site administrator to confirm your registration</p>');
-                            } else if (data === 'form') {
-                                $rtecEl.prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">There was a problem with one or more of the entries you submitted. Please try again</p>');
-                            } else {
-                                $rtecEl.prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">' + $('#rtec').attr('data-rtec-success-message') + '</p>');
-                            }
-                            if (typeof rtecAfterSubmit === 'function') {
-                                rtecAfterSubmit();
-                            }
-                            */
+                                                        if (data === 'full') {
+                                                            $rtecEl.prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">Sorry! Registrations just filled up for this event. You are not registered</p>');
+                                                        } else if (data === 'email') {
+                                                            $rtecEl.prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">There was a problem sending the email confirmation. Please contact the site administrator to confirm your registration</p>');
+                                                        } else if (data === 'form') {
+                                                            $rtecEl.prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">There was a problem with one or more of the entries you submitted. Please try again</p>');
+                                                        } else {
+                                                            $rtecEl.prepend('<p class="rtec-success-message tribe-events-notices" aria-live="polite">' + $('#rtec').attr('data-rtec-success-message') + '</p>');
+                                                        }
+                                                        if (typeof rtecAfterSubmit === 'function') {
+                                                            rtecAfterSubmit();
+                                                        }
+                                                        */
 
                             $rtecEl.find('.rtec-spinner, #rtec-form-toggle-button').remove();
                             $rtecEl.find('.rtec-form-wrapper').slideUp(400,function() {

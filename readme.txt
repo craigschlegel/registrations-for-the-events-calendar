@@ -1,4 +1,4 @@
-=== Registrations for The Events Calendar - Event Registration Plugin ===
+=== Registrations for the Events Calendar - Event Registration Plugin ===
 
 Contributors: roundupwp
 Support Website: https://roundupwp.com/support

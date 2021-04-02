@@ -244,6 +244,9 @@
     word-break: break-word;
     margin-right: 4%;
 }
+.rtec-event-meta .tribe-events-meta-group {
+    width: 100%;
+}
 @media (min-width: 768px) {
     .rtec-shortcode .tribe-events-meta-group {
         padding-bottom: 16px;
