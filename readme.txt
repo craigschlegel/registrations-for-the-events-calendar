@@ -190,6 +190,10 @@ Yes. There is a custom database table added to each sub-site's database to separ
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 
 == Changelog ==
+= UNRELEASED =
+* New: Added PHP hook "rtec_show_visitor_tools" to allow the visitor tools to be hidden.
+* Fix: Registrants were allowed to unregister from an event even after the registration deadline.
+
 = 2.7.2 =
 * IMPORTANT: Significant changes to the HTML and CSS of the attendee list, log-in form, and unregister link tool were made due to changes in The Events Calendar 5.5.
 * Fix: Fixed missing attendance count message in the event list view after updating to The Events Calendar 5.5.
