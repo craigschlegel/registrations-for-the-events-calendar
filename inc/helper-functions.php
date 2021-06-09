@@ -209,7 +209,7 @@ function rtec_format_phone_number( $raw_number ) {
  * @return string           venue title
  */
 function rtec_get_venue( $event_id = NULL ) {
-	if ( function_exists( 'tribe_get_venue' ) ) {
+	if ( function_exists( 'tribe_get_venue' ) && ! empty( $event_id ) ) {
 		$venue = tribe_get_venue( $event_id );
 
 		return $venue;
@@ -640,6 +640,117 @@ function rtec_get_confirmation_from_address( $event_id, $blank = false ) {
 		return $confirmation_address;
 	}
 
+}
+
+function rtec_send_unregistration_notification( $entry_ids ) {
+	$rtec = RTEC();
+	$db   = $rtec->db_frontend->instance();
+
+	$form = new RTEC_Form();
+
+	require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-email.php';
+
+	foreach ( $entry_ids as $entry_id ) {
+		$args = array(
+			'fields' => array(
+				'id',
+				'first',
+				'last',
+				'email',
+				'venue',
+				'phone',
+				'other',
+				'event_id',
+				'custom',
+				'entry_data_cache',
+				'action_key',
+				'guests',
+				'confirmation_code'
+			),
+			'where'    => array(
+				array( 'id', $entry_id, '=', 'int' )
+			),
+			'order_by' => 'registration_date'
+		);
+
+		$entries = $db->retrieve_entries( $args, false, 1, 'DESC' );
+
+		if ( isset( $entries[0] ) ) {
+			$registration = $entries[0];
+			$event_id         = $entries[0]['event_id'];
+			$entry_data_cache = isset( $entries[0]['entry_data_cache'] ) ? maybe_unserialize( $entries[0]['entry_data_cache'] ) : array();
+			$custom_data      = isset( $entries[0]['custom'] ) ? maybe_unserialize( $entries[0]['custom'] ) : array();
+			$email            = isset( $entry_data_cache['email'] ) ? $entry_data_cache['email']['value'] : $entries[0]['email'];
+
+			if ( isset( $registration['entry_data_cache'] ) ) {
+				$registration = array_merge( $registration, rtec_convert_entry_data_cache_for_user( $registration['entry_data_cache'] ) );
+			} else {
+				if ( isset( $registration['custom'] ) ) {
+					$registration = array_merge( $registration, rtec_convert_entry_data_cache_for_user( $registration['custom'] ) );
+					$registration['first'] = isset( $registration['first_name'] ) ? $registration['first_name'] : '';
+					$registration['last']  = isset( $registration['last_name'] ) ? $registration['last_name'] : '';
+				}
+			}
+
+			if ( is_email( $email ) ) {
+				$form->build_form( $event_id );
+				$fields_atts    = $form->get_field_attributes();
+				$event_meta     = $form->get_event_meta();
+				$custom_columns = $form->get_custom_column_keys();
+
+				$notification_message = new RTEC_Email();
+
+				$recipients = rtec_get_notification_email_recipients( $event_id );
+				$email      = isset( $email ) ? '(' . $email . ')' : '';
+				$message    = sprintf( __( 'A registrant %s has unregistered from the event %s.', 'registrations-for-the-events-calendar' ), $email, '<a href="'.get_the_permalink( $event_id ).'">' . get_the_title( $event_id ) . '</a>' );
+
+				$message .= '<br><br>';
+
+				foreach ( $entry_data_cache as $cache ) {
+					if ( isset( $cache['label'] ) && isset( $cache['value'] ) ) {
+						$data_string = esc_html( $cache['label'] ) . ': ' . esc_html( $cache['value'] ) . '<br>';
+						$message .= $data_string;
+					}
+				}
+
+				$data = array_merge( $event_meta, $registration );
+
+				$args       = array(
+					'template_type' => 'notification',
+					'content_type'  => 'html',
+					'recipients'    => $recipients,
+					'subject'       => array(
+						'text' => __( 'Notification of Unregistration', 'registrations-for-the-events-calendar' ) . ' ' . get_the_title( $event_id ),
+						'data' => $data
+					),
+					'body'          => array(
+						'message' => $message,
+						'data'    => $data
+					)
+				);
+				$notification_message->build_email( $args );
+
+				if ( ! empty( $recipients ) ) {
+					$success = $notification_message->send_email();
+				}
+			}
+
+		}
+
+	}
+}
+
+function rtec_convert_entry_data_cache_for_user( $entry_data_cache_serialized ) {
+	$entry_data_cache = maybe_unserialize( $entry_data_cache_serialized );
+	$return = array();
+
+	if ( $entry_data_cache ) {
+		foreach ( $entry_data_cache as $key => $value ) {
+			$return[ $key ] = $value['value'];
+		}
+	}
+
+	return $return;
 }
 
 function rtec_get_standard_form_fields() {

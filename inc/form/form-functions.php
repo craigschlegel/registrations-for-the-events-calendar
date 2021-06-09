@@ -432,7 +432,31 @@ function rtec_check_action_before_post() {
 
         $entry_exists = $rtec->db_frontend->maybe_verify_token( $verification_data );
 
-        if ( $verification_data['action'] === 'unregister' && $entry_exists && $verification_data['token'] !== '' ) {
+		$args = array(
+			'fields'   => array(
+				'id',
+				'event_id',
+				'registration_date'
+			),
+			'where'    => array(
+				array( 'action_key', $verification_data['token'], '=', 'string' )
+			),
+			'order_by' => 'registration_date'
+		);
+
+		$entries = RTEC()->db_frontend->retrieve_entries( $args, false, 1, 'DESC' );
+
+		$event_id = isset( $entries[0] ) ? $entries[0]['event_id'] : 0;
+
+		$form = $rtec->form->instance();
+
+		$form->build_form( $event_id );
+
+		if ( $event_id !== 0 && $form->registration_deadline_has_passed() ) {
+			if ( method_exists ( 'Tribe__Notices' , 'set_notice' ) ) {
+				Tribe__Notices::set_notice( 'unregistered', __( 'Deadline to unregister has passed.', 'registrations-for-the-events-calendar' ) );
+			}
+		} elseif ( $verification_data['action'] === 'unregister' && $entry_exists && $verification_data['token'] !== '' ) {
 
             $message = isset( $rtec_options['success_unregistration'] ) ? $rtec_options['success_unregistration'] : __( 'You have been unregistered.', 'registrations-for-the-events-calendar' );
             $o_message = rtec_get_text( $message, __( 'You have been unregistered.', 'registrations-for-the-events-calendar' ) );
@@ -497,40 +521,43 @@ function rtec_action_check_after_post() {
 		if ( $verification_data['action'] === 'unregister' && $entry_exists && $verification_data['token'] !== '' ) {
 
             $event_id = get_the_ID();
-            $record_was_deleted = $rtec->db_frontend->remove_record_by_action_key( $verification_data['token'] );
+			$form = $rtec->form->instance();
 
-            if ( $record_was_deleted ) {
-                $rtec->db_frontend->update_num_registered_meta_for_event( $event_id );
-                $disable_notification = isset( $rtec_options['disable_notification'] ) ? $rtec_options['disable_notification'] : false;
+			$form->build_form( $event_id );
 
-                if ( ! $disable_notification ) {
-
-                    require_once RTEC_PLUGIN_DIR . 'inc/class-rtec-email.php';
-                    $notification_message = new RTEC_Email();
-
-                    $recipients = rtec_get_notification_email_recipients( $event_id );
-                    $email = isset( $verification_data['email'] ) ? '(' . $verification_data['email'] . ')' : '';
-                    $message                 = sprintf( __( 'A registrant %s has unregistered from this event %s.', 'registrations-for-the-events-calendar' ), $email, get_the_permalink() );
-                    $args                    = array(
-                        'template_type' => 'notification',
-                        'content_type'  => 'plain',
-                        'recipients'    => $recipients,
-                        'subject'       => array(
-                            'text' => __( 'Notification of Unregistration', 'registrations-for-the-events-calendar' ),
-                            'data' => array()
-                        ),
-                        'body'          => array(
-                            'message' => $message,
-                            'data'    => array()
-                        )
-                    );
-                    $notification_message->build_email( $args );
-                    $success = $notification_message->send_email();
-                }
-
+			if ( $form->registration_deadline_has_passed() ) {
+			    return;
             }
 
-        }
+			$args = array(
+				'fields'   => array(
+					'id',
+					'event_id',
+					'registration_date'
+				),
+				'where'    => array(
+					array( 'action_key', $verification_data['token'], '=', 'string' )
+				),
+				'order_by' => 'registration_date'
+			);
+
+			$entries = RTEC()->db_frontend->retrieve_entries( $args, false, 1, 'DESC' );
+
+			$event_id = isset( $entries[0] ) ? $entries[0]['event_id'] : 0;
+
+            $disable_notification = isset( $rtec_options['disable_notification'] ) ? $rtec_options['disable_notification'] : false;
+
+            if ( ! $disable_notification ) {
+                rtec_send_unregistration_notification( array( $entries[0]['id'] ) );
+            }
+
+			$record_was_deleted = $rtec->db_frontend->remove_record_by_action_key( $verification_data['token'] );
+			if ( $record_was_deleted ) {
+				$rtec->db_frontend->update_num_registered_meta_for_event( $event_id );
+
+			}
+
+		}
 
 	}
 }
