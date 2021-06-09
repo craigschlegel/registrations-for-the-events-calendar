@@ -1386,6 +1386,7 @@ class RTEC_Form
 		$already_registered_tools_html = '';
 		$show_unregister_link = isset( $rtec_options['visitors_can_edit_what_status'] ) ? $rtec_options['visitors_can_edit_what_status'] : true;
 
+		$show_unregister_link = apply_filters( 'rtec_show_visitor_tools', $show_unregister_link, $event_meta );
 		if ( $show_unregister_link ) {
 			ob_start();
 			$this->already_registered_visitor_html();
