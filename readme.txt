@@ -198,6 +198,7 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 * Fix: Fixed a PHP error that would occur when text instead of a timestamp was saved for the registration deadline.
 * Fix: In the attendee list, individual attendees would be skip to the next line unnecessarily.
 * Fix: Fixed an issue where adding a space before or after an email address would cause the email to be considered invalid.
+* Fix: Updated translations for German and Spanish.
 
 = 2.7.2 =
 * IMPORTANT: Significant changes to the HTML and CSS of the attendee list, log-in form, and unregister link tool were made due to changes in The Events Calendar 5.5.
