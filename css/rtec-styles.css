@@ -241,10 +241,12 @@
 }
 .rtec-event-meta .rtec-attendee {
     display: block;
+    width: 100%;
     word-break: break-word;
     margin-right: 4%;
 }
-.rtec-event-meta .tribe-events-meta-group {
+.rtec-event-meta .tribe-events-meta-group,
+.tribe-events-event-meta.rtec-event-meta .tribe-events-meta-group{
     width: 100%;
 }
 @media (min-width: 768px) {
