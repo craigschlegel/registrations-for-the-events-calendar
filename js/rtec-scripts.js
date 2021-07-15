@@ -256,7 +256,7 @@ jQuery(document).ready(function($) {
                 isValidEmail: function (val) {
                     var regEx = /[^\s@]+@[^\s@]+\.[^\s@]+/;
 
-                    return regEx.test(val);
+                    return regEx.test(val.trim());
                 },
 
                 validateEmail: function (formEl) {
@@ -339,7 +339,7 @@ jQuery(document).ready(function($) {
                     var submittedData = {
                         'action': 'rtec_registrant_check_for_duplicate_email',
                         'event_id': eventID,
-                        'email': email
+                        'email': email.trim()
                     };
 
                     $.ajax({
@@ -347,25 +347,26 @@ jQuery(document).ready(function($) {
                         type: 'post',
                         data: submittedData,
                         success: function (data) {
+                            var json = {
+                                'approved' : true,
+                                'message' : ''
+                            };
+                            if (data.trim().indexOf('{') === 0) {
+                                json = JSON.parse(data);
+                            } else if (data.indexOf('<p class=') > -1) {
+                                json = {
+                                    'approved' : false,
+                                    'message' : data
+                                };
+                            }
 
-                            if (data.indexOf('<p class=') > -1) {
+                            if (!json.approved) {
                                 RtecForm.removeErrorMessage($emailEl);
                                 if ($emailEl.hasClass(RtecForm.validClass)) {
                                     $emailEl.removeClass(RtecForm.validClass);
                                 }
                                 $emailEl.addClass(RtecForm.invalidClass);
-                                $emailEl.closest($('.rtec-input-wrapper')).append(data);
-                            } else if (data === 'not') {
-                                RtecForm.removeErrorMessage($emailEl);
-                                if ($emailEl.hasClass(RtecForm.validClass)) {
-                                    $emailEl.removeClass(RtecForm.validClass);
-                                }
-                                $emailEl.addClass(RtecForm.invalidClass);
-                                var $formField = $emailEl.closest($('.rtec-input-wrapper'));
-                                if (!$formField.find('.rtec-error-message').length) {
-                                    $formField.append('<p class="rtec-error-message" role="alert">' + $emailEl.closest($('.rtec-form-field')).attr('data-rtec-error-message') + '</p>');
-                                }
-                                $emailEl.attr('aria-invalid', 'true');
+                                $emailEl.closest($('.rtec-input-wrapper')).append(json.message);
                             } else {
                                 if ($emailEl.hasClass(RtecForm.invalidClass)) {
                                     $emailEl.removeClass(RtecForm.invalidClass);
@@ -373,9 +374,9 @@ jQuery(document).ready(function($) {
                                 $emailEl.addClass(RtecForm.validClass);
                                 RtecForm.removeErrorMessage($emailEl);
                             }
+
                             $context.find('input[name=rtec_submit]').prop('disabled',false).css('opacity', 1);
                             $context.find('.rtec-email-spinner').remove();
-
                         }
                     }); // ajax
 

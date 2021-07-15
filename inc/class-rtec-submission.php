@@ -259,7 +259,7 @@ class RTEC_Submission
 
 		if ( false !== $email ) {
 			$db = New RTEC_Db();
-			$is_duplicate = $db->check_for_duplicate_email( $email, $event_id );
+			$is_duplicate = $db->is_duplicate_email( $email, $event_id );
 		}
 
 		return $is_duplicate;

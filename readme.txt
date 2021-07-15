@@ -4,8 +4,8 @@ Contributors: roundupwp
 Support Website: https://roundupwp.com/support
 Tags: registration, The Events Calendar, RSVP, events, event registration, meetups, meetings, seminars, groups, conferences, registrations, add-on, extension, community, event contact, events calendar, workshops
 Requires at least: 3.5
-Tested up to: 5.7
-Stable tag: 2.7.2
+Tested up to: 5.8
+Stable tag: 2.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -190,9 +190,13 @@ Yes. There is a custom database table added to each sub-site's database to separ
 Go to the "Support" tab on the plugin's settings page and follow the link to our support page, setup instructions page, or feature request page.
 
 == Changelog ==
-= UNRELEASED =
+= 2.7.3 =
 * New: Added PHP hook "rtec_show_visitor_tools" to allow the visitor tools to be hidden.
+* Tweak: Changed the code related to how duplicate emails for an event are determined to prevent false errors.
 * Fix: Registrants were allowed to unregister from an event even after the registration deadline.
+* Fix: Fixed PHP error that would occur when text instead of a timestamp was saved for the registration deadline.
+* Fix: In the attendee list, individual attendees would be skip to the next line unnecessarily.
+* Fix: Adding a space before or after an email address would cause the email to be considered invalid.
 
 = 2.7.2 =
 * IMPORTANT: Significant changes to the HTML and CSS of the attendee list, log-in form, and unregister link tool were made due to changes in The Events Calendar 5.5.

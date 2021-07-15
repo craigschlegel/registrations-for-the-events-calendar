@@ -211,6 +211,31 @@ class RTEC_Db
 		}
 	}
 
+	/**
+	 * @param $email
+	 * @param $event_id
+	 *
+	 * @return bool
+	 *
+	 * @since  2.19.2
+	 */
+	public function is_duplicate_email( $email, $event_id ) {
+		global $wpdb;
+
+
+		$results = $wpdb->get_results( $wpdb->prepare(
+			"SELECT email FROM $this->table_name 
+				WHERE event_id = %d 
+				AND email = %s;",
+			$event_id, $email ), ARRAY_A );
+
+		if ( ! empty( $results ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public function maybe_verify_token( $data )
 	{
 		global $wpdb;

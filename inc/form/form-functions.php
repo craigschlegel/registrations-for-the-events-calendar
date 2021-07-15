@@ -327,26 +327,31 @@ function rtec_registrant_check_for_duplicate_email() {
 	$email = is_email( $_POST['email'] ) ? sanitize_text_field( $_POST['email'] ) : false;
 	$event_id = (int)$_POST['event_id'];
 
-	$is_duplicate = true;
+	$is_duplicate = false;
 
 	if ( is_email( $email ) ) {
 		$db = New RTEC_Db();
-		$is_duplicate = $db->check_for_duplicate_email( $email, $event_id );
+		$is_duplicate = $db->is_duplicate_email( $email, $event_id );
 	}
 
 	$approved = ! $is_duplicate;
 	$approved = apply_filters( 'rtec_email_approved_for_registration', $approved, $email, $event_id );
+
+	$response = array(
+		'approved' => true,
+		'message' => ''
+	);
 
 	if ( ! $approved ) {
 		$options = get_option( 'rtec_options' );
 
 		$message = isset( $options['error_duplicate_message'] ) ? $options['error_duplicate_message'] : 'You have already registered for this event';
 		$message_text = rtec_get_text( $message, __( 'You have already registered for this event', 'registrations-for-the-events-calendar' ) );
-
-		echo '<p class="rtec-error-message" id="rtec-error-duplicate" role="alert">' . esc_html( $message_text ) . '</p>';
-	} else {
-		echo $is_duplicate;
+		$response['approved'] = false;
+		$response['message'] = '<p class="rtec-error-message" id="rtec-error-duplicate" role="alert">' . esc_html( $message_text ) . '</p>';
 	}
+
+	echo json_encode( $response );
 
 	die();
 }
