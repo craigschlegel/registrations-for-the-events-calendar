@@ -198,8 +198,8 @@ function rtec_meta_boxes_html(){
 
 	$notification_email = implode( ', ', $notification_recipients );
 	$confirmation_from = rtec_get_confirmation_from_address( $post->ID, true );
-	$deadline_time = isset( $event_meta['deadline_other_timestamp'] ) ? $event_meta['deadline_other_timestamp'] : strtotime( $event_meta['start_date'] );
-	if ( $deadline_time == 0 || is_string( $deadline_time ) ) {
+	$deadline_time = isset( $event_meta['deadline_other_timestamp'] ) ? intval( $event_meta['deadline_other_timestamp'] ) : strtotime( $event_meta['start_date'] );
+	if ( $deadline_time == 0 ) {
 		$deadline_time = strtotime( date( 'Y/m/d' ) ) + 28800;
 	}
 

@@ -1171,7 +1171,7 @@ class RTEC_Form
         $success_html .= rtec_get_text( $success_message, __( 'Success! Please check your email inbox for a confirmation message.', 'registrations-for-the-events-calendar' ) );
         $success_html .= '</p>';
 
-	    return $success_html;
+	    return rtec_sanitize_outputted_html( $success_html );
     }
 
 	/**

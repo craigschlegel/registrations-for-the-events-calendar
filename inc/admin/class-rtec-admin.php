@@ -1864,7 +1864,7 @@ class RTEC_Admin
             $checkbox_settings = array( 'first_show', 'first_require', 'last_show', 'last_require', 'email_show', 'email_require', 'phone_show', 'phone_require', 'other_show', 'other_require', 'terms_conditions_require', 'recaptcha_require', 'disable_by_default', 'visitors_can_edit_what_status', 'show_registrants_data', 'limit_registrations', 'only_logged_in', 'show_log_in_form', 'include_attendance_count_message', 'include_attendance_message', 'using_custom_template', 'preserve_db', 'preserve_registrations', 'preserve_settings', 'check_for_duplicates' );
             $leave_spaces = array( 'custom_js', 'custom_css', 'notification_message' );
 	        $array_settings = array( 'attendance_count_message_location' );
-	        $rich_editor_settings = array( 'attendance_count_message_template' );
+	        $rich_editor_settings = array( 'success_message', 'success_unregistration', 'please_log_in_message', 'attendance_count_message_template' );
         } elseif ( isset( $input['confirmation_message'] ) ) {
             $rich_editor_settings = array( 'confirmation_message', 'notification_message' );
             $checkbox_settings = array( 'disable_notification', 'disable_confirmation', 'use_custom_notification', 'notify_organizer' );

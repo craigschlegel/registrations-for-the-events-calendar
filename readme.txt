@@ -193,10 +193,11 @@ Go to the "Support" tab on the plugin's settings page and follow the link to our
 = 2.7.3 =
 * New: Added PHP hook "rtec_show_visitor_tools" to allow the visitor tools to be hidden.
 * Tweak: Changed the code related to how duplicate emails for an event are determined to prevent false errors.
+* Tweak: Changed how settings for some form messages are saved to allow safe HTML elements to be used in them.
 * Fix: Registrants were allowed to unregister from an event even after the registration deadline.
-* Fix: Fixed PHP error that would occur when text instead of a timestamp was saved for the registration deadline.
+* Fix: Fixed a PHP error that would occur when text instead of a timestamp was saved for the registration deadline.
 * Fix: In the attendee list, individual attendees would be skip to the next line unnecessarily.
-* Fix: Adding a space before or after an email address would cause the email to be considered invalid.
+* Fix: Fixed an issue where adding a space before or after an email address would cause the email to be considered invalid.
 
 = 2.7.2 =
 * IMPORTANT: Significant changes to the HTML and CSS of the attendee list, log-in form, and unregister link tool were made due to changes in The Events Calendar 5.5.
