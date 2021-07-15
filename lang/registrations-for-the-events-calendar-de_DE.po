@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2021-07-15 09:38-0500\n"
-"PO-Revision-Date: 2021-07-15 09:41-0500\n"
+"PO-Revision-Date: 2021-07-15 09:59-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -203,7 +203,7 @@ msgstr "Datum d. Registrierung"
 #: inc/form/class-rtec-form.php:444 inc/form/class-rtec-form.php:445
 #: inc/form/class-rtec-form.php:660
 msgid "First"
-msgstr "Erste"
+msgstr "Vorname"
 
 #: inc/admin/admin-functions.php:806 inc/admin/admin-functions.php:1274
 #: inc/admin/class-rtec-admin.php:171 inc/class-rtec-email.php:202
@@ -211,7 +211,7 @@ msgstr "Erste"
 #: inc/form/class-rtec-form.php:450 inc/form/class-rtec-form.php:451
 #: inc/form/class-rtec-form.php:663
 msgid "Last"
-msgstr "Letzte"
+msgstr "Nachname"
 
 #: inc/admin/admin-functions.php:808
 msgid "Status"
