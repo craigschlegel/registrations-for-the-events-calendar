@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2021-07-15 09:38-0500\n"
-"PO-Revision-Date: 2021-07-15 09:59-0500\n"
+"PO-Revision-Date: 2021-07-15 10:05-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -765,8 +765,6 @@ msgstr "Senden Sie den Link zum Aufheben der Registrierung"
 #: inc/admin/class-rtec-admin.php:626
 msgid "Registrations Available Only to Logged-in Users by Default"
 msgstr ""
-"Registrierungswerkzeuge für Shortcode-Formulare Zugang. Gehören Sie "
-"showtools = \"true\"."
 
 #: inc/admin/class-rtec-admin.php:640
 msgid "Website \"Users Only\" Message"
@@ -1018,12 +1016,12 @@ msgid ""
 "target=\"blank\">this FAQ</a> for more information."
 msgstr ""
 "Dadurch wird das Plugin gezwungen, die Hooks "
-"\"Tribe_events_single_event_before_the_content\" oder "
-"\"Tribe_events_single_event_after_the_content\" zu verwenden. Versuchen Sie "
+"“tribe_events_single_event_before_the_content\" oder "
+"“tribe_events_single_event_after_the_content\" zu verwenden. Versuchen Sie "
 "diese Einstellung, wenn das Registrierungsformular nicht auf der einzelnen "
 "Ereignisseite angezeigt wird. Weitere Informationen finden Sie in <a href="
 "\"https://roundupwp.com/faq/registration-form-wont-show-event-page/\" target="
-"\"blank\"> dieser FAQ </a>."
+"\"blank\">dieser FAQ</a>."
 
 #: inc/admin/class-rtec-admin.php:1137
 msgid ""
@@ -1481,9 +1479,9 @@ msgid ""
 "\"https://roundupwp.com/faq/my-confirmationnotification-emails-are-missing/"
 "\" target=\"_blank\">article</a> on our website"
 msgstr ""
-"Die besten Ergebnisse bei der E-Mail-Zustellung finden Sie im Artikel <a "
-"href=\"https://roundupwp.com/faq/my-confirmationnotification-emails-are-"
-"missing/\" target=\"_blank\"> </a> in unserem Artikel Webseite"
+"Die besten Ergebnisse bei der E-Mail-Zustellung finden Sie im <a href="
+"\"https://roundupwp.com/faq/my-confirmationnotification-emails-are-missing/"
+"\" target=\"_blank\">Artikel</a> in unserem Artikel Webseite"
 
 #: inc/admin/templates/email.php:18 inc/admin/templates/email.php:21
 #: inc/admin/templates/email.php:24 inc/admin/templates/form.php:12
@@ -1737,7 +1735,7 @@ msgstr "mit/ohne Registrierung"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:35
 msgid "Go"
-msgstr "los"
+msgstr "Los"
 
 #: inc/admin/templates/partials/registrations-toolbar.php:38
 #: inc/admin/templates/partials/registrations-toolbar.php:39
